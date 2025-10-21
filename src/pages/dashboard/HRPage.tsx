@@ -1,4 +1,4 @@
-import { HRTalentBoard } from '../../modules/HR';
+import { HRDashboard } from '../../modules/hr';
 import { usePermissions } from '../../hooks/usePermissions';
 
 export const HRPage = () => {
@@ -6,5 +6,5 @@ export const HRPage = () => {
   if (!can('hr:read')) {
     return <p className="text-sm text-danger">Недостатньо прав для перегляду HR модуля.</p>;
   }
-  return <HRTalentBoard />;
+  return <HRDashboard />;
 };
