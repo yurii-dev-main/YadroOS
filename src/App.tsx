@@ -28,7 +28,7 @@ const App = () => (
     <Route element={<ProtectedRoute />}>
       <Route element={<DashboardLayout />}>
         <Route path="/dashboard" element={<OverviewPage />} />
-        <Route path="/dashboard/crm" element={<CRMPage />} />
+        <Route path="/dashboard/crm/*" element={<CRMPage />} />
         <Route path="/dashboard/communications" element={<CommunicationsPage />} />
         <Route path="/dashboard/hr" element={<HRPage />} />
         <Route path="/dashboard/accounting" element={<AccountingPage />} />
