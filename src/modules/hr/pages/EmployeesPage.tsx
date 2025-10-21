@@ -1,0 +1,93 @@
+import { useMemo } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '../../../components/ui/card';
+import { useEmployees } from '../hooks/useEmployees';
+import { EmployeeFilters } from '../components/EmployeeFilters';
+import { EmployeesGrid } from '../components/EmployeesGrid';
+import { EmployeeProfile } from '../components/EmployeeProfile';
+import { OrgChartView } from '../components/OrgChartView';
+import { hrService } from '../services/hr.service';
+
+export const EmployeesPage = () => {
+  const {
+    employees,
+    departments,
+    positions,
+    filters,
+    setFilters,
+    resetFilters,
+    selectedEmployee,
+    selectEmployee,
+    orgChart,
+    statistics,
+  } = useEmployees();
+
+  const departmentOptions = useMemo(() => departments.map((department) => department.name), [departments]);
+
+  return (
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
+        <Card className="border-slate-800 bg-slate-900/70">
+          <CardHeader>
+            <CardTitle className="text-sm text-slate-400">Співробітники</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-3xl font-semibold text-indigo-300">{statistics.totalEmployees}</p>
+          </CardContent>
+        </Card>
+        <Card className="border-slate-800 bg-slate-900/70">
+          <CardHeader>
+            <CardTitle className="text-sm text-slate-400">Активні тренінги</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-3xl font-semibold text-emerald-300">{statistics.activeTrainings}</p>
+          </CardContent>
+        </Card>
+        <Card className="border-slate-800 bg-slate-900/70">
+          <CardHeader>
+            <CardTitle className="text-sm text-slate-400">Відвідуваність</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-3xl font-semibold text-emerald-300">{statistics.attendanceRate.toFixed(1)}%</p>
+          </CardContent>
+        </Card>
+        <Card className="border-slate-800 bg-slate-900/70">
+          <CardHeader>
+            <CardTitle className="text-sm text-slate-400">ТОП виконавці</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-1 text-sm text-slate-300">
+            {statistics.topPerformers.map((highlight) => (
+              <p key={highlight.employeeId}>
+                {hrService.getEmployeeById(highlight.employeeId)?.name ?? 'Невідомо'} — {highlight.score}
+              </p>
+            ))}
+          </CardContent>
+        </Card>
+      </div>
+
+      <EmployeeFilters
+        filters={filters}
+        departments={departmentOptions}
+        positions={positions}
+        onChange={setFilters}
+        onReset={resetFilters}
+      />
+
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[2fr,1fr]">
+        <EmployeesGrid
+          employees={employees}
+          onSelect={(employee) => selectEmployee(employee.id)}
+          selectedEmployeeId={selectedEmployee?.id}
+        />
+        <EmployeeProfile employee={selectedEmployee} />
+      </div>
+
+      <div>
+        <h3 className="text-lg font-semibold text-slate-100">Організаційна структура</h3>
+        <p className="text-sm text-slate-400">Drag-and-drop і експорт доступні у майбутніх релізах.</p>
+        <div className="mt-4">
+          <OrgChartView data={orgChart} />
+        </div>
+      </div>
+    </div>
+  );
+};
