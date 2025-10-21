@@ -1,0 +1,1 @@
+export { HRTalentBoard } from './HRTalentBoard';
