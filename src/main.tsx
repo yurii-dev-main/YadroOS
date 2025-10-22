@@ -6,13 +6,16 @@ import { BrowserRouter } from 'react-router-dom';
 
 import App from './App';
 import { AuthProvider } from './store/AuthProvider';
+import { PWAProvider } from './mobile/context/PWAContext';
 
 createRoot(document.getElementById('root') as HTMLElement).render(
   <StrictMode>
     <BrowserRouter>
-      <AuthProvider>
-        <App />
-      </AuthProvider>
+      <PWAProvider>
+        <AuthProvider>
+          <App />
+        </AuthProvider>
+      </PWAProvider>
     </BrowserRouter>
   </StrictMode>
 );
