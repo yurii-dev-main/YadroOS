@@ -1,0 +1,84 @@
+openapi: 3.1.0
+info:
+  title: YadroOS Public API
+  version: 1.0.0
+  description: >-
+    Core endpoints for CRM, HR, Accounting and AI modules with integration webhooks.
+servers:
+  - url: https://api.yadroos.local/v1
+paths:
+  /crm/clients:
+    get:
+      summary: List clients
+      parameters:
+        - in: query
+          name: cursor
+          schema:
+            type: string
+        - in: query
+          name: limit
+          schema:
+            type: integer
+        - in: query
+          name: fields
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+    post:
+      summary: Create client
+      responses:
+        '201':
+          description: Created
+  /crm/deals:
+    get:
+      summary: List deals
+      responses:
+        '200':
+          description: Successful response
+  /hr/employees:
+    get:
+      summary: List employees
+      responses:
+        '200':
+          description: Successful response
+  /accounting/transactions:
+    get:
+      summary: List transactions
+      responses:
+        '200':
+          description: Successful response
+  /accounting/invoices:
+    get:
+      summary: List invoices
+      responses:
+        '200':
+          description: Successful response
+  /ai/insights:
+    get:
+      summary: List AI insights
+      responses:
+        '200':
+          description: Successful response
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    OAuth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.yadroos.local/oauth/authorize
+          tokenUrl: https://auth.yadroos.local/oauth/token
+          scopes:
+            crm: CRM access
+            hr: HR access
+            accounting: Accounting access
+            ai: AI insights access
+security:
+  - ApiKeyAuth: []
+  - OAuth2:
+      - crm
