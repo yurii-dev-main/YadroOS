@@ -8,6 +8,8 @@
 
 body {
   @apply bg-slate-950 text-slate-100 font-sans min-h-screen;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
 }
 
 a {
@@ -22,4 +24,12 @@ textarea {
 
 button:disabled {
   @apply opacity-60 cursor-not-allowed;
+}
+
+.pb-safe {
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 0.5rem);
+}
+
+.pt-safe {
+  padding-top: calc(env(safe-area-inset-top, 0px) + 0.5rem);
 }
