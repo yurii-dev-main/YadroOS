@@ -33,7 +33,11 @@
     "uuid": "^9.0.1",
     "@radix-ui/react-slot": "^1.0.2",
     "class-variance-authority": "^0.7.0",
-    "@hookform/error-message": "^3.0.0"
+    "@hookform/error-message": "^3.0.0",
+    "decimal.js": "^10.4.3",
+    "jspdf": "^2.5.1",
+    "jspdf-autotable": "^3.8.3",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@types/node": "^20.11.19",
