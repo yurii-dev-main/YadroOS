@@ -1,17 +1,42 @@
-#!/usr/bin/env bash
-set -euo pipefail
+#!/bin/bash
+# scripts/backup.sh
 
-TIMESTAMP=$(date +"%Y%m%d-%H%M%S")
-BACKUP_DIR="backups/${TIMESTAMP}"
-mkdir -p "${BACKUP_DIR}"
+set -e
 
-echo "[+] Creating database backup"
-pg_dump "$DATABASE_URL" > "${BACKUP_DIR}/database.sql"
+# Configuration
+BACKUP_DIR="/var/backups/crm"
+DB_NAME="crm_production"
+DB_USER="crm_user"
+DATE=$(date +%Y-%m-%d_%H-%M-%S)
+RETENTION_DAYS=30
 
-echo "[+] Archiving uploaded assets"
-rsync -av --delete "$ASSETS_DIR/" "${BACKUP_DIR}/assets/"
+# Create backup directory
+mkdir -p $BACKUP_DIR
 
-echo "[+] Storing environment snapshot"
-printenv | grep -E '^(APP_|API_|DB_)' > "${BACKUP_DIR}/env.snapshot"
+echo "🔄 Starting backup process..."
 
-echo "[+] Backup completed at ${BACKUP_DIR}"
+# Database backup
+echo "📦 Backing up database..."
+pg_dump -U $DB_USER -d $DB_NAME | gzip > $BACKUP_DIR/db-$DATE.sql.gz
+echo "✅ Database backup completed"
+
+# Files backup
+echo "📦 Backing up files..."
+tar -czf $BACKUP_DIR/files-$DATE.tar.gz /var/www/crm/uploads
+echo "✅ Files backup completed"
+
+# Upload to S3 (optional)
+if [ ! -z "$AWS_S3_BUCKET" ]; then
+    echo "☁️ Uploading to S3..."
+    aws s3 cp $BACKUP_DIR/db-$DATE.sql.gz s3://$AWS_S3_BUCKET/backups/
+    aws s3 cp $BACKUP_DIR/files-$DATE.tar.gz s3://$AWS_S3_BUCKET/backups/
+    echo "✅ Uploaded to S3"
+fi
+
+# Clean old backups
+echo "🧹 Cleaning old backups..."
+find $BACKUP_DIR -name "*.sql.gz" -mtime +$RETENTION_DAYS -delete
+find $BACKUP_DIR -name "*.tar.gz" -mtime +$RETENTION_DAYS -delete
+echo "✅ Old backups cleaned"
+
+echo "🎉 Backup completed successfully!"
