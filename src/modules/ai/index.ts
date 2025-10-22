@@ -1,0 +1,10 @@
+export { AIDashboardPage } from './pages/AIDashboardPage';
+export { InsightsPage } from './pages/InsightsPage';
+export { ChatPage } from './pages/ChatPage';
+export { ChatInterface } from './components/ChatInterface';
+export { RecommendationList } from './components/RecommendationList';
+export { ScoreGauge } from './components/ScoreGauge';
+export { useAI } from './hooks/useAI';
+export { useInsights } from './hooks/useInsights';
+export { usePredictions } from './hooks/usePredictions';
+export * from './types/ai.types';
