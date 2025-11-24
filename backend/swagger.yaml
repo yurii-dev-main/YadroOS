@@ -1,0 +1,611 @@
+openapi: 3.0.0
+info:
+  title: YadroOS API
+  version: 1.0.0
+  description: >-
+    REST API for authentication, CRM entities, and finance operations.
+servers:
+  - url: http://localhost:3000/api
+    description: Local development
+  - url: https://api.yadroos.example.com/api
+    description: Production
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Message:
+      type: object
+      properties:
+        message:
+          type: string
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+          format: email
+        role:
+          type: string
+          enum: [ADMIN, MANAGER, OPERATOR, ACCOUNTANT, HR_SPECIALIST, VIEWER]
+        isActive:
+          type: boolean
+        lastLogin:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        employee:
+          $ref: '#/components/schemas/Employee'
+    Employee:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        firstName:
+          type: string
+        lastName:
+          type: string
+        position:
+          type: string
+        department:
+          type: string
+        phone:
+          type: string
+        avatarUrl:
+          type: string
+          format: uri
+    Client:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        company:
+          type: string
+        industry:
+          type: string
+        website:
+          type: string
+          format: uri
+        size:
+          type: integer
+        revenue:
+          type: number
+          format: double
+        status:
+          type: string
+          enum: [lead, active, inactive, lost]
+        assignedTo:
+          type: string
+          format: uuid
+        assignedEmployee:
+          $ref: '#/components/schemas/Employee'
+        lastContactedAt:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    Deal:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        clientId:
+          type: string
+        title:
+          type: string
+        value:
+          type: number
+          format: double
+        currency:
+          type: string
+        stage:
+          type: string
+          enum: [lead, contact_made, qualification, proposal, negotiation, closed_won, closed_lost]
+        probability:
+          type: integer
+        expectedCloseDate:
+          type: string
+          format: date-time
+        assignedTo:
+          type: string
+          format: uuid
+        assignedEmployee:
+          $ref: '#/components/schemas/Employee'
+        client:
+          $ref: '#/components/schemas/Client'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    Invoice:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        invoiceNumber:
+          type: string
+        clientId:
+          type: string
+        amount:
+          type: number
+          format: double
+        currency:
+          type: string
+        status:
+          type: string
+          enum: [draft, sent, paid, overdue, cancelled]
+        issueDate:
+          type: string
+          format: date
+        dueDate:
+          type: string
+          format: date
+        paidDate:
+          type: string
+          format: date
+        taxRate:
+          type: number
+          format: float
+        taxAmount:
+          type: number
+          format: double
+        totalAmount:
+          type: number
+          format: double
+        createdBy:
+          type: string
+        client:
+          $ref: '#/components/schemas/Client'
+        createdAt:
+          type: string
+          format: date-time
+    ProfitAndLossReport:
+      type: object
+      properties:
+        type:
+          type: string
+          example: profitAndLoss
+        generatedAt:
+          type: string
+          format: date-time
+        currency:
+          type: string
+        figures:
+          type: object
+          properties:
+            income:
+              type: number
+              format: double
+            expenses:
+              type: number
+              format: double
+            grossProfit:
+              type: number
+              format: double
+        period:
+          type: object
+          properties:
+            from:
+              type: string
+              format: date-time
+            to:
+              type: string
+              format: date-time
+security:
+  - bearerAuth: []
+paths:
+  /auth/login:
+    post:
+      summary: User login
+      tags: [Auth]
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Successful login
+          headers:
+            Set-Cookie:
+              description: HTTP-only refresh token cookie
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                  user:
+                    $ref: '#/components/schemas/User'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+  /auth/refresh:
+    post:
+      summary: Refresh access token
+      tags: [Auth]
+      security: []
+      responses:
+        '200':
+          description: New tokens issued
+          headers:
+            Set-Cookie:
+              description: HTTP-only refresh token cookie
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                  user:
+                    $ref: '#/components/schemas/User'
+        '401':
+          description: Missing or invalid refresh token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+  /auth/logout:
+    post:
+      summary: Logout and clear refresh token
+      tags: [Auth]
+      responses:
+        '200':
+          description: Refresh token cookie cleared
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+  /auth/me:
+    get:
+      summary: Get current user profile
+      tags: [Auth]
+      responses:
+        '200':
+          description: Current user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '#/components/schemas/User'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+  /finance/reports/pnl:
+    get:
+      summary: Profit and loss report
+      tags: [Finance]
+      parameters:
+        - name: from
+          in: query
+          schema:
+            type: string
+            format: date-time
+          description: Start date (inclusive)
+        - name: to
+          in: query
+          schema:
+            type: string
+            format: date-time
+          description: End date (inclusive)
+        - name: currency
+          in: query
+          schema:
+            type: string
+            default: USD
+      responses:
+        '200':
+          description: Aggregated profit and loss figures
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfitAndLossReport'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+  /finance/invoices:
+    post:
+      summary: Create invoice
+      tags: [Finance]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [clientId, amount]
+              properties:
+                clientId:
+                  type: string
+                amount:
+                  type: number
+                currency:
+                  type: string
+                  default: USD
+                issueDate:
+                  type: string
+                  format: date
+                dueDate:
+                  type: string
+                  format: date
+                taxRate:
+                  type: number
+                  format: float
+                  default: 0.2
+                status:
+                  type: string
+                  enum: [draft, sent, paid, overdue, cancelled]
+                lineItems:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      quantity:
+                        type: number
+                      unitPrice:
+                        type: number
+      responses:
+        '201':
+          description: Invoice created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+  /crm/clients:
+    get:
+      summary: List clients
+      tags: [CRM]
+      responses:
+        '200':
+          description: Clients collection
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Client'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+    post:
+      summary: Create client
+      tags: [CRM]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Client'
+      responses:
+        '201':
+          description: Client created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+  /crm/clients/{id}:
+    put:
+      summary: Update client
+      tags: [CRM]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Client'
+      responses:
+        '200':
+          description: Client updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+    delete:
+      summary: Delete client
+      tags: [CRM]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Client removed
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+  /crm/deals:
+    get:
+      summary: List deals
+      tags: [CRM]
+      responses:
+        '200':
+          description: Deals collection
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Deal'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+    post:
+      summary: Create deal
+      tags: [CRM]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Deal'
+      responses:
+        '201':
+          description: Deal created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Deal'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+  /crm/deals/{id}:
+    put:
+      summary: Update deal
+      tags: [CRM]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Deal'
+      responses:
+        '200':
+          description: Deal updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Deal'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        '404':
+          description: Deal not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+    delete:
+      summary: Delete deal
+      tags: [CRM]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Deal removed
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
