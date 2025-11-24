@@ -1,0 +1,230 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  MANAGER
+  OPERATOR
+  ACCOUNTANT
+  HR_SPECIALIST
+  VIEWER
+}
+
+enum ClientStatus {
+  lead
+  active
+  inactive
+  lost
+}
+
+enum DealStage {
+  lead
+  contact_made
+  qualification
+  proposal
+  negotiation
+  closed_won
+  closed_lost
+}
+
+enum ActivityType {
+  call
+  meeting
+  email
+  note
+  task
+}
+
+enum AccountType {
+  bank
+  cash
+  card
+}
+
+enum TransactionType {
+  income
+  expense
+  transfer
+}
+
+enum InvoiceStatus {
+  draft
+  sent
+  paid
+  overdue
+  cancelled
+}
+
+model User {
+  id           String    @id @default(uuid()) @db.Uuid
+  email        String    @unique
+  passwordHash String
+  role         Role
+  isActive     Boolean   @default(true)
+  lastLogin    DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  employee     Employee?
+  auditLogs    AuditLog[]
+}
+
+model Employee {
+  id         String    @id @default(uuid()) @db.Uuid
+  userId     String?   @unique
+  user       User?     @relation(fields: [userId], references: [id])
+  firstName  String
+  lastName   String
+  position   String?
+  department String?
+  hireDate   DateTime?
+  salary     Decimal?
+  phone      String?
+  avatarUrl  String?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  clients    Client[]  @relation("ClientAssigned")
+  deals      Deal[]    @relation("DealAssigned")
+  activities Activity[] @relation("ActivityCreator")
+  invoices   Invoice[] @relation("InvoiceCreator")
+}
+
+model Client {
+  id              String      @id @default(uuid()) @db.Uuid
+  name            String
+  email           String?
+  phone           String?
+  company         String?
+  industry        String?
+  website         String?
+  size            Int?
+  revenue         Decimal?
+  status          ClientStatus @default(lead)
+  assignedTo      String?
+  assignedEmployee Employee?   @relation("ClientAssigned", fields: [assignedTo], references: [id])
+  deals           Deal[]
+  activities      Activity[]
+  transactions    Transaction[]
+  invoices        Invoice[]
+  lastContactedAt DateTime?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  @@index([status, assignedTo])
+  @@index([email])
+}
+
+model Deal {
+  id                String      @id @default(uuid()) @db.Uuid
+  clientId          String
+  client            Client      @relation(fields: [clientId], references: [id])
+  title             String
+  value             Decimal?
+  currency          String      @default("USD")
+  stage             DealStage   @default(lead)
+  probability       Int?
+  expectedCloseDate DateTime?
+  assignedTo        String?
+  assignedEmployee  Employee?   @relation("DealAssigned", fields: [assignedTo], references: [id])
+  activities        Activity[]
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+
+  @@index([stage, assignedTo])
+  @@index([clientId])
+}
+
+model Activity {
+  id          String       @id @default(uuid()) @db.Uuid
+  clientId    String?
+  client      Client?      @relation(fields: [clientId], references: [id])
+  dealId      String?
+  deal        Deal?        @relation(fields: [dealId], references: [id])
+  type        ActivityType
+  subject     String?
+  description String?
+  date        DateTime?
+  duration    Int?
+  createdBy   String?
+  creator     Employee?    @relation("ActivityCreator", fields: [createdBy], references: [id])
+  createdAt   DateTime     @default(now())
+
+  @@index([clientId, date])
+  @@index([dealId])
+}
+
+model Account {
+  id             String        @id @default(uuid()) @db.Uuid
+  name           String
+  type           AccountType
+  currency       String        @default("USD")
+  balance        Decimal       @default(0)
+  bankName       String?
+  accountNumber  String?
+  isActive       Boolean       @default(true)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  transactions   Transaction[] @relation("AccountTransactions")
+  transferTarget Transaction[] @relation("TransferTargets")
+}
+
+model Transaction {
+  id          String          @id @default(uuid()) @db.Uuid
+  accountId   String
+  account     Account         @relation("AccountTransactions", fields: [accountId], references: [id])
+  toAccountId String?
+  transferTo  Account?        @relation("TransferTargets", fields: [toAccountId], references: [id])
+  type        TransactionType
+  amount      Decimal
+  currency    String
+  category    String?
+  description String?
+  date        DateTime        @db.Date
+  clientId    String?
+  client      Client?         @relation(fields: [clientId], references: [id])
+  status      String          @default("completed")
+  createdAt   DateTime        @default(now())
+
+  @@index([accountId, date])
+  @@index([type, category, date])
+}
+
+model Invoice {
+  id             String       @id @default(uuid()) @db.Uuid
+  invoiceNumber  String       @unique
+  clientId       String
+  client         Client       @relation(fields: [clientId], references: [id])
+  amount         Decimal
+  currency       String       @default("USD")
+  status         InvoiceStatus @default(draft)
+  issueDate      DateTime?    @db.Date
+  dueDate        DateTime?    @db.Date
+  paidDate       DateTime?    @db.Date
+  createdBy      String?
+  creator        Employee?    @relation("InvoiceCreator", fields: [createdBy], references: [id])
+  taxRate        Float        @default(0)
+  taxAmount      Decimal      @default(0)
+  totalAmount    Decimal      @default(0)
+  createdAt      DateTime     @default(now())
+
+  @@index([status, dueDate])
+  @@index([clientId])
+  @@index([invoiceNumber])
+}
+
+model AuditLog {
+  id          String   @id @default(uuid()) @db.Uuid
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id])
+  entityType  String?
+  entityId    String?
+  action      String
+  description String
+  metadata    Json?
+  createdAt   DateTime @default(now())
+}
