@@ -214,7 +214,7 @@ async function main() {
       entityType: 'deal',
       entityId: deal.id,
       action: 'deal_created',
-      description: `Менеджер ${managerEmployee.firstName} ${managerEmployee.lastName} создал сделку ${deal.title}`,
+      description: `Менеджер ${managerEmployee.firstName} ${managerEmployee.lastName} створив угоду ${deal.title}`,
       metadata: { clientId: clientA.id }
     }
   });
@@ -225,7 +225,7 @@ async function main() {
       entityType: 'invoice',
       entityId: invoice.id,
       action: 'invoice_sent',
-      description: 'Финансовый отдел отправил инвойс клиенту',
+      description: 'Фінансовий відділ надіслав інвойс клієнту',
       metadata: { client: clientA.name }
     }
   });

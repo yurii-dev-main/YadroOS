@@ -65,7 +65,7 @@ export const updateDeal = async (req: Request, res: Response) => {
         entityType: 'deal',
         entityId: updated.id,
         action: 'deal_closed',
-        description: `Менеджер ${actorName} закрыл сделку ${updated.title}`
+        description: `Менеджер ${actorName} закрив угоду ${updated.title}`
       }
     });
   }
