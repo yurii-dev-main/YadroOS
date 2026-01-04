@@ -6,6 +6,7 @@ import financeRoutes from './finance.routes';
 import accountingRoutes from './accounting.routes';
 import hrRoutes from './hr.routes';
 import communicationsRoutes from './communications.routes';
+import aiRoutes from './ai.routes';
 
 const router = Router();
 
@@ -16,5 +17,6 @@ router.use('/finance', financeRoutes);
 router.use('/v1/accounting', accountingRoutes);
 router.use('/v1/hr', hrRoutes);
 router.use('/v1/communications', communicationsRoutes);
+router.use('/v1/ai', aiRoutes);
 
 export default router;
