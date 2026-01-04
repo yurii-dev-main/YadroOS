@@ -163,3 +163,10 @@ export interface AutoResponder {
     end: string;
   };
 }
+
+export interface TelegramConnectionStatus {
+  connected: boolean;
+  botName?: string | null;
+  webhookUrl?: string | null;
+  lastEventAt?: string | null;
+}

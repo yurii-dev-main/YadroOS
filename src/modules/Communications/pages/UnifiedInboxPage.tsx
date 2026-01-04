@@ -44,7 +44,7 @@ export const UnifiedInboxPage = () => {
               ? [
                   {
                     id: `chat-${thread.id}`,
-                    channel: 'internal' as CommunicationChannel,
+                    channel: (thread.id.startsWith('telegram-') ? 'telegram' : 'internal') as CommunicationChannel,
                     title: thread.title,
                     preview: thread.lastMessage?.content ?? '',
                     timestamp: thread.lastMessage?.createdAt ?? new Date().toISOString(),
