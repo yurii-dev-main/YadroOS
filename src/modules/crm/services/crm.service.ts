@@ -1,5 +1,6 @@
 import { v4 as uuid } from 'uuid';
 
+import { apiClient } from '../../../services/apiClient';
 import {
   CRMActivity,
   CRMAnalyticsSummary,
@@ -26,6 +27,23 @@ type CRMDataStore = {
   activities: CRMActivity[];
   emailTemplates: CRMEmailTemplate[];
   campaigns: CRMEmailCampaign[];
+};
+
+type ActivityApiResponse = {
+  id: string;
+  clientId?: string | null;
+  dealId?: string | null;
+  type: ActivityType;
+  subject?: string | null;
+  description?: string | null;
+  date?: string | null;
+  duration?: number | null;
+  createdBy?: string | null;
+  createdAt: string;
+  creator?: {
+    firstName: string;
+    lastName: string;
+  } | null;
 };
 
 const crmEventTarget = new EventTarget();
@@ -145,6 +163,123 @@ const generateMockActivities = (clients: CRMClient[]): CRMActivity[] => {
       }
     ] as CRMActivity[];
   });
+};
+
+const normalizeActivityDate = (value?: string | null) => {
+  if (!value) return undefined;
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? undefined : date.toISOString();
+};
+
+const mapActivityFromApi = (activity: ActivityApiResponse): CRMActivity => {
+  const creatorName = activity.creator
+    ? `${activity.creator.firstName} ${activity.creator.lastName}`
+    : 'Система';
+  const createdAt = normalizeActivityDate(activity.createdAt) ?? new Date().toISOString();
+  const base = {
+    id: activity.id,
+    clientId: activity.clientId ?? '',
+    createdAt,
+    createdBy: creatorName,
+    type: activity.type,
+    notes: activity.description ?? undefined
+  };
+
+  switch (activity.type) {
+    case 'call':
+      return {
+        ...base,
+        type: 'call',
+        duration: activity.duration ?? 0,
+        summary: activity.subject ?? activity.description ?? ''
+      };
+    case 'meeting':
+      return {
+        ...base,
+        type: 'meeting',
+        date: normalizeActivityDate(activity.date) ?? createdAt,
+        attendees: [],
+        notes: activity.description ?? ''
+      };
+    case 'email':
+      return {
+        ...base,
+        type: 'email',
+        subject: activity.subject ?? '',
+        direction: 'outbound',
+        status: 'sent'
+      };
+    case 'note':
+      return {
+        ...base,
+        type: 'note',
+        content: activity.description ?? activity.subject ?? ''
+      };
+    case 'task': {
+      const rawStatus = activity.subject ?? '';
+      const status = rawStatus === 'pending' || rawStatus === 'in_progress' || rawStatus === 'completed'
+        ? rawStatus
+        : 'pending';
+      return {
+        ...base,
+        type: 'task',
+        deadline: normalizeActivityDate(activity.date) ?? createdAt,
+        status
+      };
+    }
+    default:
+      return {
+        ...base,
+        type: 'note',
+        content: activity.description ?? activity.subject ?? ''
+      };
+  }
+};
+
+const mapActivityToApi = (activity: Omit<CRMActivity, 'id' | 'createdAt'>) => {
+  const description =
+    'notes' in activity && activity.notes
+      ? activity.notes
+      : 'content' in activity
+        ? activity.content
+        : undefined;
+
+  const payload: {
+    clientId: string;
+    dealId?: string;
+    type: ActivityType;
+    subject?: string;
+    description?: string;
+    date?: string;
+    duration?: number;
+  } = {
+    clientId: activity.clientId,
+    type: activity.type,
+    description
+  };
+
+  if ('summary' in activity && activity.summary) {
+    payload.subject = activity.summary;
+  }
+
+  if ('subject' in activity && activity.subject) {
+    payload.subject = activity.subject;
+  }
+
+  if (activity.type === 'task') {
+    payload.subject = 'status' in activity ? activity.status : payload.subject;
+    payload.date = 'deadline' in activity ? activity.deadline : payload.date;
+  }
+
+  if (activity.type === 'meeting') {
+    payload.date = 'date' in activity ? activity.date : payload.date;
+  }
+
+  if ('duration' in activity && activity.duration) {
+    payload.duration = activity.duration;
+  }
+
+  return payload;
 };
 
 class CRMService {
@@ -357,21 +492,17 @@ class CRMService {
   }
 
   async getActivities(clientId?: string) {
-    const activities = clientId
-      ? this.store.activities.filter((activity) => activity.clientId === clientId)
-      : this.store.activities;
-    return this.simulateLatency(activities);
+    const response = await apiClient.get<{ data: ActivityApiResponse[] }>('/activities', {
+      params: clientId ? { clientId } : undefined
+    });
+    return response.data.data.map(mapActivityFromApi);
   }
 
   async createActivity(activity: Omit<CRMActivity, 'id' | 'createdAt'>) {
-    const newActivity: CRMActivity = {
-      ...activity,
-      id: uuid(),
-      createdAt: new Date().toISOString()
-    } as CRMActivity;
-    this.store.activities = [newActivity, ...this.store.activities];
-    emitEvent({ type: 'activities:updated', resourceId: newActivity.clientId });
-    return this.simulateLatency(newActivity);
+    const response = await apiClient.post<ActivityApiResponse>('/activities', mapActivityToApi(activity));
+    const mapped = mapActivityFromApi(response.data);
+    emitEvent({ type: 'activities:updated', resourceId: mapped.clientId });
+    return mapped;
   }
 
   async getAnalytics(): Promise<CRMAnalyticsSummary> {
