@@ -49,6 +49,22 @@ paths:
       responses:
         '200':
           description: Successful response
+    post:
+      summary: Create transaction
+      responses:
+        '201':
+          description: Created
+  /accounting/accounts:
+    get:
+      summary: List accounts
+      responses:
+        '200':
+          description: Successful response
+    post:
+      summary: Create account
+      responses:
+        '201':
+          description: Created
   /accounting/invoices:
     get:
       summary: List invoices
