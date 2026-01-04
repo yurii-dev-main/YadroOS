@@ -16,6 +16,7 @@ import {
   TrainingFeedback,
   TrainingParticipant,
 } from '../types/hr.types';
+import { apiClient } from '../../../services/apiClient';
 
 interface EmployeeFilters {
   department?: string;
@@ -23,6 +24,24 @@ interface EmployeeFilters {
   status?: EmployeeStatus;
   search?: string;
 }
+
+type EmployeeApiResponse = {
+  id: string;
+  userId?: string | null;
+  firstName: string;
+  lastName: string;
+  position?: string | null;
+  department?: string | null;
+  hireDate?: string | null;
+  salary?: number | null;
+  phone?: string | null;
+  avatarUrl?: string | null;
+  createdAt: string;
+  updatedAt: string;
+  user?: {
+    email?: string | null;
+  } | null;
+};
 
 const employees: Employee[] = [
   {
@@ -505,7 +524,63 @@ const hrStatistics: HRStatistics = {
 const clone = <T,>(data: T): T =>
   data === undefined ? data : (JSON.parse(JSON.stringify(data)) as T);
 
+const mapEmployeeFromApi = (employee: EmployeeApiResponse): Employee => ({
+  id: employee.id,
+  name: `${employee.firstName} ${employee.lastName}`.trim(),
+  email: employee.user?.email ?? '',
+  phone: employee.phone ?? '',
+  birthdate: new Date().toISOString(),
+  position: employee.position ?? '—',
+  department: employee.department ?? '—',
+  managerId: undefined,
+  hireDate: employee.hireDate ?? new Date().toISOString(),
+  probationEnd: '',
+  contractEnd: '',
+  salary: employee.salary ?? 0,
+  currency: 'USD',
+  paymentMethod: 'bank_transfer',
+  documents: {
+    passport: '',
+    taxId: '',
+    bankDetails: '',
+  },
+  emergencyContact: {
+    name: '',
+    relationship: '',
+    phone: '',
+  },
+  status: 'active',
+  timeline: [],
+  trainings: [],
+});
+
 export const hrService = {
+  async fetchEmployees(filters: EmployeeFilters = {}): Promise<Employee[]> {
+    const response = await apiClient.get<{ data: EmployeeApiResponse[] }>('/v1/hr/employees', {
+      params: filters,
+    });
+    return response.data.data.map(mapEmployeeFromApi);
+  },
+
+  async fetchEmployeeById(id: string): Promise<Employee | null> {
+    const response = await apiClient.get<EmployeeApiResponse>(`/v1/hr/employees/${id}`);
+    return mapEmployeeFromApi(response.data);
+  },
+
+  async createEmployee(payload: Partial<EmployeeApiResponse>): Promise<Employee> {
+    const response = await apiClient.post<EmployeeApiResponse>('/v1/hr/employees', payload);
+    return mapEmployeeFromApi(response.data);
+  },
+
+  async updateEmployee(id: string, payload: Partial<EmployeeApiResponse>): Promise<Employee> {
+    const response = await apiClient.put<EmployeeApiResponse>(`/v1/hr/employees/${id}`, payload);
+    return mapEmployeeFromApi(response.data);
+  },
+
+  async deleteEmployee(id: string): Promise<void> {
+    await apiClient.delete(`/v1/hr/employees/${id}`);
+  },
+
   getEmployees(filters: EmployeeFilters = {}): Employee[] {
     const { department, position, status, search } = filters;
     return clone(
