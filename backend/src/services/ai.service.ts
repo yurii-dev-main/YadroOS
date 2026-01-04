@@ -15,7 +15,7 @@ const buildMessages = (messages: AIChatMessage[]) => {
   return [{ role: 'system' as const, content: SYSTEM_PROMPT }, ...normalized];
 };
 
-export const generateAIResponse = async (messages: AIChatMessage[]) => {
+const requestOpenAI = async <TResponse>(body: Record<string, unknown>): Promise<TResponse> => {
   if (!env.openAiApiKey) {
     throw new Error('OpenAI API key is not configured');
   }
@@ -26,11 +26,7 @@ export const generateAIResponse = async (messages: AIChatMessage[]) => {
       Authorization: `Bearer ${env.openAiApiKey}`,
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({
-      model: DEFAULT_MODEL,
-      messages: buildMessages(messages),
-      temperature: 0.2
-    })
+    body: JSON.stringify(body)
   });
 
   if (!response.ok) {
@@ -38,9 +34,17 @@ export const generateAIResponse = async (messages: AIChatMessage[]) => {
     throw new Error(`OpenAI request failed: ${response.status} ${errorText}`);
   }
 
-  const payload = (await response.json()) as {
+  return (await response.json()) as TResponse;
+};
+
+export const generateAIResponse = async (messages: AIChatMessage[]) => {
+  const payload = await requestOpenAI<{
     choices?: Array<{ message?: { content?: string } }>;
-  };
+  }>({
+    model: DEFAULT_MODEL,
+    messages: buildMessages(messages),
+    temperature: 0.2
+  });
 
   const content = payload.choices?.[0]?.message?.content?.trim();
   if (!content) {
