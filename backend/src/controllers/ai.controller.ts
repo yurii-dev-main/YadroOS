@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { getAIOverview } from '../services/ai-insights.service';
 import { generateAIResponse } from '../services/ai.service';
 
 export const createChatCompletion = async (req: Request, res: Response) => {
@@ -20,4 +21,14 @@ export const createChatCompletion = async (req: Request, res: Response) => {
   );
 
   return res.json({ content: response });
+};
+
+export const getAIInsights = async (_req: Request, res: Response) => {
+  const overview = getAIOverview();
+  return res.json(overview);
+};
+
+export const createAIInsights = async (_req: Request, res: Response) => {
+  const overview = getAIOverview();
+  return res.json(overview);
 };

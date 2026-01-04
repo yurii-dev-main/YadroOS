@@ -76,7 +76,27 @@ paths:
       summary: List AI insights
       responses:
         '200':
-          description: Successful response
+          description: AI insights overview
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AIOverview'
+    post:
+      summary: Generate AI insights
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '200':
+          description: AI insights overview
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AIOverview'
 components:
   securitySchemes:
     ApiKeyAuth:
@@ -94,6 +114,337 @@ components:
             hr: HR access
             accounting: Accounting access
             ai: AI insights access
+  schemas:
+    AIOverview:
+      type: object
+      properties:
+        crm:
+          type: object
+          properties:
+            leadScores:
+              type: array
+              items:
+                $ref: '#/components/schemas/LeadScoreResult'
+            dealProbabilities:
+              type: array
+              items:
+                $ref: '#/components/schemas/DealProbabilityResult'
+            recommendations:
+              type: array
+              items:
+                $ref: '#/components/schemas/Recommendation'
+            sentimentTrend:
+              type: array
+              items:
+                $ref: '#/components/schemas/SentimentTrendPoint'
+            sentimentSamples:
+              type: array
+              items:
+                $ref: '#/components/schemas/SentimentSample'
+        hr:
+          type: object
+          properties:
+            performance:
+              type: array
+              items:
+                $ref: '#/components/schemas/PerformanceScoreResult'
+            bonusBreakdown:
+              type: array
+              items:
+                $ref: '#/components/schemas/BonusBreakdown'
+            recommendations:
+              type: array
+              items:
+                $ref: '#/components/schemas/Recommendation'
+            talentMatches:
+              type: array
+              items:
+                $ref: '#/components/schemas/TalentMatch'
+        communications:
+          type: object
+          properties:
+            inbox:
+              type: array
+              items:
+                $ref: '#/components/schemas/CommunicationInsight'
+            autoReplies:
+              type: array
+              items:
+                $ref: '#/components/schemas/Recommendation'
+        accounting:
+          type: object
+          properties:
+            expenses:
+              type: array
+              items:
+                $ref: '#/components/schemas/ExpenseInsight'
+            anomalies:
+              type: array
+              items:
+                $ref: '#/components/schemas/Recommendation'
+            forecast:
+              $ref: '#/components/schemas/ForecastScenario'
+        executive:
+          type: object
+          properties:
+            metrics:
+              type: array
+              items:
+                $ref: '#/components/schemas/ExecutiveMetric'
+            insights:
+              type: array
+              items:
+                $ref: '#/components/schemas/ExecutiveInsight'
+            healthScore:
+              type: number
+    LeadProfile:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        companySize:
+          type: number
+        industry:
+          type: string
+        engagement:
+          type: number
+        budget:
+          type: number
+    LeadScoreResult:
+      type: object
+      properties:
+        lead:
+          $ref: '#/components/schemas/LeadProfile'
+        score:
+          type: number
+        factors:
+          type: array
+          items:
+            type: object
+            properties:
+              label:
+                type: string
+              value:
+                type: number
+        explanation:
+          type: string
+    DealProfile:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        stage:
+          type: string
+        daysInStage:
+          type: number
+        activityScore:
+          type: number
+        value:
+          type: number
+        owner:
+          type: string
+    DealProbabilityResult:
+      type: object
+      properties:
+        deal:
+          $ref: '#/components/schemas/DealProfile'
+        probability:
+          type: number
+        drivers:
+          type: array
+          items:
+            type: object
+            properties:
+              label:
+                type: string
+              impact:
+                type: number
+        recommendations:
+          type: array
+          items:
+            type: string
+    Recommendation:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        type:
+          type: string
+          enum: [action, insight, alert]
+        confidence:
+          type: number
+    SentimentTrendPoint:
+      type: object
+      properties:
+        date:
+          type: string
+        score:
+          type: number
+    SentimentSample:
+      type: object
+      properties:
+        id:
+          type: string
+        channel:
+          type: string
+          enum: [email, chat]
+        customer:
+          type: string
+        sentiment:
+          type: string
+          enum: [positive, negative, neutral]
+        text:
+          type: string
+        timestamp:
+          type: string
+    PerformanceScoreResult:
+      type: object
+      properties:
+        employeeId:
+          type: string
+        employeeName:
+          type: string
+        normalizedScore:
+          type: number
+        trend:
+          type: string
+          enum: [improving, stable, declining]
+        highlights:
+          type: array
+          items:
+            type: string
+    BonusBreakdown:
+      type: object
+      properties:
+        employeeId:
+          type: string
+        bonusAmount:
+          type: number
+        baseSalary:
+          type: number
+        performanceCoefficient:
+          type: number
+        companyModifier:
+          type: number
+        components:
+          type: array
+          items:
+            type: object
+            properties:
+              label:
+                type: string
+              weight:
+                type: number
+              value:
+                type: number
+    TalentMatch:
+      type: object
+      properties:
+        employeeId:
+          type: string
+        employeeName:
+          type: string
+        matchScore:
+          type: number
+        recommendedRole:
+          type: string
+        skillGaps:
+          type: array
+          items:
+            type: string
+    CommunicationInsight:
+      type: object
+      properties:
+        id:
+          type: string
+        category:
+          type: string
+        priority:
+          type: string
+          enum: [urgent, normal, low]
+        summary:
+          type: string
+        suggestedActions:
+          type: array
+          items:
+            type: string
+    ExpenseInsight:
+      type: object
+      properties:
+        id:
+          type: string
+        statement:
+          type: string
+        category:
+          type: string
+        delta:
+          type: number
+        unit:
+          type: string
+    ForecastScenario:
+      type: object
+      properties:
+        horizonMonths:
+          type: number
+        baseline:
+          type: array
+          items:
+            $ref: '#/components/schemas/ForecastPoint'
+        bestCase:
+          type: array
+          items:
+            $ref: '#/components/schemas/ForecastPoint'
+        worstCase:
+          type: array
+          items:
+            $ref: '#/components/schemas/ForecastPoint'
+    ForecastPoint:
+      type: object
+      properties:
+        period:
+          type: string
+        value:
+          type: number
+        lowerBound:
+          type: number
+        upperBound:
+          type: number
+    ExecutiveMetric:
+      type: object
+      properties:
+        id:
+          type: string
+        label:
+          type: string
+        value:
+          oneOf:
+            - type: string
+            - type: number
+        change:
+          type: number
+        unit:
+          type: string
+    ExecutiveInsight:
+      type: object
+      properties:
+        id:
+          type: string
+        message:
+          type: string
+        category:
+          type: string
+          enum: [crm, hr, finance]
+        severity:
+          type: string
+          enum: [info, warning, critical]
 security:
   - ApiKeyAuth: []
   - OAuth2:
