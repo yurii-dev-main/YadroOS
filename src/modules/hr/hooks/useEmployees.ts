@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { hrService } from '../services/hr.service';
 import {
   Department,
@@ -26,28 +26,52 @@ interface UseEmployeesResult {
   selectEmployee: (id: string | null) => void;
   orgChart: OrgChartNode;
   statistics: HRStatistics;
+  isLoading: boolean;
 }
 
 export const useEmployees = (): UseEmployeesResult => {
   const [filters, setFilters] = useState<EmployeeFilterState>({});
   const [selectedEmployeeId, setSelectedEmployeeId] = useState<string | null>(null);
-
-  const employees = useMemo(() => hrService.getEmployees(filters), [filters]);
+  const [employees, setEmployees] = useState<Employee[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const departments = useMemo(() => hrService.getDepartments(), []);
 
   const positions = useMemo(() => {
-    const allEmployees = hrService.getEmployees();
-    return Array.from(new Set(allEmployees.map((employee) => employee.position))).sort();
-  }, []);
+    return Array.from(new Set(employees.map((employee) => employee.position))).sort();
+  }, [employees]);
 
   const orgChart = useMemo(() => hrService.getOrgChart(), []);
 
   const statistics = useMemo(() => hrService.getStatistics(), []);
 
+  useEffect(() => {
+    let isMounted = true;
+    const loadEmployees = async () => {
+      setIsLoading(true);
+      try {
+        const data = await hrService.fetchEmployees(filters);
+        if (isMounted) {
+          setEmployees(data);
+          if (selectedEmployeeId && !data.find((employee) => employee.id === selectedEmployeeId)) {
+            setSelectedEmployeeId(null);
+          }
+        }
+      } finally {
+        if (isMounted) {
+          setIsLoading(false);
+        }
+      }
+    };
+    loadEmployees();
+    return () => {
+      isMounted = false;
+    };
+  }, [filters, selectedEmployeeId]);
+
   const selectedEmployee = useMemo(
-    () => (selectedEmployeeId ? hrService.getEmployeeById(selectedEmployeeId) : undefined),
-    [selectedEmployeeId],
+    () => employees.find((employee) => employee.id === selectedEmployeeId),
+    [employees, selectedEmployeeId],
   );
 
   return {
@@ -61,5 +85,6 @@ export const useEmployees = (): UseEmployeesResult => {
     selectEmployee: setSelectedEmployeeId,
     orgChart,
     statistics,
+    isLoading,
   };
 };

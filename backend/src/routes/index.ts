@@ -4,6 +4,7 @@ import activitiesRoutes from './activities.routes';
 import crmRoutes from './crm.routes';
 import financeRoutes from './finance.routes';
 import accountingRoutes from './accounting.routes';
+import hrRoutes from './hr.routes';
 
 const router = Router();
 
@@ -12,5 +13,6 @@ router.use('/activities', activitiesRoutes);
 router.use('/crm', crmRoutes);
 router.use('/finance', financeRoutes);
 router.use('/v1/accounting', accountingRoutes);
+router.use('/v1/hr', hrRoutes);
 
 export default router;
