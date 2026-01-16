@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { Bot, ChartBar, Lightbulb } from 'lucide-react';
+import { BarChart, Bot, Lightbulb } from 'lucide-react';
 
 import { Button } from '../../components/ui/button';
 import { usePermissions } from '../../hooks/usePermissions';
 import { AIDashboardPage, ChatPage, InsightsPage } from '../../modules/ai';
 
 const tabs = [
-  { id: 'dashboard', label: 'AI Дашборд', icon: ChartBar },
+  { id: 'dashboard', label: 'AI Дашборд', icon: BarChart },
   { id: 'insights', label: 'AI Інсайти', icon: Lightbulb },
   { id: 'assistant', label: 'AI Асистент', icon: Bot }
 ] as const;
