@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../../../components/ui/card';
-import { Employee, OffboardingChecklist } from '../types/hr.types';
+import type { Employee, OffboardingChecklist } from '../types/hr.types';
 import { getEmployeeName } from '../utils/hr.utils';
 
 interface OffboardingChecklistProps {

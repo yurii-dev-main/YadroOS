@@ -1,4 +1,4 @@
-import { Lightbulb, TriangleAlert } from 'lucide-react';
+import { AlertTriangle, Lightbulb } from 'lucide-react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '../../../components/ui/card';
 import type { Recommendation } from '../types/ai.types';
@@ -6,7 +6,7 @@ import type { Recommendation } from '../types/ai.types';
 const typeToIcon: Record<Recommendation['type'], typeof Lightbulb> = {
   action: Lightbulb,
   insight: Lightbulb,
-  alert: TriangleAlert
+  alert: AlertTriangle
 };
 
 const typeToColor: Record<Recommendation['type'], string> = {
