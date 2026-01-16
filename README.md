@@ -39,7 +39,7 @@ YadroOS — модульная веб‑платформа для управле
    ```bash
    npm install
    ```
-3. Запустите дев‑сервер Vite (по умолчанию на http://localhost:5173/):
+3. Запустите дев‑сервер Vite (по умолчанию на http://localhost:5187/):
    ```bash
    npm run dev
    ```

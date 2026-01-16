@@ -19,7 +19,7 @@ services:
       JWT_ACCESS_SECRET: dev-access-secret
       JWT_REFRESH_SECRET: dev-refresh-secret
       PORT: 3000
-      CORS_ORIGIN: http://localhost:5173
+      CORS_ORIGIN: http://localhost:5187
     depends_on:
       - db
     ports:

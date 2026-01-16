@@ -9,6 +9,6 @@ export const env = {
   jwtRefreshSecret: process.env.JWT_REFRESH_SECRET || 'refresh-secret',
   accessTokenExpiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN || '15m',
   refreshTokenExpiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN || '7d',
-  corsOrigin: process.env.CORS_ORIGIN || 'http://localhost:5173',
+  corsOrigin: process.env.CORS_ORIGIN || 'http://localhost:5187',
   openAiApiKey: process.env.OPENAI_API_KEY || ''
 };
