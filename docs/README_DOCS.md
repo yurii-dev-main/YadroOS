@@ -13,6 +13,7 @@
 - API и интеграции: `docs/technical/api-reference.md`.
 - База данных: `docs/technical/database-schema.md`.
 - Процесс разработки: `docs/technical/development-guide.md`.
+- Автозапуск окружения: `docs/technical/auto-start-protocol.md`.
 - Запуск и поддержка в продакшене: `docs/admin/launch-checklist.md` и `docs/admin/maintenance-plan.md`.
 
 При добавлении новых модулей или процессов обновляйте соответствующий раздел и добавляйте ссылку сюда для удобства поиска.
