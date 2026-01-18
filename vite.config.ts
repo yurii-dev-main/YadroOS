@@ -13,6 +13,14 @@ export default defineConfig(({ mode }) => {
     define: {
       __DEMO_SINGLEFILE__: JSON.stringify(isSingleFileDemo)
     },
+    ...(isSingleFileDemo
+      ? {
+          transformIndexHtml: (html) =>
+            html
+              .replace(/<link\s+rel="manifest"[^>]*>\s*/i, '')
+              .replace(/<link\s+rel="apple-touch-icon"[^>]*>\s*/i, '')
+        }
+      : {}),
     plugins: [
       react(),
       ...(isSingleFileDemo

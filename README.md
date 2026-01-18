@@ -82,7 +82,7 @@ PowerShell флаги:
   npm run build:demo
   ```
   После этого открыть `dist/index.html` напрямую (подходит для показа внешнего вида, маршруты работают через #).
-  Если в `dist/` остались папки `assets/`, удалите `dist/` и повторите `npm run build:demo`.
+  Если в `dist/` остались папки `assets/`, удалите `dist/` и повторите `npm run build:demo` или запустите `npm run build:demo:clean`.
 - Проверка типов (TypeScript):
   ```bash
   npm run type-check
