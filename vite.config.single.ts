@@ -4,6 +4,11 @@ import { viteSingleFile } from 'vite-plugin-singlefile';
 
 export default defineConfig({
   base: './',
+  define: {
+    __DEMO_SINGLEFILE__: JSON.stringify(true)
+  },
+  transformIndexHtml: (html) =>
+    html.replace(/<link\s+rel="manifest"[^>]*>\s*/i, '').replace(/<link\s+rel="apple-touch-icon"[^>]*>\s*/i, ''),
   plugins: [
     react(),
     viteSingleFile({
