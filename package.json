@@ -8,6 +8,8 @@
     "build": "vite build",
     "build:demo": "cross-env DEMO_SINGLEFILE=true vite build",
     "build:demo:clean": "rimraf dist && npm run build:demo",
+    "build:single": "vite build --config vite.config.single.ts",
+    "build:single:clean": "rimraf dist && npm run build:single",
     "type-check": "tsc -b",
     "preview": "vite preview",
     "lint": "eslint \"src/**/*.{ts,tsx}\" --max-warnings=0",
