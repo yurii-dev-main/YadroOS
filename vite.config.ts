@@ -15,9 +15,12 @@ export default defineConfig(({ mode }) => {
     },
     plugins: [
       react(),
-      ...(isSingleFileDemo ? [viteSingleFile()] : []),
       ...(isSingleFileDemo
-        ? []
+        ? [
+            viteSingleFile({
+              removeViteModuleLoader: true
+            })
+          ]
         : [
             VitePWA({
               srcDir: 'src/mobile',
@@ -46,7 +49,8 @@ export default defineConfig(({ mode }) => {
           assetsInlineLimit: 100000000,
           rollupOptions: {
             output: {
-              inlineDynamicImports: true
+              inlineDynamicImports: true,
+              manualChunks: undefined
             }
           }
         }
