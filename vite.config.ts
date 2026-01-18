@@ -8,6 +8,9 @@ export default defineConfig(() => {
 
   return {
     base: isSingleFileDemo ? './' : '/',
+    define: {
+      __DEMO_SINGLEFILE__: JSON.stringify(isSingleFileDemo)
+    },
     plugins: [
       react(),
       ...(isSingleFileDemo ? [viteSingleFile()] : []),
