@@ -77,13 +77,12 @@ PowerShell флаги:
   ```bash
   npm run build
   ```
-
 - Самодостаточная демо‑сборка в один HTML (для запуска без Node.js/сервера):
   ```bash
   npm run build:demo
   ```
-  После этого открыть `dist/index.html` напрямую (подходит для показа внешнего вида).
-
+  После этого открыть `dist/index.html` напрямую (подходит для показа внешнего вида, маршруты работают через #).
+  Если в `dist/` остались папки `assets/`, удалите `dist/` и повторите `npm run build:demo`.
 - Проверка типов (TypeScript):
   ```bash
   npm run type-check

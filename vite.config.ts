@@ -1,10 +1,12 @@
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 import { viteSingleFile } from 'vite-plugin-singlefile';
 
-export default defineConfig(() => {
-  const isSingleFileDemo = process.env.DEMO_SINGLEFILE === 'true';
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), '');
+  const demoFlag = env.DEMO_SINGLEFILE ?? process.env.DEMO_SINGLEFILE;
+  const isSingleFileDemo = demoFlag === 'true' || demoFlag === '1';
 
   return {
     base: isSingleFileDemo ? './' : '/',
@@ -41,7 +43,12 @@ export default defineConfig(() => {
     build: isSingleFileDemo
       ? {
           cssCodeSplit: false,
-          assetsInlineLimit: 100000000
+          assetsInlineLimit: 100000000,
+          rollupOptions: {
+            output: {
+              inlineDynamicImports: true
+            }
+          }
         }
       : undefined,
     server: {
