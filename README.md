@@ -77,6 +77,10 @@ PowerShell флаги:
   ```bash
   npm run build
   ```
+- Проверка типов (TypeScript):
+  ```bash
+  npm run type-check
+  ```
 - Предпросмотр production‑сборки:
   ```bash
   npm run preview
