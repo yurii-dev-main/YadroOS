@@ -162,13 +162,13 @@ export class TotpService {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const key = await cryptoProvider.subtle.importKey(
       'raw',
-      decodedSecret as any,
+      decodedSecret as any, // eslint-disable-line @typescript-eslint/no-explicit-any
       { name: 'HMAC', hash: 'SHA-1' },
       false,
       ['sign']
     );
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const signature = await cryptoProvider.subtle.sign('HMAC', key, counter as any);
+    const signature = await cryptoProvider.subtle.sign('HMAC', key, counter as any); // eslint-disable-line @typescript-eslint/no-explicit-any
     const hmac = new Uint8Array(signature);
     const offset = hmac[hmac.length - 1] & 0x0f;
     const binary =

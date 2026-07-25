@@ -60,9 +60,9 @@ export const encryptionService = {
     const encoded = textEncoder.encode(plainText);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const cipherBuffer = await cryptoProvider.subtle.encrypt(
-      { name: 'AES-GCM', iv: iv as any },
+      { name: 'AES-GCM', iv: iv as any }, // eslint-disable-line @typescript-eslint/no-explicit-any
       key,
-      encoded as any
+      encoded as any // eslint-disable-line @typescript-eslint/no-explicit-any
     );
     return {
       iv: toBase64(iv.buffer),
@@ -75,9 +75,9 @@ export const encryptionService = {
     const data = fromBase64(payload.cipherText);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const plainBuffer = await cryptoProvider.subtle.decrypt(
-      { name: 'AES-GCM', iv: iv as any },
+      { name: 'AES-GCM', iv: iv as any }, // eslint-disable-line @typescript-eslint/no-explicit-any
       key,
-      data as any
+      data as any // eslint-disable-line @typescript-eslint/no-explicit-any
     );
     return textDecoder.decode(plainBuffer);
   }

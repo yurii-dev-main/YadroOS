@@ -68,7 +68,7 @@ export const LoginPage = () => {
           Log In
         </Button>
         <p className="text-center text-sm text-slate-400">
-          Don't have an account?{' '}
+          Don&apos;t have an account?{' '}
           <Link to="/register" className="text-primary hover:underline">
             Register
           </Link>
