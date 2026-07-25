@@ -15,13 +15,7 @@ export interface EmergencyContact {
 }
 
 export type TimelineEventType =
-  | 'hiring'
-  | 'promotion'
-  | 'review'
-  | 'training'
-  | 'leave'
-  | 'warning'
-  | 'milestone';
+  'hiring' | 'promotion' | 'review' | 'training' | 'leave' | 'warning' | 'milestone';
 
 export interface EmployeeTimelineEvent {
   id: string;

@@ -55,8 +55,7 @@ export const UnifiedInboxPage = () => {
                     timestamp: thread.lastMessage?.createdAt ?? new Date().toISOString(),
                     unread: Boolean(thread.unreadCount),
                     priority: (thread.unreadCount && thread.unreadCount > 0 ? 'high' : 'normal') as
-                      | 'high'
-                      | 'normal',
+                      'high' | 'normal',
                     payload: thread.lastMessage
                   }
                 ]

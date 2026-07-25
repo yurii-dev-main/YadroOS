@@ -117,11 +117,7 @@ export interface CRMTaskActivity extends CRMActivityBase {
 }
 
 export type CRMActivity =
-  | CRMCallActivity
-  | CRMMeetingActivity
-  | CRMEmailActivity
-  | CRMNoteActivity
-  | CRMTaskActivity;
+  CRMCallActivity | CRMMeetingActivity | CRMEmailActivity | CRMNoteActivity | CRMTaskActivity;
 
 export interface CRMClientFilters {
   status?: ClientStatus | 'all';
@@ -196,10 +192,7 @@ export interface CRMEmailCampaign {
 }
 
 export type CRMEventType =
-  | 'clients:updated'
-  | 'deals:updated'
-  | 'activities:updated'
-  | 'analytics:updated';
+  'clients:updated' | 'deals:updated' | 'activities:updated' | 'analytics:updated';
 
 export interface CRMEventPayload {
   type: CRMEventType;

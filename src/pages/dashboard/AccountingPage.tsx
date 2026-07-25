@@ -1,4 +1,4 @@
-import { AccountingWorkspace } from '../../modules/Accounting';
+import { AccountingWorkspace } from '../../modules/accounting';
 import { usePermissions } from '../../hooks/usePermissions';
 
 export const AccountingPage = () => {

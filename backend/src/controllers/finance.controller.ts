@@ -62,8 +62,7 @@ export const createInvoice = async (req: Request, res: Response) => {
     status
   } = req.body;
   const lineItems = req.body.lineItems as
-    | Array<{ quantity: number; unitPrice: number }>
-    | undefined;
+    Array<{ quantity: number; unitPrice: number }> | undefined;
 
   const subtotal =
     lineItems?.reduce((acc, item) => acc + item.quantity * item.unitPrice, 0) ?? Number(amount);

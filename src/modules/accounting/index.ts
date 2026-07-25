@@ -8,3 +8,4 @@ export { PayrollPage } from './pages/PayrollPage';
 export { ReportsPage } from './pages/ReportsPage';
 export { BudgetsPage } from './pages/BudgetsPage';
 export { AccountingWorkspace } from './pages/AccountingWorkspace';
+export { AccountingSnapshot } from './AccountingSnapshot';
