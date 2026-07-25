@@ -13,9 +13,9 @@ interface ClientTableProps {
 }
 
 const sortableColumns: Array<{ key: ClientSortField; label: string }> = [
-  { key: 'name', label: 'Клієнт' },
-  { key: 'createdAt', label: 'Дата створення' },
-  { key: 'revenue', label: 'Дохід' }
+  { key: 'name', label: 'Client' },
+  { key: 'createdAt', label: 'Created Date' },
+  { key: 'revenue', label: 'Revenue' }
 ];
 
 export const ClientTable = ({
@@ -68,16 +68,16 @@ export const ClientTable = ({
                 </button>
               </th>
             ))}
-            <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-400">Менеджер</th>
-            <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-400">Статус</th>
-            <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-400">Теги</th>
+            <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-400">Manager</th>
+            <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-400">Status</th>
+            <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-400">Tags</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-slate-800/60">
           {loading && (
             <tr>
               <td colSpan={7} className="px-6 py-12 text-center text-slate-400">
-                Завантаження клієнтів...
+                Loading clients...
               </td>
             </tr>
           )}
@@ -85,7 +85,7 @@ export const ClientTable = ({
           {!loading && clients.length === 0 && (
             <tr>
               <td colSpan={7} className="px-6 py-12 text-center text-slate-400">
-                Клієнтів не знайдено. Додайте нового клієнта, щоб почати.
+                No clients found. Add a new client to get started.
               </td>
             </tr>
           )}

@@ -7,10 +7,10 @@ interface EmailSidebarProps {
 }
 
 const folders = [
-  { id: 'inbox', label: 'Вхідні' },
-  { id: 'sent', label: 'Надіслані' },
-  { id: 'drafts', label: 'Чернетки' },
-  { id: 'trash', label: 'Кошик' },
+  { id: 'inbox', label: 'Inbox' },
+  { id: 'sent', label: 'Sent' },
+  { id: 'drafts', label: 'Drafts' },
+  { id: 'trash', label: 'Trash' },
 ];
 
 export const EmailSidebar = ({ searchParams, onChange, onCompose }: EmailSidebarProps) => {
@@ -25,13 +25,13 @@ export const EmailSidebar = ({ searchParams, onChange, onCompose }: EmailSidebar
           className="w-full rounded-md border border-emerald-500 bg-emerald-600/20 px-3 py-2 text-sm text-emerald-300 hover:bg-emerald-500/30"
           onClick={onCompose}
         >
-          Новий лист
+          New Email
         </button>
       </div>
       <div className="p-4">
         <input
           className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-xs text-slate-100"
-          placeholder="Пошук..."
+          placeholder="Search..."
           value={searchParams.query ?? ''}
           onChange={(event) => onChange({ ...searchParams, query: event.target.value })}
         />
@@ -57,7 +57,7 @@ export const EmailSidebar = ({ searchParams, onChange, onCompose }: EmailSidebar
             checked={Boolean(searchParams.unreadOnly)}
             onChange={(event) => onChange({ ...searchParams, unreadOnly: event.target.checked })}
           />
-          Непрочитані
+          Unread
         </label>
         <label className="flex items-center gap-2">
           <input
@@ -66,7 +66,7 @@ export const EmailSidebar = ({ searchParams, onChange, onCompose }: EmailSidebar
             checked={Boolean(searchParams.starredOnly)}
             onChange={(event) => onChange({ ...searchParams, starredOnly: event.target.checked })}
           />
-          Позначені
+          Starred
         </label>
       </div>
     </aside>

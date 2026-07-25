@@ -122,7 +122,7 @@ Have clients in a spreadsheet? Import them!
 ### Creating a Deal
 
 1. Go to CRM → Pipeline
-2. Click "+ New Deal" або drag client to stage
+2. Click "+ New Deal" or drag client to stage
 3. Fill information:
    - Title (what are you selling?)
    - Client (select from list)

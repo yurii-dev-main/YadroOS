@@ -26,7 +26,7 @@ export const UnifiedInboxPage = () => {
           preview: email.preview,
           timestamp: email.date,
           unread: email.unread,
-          priority: email.starred ? 'high' : 'normal',
+          priority: (email.starred ? 'high' : 'normal') as 'high' | 'normal',
           tags: email.tags,
           relatedClient: email.relatedClientId
             ? {
@@ -49,7 +49,7 @@ export const UnifiedInboxPage = () => {
                     preview: thread.lastMessage?.content ?? '',
                     timestamp: thread.lastMessage?.createdAt ?? new Date().toISOString(),
                     unread: Boolean(thread.unreadCount),
-                    priority: thread.unreadCount && thread.unreadCount > 0 ? 'high' : 'normal',
+                    priority: (thread.unreadCount && thread.unreadCount > 0 ? 'high' : 'normal') as 'high' | 'normal',
                     payload: thread.lastMessage,
                   },
                 ]

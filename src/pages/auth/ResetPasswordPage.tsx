@@ -10,12 +10,12 @@ import { authService } from '../../services/authService';
 
 const resetSchema = z
   .object({
-    password: z.string().min(6, 'Мінімум 6 символів'),
-    confirmPassword: z.string().min(6, 'Підтвердіть пароль')
+    password: z.string().min(6, 'Minimum 6 characters'),
+    confirmPassword: z.string().min(6, 'Confirm password')
   })
   .refine((values) => values.password === values.confirmPassword, {
     path: ['confirmPassword'],
-    message: 'Паролі не співпадають'
+    message: 'Passwords do not match'
   });
 
 type ResetFormValues = z.infer<typeof resetSchema>;
@@ -38,7 +38,7 @@ export const ResetPasswordPage = () => {
       const valid = await authService.verifyResetToken(token);
       setIsTokenValid(valid);
       if (!valid) {
-        methods.setError('password', { message: 'Токен недійсний або прострочений' });
+        methods.setError('password', { message: 'Token is invalid or expired' });
       }
     };
 
@@ -54,14 +54,14 @@ export const ResetPasswordPage = () => {
   };
 
   if (isTokenValid === null) {
-    return <p className="text-sm text-slate-400">Перевірка токена...</p>;
+    return <p className="text-sm text-slate-400">Verifying token...</p>;
   }
 
   if (!isTokenValid) {
     return (
       <div className="space-y-4 text-center">
-        <h2 className="text-xl font-semibold text-slate-50">Посилання недійсне</h2>
-        <p className="text-sm text-slate-400">Запросіть нове посилання для відновлення.</p>
+        <h2 className="text-xl font-semibold text-slate-50">Link is invalid</h2>
+        <p className="text-sm text-slate-400">Request a new reset link.</p>
       </div>
     );
   }
@@ -70,23 +70,23 @@ export const ResetPasswordPage = () => {
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-6" noValidate>
         <div>
-          <h2 className="text-xl font-semibold text-slate-50">Створення нового паролю</h2>
-          <p className="text-sm text-slate-400">Вигадайте надійний пароль для доступу</p>
+          <h2 className="text-xl font-semibold text-slate-50">Create New Password</h2>
+          <p className="text-sm text-slate-400">Create a secure password for access</p>
         </div>
         <FormField<ResetFormValues>
           name="password"
-          label="Новий пароль"
+          label="New Password"
           type="password"
           autoComplete="new-password"
         />
         <FormField<ResetFormValues>
           name="confirmPassword"
-          label="Підтвердження паролю"
+          label="Confirm Password"
           type="password"
           autoComplete="new-password"
         />
         <Button type="submit" className="w-full">
-          Оновити пароль
+          Update Password
         </Button>
       </form>
     </FormProvider>

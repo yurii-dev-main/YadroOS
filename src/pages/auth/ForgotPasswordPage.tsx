@@ -8,7 +8,7 @@ import { FormField } from '../../components/forms/FormField';
 import { useAuthStore } from '../../store/authStore';
 
 const forgotSchema = z.object({
-  email: z.string().email('Введіть коректний email')
+  email: z.string().email('Enter a valid email')
 });
 
 type ForgotFormValues = z.infer<typeof forgotSchema>;
@@ -25,7 +25,7 @@ export const ForgotPasswordPage = () => {
       methods.reset();
     } catch (error) {
       methods.setError('email', {
-        message: error instanceof Error ? error.message : 'Не вдалося відправити лист'
+        message: error instanceof Error ? error.message : 'Failed to send email'
       });
     }
   };
@@ -34,17 +34,17 @@ export const ForgotPasswordPage = () => {
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-6" noValidate>
         <div>
-          <h2 className="text-xl font-semibold text-slate-50">Відновлення паролю</h2>
+          <h2 className="text-xl font-semibold text-slate-50">Password Reset</h2>
           <p className="text-sm text-slate-400">
-            Вкажіть email, ми надішлемо посилання для відновлення
+            Specify your email, we will send a reset link
           </p>
         </div>
         <FormField<ForgotFormValues> name="email" label="Email" type="email" autoComplete="email" />
         <Button type="submit" className="w-full">
-          Надіслати інструкції
+          Send instructions
         </Button>
         <p className="text-center text-sm text-slate-400">
-          Повернутися до <Link to="/login" className="text-primary hover:underline">входу</Link>
+          Back to <Link to="/login" className="text-primary hover:underline">login</Link>
         </p>
       </form>
     </FormProvider>

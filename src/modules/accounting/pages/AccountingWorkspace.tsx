@@ -8,12 +8,12 @@ import { ReportsPage } from './ReportsPage';
 import { BudgetsPage } from './BudgetsPage';
 
 const sections = [
-  { id: 'accounts', label: 'Рахунки', component: AccountsPage },
-  { id: 'transactions', label: 'Транзакції', component: TransactionsPage },
-  { id: 'invoices', label: 'Інвойси', component: InvoicesPage },
-  { id: 'payroll', label: 'Зарплати', component: PayrollPage },
-  { id: 'reports', label: 'Звіти', component: ReportsPage },
-  { id: 'budgets', label: 'Бюджети', component: BudgetsPage },
+  { id: 'accounts', label: 'Accounts', component: AccountsPage },
+  { id: 'transactions', label: 'Transactions', component: TransactionsPage },
+  { id: 'invoices', label: 'Invoices', component: InvoicesPage },
+  { id: 'payroll', label: 'Payroll', component: PayrollPage },
+  { id: 'reports', label: 'Reports', component: ReportsPage },
+  { id: 'budgets', label: 'Budgets', component: BudgetsPage },
 ];
 
 export const AccountingWorkspace = () => {

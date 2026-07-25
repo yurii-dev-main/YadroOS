@@ -54,10 +54,10 @@ export const AccountsPage = () => {
             onReconcile={(accountId) => handleImport(accountId)}
           />
           <div className="rounded-lg border border-slate-800 bg-slate-900/60 p-4 text-sm text-slate-200">
-            <h3 className="text-base font-semibold text-slate-100">Переказ між рахунками</h3>
+            <h3 className="text-base font-semibold text-slate-100">Transfer between accounts</h3>
             <div className="mt-4 grid gap-3 md:grid-cols-2">
               <div className="grid gap-2">
-                <span className="text-xs text-slate-500">З рахунку</span>
+                <span className="text-xs text-slate-500">From account</span>
                 <select
                   className="rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm"
                   value={fromAccount}
@@ -67,7 +67,7 @@ export const AccountsPage = () => {
                     if (account) setCurrency(account.currency);
                   }}
                 >
-                  <option value="">Оберіть рахунок</option>
+                  <option value="">Select account</option>
                   {accounts.map((account) => (
                     <option key={account.id} value={account.id}>
                       {account.name}
@@ -76,13 +76,13 @@ export const AccountsPage = () => {
                 </select>
               </div>
               <div className="grid gap-2">
-                <span className="text-xs text-slate-500">На рахунок</span>
+                <span className="text-xs text-slate-500">To account</span>
                 <select
                   className="rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm"
                   value={toAccount}
                   onChange={(event) => setToAccount(event.target.value)}
                 >
-                  <option value="">Оберіть рахунок</option>
+                  <option value="">Select account</option>
                   {accounts
                     .filter((account) => account.id !== fromAccount)
                     .map((account) => (
@@ -95,7 +95,7 @@ export const AccountsPage = () => {
             </div>
             <div className="mt-4 grid gap-3 md:grid-cols-3">
               <div className="grid gap-2">
-                <span className="text-xs text-slate-500">Сума</span>
+                <span className="text-xs text-slate-500">Amount</span>
                 <Input
                   type="number"
                   value={transferAmount}
@@ -103,7 +103,7 @@ export const AccountsPage = () => {
                 />
               </div>
               <div className="grid gap-2">
-                <span className="text-xs text-slate-500">Валюта</span>
+                <span className="text-xs text-slate-500">Currency</span>
                 <select
                   className="rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm"
                   value={currency}
@@ -115,24 +115,24 @@ export const AccountsPage = () => {
                 </select>
               </div>
               <div className="grid gap-2">
-                <span className="text-xs text-slate-500">Опис</span>
+                <span className="text-xs text-slate-500">Description</span>
                 <Input value={description} onChange={(event) => setDescription(event.target.value)} />
               </div>
             </div>
             <div className="mt-4 flex flex-wrap items-center gap-2">
               <Button variant="secondary" size="sm" onClick={handleTransfer} disabled={loading}>
-                Виконати переказ
+                Execute transfer
               </Button>
               {fromAccount && (
                 <Button variant="ghost" size="sm" onClick={() => handleImport(fromAccount)}>
-                  Імпорт з банку
+                  Import from bank
                 </Button>
               )}
             </div>
           </div>
         </div>
         <div className="space-y-6">
-          <AccountForm onSubmit={(payload) => addAccount(payload)} />
+          <AccountForm onSubmit={async (payload) => { await addAccount(payload); }} />
           <ExchangeRateWidget exchangeRate={exchangeRate} onRefresh={() => refreshExchangeRates()} />
           <ReconciliationPanel accounts={accounts} />
         </div>

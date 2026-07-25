@@ -26,12 +26,9 @@ export const ScoreGauge = ({ value, label, size = 180, suffix = '%' }: ScoreGaug
           >
             <RadialBar
               background
-              clockWise
               dataKey="value"
               cornerRadius={12}
               fill="#38bdf8"
-              minAngle={15}
-              maxAngle={360}
             />
           </RadialBarChart>
         </ResponsiveContainer>

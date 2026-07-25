@@ -6,9 +6,9 @@ import { usePermissions } from '../../hooks/usePermissions';
 import { AIDashboardPage, ChatPage, InsightsPage } from '../../modules/ai';
 
 const tabs = [
-  { id: 'dashboard', label: 'AI Дашборд', icon: BarChart },
-  { id: 'insights', label: 'AI Інсайти', icon: Lightbulb },
-  { id: 'assistant', label: 'AI Асистент', icon: Bot }
+  { id: 'dashboard', label: 'AI Dashboard', icon: BarChart },
+  { id: 'insights', label: 'AI Insights', icon: Lightbulb },
+  { id: 'assistant', label: 'AI Assistant', icon: Bot }
 ] as const;
 
 type TabId = (typeof tabs)[number]['id'];
@@ -18,7 +18,7 @@ export const AISuitePage = () => {
   const [activeTab, setActiveTab] = useState<TabId>('dashboard');
 
   if (!can('ai:read')) {
-    return <p className="text-sm text-danger">Недостатньо прав для перегляду AI аналітики.</p>;
+    return <p className="text-sm text-danger">Insufficient permissions to view AI analytics.</p>;
   }
 
   return (

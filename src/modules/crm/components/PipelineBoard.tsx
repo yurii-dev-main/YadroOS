@@ -30,7 +30,7 @@ const Column = ({ stage, deals, onQuickEdit }: { stage: DealStage; deals: CRMDea
           ))}
           {deals.length === 0 && (
             <div className="rounded-2xl border border-dashed border-slate-700/60 bg-slate-900/40 p-6 text-center text-xs text-slate-500">
-              Перетягніть угоди сюди
+              Drag deals here
             </div>
           )}
         </div>

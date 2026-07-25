@@ -129,7 +129,7 @@ See: docs/technical/database-schema.md for full ER diagram
 
 ## API Architecture
 
-RESTful API на /api/v1/
+RESTful API at /api/v1/
 
 ### Endpoints Structure
 ```
@@ -231,5 +231,5 @@ RESTful API на /api/v1/
 ## Monitoring & Logging
 - Application: Sentry
 - Uptime: UptimeRobot
-- Logs: Centralized (ELK stack або CloudWatch)
+- Logs: Centralized (ELK stack or CloudWatch)
 - Metrics: Custom dashboard

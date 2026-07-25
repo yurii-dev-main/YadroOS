@@ -53,7 +53,7 @@ export const MobileLayout = ({ children, updateAvailable = false, onRefresh }: M
     <div className="relative min-h-screen bg-slate-950 text-slate-100">
       {!isOnline && (
         <div className="fixed inset-x-0 top-0 z-40 bg-amber-500/90 px-4 py-2 text-center text-sm font-semibold text-slate-950">
-          Немає підключення до мережі. Офлайн режим.
+          No network connection. Offline mode.
         </div>
       )}
       {updateAvailable && onRefresh && (
@@ -62,7 +62,7 @@ export const MobileLayout = ({ children, updateAvailable = false, onRefresh }: M
           className="fixed inset-x-4 bottom-28 z-50 rounded-xl bg-emerald-500 px-4 py-3 text-sm font-semibold text-emerald-950 shadow-lg"
           onClick={onRefresh}
         >
-          Доступне оновлення. Натисніть, щоб перезавантажити.
+          Update available. Click to reload.
         </button>
       )}
       <header className="sticky top-0 z-30 flex items-center justify-between gap-3 border-b border-slate-800 bg-slate-950/80 px-4 py-3 pt-safe backdrop-blur">
@@ -70,7 +70,7 @@ export const MobileLayout = ({ children, updateAvailable = false, onRefresh }: M
           type="button"
           onClick={() => setDrawerOpen(true)}
           className="flex h-11 w-11 items-center justify-center rounded-full border border-slate-700 text-slate-100"
-          aria-label="Відкрити меню"
+          aria-label="Open menu"
         >
           <Menu className="h-5 w-5" />
         </button>
@@ -79,7 +79,7 @@ export const MobileLayout = ({ children, updateAvailable = false, onRefresh }: M
           <button
             type="button"
             className="relative flex h-11 w-11 items-center justify-center rounded-full border border-slate-700"
-            aria-label="Сповіщення"
+            aria-label="Notifications"
             onClick={() => navigate('/dashboard/communications')}
           >
             <Bell className="h-5 w-5" />
@@ -103,7 +103,7 @@ export const MobileLayout = ({ children, updateAvailable = false, onRefresh }: M
           <div className="space-y-4">
             {!isOnline && (
               <p className="rounded-xl border border-amber-400/40 bg-amber-500/20 p-4 text-xs text-amber-100">
-                Ви працюєте офлайн. Дані синхронізуються після підключення до мережі.
+                You are working offline. Data will synchronize once reconnected to the network.
               </p>
             )}
             {canInstall && (
@@ -112,7 +112,7 @@ export const MobileLayout = ({ children, updateAvailable = false, onRefresh }: M
                 onClick={install}
                 className="flex w-full items-center justify-between rounded-xl border border-slate-800 bg-slate-900 px-4 py-3 text-left"
               >
-                <span className="text-sm font-semibold">Встановити додаток</span>
+                <span className="text-sm font-semibold">Install app</span>
                 <PlusCircle className="h-5 w-5" />
               </button>
             )}
@@ -127,17 +127,17 @@ export const MobileLayout = ({ children, updateAvailable = false, onRefresh }: M
         actions={[
           {
             icon: <UserPlus className="h-4 w-4" />,
-            label: 'Додати клієнта',
+            label: 'Add client',
             onClick: () => navigate('/dashboard/crm')
           },
           {
             icon: <Workflow className="h-4 w-4" />,
-            label: 'Нова угода',
+            label: 'New deal',
             onClick: () => navigate('/dashboard/crm')
           },
           {
             icon: <Camera className="h-4 w-4" />,
-            label: 'Сканувати',
+            label: 'Scan',
             onClick: () => setActionsSheetOpen(true)
           }
         ]}

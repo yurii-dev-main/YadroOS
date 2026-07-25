@@ -7,11 +7,11 @@ import { TrainingCard } from '../components/TrainingCard';
 import { TrainingStatus } from '../types/hr.types';
 
 const statusOptions = [
-  { label: 'Всі події', value: '' },
-  { label: 'Заплановані', value: 'scheduled' },
-  { label: 'Тривають', value: 'ongoing' },
-  { label: 'Завершені', value: 'completed' },
-  { label: 'Скасовані', value: 'cancelled' },
+  { label: 'All events', value: '' },
+  { label: 'Scheduled', value: 'scheduled' },
+  { label: 'Ongoing', value: 'ongoing' },
+  { label: 'Completed', value: 'completed' },
+  { label: 'Cancelled', value: 'cancelled' },
 ];
 
 export const TrainingsPage = () => {
@@ -23,12 +23,12 @@ export const TrainingsPage = () => {
     <div className="space-y-6">
       <Card className="border-slate-800 bg-slate-900/70">
         <CardHeader>
-          <CardTitle className="text-lg text-slate-100">Календар тренінгів</CardTitle>
+          <CardTitle className="text-lg text-slate-100">Training Calendar</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
             <p className="text-sm text-slate-300">
-              Плануйте воркшопи, вебінари та курси. Відмічайте присутність та збирайте фідбек.
+              Plan workshops, webinars, and courses. Mark attendance and gather feedback.
             </p>
             <select
               value={filters.status ?? ''}

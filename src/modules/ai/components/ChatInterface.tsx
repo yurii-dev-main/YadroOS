@@ -9,7 +9,7 @@ import { askAssistant } from '../services/ai.service';
 const initialMessage: ChatMessage = {
   id: 'welcome',
   role: 'assistant',
-  content: 'Вітаю! Я AI-радник YadroOS. Запитайте про клієнтів, співробітників чи фінанси — і я згенерую потрібний інсайт.',
+  content: 'Hello! I am YadroOS AI Advisor. Ask about clients, employees, or finances — and I will generate the needed insight.',
   timestamp: Date.now()
 };
 
@@ -95,11 +95,11 @@ export const ChatInterface = () => {
         <Input
           value={input}
           onChange={(event) => setInput(event.target.value)}
-          placeholder="Поставте запитання, наприклад: 'Покажи топ клієнтів за доходом'"
+          placeholder="Ask a question, for example: 'Show top clients by revenue'"
           className="flex-1"
         />
         <Button type="submit" disabled={pending} className="gap-2">
-          <Send className="h-4 w-4" /> Надіслати
+          <Send className="h-4 w-4" /> Send
         </Button>
       </form>
     </div>

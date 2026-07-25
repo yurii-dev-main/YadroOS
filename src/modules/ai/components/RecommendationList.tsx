@@ -18,7 +18,7 @@ export const RecommendationList = ({ recommendations, title }: RecommendationLis
             <div className="space-y-1">
               <p className="font-medium text-slate-100">{recommendation.title}</p>
               <p className="text-sm text-slate-300">{recommendation.description}</p>
-              <span className="text-xs text-slate-500">Впевненість {(recommendation.confidence * 100).toFixed(0)}%</span>
+              <span className="text-xs text-slate-500">Confidence {(recommendation.confidence * 100).toFixed(0)}%</span>
             </div>
           </div>
         </li>

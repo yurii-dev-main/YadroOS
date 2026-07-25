@@ -12,10 +12,10 @@ export const AttendancePage = () => {
     <div className="space-y-6">
       <Card className="border-slate-800 bg-slate-900/70">
         <CardHeader>
-          <CardTitle className="text-lg text-slate-100">Облік часу</CardTitle>
+          <CardTitle className="text-lg text-slate-100">Time Tracking</CardTitle>
         </CardHeader>
         <CardContent className="text-sm text-slate-300">
-          Відстежуйте чек-іни, графіки, відпустки та лікарняні. Звітуйте по відвідуваності та контролюйте овертайми.
+          Track check-ins, schedules, vacations, and sick leave. Report on attendance and monitor overtime.
         </CardContent>
       </Card>
 

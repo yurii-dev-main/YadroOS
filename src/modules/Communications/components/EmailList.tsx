@@ -56,7 +56,7 @@ export const EmailList = ({ emails, selectedIds, onSelect, onOpen }: EmailListPr
           </div>
         </article>
       ))}
-      {!emails.length && <p className="p-6 text-center text-sm text-slate-500">Немає листів за обраними критеріями.</p>}
+      {!emails.length && <p className="p-6 text-center text-sm text-slate-500">No emails matching the selected criteria.</p>}
     </div>
   );
 };

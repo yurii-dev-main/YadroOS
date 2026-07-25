@@ -11,7 +11,7 @@ export const InsightsPage = () => {
     <div className="space-y-8">
       <section className="grid gap-6 lg:grid-cols-2">
         {insightsLoading ? (
-          <p className="text-sm text-slate-400">AI формує рекомендації…</p>
+          <p className="text-sm text-slate-400">AI is generating recommendations…</p>
         ) : (
           insights.map((group) => (
             <Card key={group.title} className="border-slate-800/60 bg-slate-950/40">
@@ -31,13 +31,13 @@ export const InsightsPage = () => {
       <section>
         <Card>
           <CardHeader>
-            <CardTitle>Прогнози</CardTitle>
+            <CardTitle>Predictions</CardTitle>
           </CardHeader>
           <CardContent className="grid gap-4 md:grid-cols-2">
             {predictionsLoading
               ? [1, 2].map((placeholder) => (
                   <div key={placeholder} className="rounded-lg border border-slate-800/60 bg-slate-900/40 p-4 text-sm text-slate-400">
-                    Аналітика обробляється…
+                    Analytics processing…
                   </div>
                 ))
               : predictions.map((prediction) => (
@@ -47,10 +47,10 @@ export const InsightsPage = () => {
                       <p className="text-sm text-slate-300">{prediction.description}</p>
                     </div>
                     <p className="text-xs uppercase tracking-wide text-slate-500">
-                      Впевненість {(prediction.confidence * 100).toFixed(0)}%
+                      Confidence {(prediction.confidence * 100).toFixed(0)}%
                     </p>
                     <p className="text-xs text-slate-400">
-                      Горизонт прогнозу: {prediction.forecast.horizonMonths} місяців
+                      Forecast horizon: {prediction.forecast.horizonMonths} months
                     </p>
                   </div>
                 ))}

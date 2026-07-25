@@ -7,11 +7,11 @@ interface ActivityLogProps {
 }
 
 const activityLabels: Record<ActivityType, string> = {
-  call: 'Дзвінок',
-  meeting: 'Зустріч',
+  call: 'Call',
+  meeting: 'Meeting',
   email: 'Email',
-  note: 'Нотатка',
-  task: 'Завдання'
+  note: 'Note',
+  task: 'Task'
 };
 
 export const ActivityLog = ({ activities, filter, onFilterChange }: ActivityLogProps) => {
@@ -29,7 +29,7 @@ export const ActivityLog = ({ activities, filter, onFilterChange }: ActivityLogP
                 : 'bg-slate-800/80 text-slate-300 hover:bg-slate-700/80'
             }`}
           >
-            {type === 'all' ? 'Усі' : activityLabels[type]}
+            {type === 'all' ? 'All' : activityLabels[type]}
           </button>
         ))}
       </div>
@@ -43,29 +43,29 @@ export const ActivityLog = ({ activities, filter, onFilterChange }: ActivityLogP
               <div className="ml-8 flex flex-1 flex-col gap-2 rounded-2xl border border-slate-700/40 bg-slate-900/60 p-4 shadow-lg shadow-black/20">
                 <div className="flex items-center justify-between">
                   <h4 className="text-sm font-semibold text-white">
-                    {activity.type === 'call' && 'Дзвінок'}
-                    {activity.type === 'meeting' && 'Зустріч'}
+                    {activity.type === 'call' && 'Call'}
+                    {activity.type === 'meeting' && 'Meeting'}
                     {activity.type === 'email' && 'Email'}
-                    {activity.type === 'note' && 'Нотатка'}
-                    {activity.type === 'task' && 'Завдання'}
+                    {activity.type === 'note' && 'Note'}
+                    {activity.type === 'task' && 'Task'}
                   </h4>
                   <span className="text-xs text-slate-400">{new Date(activity.createdAt).toLocaleString()}</span>
                 </div>
                 <p className="text-sm text-slate-200">{('notes' in activity && activity.notes) || ('content' in activity && activity.content) || '—'}</p>
                 <div className="grid grid-cols-2 gap-3 text-xs text-slate-400">
-                  {'duration' in activity && <span>Тривалість: {activity.duration} хв.</span>}
-                  {'summary' in activity && <span>Резюме: {activity.summary}</span>}
-                  {'deadline' in activity && <span>Дедлайн: {new Date(activity.deadline).toLocaleDateString()}</span>}
-                  {'status' in activity && 'deadline' in activity && <span>Статус: {activity.status}</span>}
-                  {'attendees' in activity && <span>Учасники: {activity.attendees.join(', ')}</span>}
-                  {'subject' in activity && <span>Тема: {activity.subject}</span>}
+                  {'duration' in activity && <span>Duration: {activity.duration} min.</span>}
+                  {'summary' in activity && <span>Summary: {activity.summary}</span>}
+                  {'deadline' in activity && <span>Deadline: {new Date(activity.deadline).toLocaleDateString()}</span>}
+                  {'status' in activity && 'deadline' in activity && <span>Status: {activity.status}</span>}
+                  {'attendees' in activity && <span>Attendees: {activity.attendees.join(', ')}</span>}
+                  {'subject' in activity && <span>Subject: {activity.subject}</span>}
                 </div>
               </div>
             </div>
           ))}
           {activities.length === 0 && (
             <div className="ml-8 rounded-2xl border border-dashed border-slate-700/50 bg-slate-900/40 p-6 text-center text-sm text-slate-400">
-              Немає активностей для відображення.
+              No activities to display.
             </div>
           )}
         </div>

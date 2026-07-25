@@ -50,7 +50,7 @@ export const Sidebar = () => {
           <Menu className="h-5 w-5" />
         </button>
       </div>
-      <nav className={cn('space-y-1 px-4 py-6', !isOpen && 'hidden lg:block')} aria-label="Основна навігація">
+      <nav className={cn('space-y-1 px-4 py-6', !isOpen && 'hidden lg:block')} aria-label="Main navigation">
         {items.map((item) => {
           const Icon = iconMap[item.icon] ?? LayoutDashboard;
           const isActive = location.pathname.startsWith(item.to);

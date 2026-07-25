@@ -20,7 +20,7 @@ const statusStyles: Record<Invoice['status'], string> = {
 export const InvoiceList = ({ invoices, onSend, onRecordPayment, onDownload }: InvoiceListProps) => (
   <Card className="border border-slate-800 bg-slate-900/60">
     <CardHeader>
-      <CardTitle className="text-base text-slate-100">Інвойси</CardTitle>
+      <CardTitle className="text-base text-slate-100">Invoices</CardTitle>
     </CardHeader>
     <CardContent className="space-y-4 text-sm text-slate-200">
       {invoices.map((invoice) => {
@@ -40,10 +40,10 @@ export const InvoiceList = ({ invoices, onSend, onRecordPayment, onDownload }: I
               </span>
             </div>
             <div className="mt-3 grid gap-2 text-xs text-slate-400 md:grid-cols-4">
-              <span>Виписано: {format(new Date(invoice.issueDate), 'dd.MM.yyyy')}</span>
-              <span>Оплата до: {format(new Date(invoice.dueDate), 'dd.MM.yyyy')}</span>
-              <span>Разом: {total.toFixed(2)} {invoice.currency}</span>
-              <span>Сплачено: {(invoice.payments ?? []).reduce((acc, payment) => acc + payment.amount, 0).toFixed(2)} {invoice.currency}</span>
+              <span>Issued: {format(new Date(invoice.issueDate), 'dd.MM.yyyy')}</span>
+              <span>Due: {format(new Date(invoice.dueDate), 'dd.MM.yyyy')}</span>
+              <span>Total: {total.toFixed(2)} {invoice.currency}</span>
+              <span>Paid: {(invoice.payments ?? []).reduce((acc, payment) => acc + payment.amount, 0).toFixed(2)} {invoice.currency}</span>
             </div>
             <div className="mt-4 flex flex-wrap items-center gap-2">
               <Button variant="ghost" size="sm" onClick={() => onDownload(invoice.id)}>
@@ -51,19 +51,19 @@ export const InvoiceList = ({ invoices, onSend, onRecordPayment, onDownload }: I
               </Button>
               {invoice.status === 'draft' && (
                 <Button variant="secondary" size="sm" onClick={() => onSend(invoice.id)}>
-                  Надіслати
+                  Send
                 </Button>
               )}
               {invoice.status !== 'paid' && (
                 <Button variant="outline" size="sm" onClick={() => onRecordPayment(invoice.id)}>
-                  Записати оплату
+                  Record payment
                 </Button>
               )}
             </div>
           </div>
         );
       })}
-      {!invoices.length && <p className="text-xs text-slate-500">Інвойси відсутні.</p>}
+      {!invoices.length && <p className="text-xs text-slate-500">No invoices available.</p>}
     </CardContent>
   </Card>
 );

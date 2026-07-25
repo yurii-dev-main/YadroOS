@@ -1,13 +1,13 @@
 import { Link, useLocation } from 'react-router-dom';
 
 const segmentLabels: Record<string, string> = {
-  dashboard: 'Дашборд',
+  dashboard: 'Dashboard',
   crm: 'CRM',
-  communications: 'Комунікації',
+  communications: 'Communications',
   hr: 'HR',
-  accounting: 'Бухгалтерія',
-  ai: 'AI Аналітика',
-  profile: 'Профіль'
+  accounting: 'Accounting',
+  ai: 'AI Analytics',
+  profile: 'Profile'
 };
 
 export const Breadcrumbs = () => {
@@ -19,7 +19,7 @@ export const Breadcrumbs = () => {
       <ol className="flex flex-wrap items-center gap-2">
         <li>
           <Link to="/dashboard" className="text-slate-200 hover:text-primary">
-            Головна
+            Home
           </Link>
         </li>
         {segments.map((segment, index) => {

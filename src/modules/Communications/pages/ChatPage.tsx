@@ -7,7 +7,7 @@ import { chatService } from '../services/chat.service';
 
 const activeUser = {
   id: 'u-1',
-  name: 'Анна Левченко',
+  name: 'Anna Levchenko',
   avatar: 'https://i.pravatar.cc/64?img=15',
 };
 
@@ -25,13 +25,13 @@ export const ChatPage = () => {
           threads={threads}
           activeChatId={activeChatId}
           onSelect={setActiveChatId}
-          onCreateGroup={() => alert('Форма створення групи')}
+          onCreateGroup={() => alert('Group creation form')}
         />
         <div className="flex min-w-0 flex-1 flex-col">
           <div className="flex items-center justify-between border-b border-slate-800 px-4 py-3">
             <div>
-              <h2 className="text-base font-semibold text-slate-100">Внутрішній месенджер</h2>
-              <p className="text-xs text-slate-500">Online статуси, read receipts та threads у реальному часі</p>
+              <h2 className="text-base font-semibold text-slate-100">Internal Messenger</h2>
+              <p className="text-xs text-slate-500">Online statuses, read receipts and threads in real time</p>
             </div>
             <span className="rounded-full bg-emerald-500/20 px-3 py-1 text-xs text-emerald-300">WebSocket active</span>
           </div>

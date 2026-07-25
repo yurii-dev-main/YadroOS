@@ -26,10 +26,10 @@ export const PayrollPage = () => {
   return (
     <div className="space-y-6">
       <div className="rounded-lg border border-slate-800 bg-slate-900/60 p-4 text-sm text-slate-200">
-        <h3 className="text-base font-semibold text-slate-100">Запуск розрахунку</h3>
+        <h3 className="text-base font-semibold text-slate-100">Run Calculation</h3>
         <div className="mt-4 grid gap-4 md:grid-cols-4">
           <div className="grid gap-2">
-            <span className="text-xs text-slate-500">Період</span>
+            <span className="text-xs text-slate-500">Period</span>
             <Input type="month" value={period} onChange={(event) => setPeriod(event.target.value)} />
           </div>
           <label className="flex items-center gap-2 text-xs text-slate-400">
@@ -39,7 +39,7 @@ export const PayrollPage = () => {
               onChange={(event) => setIncludeBonuses(event.target.checked)}
               className="h-4 w-4 rounded border border-slate-600 bg-slate-900"
             />
-            Включити бонуси AI
+            Include AI bonuses
           </label>
           <label className="flex items-center gap-2 text-xs text-slate-400">
             <input
@@ -48,14 +48,14 @@ export const PayrollPage = () => {
               onChange={(event) => setIncludeOvertime(event.target.checked)}
               className="h-4 w-4 rounded border border-slate-600 bg-slate-900"
             />
-            Надбавка за овертайм
+            Overtime pay
           </label>
           <div className="flex items-center justify-end gap-2">
             <Button variant="secondary" size="sm" onClick={handleRun} disabled={loading}>
-              Розрахувати
+              Calculate
             </Button>
             <Button variant="outline" size="sm" onClick={handleMarkPaid}>
-              Позначити оплаченим
+              Mark as paid
             </Button>
           </div>
         </div>

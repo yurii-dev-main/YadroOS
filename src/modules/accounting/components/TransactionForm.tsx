@@ -54,25 +54,25 @@ export const TransactionForm = ({ accounts, categories, defaultCurrency = 'UAH',
       onSubmit={handleSubmit(submit)}
       className="grid gap-4 rounded-lg border border-slate-800 bg-slate-900/60 p-4 text-sm text-slate-200"
     >
-      <h3 className="text-base font-semibold text-slate-100">Нова транзакція</h3>
+      <h3 className="text-base font-semibold text-slate-100">New Transaction</h3>
       <div className="grid gap-2">
-        <Label htmlFor="type">Тип</Label>
+        <Label htmlFor="type">Type</Label>
         <select
           id="type"
           className="rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm"
           {...register('type', { required: true })}
         >
-          <option value="income">Дохід</option>
-          <option value="expense">Витрата</option>
-          <option value="transfer">Переказ</option>
+          <option value="income">Income</option>
+          <option value="expense">Expense</option>
+          <option value="transfer">Transfer</option>
         </select>
       </div>
       <div className="grid gap-2">
-        <Label htmlFor="amount">Сума</Label>
+        <Label htmlFor="amount">Amount</Label>
         <Input id="amount" type="number" step="0.01" {...register('amount', { valueAsNumber: true, required: true })} />
       </div>
       <div className="grid gap-2">
-        <Label htmlFor="currency">Валюта</Label>
+        <Label htmlFor="currency">Currency</Label>
         <select
           id="currency"
           className="rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm"
@@ -84,7 +84,7 @@ export const TransactionForm = ({ accounts, categories, defaultCurrency = 'UAH',
         </select>
       </div>
       <div className="grid gap-2">
-        <Label htmlFor="accountId">З рахунку</Label>
+        <Label htmlFor="accountId">From Account</Label>
         <select
           id="accountId"
           className="rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm"
@@ -99,13 +99,13 @@ export const TransactionForm = ({ accounts, categories, defaultCurrency = 'UAH',
       </div>
       {type === 'transfer' && (
         <div className="grid gap-2">
-          <Label htmlFor="toAccountId">На рахунок</Label>
+          <Label htmlFor="toAccountId">To Account</Label>
           <select
             id="toAccountId"
             className="rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm"
             {...register('toAccountId', { required: true })}
           >
-            <option value="">Оберіть рахунок</option>
+            <option value="">Select account</option>
             {accounts.map((account) => (
               <option key={account.id} value={account.id}>
                 {account.name}
@@ -115,13 +115,13 @@ export const TransactionForm = ({ accounts, categories, defaultCurrency = 'UAH',
         </div>
       )}
       <div className="grid gap-2">
-        <Label htmlFor="categoryId">Категорія</Label>
+        <Label htmlFor="categoryId">Category</Label>
         <select
           id="categoryId"
           className="rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm"
           {...register('categoryId')}
         >
-          <option value="">Без категорії</option>
+          <option value="">Uncategorized</option>
           {categories
             .filter((category) => category.type !== 'income' || type !== 'expense')
             .map((category) => (
@@ -132,19 +132,19 @@ export const TransactionForm = ({ accounts, categories, defaultCurrency = 'UAH',
         </select>
       </div>
       <div className="grid gap-2">
-        <Label htmlFor="date">Дата</Label>
+        <Label htmlFor="date">Date</Label>
         <Input id="date" type="date" {...register('date', { required: true })} />
       </div>
       <div className="grid gap-2">
-        <Label htmlFor="description">Опис</Label>
-        <Input id="description" {...register('description')} placeholder="Примітка" />
+        <Label htmlFor="description">Description</Label>
+        <Input id="description" {...register('description')} placeholder="Note" />
       </div>
       <div className="grid gap-2">
-        <Label htmlFor="tags">Теги</Label>
-        <Input id="tags" {...register('tags')} placeholder="marketing, квартал" />
+        <Label htmlFor="tags">Tags</Label>
+        <Input id="tags" {...register('tags')} placeholder="marketing, quarter" />
       </div>
       <Button type="submit" variant="secondary" className="mt-2">
-        Додати транзакцію
+        Add Transaction
       </Button>
     </form>
   );

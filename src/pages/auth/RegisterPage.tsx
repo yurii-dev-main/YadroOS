@@ -9,15 +9,15 @@ import { useAuthStore } from '../../store/authStore';
 
 const registerSchema = z
   .object({
-    name: z.string().min(2, 'Мінімум 2 символи'),
-    company: z.string().min(2, 'Вкажіть компанію'),
-    email: z.string().email('Введіть коректний email'),
-    password: z.string().min(6, 'Мінімум 6 символів'),
-    confirmPassword: z.string().min(6, 'Підтвердіть пароль')
+    name: z.string().min(2, 'Minimum 2 characters'),
+    company: z.string().min(2, 'Specify company name'),
+    email: z.string().email('Enter a valid email'),
+    password: z.string().min(6, 'Minimum 6 characters'),
+    confirmPassword: z.string().min(6, 'Confirm password')
   })
   .refine((data) => data.password === data.confirmPassword, {
     path: ['confirmPassword'],
-    message: 'Паролі не співпадають'
+    message: 'Passwords do not match'
   });
 
 type RegisterFormValues = z.infer<typeof registerSchema>;
@@ -36,12 +36,12 @@ export const RegisterPage = () => {
   const registerUser = useAuthStore((state) => state.register);
   const navigate = useNavigate();
 
-  const onSubmit = async ({ confirmPassword, ...payload }: RegisterFormValues) => {
+  const onSubmit = async ({ confirmPassword: _confirmPassword, ...payload }: RegisterFormValues) => {
     try {
       await registerUser(payload);
       navigate('/dashboard');
     } catch (error) {
-      methods.setError('email', { message: error instanceof Error ? error.message : 'Помилка реєстрації' });
+      methods.setError('email', { message: error instanceof Error ? error.message : 'Registration error' });
     }
   };
 
@@ -49,31 +49,31 @@ export const RegisterPage = () => {
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-6" noValidate>
         <div>
-          <h2 className="text-xl font-semibold text-slate-50">Реєстрація</h2>
-          <p className="text-sm text-slate-400">Створіть командний обліковий запис</p>
+          <h2 className="text-xl font-semibold text-slate-50">Registration</h2>
+          <p className="text-sm text-slate-400">Create a team account</p>
         </div>
-        <FormField<RegisterFormValues> name="name" label="Ім'я" autoComplete="name" />
-        <FormField<RegisterFormValues> name="company" label="Компанія" autoComplete="organization" />
+        <FormField<RegisterFormValues> name="name" label="Name" autoComplete="name" />
+        <FormField<RegisterFormValues> name="company" label="Company" autoComplete="organization" />
         <FormField<RegisterFormValues> name="email" label="Email" type="email" autoComplete="email" />
         <FormField<RegisterFormValues>
           name="password"
-          label="Пароль"
+          label="Password"
           type="password"
           autoComplete="new-password"
         />
         <FormField<RegisterFormValues>
           name="confirmPassword"
-          label="Підтвердження паролю"
+          label="Confirm Password"
           type="password"
           autoComplete="new-password"
         />
         <Button type="submit" className="w-full">
-          Створити акаунт
+          Create Account
         </Button>
         <p className="text-center text-sm text-slate-400">
-          Вже маєте акаунт?{' '}
+          Already have an account?{' '}
           <Link to="/login" className="text-primary hover:underline">
-            Увійдіть
+            Log in
           </Link>
         </p>
       </form>

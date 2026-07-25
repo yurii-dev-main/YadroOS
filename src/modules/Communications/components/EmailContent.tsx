@@ -9,7 +9,7 @@ interface EmailContentProps {
 
 export const EmailContent = ({ email, onReply, onAssignClient, availableTags = [] }: EmailContentProps) => {
   if (!email) {
-    return <div className="flex h-full items-center justify-center text-sm text-slate-500">Оберіть лист зі списку</div>;
+    return <div className="flex h-full items-center justify-center text-sm text-slate-500">Select an email from the list</div>;
   }
 
   return (
@@ -18,24 +18,24 @@ export const EmailContent = ({ email, onReply, onAssignClient, availableTags = [
         <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
           <div>
             <h2 className="text-lg font-semibold text-slate-100">{email.subject}</h2>
-            <p className="text-xs text-slate-500">Від: {email.from}</p>
+            <p className="text-xs text-slate-500">From: {email.from}</p>
           </div>
           <div className="flex items-center gap-2 text-xs text-slate-500">
             <span>{new Date(email.date).toLocaleString()}</span>
             {email.relatedClientId ? (
-              <span className="rounded bg-emerald-500/20 px-2 py-1 text-emerald-300">Прив'язано до клієнта</span>
+              <span className="rounded bg-emerald-500/20 px-2 py-1 text-emerald-300">Linked to client</span>
             ) : (
               <button
                 className="rounded border border-slate-700 px-2 py-1 hover:border-emerald-500 hover:text-emerald-400"
                 onClick={onAssignClient}
               >
-                Прив'язати до клієнта
+                Link to client
               </button>
             )}
           </div>
         </div>
         <div className="flex flex-wrap items-center gap-2 text-xs text-slate-400">
-          <span>Кому: {email.to.join(', ')}</span>
+          <span>To: {email.to.join(', ')}</span>
           {email.cc?.length ? <span>CC: {email.cc.join(', ')}</span> : null}
           {email.bcc?.length ? <span>BCC: {email.bcc.join(', ')}</span> : null}
           {email.tags?.map((tag) => (
@@ -44,7 +44,7 @@ export const EmailContent = ({ email, onReply, onAssignClient, availableTags = [
             </span>
           ))}
           <select className="rounded border border-slate-700 bg-slate-900 px-2 py-1 text-slate-200">
-            <option>Додати тег</option>
+            <option>Add tag</option>
             {availableTags.map((tag) => (
               <option key={tag.id} value={tag.id}>
                 {tag.label}
@@ -64,19 +64,19 @@ export const EmailContent = ({ email, onReply, onAssignClient, availableTags = [
             className="rounded border border-slate-700 px-3 py-2 hover:border-emerald-500 hover:text-emerald-400"
             onClick={() => onReply('reply')}
           >
-            Відповісти
+            Reply
           </button>
           <button
             className="rounded border border-slate-700 px-3 py-2 hover:border-emerald-500 hover:text-emerald-400"
             onClick={() => onReply('replyAll')}
           >
-            Відповісти всім
+            Reply all
           </button>
           <button
             className="rounded border border-slate-700 px-3 py-2 hover:border-emerald-500 hover:text-emerald-400"
             onClick={() => onReply('forward')}
           >
-            Переслати
+            Forward
           </button>
         </div>
       </footer>

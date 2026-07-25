@@ -19,9 +19,9 @@ export const AccountList = ({ accounts, exchangeRate, baseCurrency, onReconcile 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-slate-100">Рахунки</h3>
+        <h3 className="text-lg font-semibold text-slate-100">Accounts</h3>
         <div className="text-sm text-slate-400">
-          Загальний баланс:{' '}
+          Total Balance:{' '}
           <span className="font-semibold text-secondary">
             {total.toLocaleString('uk-UA', { style: 'currency', currency: baseCurrency })}
           </span>

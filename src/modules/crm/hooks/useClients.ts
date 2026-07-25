@@ -51,7 +51,7 @@ export const useClients = () => {
       setTotal(result.total);
       setError(null);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Не вдалося завантажити клієнтів');
+      setError(err instanceof Error ? err.message : 'Failed to fetch clients');
     } finally {
       setLoading(false);
     }

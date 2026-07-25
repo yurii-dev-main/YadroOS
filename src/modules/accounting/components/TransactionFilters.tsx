@@ -11,9 +11,9 @@ interface TransactionFiltersProps {
 }
 
 const typeLabels: Record<TransactionType, string> = {
-  income: 'Дохід',
-  expense: 'Витрата',
-  transfer: 'Переказ',
+  income: 'Income',
+  expense: 'Expense',
+  transfer: 'Transfer',
 };
 
 export const TransactionFilters = ({ filters, categories, onFiltersChange, onSearch }: TransactionFiltersProps) => {
@@ -53,15 +53,15 @@ export const TransactionFilters = ({ filters, categories, onFiltersChange, onSea
       </div>
       <div className="grid gap-3 md:grid-cols-3">
         <div className="grid gap-2">
-          <span className="text-xs text-slate-500">Від</span>
+          <span className="text-xs text-slate-500">From</span>
           <Input type="date" value={filters.dateRange?.from ?? ''} onChange={handleDateChange('from')} />
         </div>
         <div className="grid gap-2">
-          <span className="text-xs text-slate-500">До</span>
+          <span className="text-xs text-slate-500">To</span>
           <Input type="date" value={filters.dateRange?.to ?? ''} onChange={handleDateChange('to')} />
         </div>
         <div className="grid gap-2">
-          <span className="text-xs text-slate-500">Категорія</span>
+          <span className="text-xs text-slate-500">Category</span>
           <select
             className="rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm"
             value={filters.categories[0] ?? ''}
@@ -69,7 +69,7 @@ export const TransactionFilters = ({ filters, categories, onFiltersChange, onSea
               onFiltersChange({ categories: event.target.value ? [event.target.value] : [] })
             }
           >
-            <option value="">Всі</option>
+            <option value="">All</option>
             {categories.map((category) => (
               <option key={category.id} value={category.id}>
                 {category.name}
@@ -81,14 +81,14 @@ export const TransactionFilters = ({ filters, categories, onFiltersChange, onSea
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Input
-            placeholder="Пошук за описом або тегами"
+            placeholder="Search by description or tags"
             value={filters.tags[0] ?? ''}
             onChange={(event) => onFiltersChange({ tags: event.target.value ? [event.target.value] : [] })}
           />
         </div>
         {onSearch && (
           <Button variant="secondary" onClick={onSearch}>
-            Застосувати
+            Apply
           </Button>
         )}
       </div>

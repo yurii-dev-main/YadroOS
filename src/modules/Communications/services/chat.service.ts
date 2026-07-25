@@ -10,12 +10,12 @@ import {
 import { apiClient } from '../../../services/apiClient';
 
 const cannedResponses: CannedResponse[] = [
-  { id: 'cr-1', shortcut: '/thanks', title: 'Подяка', content: 'Дякуємо за звернення! Ми вже працюємо над вашим запитом.' },
+  { id: 'cr-1', shortcut: '/thanks', title: 'Thank You', content: 'Thank you for reaching out! We are already working on your request.' },
   {
     id: 'cr-2',
     shortcut: '/schedule',
-    title: 'Запропонувати дзвінок',
-    content: 'Чи зручно буде вам обговорити деталі на короткому дзвінку завтра о 12:00?',
+    title: 'Offer a call',
+    content: 'Would it be convenient for you to discuss the details on a short call tomorrow at 12:00?',
   },
 ];
 
@@ -24,13 +24,13 @@ const autoResponders: AutoResponder[] = [
     id: 'auto-1',
     type: 'out_of_office',
     active: false,
-    message: 'Доброго дня! Ми зараз поза офісом, повернемося до вас протягом 24 годин.',
+    message: 'Hello! We are currently out of office, we will get back to you within 24 hours.',
   },
   {
     id: 'auto-2',
     type: 'business_hours',
     active: true,
-    message: 'Вітаємо! Ми працюємо з 9:00 до 18:00. Відповімо одразу, як будемо онлайн.',
+    message: 'Welcome! We work from 9:00 to 18:00. We will reply as soon as we are online.',
   },
 ];
 

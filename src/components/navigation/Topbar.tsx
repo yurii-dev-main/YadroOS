@@ -25,15 +25,15 @@ export const Topbar = () => {
           <Search className="pointer-events-none absolute left-3 h-4 w-4 text-slate-500" />
           <Input
             type="search"
-            placeholder="Пошук по платформі"
+            placeholder="Search platform"
             className="w-full rounded-lg border border-slate-800 bg-slate-900 pl-9"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            aria-label="Пошук"
+            aria-label="Search"
           />
         </div>
         <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" aria-label="Переглянути сповіщення">
+          <Button variant="ghost" size="icon" aria-label="View notifications">
             <Bell className="h-5 w-5" />
           </Button>
           <div className="flex items-center gap-3">
@@ -44,9 +44,9 @@ export const Topbar = () => {
             </div>
           </div>
           <Button variant="outline" onClick={() => navigate('/profile')}>
-            Профіль
+            Profile
           </Button>
-          <Button variant="ghost" onClick={handleLogout} aria-label="Вийти">
+          <Button variant="ghost" onClick={handleLogout} aria-label="Log out">
             <LogOut className="h-5 w-5" />
           </Button>
         </div>

@@ -25,10 +25,12 @@ export const useTrainings = (): UseTrainingsResult => {
   const trainings = useMemo(() => {
     const data = hrService.getTrainings(filters.status);
     return data.sort((a, b) => a.date.localeCompare(b.date));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters, version]);
 
   const selectedTraining = useMemo(
     () => (selectedTrainingId ? hrService.getTrainingById(selectedTrainingId) : undefined),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [selectedTrainingId, version],
   );
 

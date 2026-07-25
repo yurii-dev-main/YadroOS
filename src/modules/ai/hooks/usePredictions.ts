@@ -16,8 +16,9 @@ export const usePredictions = () => {
         if (!mounted) return;
         setPredictions(result);
       } finally {
-        if (!mounted) return;
-        setLoading(false);
+        if (mounted) {
+          setLoading(false);
+        }
       }
     };
 

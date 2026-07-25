@@ -24,11 +24,11 @@ const parseDurationToMs = (duration: string): number => {
 };
 
 export const createAccessToken = (payload: AuthPayload) => {
-  return jwt.sign(payload, env.jwtAccessSecret, { expiresIn: env.accessTokenExpiresIn });
+  return jwt.sign(payload, env.jwtAccessSecret, { expiresIn: env.accessTokenExpiresIn as any });
 };
 
 export const createRefreshToken = (payload: AuthPayload) => {
-  return jwt.sign(payload, env.jwtRefreshSecret, { expiresIn: env.refreshTokenExpiresIn });
+  return jwt.sign(payload, env.jwtRefreshSecret, { expiresIn: env.refreshTokenExpiresIn as any });
 };
 
 export const verifyRefreshToken = (token: string): AuthPayload | null => {

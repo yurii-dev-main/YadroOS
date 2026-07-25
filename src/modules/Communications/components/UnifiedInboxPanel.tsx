@@ -6,9 +6,9 @@ interface UnifiedInboxPanelProps {
 }
 
 const channelLabels: Record<'all' | CommunicationChannel, string> = {
-  all: 'Усі канали',
+  all: 'All channels',
   email: 'Email',
-  internal: 'Внутрішні чати',
+  internal: 'Internal chats',
   telegram: 'Telegram',
 };
 
@@ -46,7 +46,7 @@ export const UnifiedInboxPanel = ({ items }: UnifiedInboxPanelProps) => {
             checked={showOnlyImportant}
             onChange={(event) => setShowOnlyImportant(event.target.checked)}
           />
-          Важливі спочатку
+          Important first
         </label>
       </header>
       <div className="divide-y divide-slate-800">
@@ -61,17 +61,17 @@ export const UnifiedInboxPanel = ({ items }: UnifiedInboxPanelProps) => {
                 </div>
                 <p className="mt-1 line-clamp-2 text-xs text-slate-400">{item.preview}</p>
                 {item.relatedClient && (
-                  <p className="mt-1 text-xs text-emerald-300">Клієнт: {item.relatedClient.name}</p>
+                  <p className="mt-1 text-xs text-emerald-300">Client: {item.relatedClient.name}</p>
                 )}
                 <div className="mt-2 flex flex-wrap items-center gap-2 text-[10px] text-slate-500">
                   <button className="rounded border border-slate-700 px-2 py-1 hover:border-emerald-500 hover:text-emerald-300">
-                    Призначити
+                    Assign
                   </button>
                   <button className="rounded border border-slate-700 px-2 py-1 hover:border-sky-500 hover:text-sky-300">
-                    Відкласти
+                    Snooze
                   </button>
                   <button className="rounded border border-slate-700 px-2 py-1 hover:border-slate-500 hover:text-slate-200">
-                    Швидка відповідь
+                    Quick reply
                   </button>
                 </div>
               </div>
@@ -79,7 +79,7 @@ export const UnifiedInboxPanel = ({ items }: UnifiedInboxPanelProps) => {
             </div>
           </article>
         ))}
-        {!filteredItems.length && <p className="p-6 text-center text-xs text-slate-500">Немає повідомлень</p>}
+        {!filteredItems.length && <p className="p-6 text-center text-xs text-slate-500">No messages</p>}
       </div>
     </section>
   );

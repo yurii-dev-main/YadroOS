@@ -7,18 +7,18 @@ export const generateInvoicePdf = (invoice: Invoice, options?: { companyName?: s
   const doc = new jsPDF();
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(18);
-  doc.text(options?.companyName ?? 'Компанія', 14, 20);
+  doc.text(options?.companyName ?? 'Company', 14, 20);
 
   doc.setFontSize(12);
   doc.setFont('helvetica', 'normal');
-  doc.text(`Інвойс №${invoice.number}`, 14, 32);
-  doc.text(`Дата: ${format(new Date(invoice.issueDate), 'dd.MM.yyyy')}`, 14, 40);
-  doc.text(`Клієнт: ${invoice.clientName}`, 14, 48);
-  doc.text(`Статус: ${invoice.status.toUpperCase()}`, 14, 56);
+  doc.text(`Invoice #${invoice.number}`, 14, 32);
+  doc.text(`Date: ${format(new Date(invoice.issueDate), 'dd.MM.yyyy')}`, 14, 40);
+  doc.text(`Client: ${invoice.clientName}`, 14, 48);
+  doc.text(`Status: ${invoice.status.toUpperCase()}`, 14, 56);
 
   autoTable(doc, {
     startY: 65,
-    head: [['Позиція', 'К-сть', 'Ціна', 'Податок', 'Разом']],
+    head: [['Item', 'Qty', 'Price', 'Tax', 'Total']],
     body: invoice.lineItems.map((item) => {
       const total = item.quantity * item.unitPrice * (1 + (item.taxRate ?? 0));
       return [
@@ -36,15 +36,16 @@ export const generateInvoicePdf = (invoice: Invoice, options?: { companyName?: s
   const discount = invoice.discount ? subtotal * invoice.discount : 0;
   const total = subtotal + taxes - discount;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const finalTable = (doc as any).lastAutoTable;
   const summaryY = finalTable ? finalTable.finalY + 10 : 120;
   doc.setFont('helvetica', 'bold');
-  doc.text(`Разом без ПДВ: ${subtotal.toFixed(2)} ${invoice.currency}`, 14, summaryY);
-  doc.text(`ПДВ: ${taxes.toFixed(2)} ${invoice.currency}`, 14, summaryY + 8);
+  doc.text(`Subtotal excl. VAT: ${subtotal.toFixed(2)} ${invoice.currency}`, 14, summaryY);
+  doc.text(`VAT: ${taxes.toFixed(2)} ${invoice.currency}`, 14, summaryY + 8);
   if (discount) {
-    doc.text(`Знижка: -${discount.toFixed(2)} ${invoice.currency}`, 14, summaryY + 16);
+    doc.text(`Discount: -${discount.toFixed(2)} ${invoice.currency}`, 14, summaryY + 16);
   }
-  doc.text(`До оплати: ${total.toFixed(2)} ${invoice.currency}`, 14, summaryY + 24);
+  doc.text(`Total due: ${total.toFixed(2)} ${invoice.currency}`, 14, summaryY + 24);
 
   return doc;
 };
@@ -55,23 +56,23 @@ export const generatePayslipPdf = (
 ) => {
   const doc = new jsPDF();
   doc.setFontSize(16);
-  doc.text('Розрахунковий лист', 14, 20);
+  doc.text('Payslip', 14, 20);
   doc.setFontSize(12);
-  doc.text(`Працівник: ${record.employeeName}`, 14, 30);
-  doc.text(`Період: ${record.period}`, 14, 38);
-  doc.text(`Базова зарплата: ${record.baseSalary.toFixed(2)} ${record.currency}`, 14, 46);
+  doc.text(`Employee: ${record.employeeName}`, 14, 30);
+  doc.text(`Period: ${record.period}`, 14, 38);
+  doc.text(`Base Salary: ${record.baseSalary.toFixed(2)} ${record.currency}`, 14, 46);
 
   const bonusStart = 54;
   doc.setFont('helvetica', 'bold');
-  doc.text('Бонуси', 14, bonusStart);
+  doc.text('Bonuses', 14, bonusStart);
   doc.setFont('helvetica', 'normal');
   record.bonuses.forEach((bonus, index) => {
     doc.text(`${bonus.name}: ${bonus.amount.toFixed(2)} ${record.currency}`, 14, bonusStart + 8 * (index + 1));
   });
 
-  let deductionsY = bonusStart + 8 * (record.bonuses.length + 2);
+  const deductionsY = bonusStart + 8 * (record.bonuses.length + 2);
   doc.setFont('helvetica', 'bold');
-  doc.text('Відрахування', 14, deductionsY);
+  doc.text('Deductions', 14, deductionsY);
   doc.setFont('helvetica', 'normal');
   record.deductions.forEach((deduction, index) => {
     doc.text(
@@ -83,13 +84,13 @@ export const generatePayslipPdf = (
 
   const totalsY = deductionsY + 8 * (record.deductions.length + 2);
   doc.setFont('helvetica', 'bold');
-  doc.text(`Брутто: ${record.grossSalary.toFixed(2)} ${record.currency}`, 14, totalsY);
-  doc.text(`Нетто: ${record.netSalary.toFixed(2)} ${record.currency}`, 14, totalsY + 8);
+  doc.text(`Gross: ${record.grossSalary.toFixed(2)} ${record.currency}`, 14, totalsY);
+  doc.text(`Net: ${record.netSalary.toFixed(2)} ${record.currency}`, 14, totalsY + 8);
 
   if (options?.includeSignature) {
     doc.setFont('helvetica', 'normal');
     doc.text('________________________', 14, totalsY + 24);
-    doc.text('Підпис', 14, totalsY + 32);
+    doc.text('Signature', 14, totalsY + 32);
   }
 
   return doc;

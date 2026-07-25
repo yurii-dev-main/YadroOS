@@ -1,28 +1,28 @@
 import { FC } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../../../components/ui/card';
-import type { Employee, OffboardingChecklist } from '../types/hr.types';
+import type { Employee, OffboardingChecklist as OffboardingChecklistType } from '../types/hr.types';
 import { getEmployeeName } from '../utils/hr.utils';
 
 interface OffboardingChecklistProps {
   employees: Employee[];
-  checklists: OffboardingChecklist[];
+  checklists: OffboardingChecklistType[];
 }
 
 export const OffboardingChecklist: FC<OffboardingChecklistProps> = ({ employees, checklists }) => (
   <Card className="border-slate-800 bg-slate-900/70">
     <CardHeader>
-      <CardTitle className="text-lg text-slate-100">Офбординг</CardTitle>
+      <CardTitle className="text-lg text-slate-100">Offboarding</CardTitle>
     </CardHeader>
     <CardContent className="space-y-4 text-sm text-slate-300">
-      {checklists.length === 0 && <p>Активних офбордингів немає.</p>}
+      {checklists.length === 0 && <p>No active offboardings.</p>}
       {checklists.map((checklist) => (
         <div key={checklist.employeeId} className="rounded-lg border border-slate-800 bg-slate-900/70 p-4">
           <p className="text-sm font-semibold text-slate-100">
             {getEmployeeName(employees, checklist.employeeId)}
           </p>
           <p className="text-xs text-slate-400">
-            Exit interview: {checklist.exitInterviewScheduled ? 'заплановано' : 'не заплановано'} | Фінальний розрахунок:{' '}
-            {checklist.finalPaycheckProcessed ? 'готово' : 'в процесі'}
+            Exit interview: {checklist.exitInterviewScheduled ? 'scheduled' : 'not scheduled'} | Final paycheck:{' '}
+            {checklist.finalPaycheckProcessed ? 'completed' : 'in progress'}
           </p>
           <ul className="mt-3 space-y-2">
             {checklist.tasks.map((task) => (
@@ -36,10 +36,10 @@ export const OffboardingChecklist: FC<OffboardingChecklistProps> = ({ employees,
                         : 'border border-rose-500/40 bg-rose-500/10 text-rose-300'
                     }`}
                   >
-                    {task.completed ? 'Готово' : 'Очікує'}
+                    {task.completed ? 'Completed' : 'Pending'}
                   </span>
                 </div>
-                <p className="text-xs text-slate-400">Відповідальний: {task.owner}</p>
+                <p className="text-xs text-slate-400">Assignee: {task.owner}</p>
               </li>
             ))}
           </ul>

@@ -21,20 +21,20 @@ export const AccountCard = ({ account, onReconcile }: AccountCardProps) => {
       </CardHeader>
       <CardContent className="space-y-3 text-sm text-slate-300">
         <div className="flex items-baseline justify-between">
-          <span className="text-slate-400">Баланс</span>
+          <span className="text-slate-400">Balance</span>
           <span className="text-2xl font-semibold text-emerald-400">
             {account.balance.toLocaleString('uk-UA', { style: 'currency', currency: account.currency })}
           </span>
         </div>
         {account.bankName && (
           <div className="flex justify-between text-xs text-slate-400">
-            <span>Банк</span>
+            <span>Bank</span>
             <span>{account.bankName}</span>
           </div>
         )}
         {account.accountNumber && (
           <div className="flex justify-between text-xs text-slate-500">
-            <span>Рахунок</span>
+            <span>Account</span>
             <span>{account.accountNumber}</span>
           </div>
         )}
@@ -45,11 +45,11 @@ export const AccountCard = ({ account, onReconcile }: AccountCardProps) => {
           </div>
         )}
         <div className="flex items-center justify-between text-xs text-slate-500">
-          <span>Синхронізація</span>
+          <span>Sync</span>
           <span>{account.syncedAt ? format(new Date(account.syncedAt), 'dd.MM.yyyy HH:mm') : '—'}</span>
         </div>
         <div className="flex items-center justify-between text-xs">
-          <span className="text-slate-500">Статус</span>
+          <span className="text-slate-500">Status</span>
           <span
             className={`rounded-full px-2 py-1 text-[11px] uppercase tracking-wide ${
               account.reconciliationStatus === 'clean'
@@ -68,7 +68,7 @@ export const AccountCard = ({ account, onReconcile }: AccountCardProps) => {
             onClick={() => onReconcile(account.id)}
             className="w-full rounded-md border border-slate-700 bg-slate-800/80 px-3 py-2 text-sm font-medium text-slate-100 transition hover:bg-slate-700"
           >
-            Звірити з банком
+            Reconcile with bank
           </button>
         )}
       </CardContent>

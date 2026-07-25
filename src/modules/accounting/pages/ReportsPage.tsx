@@ -64,11 +64,11 @@ export const ReportsPage = () => {
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h3 className="text-xl font-semibold text-slate-100">Фінансова аналітика</h3>
-          <p className="text-sm text-slate-500">P&L, Cash Flow, прогнози та структури витрат</p>
+          <h3 className="text-xl font-semibold text-slate-100">Financial Analytics</h3>
+          <p className="text-sm text-slate-500">P&L, Cash Flow, forecasts and expense structures</p>
         </div>
         <Button variant="secondary" onClick={handleExport}>
-          Експорт в Excel
+          Export to Excel
         </Button>
       </div>
       <div className="grid gap-4 md:grid-cols-2">
@@ -96,16 +96,16 @@ export const ReportsPage = () => {
       />
       <Card className="border border-slate-800 bg-slate-900/60">
         <CardHeader>
-          <CardTitle className="text-sm font-semibold text-slate-100">Прогноз руху коштів</CardTitle>
+          <CardTitle className="text-sm font-semibold text-slate-100">Cash Flow Forecast</CardTitle>
         </CardHeader>
         <CardContent className="space-y-2 text-sm text-slate-300">
           {cashFlowForecast.map((item) => (
             <div key={item.month} className="flex items-center justify-between rounded-md border border-slate-800 bg-slate-900/80 p-3">
               <span className="text-xs uppercase text-slate-500">{item.month}</span>
               <div className="flex items-center gap-4">
-                <span className="text-emerald-300">Вхід: {item.inflow.toFixed(2)}</span>
-                <span className="text-rose-300">Вихід: {item.outflow.toFixed(2)}</span>
-                <span className="text-slate-100">Баланс: {item.closingBalance.toFixed(2)}</span>
+                <span className="text-emerald-300">Inflow: {item.inflow.toFixed(2)}</span>
+                <span className="text-rose-300">Outflow: {item.outflow.toFixed(2)}</span>
+                <span className="text-slate-100">Balance: {item.closingBalance.toFixed(2)}</span>
               </div>
             </div>
           ))}

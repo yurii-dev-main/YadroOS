@@ -15,12 +15,12 @@ Options:
   -SkipGit      Skip git installation step
   -Help         Show this help message
 
-This script installs базовые зависимости для презентационного запуска (Windows):
+This script installs basic dependencies for presentation launch (Windows):
 - git (winget)
 - Node.js 20 LTS (winget)
 - Docker Desktop (prints download link; optional winget if available)
 
-Требуются права администратора для установки через winget.
+Administrator privileges are required for installation via winget.
 '@ | Write-Output
     exit 0
 }
@@ -29,14 +29,14 @@ function Ensure-Admin {
     $currentIdentity = [Security.Principal.WindowsIdentity]::GetCurrent()
     $principal = New-Object Security.Principal.WindowsPrincipal($currentIdentity)
     if (-not $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
-        Write-Error "Запустите PowerShell от имени администратора."
+        Write-Error "Run PowerShell as Administrator."
         exit 1
     }
 }
 
 function Ensure-Winget {
     if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
-        Write-Error "winget не найден. Установите App Installer из Microsoft Store и повторите."
+        Write-Error "winget not found. Install App Installer from Microsoft Store and try again."
         exit 1
     }
 }
@@ -49,11 +49,11 @@ function Install-WingetPackage {
 
     $existing = winget list --id $Id --source winget 2>$null
     if ($existing -and ($existing | Select-String -Pattern $Id)) {
-        Write-Output "✓ $Name уже установлен"
+        Write-Output "✓ $Name is already installed"
         return
     }
 
-    Write-Output "→ Устанавливаю $Name"
+    Write-Output "→ Installing $Name"
     winget install --id $Id --source winget --accept-package-agreements --accept-source-agreements
 }
 
@@ -72,12 +72,12 @@ if (-not $SkipDocker) {
     $dockerId = "Docker.DockerDesktop"
     $dockerExisting = winget list --id $dockerId --source winget 2>$null
     if ($dockerExisting -and ($dockerExisting | Select-String -Pattern $dockerId)) {
-        Write-Output "✓ Docker Desktop уже установлен"
+        Write-Output "✓ Docker Desktop is already installed"
     } else {
-        Write-Output "→ Устанавливаю Docker Desktop через winget"
+        Write-Output "→ Installing Docker Desktop via winget"
         winget install --id $dockerId --source winget --accept-package-agreements --accept-source-agreements
-        Write-Output "Если winget недоступен для Docker Desktop, скачайте установщик: https://www.docker.com/products/docker-desktop/"
+        Write-Output "If winget is not available for Docker Desktop, download installer: https://www.docker.com/products/docker-desktop/"
     }
 }
 
-Write-Output "Готово. Проверьте версии: node -v, npm -v, git --version"
+Write-Output "Done. Check versions: node -v, npm -v, git --version"

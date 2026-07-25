@@ -71,7 +71,7 @@ export const ClientsPage = ({ onOpenClient }: { onOpenClient: (id: string) => vo
   };
 
   const handleBulkDelete = async () => {
-    if (confirm('Видалити вибраних клієнтів?')) {
+    if (confirm('Delete selected clients?')) {
       await bulkDelete(selectedIds);
     }
   };
@@ -80,8 +80,8 @@ export const ClientsPage = ({ onOpenClient }: { onOpenClient: (id: string) => vo
     <div className="flex flex-col gap-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold text-white">База клієнтів</h1>
-          <p className="text-sm text-slate-400">Повний контроль над всіма клієнтами, угодами та взаємодіями.</p>
+          <h1 className="text-2xl font-semibold text-white">Client Database</h1>
+          <p className="text-sm text-slate-400">Full control over all clients, deals, and interactions.</p>
         </div>
         <div className="flex items-center gap-3">
           <button
@@ -89,10 +89,10 @@ export const ClientsPage = ({ onOpenClient }: { onOpenClient: (id: string) => vo
             onClick={() => setOpenForm(true)}
             className="flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-blue-500/30 transition hover:bg-blue-500"
           >
-            <Plus className="h-4 w-4" /> Новий клієнт
+            <Plus className="h-4 w-4" /> New Client
           </button>
           <label className="flex items-center gap-2 rounded-xl border border-slate-600/60 px-4 py-2 text-sm text-slate-200 transition hover:border-blue-500 hover:text-blue-300">
-            <UploadCloud className="h-4 w-4" /> Імпорт
+            <UploadCloud className="h-4 w-4" /> Import
             <input
               type="file"
               accept=".csv"
@@ -108,7 +108,7 @@ export const ClientsPage = ({ onOpenClient }: { onOpenClient: (id: string) => vo
             onClick={handleExport}
             className="flex items-center gap-2 rounded-xl border border-slate-600/60 px-4 py-2 text-sm text-slate-200 transition hover:border-blue-500 hover:text-blue-300"
           >
-            <Download className="h-4 w-4" /> Експорт
+            <Download className="h-4 w-4" /> Export
           </button>
         </div>
       </div>
@@ -127,11 +127,11 @@ export const ClientsPage = ({ onOpenClient }: { onOpenClient: (id: string) => vo
         <Input
           value={search}
           onChange={(event) => setSearch(event.target.value)}
-          placeholder="Пошук клієнтів..."
+          placeholder="Search clients..."
           className="w-full max-w-sm"
         />
         <div className="ml-auto flex items-center gap-2 text-xs text-slate-400">
-          <span>Показувати:</span>
+          <span>Show:</span>
           <select
             value={pagination.pageSize}
             onChange={(event) => pagination.setPageSize(Number(event.target.value))}
@@ -158,34 +158,34 @@ export const ClientsPage = ({ onOpenClient }: { onOpenClient: (id: string) => vo
 
       {selectedIds.length > 0 && (
         <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-blue-500/40 bg-blue-500/10 p-4 text-sm text-blue-100">
-          <span>{selectedIds.length} вибрано</span>
+          <span>{selectedIds.length} selected</span>
           <button
             type="button"
             onClick={() => handleBulkStatus('active')}
             className="rounded-lg border border-blue-400/60 px-3 py-1 text-xs uppercase tracking-wide text-blue-200 transition hover:border-blue-300 hover:text-white"
           >
-            Позначити як активні
+            Mark as active
           </button>
           <button
             type="button"
             onClick={() => handleBulkStatus('inactive')}
             className="rounded-lg border border-blue-400/60 px-3 py-1 text-xs uppercase tracking-wide text-blue-200 transition hover:border-blue-300 hover:text-white"
           >
-            Неактивні
+            Inactive
           </button>
           <button
             type="button"
             onClick={handleBulkDelete}
             className="flex items-center gap-2 rounded-lg border border-red-400/60 px-3 py-1 text-xs uppercase tracking-wide text-red-200 transition hover:border-red-300 hover:text-white"
           >
-            <Trash2 className="h-3 w-3" /> Видалити
+            <Trash2 className="h-3 w-3" /> Delete
           </button>
           <button
             type="button"
-            onClick={() => alert('Масова розсилка запущена (демо)')}
+            onClick={() => alert('Bulk mailing launched (demo)')}
             className="ml-auto flex items-center gap-2 rounded-lg border border-emerald-400/60 px-3 py-1 text-xs uppercase tracking-wide text-emerald-200 transition hover:border-emerald-300 hover:text-white"
           >
-            <Mail className="h-3 w-3" /> Масова розсилка
+            <Mail className="h-3 w-3" /> Bulk email
           </button>
         </div>
       )}
@@ -208,7 +208,7 @@ export const ClientsPage = ({ onOpenClient }: { onOpenClient: (id: string) => vo
           ))}
           {clients.length === 0 && !loading && (
             <div className="rounded-2xl border border-dashed border-slate-700/60 bg-slate-900/40 p-6 text-center text-sm text-slate-400">
-              Немає клієнтів для відображення.
+              No clients to display.
             </div>
           )}
         </div>
@@ -218,11 +218,11 @@ export const ClientsPage = ({ onOpenClient }: { onOpenClient: (id: string) => vo
         <div>
           {pagination.total > 0 ? (
             <>
-              Показано {(pagination.page - 1) * pagination.pageSize + 1}–
-              {Math.min(pagination.page * pagination.pageSize, pagination.total)} з {pagination.total}
+              Showing {(pagination.page - 1) * pagination.pageSize + 1}–
+              {Math.min(pagination.page * pagination.pageSize, pagination.total)} of {pagination.total}
             </>
           ) : (
-            'Немає результатів'
+            'No results'
           )}
         </div>
         <div className="flex items-center gap-2">
@@ -232,16 +232,16 @@ export const ClientsPage = ({ onOpenClient }: { onOpenClient: (id: string) => vo
             onClick={() => pagination.setPage(Math.max(1, pagination.page - 1))}
             className="rounded-lg border border-slate-600/60 px-3 py-1 text-xs text-slate-200 transition hover:border-slate-500 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            Попередня
+            Previous
           </button>
-          <span>Сторінка {pagination.page}</span>
+          <span>Page {pagination.page}</span>
           <button
             type="button"
             disabled={pagination.page * pagination.pageSize >= pagination.total}
             onClick={() => pagination.setPage(pagination.page + 1)}
             className="rounded-lg border border-slate-600/60 px-3 py-1 text-xs text-slate-200 transition hover:border-slate-500 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            Наступна
+            Next
           </button>
         </div>
       </div>
@@ -252,7 +252,7 @@ export const ClientsPage = ({ onOpenClient }: { onOpenClient: (id: string) => vo
         onSubmit={handleCreate}
       />
 
-      {importing && <p className="text-xs text-slate-500">Імпорт клієнтів...</p>}
+      {importing && <p className="text-xs text-slate-500">Importing clients...</p>}
     </div>
   );
 };

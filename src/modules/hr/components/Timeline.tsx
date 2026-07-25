@@ -8,7 +8,7 @@ interface TimelineProps {
 
 export const Timeline: FC<TimelineProps> = ({ events }) => {
   if (!events.length) {
-    return <p className="text-sm text-slate-400">Подій не зафіксовано.</p>;
+    return <p className="text-sm text-slate-400">No events recorded.</p>;
   }
 
   return (

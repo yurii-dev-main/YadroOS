@@ -6,9 +6,9 @@ import { AnalyticsPage, ClientDetailPage, ClientsPage, PipelinePage } from '../.
 import { CRMErrorBoundary } from '../../modules/crm/components/CRMErrorBoundary';
 
 const navItems = [
-  { to: 'clients', label: 'Клієнти', icon: Users },
-  { to: 'pipeline', label: 'Воронка', icon: Kanban },
-  { to: 'analytics', label: 'Аналітика', icon: BarChart3 }
+  { to: 'clients', label: 'Clients', icon: Users },
+  { to: 'pipeline', label: 'Pipeline', icon: Kanban },
+  { to: 'analytics', label: 'Analytics', icon: BarChart3 }
 ];
 
 export const CRMPage = () => {
@@ -17,7 +17,7 @@ export const CRMPage = () => {
   const location = useLocation();
 
   if (!can('crm:read')) {
-    return <p className="text-sm text-danger">Недостатньо прав для перегляду CRM.</p>;
+    return <p className="text-sm text-danger">Insufficient permissions to view CRM.</p>;
   }
 
   const handleOpenClient = (id: string) => navigate(`/dashboard/crm/clients/${id}`);
@@ -27,8 +27,8 @@ export const CRMPage = () => {
       <div className="flex flex-col gap-6">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-semibold text-white">CRM модуль</h1>
-            <p className="text-sm text-slate-400">Керуйте клієнтами, угодами та продажами в одному просторі.</p>
+            <h1 className="text-3xl font-semibold text-white">CRM Module</h1>
+            <p className="text-sm text-slate-400">Manage clients, deals, and sales in one place.</p>
           </div>
         </div>
 

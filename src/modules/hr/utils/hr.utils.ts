@@ -13,11 +13,11 @@ export const formatDate = (value: string) =>
 export const getStatusLabel = (status: EmployeeStatus) => {
   switch (status) {
     case 'active':
-      return 'Активний';
+      return 'Active';
     case 'on_leave':
-      return 'У відпустці';
+      return 'On leave';
     case 'terminated':
-      return 'Звільнений';
+      return 'Terminated';
     default:
       return status;
   }
@@ -26,19 +26,19 @@ export const getStatusLabel = (status: EmployeeStatus) => {
 export const getTimelineLabel = (type: TimelineEventType) => {
   switch (type) {
     case 'hiring':
-      return 'Найм';
+      return 'Hiring';
     case 'promotion':
-      return 'Підвищення';
+      return 'Promotion';
     case 'review':
-      return 'Оцінювання';
+      return 'Review';
     case 'training':
-      return 'Тренінг';
+      return 'Training';
     case 'leave':
-      return 'Відпустка';
+      return 'Leave';
     case 'warning':
-      return 'Попередження';
+      return 'Warning';
     case 'milestone':
-      return 'Досягнення';
+      return 'Milestone';
     default:
       return type;
   }

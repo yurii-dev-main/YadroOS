@@ -35,22 +35,22 @@ type TelegramStatus = {
 };
 
 const teamMembers: ChatParticipant[] = [
-  { id: 'u-1', name: 'Анна Левченко', avatar: 'https://i.pravatar.cc/64?img=15', role: 'Support', online: true },
-  { id: 'u-2', name: 'Сергій Поліщук', avatar: 'https://i.pravatar.cc/64?img=18', role: 'Sales', online: true },
-  { id: 'u-3', name: 'Ірина Петренко', avatar: 'https://i.pravatar.cc/64?img=25', role: 'Marketing', online: false }
+  { id: 'u-1', name: 'Anna Levchenko', avatar: 'https://i.pravatar.cc/64?img=15', role: 'Support', online: true },
+  { id: 'u-2', name: 'Serhii Polishchuk', avatar: 'https://i.pravatar.cc/64?img=18', role: 'Sales', online: true },
+  { id: 'u-3', name: 'Iryna Petrenko', avatar: 'https://i.pravatar.cc/64?img=25', role: 'Marketing', online: false }
 ];
 
 const chatThreads: ChatThread[] = [
   {
     id: 'chat-1',
-    title: 'Підтримка / Марія',
+    title: 'Support / Mariia',
     participants: [teamMembers[0], teamMembers[1]],
     type: 'group',
     unreadCount: 2
   },
   {
     id: 'chat-2',
-    title: 'DM / Сергій',
+    title: 'DM / Serhii',
     participants: [teamMembers[1]],
     type: 'dm',
     unreadCount: 0
@@ -62,7 +62,7 @@ const chatMessages: ChatMessage[] = [
     id: 'msg-1',
     chatId: 'chat-1',
     author: teamMembers[0],
-    content: 'Колеги, Марія питає про інтеграцію з e-commerce.',
+    content: 'Colleagues, Mariia is asking about integration with e-commerce.',
     createdAt: '2024-02-05T08:01:00Z',
     status: 'read'
   },
@@ -70,7 +70,7 @@ const chatMessages: ChatMessage[] = [
     id: 'msg-2',
     chatId: 'chat-1',
     author: teamMembers[1],
-    content: 'Я уточню у техпідтримки, чи є готовий конектор.',
+    content: 'I will check with tech support if there is a ready connector.',
     createdAt: '2024-02-05T08:05:00Z',
     status: 'read'
   },
@@ -78,7 +78,7 @@ const chatMessages: ChatMessage[] = [
     id: 'msg-3',
     chatId: 'chat-1',
     author: teamMembers[1],
-    content: 'Перевірив CRM картку, додав нотатку.',
+    content: 'Checked CRM card, added a note.',
     createdAt: '2024-02-05T08:20:00Z',
     status: 'read'
   },
@@ -86,7 +86,7 @@ const chatMessages: ChatMessage[] = [
     id: 'msg-4',
     chatId: 'chat-1',
     author: teamMembers[2],
-    content: 'Я можу підготувати оновлений one-pager для неї.',
+    content: 'I can prepare an updated one-pager for her.',
     createdAt: '2024-02-05T08:25:00Z',
     status: 'delivered'
   },
@@ -94,7 +94,7 @@ const chatMessages: ChatMessage[] = [
     id: 'msg-5',
     chatId: 'chat-2',
     author: teamMembers[1],
-    content: 'Готовий до синку о 15:00.',
+    content: 'Ready for sync at 15:00.',
     createdAt: '2024-02-04T11:44:00Z',
     status: 'delivered'
   }
@@ -117,7 +117,7 @@ const updateThreadWithMessage = (message: ChatMessage) => {
 
   chatThreads.unshift({
     id: message.chatId,
-    title: `Диалог с ${message.author.name}`,
+    title: `Chat with ${message.author.name}`,
     participants: [message.author],
     type: 'dm',
     unreadCount: 1,

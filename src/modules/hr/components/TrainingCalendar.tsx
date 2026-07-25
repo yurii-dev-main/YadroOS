@@ -1,18 +1,18 @@
 import { addHours, format, getDay, parse, startOfWeek } from 'date-fns';
-import { uk } from 'date-fns/locale';
+import { enUS } from 'date-fns/locale';
 import { FC, useMemo } from 'react';
 import { Calendar, dateFnsLocalizer, EventPropGetter } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { Training } from '../types/hr.types';
 
 const locales = {
-  uk,
+  'en-US': enUS,
 };
 
 const localizer = dateFnsLocalizer({
   format,
   parse,
-  startOfWeek: (date) => startOfWeek(date, { weekStartsOn: 1 }),
+  startOfWeek: (date: Date) => startOfWeek(date, { weekStartsOn: 1 }),
   getDay,
   locales,
 });
@@ -22,7 +22,8 @@ interface TrainingCalendarProps {
   onSelectTraining: (trainingId: string) => void;
 }
 
-const eventPropGetter: EventPropGetter = (event) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const eventPropGetter: EventPropGetter<any> = (event: any) => {
   const training = event.resource as Training;
   const statusColor = {
     scheduled: '#6366f1',
@@ -58,7 +59,7 @@ export const TrainingCalendar: FC<TrainingCalendarProps> = ({ trainings, onSelec
   return (
     <div className="rounded-lg border border-slate-800 bg-slate-900/60 p-4">
       <Calendar
-        culture="uk"
+        culture="en-US"
         localizer={localizer}
         events={events}
         startAccessor="start"
@@ -66,20 +67,21 @@ export const TrainingCalendar: FC<TrainingCalendarProps> = ({ trainings, onSelec
         style={{ height: 520 }}
         popup
         messages={{
-          next: 'Наступний',
-          previous: 'Попередній',
-          today: 'Сьогодні',
-          month: 'Місяць',
-          week: 'Тиждень',
-          day: 'День',
-          agenda: 'Список',
-          date: 'Дата',
-          time: 'Час',
-          event: 'Подія',
-          showMore: (total) => `+${total} ще`,
+          next: 'Next',
+          previous: 'Previous',
+          today: 'Today',
+          month: 'Month',
+          week: 'Week',
+          day: 'Day',
+          agenda: 'Agenda',
+          date: 'Date',
+          time: 'Time',
+          event: 'Event',
+          showMore: (total: number) => `+${total} more`,
         }}
         views={['month', 'agenda']}
-        onSelectEvent={(event) => onSelectTraining(event.id as string)}
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        onSelectEvent={(event: any) => onSelectTraining(event.id as string)}
         eventPropGetter={eventPropGetter}
       />
     </div>

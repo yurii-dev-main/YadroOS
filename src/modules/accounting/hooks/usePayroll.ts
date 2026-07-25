@@ -46,7 +46,7 @@ const usePayrollStore = create<PayrollState>((set, get) => ({
     } catch (error) {
       set({
         loading: false,
-        error: error instanceof Error ? error.message : 'Не вдалося завантажити зарплатні дані',
+        error: error instanceof Error ? error.message : 'Failed to load payroll data',
       });
     }
   },
@@ -62,7 +62,7 @@ const usePayrollStore = create<PayrollState>((set, get) => ({
     } catch (error) {
       set({
         loading: false,
-        error: error instanceof Error ? error.message : 'Помилка запуску розрахунку зарплат',
+        error: error instanceof Error ? error.message : 'Failed to run payroll calculation',
       });
     }
   },
@@ -85,6 +85,6 @@ export const usePayroll = () => {
     if (!store.records.length && !store.loading) {
       void store.loadPayroll();
     }
-  }, [store.records.length, store.loading, store.loadPayroll]);
+  }, [store, store.records.length, store.loading, store.loadPayroll]);
   return store;
 };

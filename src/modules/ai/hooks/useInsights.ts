@@ -16,8 +16,9 @@ export const useInsights = () => {
         if (!mounted) return;
         setInsights(result);
       } finally {
-        if (!mounted) return;
-        setLoading(false);
+        if (mounted) {
+          setLoading(false);
+        }
       }
     };
 

@@ -16,9 +16,9 @@ export const CommunicationsCenter = () => {
     <div className="flex h-full flex-col gap-4">
       <header className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-slate-800 bg-slate-900/50 px-4 py-3">
         <div>
-          <h1 className="text-xl font-semibold text-slate-100">Комунікаційний центр</h1>
+          <h1 className="text-xl font-semibold text-slate-100">Communication Center</h1>
           <p className="text-sm text-slate-400">
-            Єдиний хаб для email, внутрішніх чатів, Telegram та нотифікацій
+            Unified hub for email, internal chats, Telegram and notifications
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2 text-xs">

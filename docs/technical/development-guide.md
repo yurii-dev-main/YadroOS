@@ -198,7 +198,7 @@ export function Btn(props: any) {
 - Components: PascalCase (UserProfile.tsx)
 - Functions: camelCase (getUserById)
 - Constants: UPPER_SNAKE_CASE (API_BASE_URL)
-- Files: kebab-case або PascalCase (user-profile.tsx або UserProfile.tsx)
+- Files: kebab-case or PascalCase (user-profile.tsx or UserProfile.tsx)
 - CSS classes: kebab-case (btn-primary)
 
 ### File Organization

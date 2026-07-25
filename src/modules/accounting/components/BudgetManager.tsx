@@ -25,7 +25,7 @@ export const BudgetManager = ({ budgets, onUpdate }: BudgetManagerProps) => {
 
   return (
     <div className="space-y-3 rounded-lg border border-slate-800 bg-slate-900/60 p-4 text-sm text-slate-200">
-      <h3 className="text-base font-semibold text-slate-100">Бюджети</h3>
+      <h3 className="text-base font-semibold text-slate-100">Budgets</h3>
       {budgets.map((budget) => {
         const usage = (budget.spentAmount / budget.allocatedAmount) * 100;
         return (
@@ -33,11 +33,11 @@ export const BudgetManager = ({ budgets, onUpdate }: BudgetManagerProps) => {
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
                 <p className="text-sm font-semibold text-slate-100">{budget.name}</p>
-                <p className="text-xs text-slate-500">Період: {budget.period}</p>
+                <p className="text-xs text-slate-500">Period: {budget.period}</p>
               </div>
               <div className="text-right text-xs text-slate-400">
-                <p>Виділено: {budget.allocatedAmount.toLocaleString('uk-UA', { style: 'currency', currency: budget.currency })}</p>
-                <p>Витрачено: {budget.spentAmount.toLocaleString('uk-UA', { style: 'currency', currency: budget.currency })}</p>
+                <p>Allocated: {budget.allocatedAmount.toLocaleString('uk-UA', { style: 'currency', currency: budget.currency })}</p>
+                <p>Spent: {budget.spentAmount.toLocaleString('uk-UA', { style: 'currency', currency: budget.currency })}</p>
               </div>
             </div>
             <div className="mt-3 h-2 rounded-full bg-slate-800">
@@ -53,22 +53,22 @@ export const BudgetManager = ({ budgets, onUpdate }: BudgetManagerProps) => {
                     className="w-32"
                   />
                   <Button variant="secondary" size="sm" onClick={save}>
-                    Зберегти
+                    Save
                   </Button>
                   <Button variant="ghost" size="sm" onClick={() => setEditing(null)}>
-                    Скасувати
+                    Cancel
                   </Button>
                 </>
               ) : (
                 <Button variant="outline" size="sm" onClick={() => startEdit(budget)}>
-                  Редагувати бюджет
+                  Edit budget
                 </Button>
               )}
             </div>
           </div>
         );
       })}
-      {!budgets.length && <p className="text-xs text-slate-500">Немає активних бюджетів.</p>}
+      {!budgets.length && <p className="text-xs text-slate-500">No active budgets.</p>}
     </div>
   );
 };

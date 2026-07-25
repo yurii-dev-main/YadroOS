@@ -25,13 +25,14 @@ import {
   PaymentReminder,
   PayrollRecord,
   PayrollRunRequest,
-  PayrollSummary,
+
   ProjectProfitability,
   RecurringTransactionInsight,
   ReportSummary,
   Transaction,
   TransactionCategory,
   TransferRequest,
+  CurrencyCode,
 } from '../types/accounting.types';
 import { bankIntegrationService } from './bank-integration.service';
 import {
@@ -87,7 +88,7 @@ const accounts: Account[] = [
   },
   {
     id: 'acc-cash',
-    name: 'Каса',
+    name: 'Cash',
     type: 'cash',
     currency: 'UAH',
     balance: 8200,
@@ -99,16 +100,16 @@ const accounts: Account[] = [
 ];
 
 const categories: TransactionCategory[] = [
-  { id: 'cat-sales', name: 'Продажі', type: 'income', color: '#22c55e' },
-  { id: 'cat-office', name: 'Офіс', type: 'expense', color: '#38bdf8' },
-  { id: 'cat-rent', name: 'Оренда', type: 'expense', parentId: 'cat-office' },
-  { id: 'cat-utilities', name: 'Комунальні послуги', type: 'expense', parentId: 'cat-office' },
-  { id: 'cat-salaries', name: 'Зарплати', type: 'expense', color: '#ef4444' },
-  { id: 'cat-taxes', name: 'Податки', type: 'expense', color: '#facc15' },
-  { id: 'cat-marketing', name: 'Маркетинг', type: 'expense', color: '#a855f7' },
-  { id: 'cat-development', name: 'Розробка', type: 'expense' },
-  { id: 'cat-travel', name: 'Подорожі', type: 'expense' },
-  { id: 'cat-custom', name: 'Кастомні категорії', type: 'mixed' },
+  { id: 'cat-sales', name: 'Sales', type: 'income', color: '#22c55e' },
+  { id: 'cat-office', name: 'Office', type: 'expense', color: '#38bdf8' },
+  { id: 'cat-rent', name: 'Rent', type: 'expense', parentId: 'cat-office' },
+  { id: 'cat-utilities', name: 'Utilities', type: 'expense', parentId: 'cat-office' },
+  { id: 'cat-salaries', name: 'Salaries', type: 'expense', color: '#ef4444' },
+  { id: 'cat-taxes', name: 'Taxes', type: 'expense', color: '#facc15' },
+  { id: 'cat-marketing', name: 'Marketing', type: 'expense', color: '#a855f7' },
+  { id: 'cat-development', name: 'Development', type: 'expense' },
+  { id: 'cat-travel', name: 'Travel', type: 'expense' },
+  { id: 'cat-custom', name: 'Custom Categories', type: 'mixed' },
 ];
 
 const transactions: Transaction[] = [
@@ -120,7 +121,7 @@ const transactions: Transaction[] = [
     accountId: 'acc-privat',
     categoryId: 'cat-sales',
     date: format(addMonths(new Date(), -1), 'yyyy-MM-05'),
-    description: 'Оплата за проєкт CRM',
+    description: 'Payment for CRM project',
     status: 'completed',
     attachments: [],
     tags: ['crm', 'client:acme'],
@@ -137,7 +138,7 @@ const transactions: Transaction[] = [
     accountId: 'acc-mono',
     categoryId: 'cat-salaries',
     date: format(addMonths(new Date(), -1), 'yyyy-MM-28'),
-    description: 'Зарплата за березень',
+    description: 'Salary for March',
     status: 'completed',
     attachments: [],
     tags: ['payroll'],
@@ -153,7 +154,7 @@ const transactions: Transaction[] = [
     categoryId: 'cat-office',
     subcategory: 'rent',
     date: format(addMonths(new Date(), -1), 'yyyy-MM-10'),
-    description: 'Оренда офісу',
+    description: 'Office rent',
     status: 'completed',
     attachments: [],
     tags: ['office'],
@@ -176,7 +177,7 @@ const invoices: Invoice[] = [
     lineItems: [
       {
         id: uuid(),
-        name: 'Розробка модулю CRM',
+        name: 'CRM module development',
         quantity: 120,
         unitPrice: 80,
         currency: 'USD',
@@ -185,7 +186,7 @@ const invoices: Invoice[] = [
     ],
     taxes: 1920,
     discount: 0.05,
-    notes: 'Оплата протягом 14 днів',
+    notes: 'Payment within 14 days',
     attachments: [],
     payments: [],
     branding: {
@@ -208,7 +209,7 @@ const invoices: Invoice[] = [
     lineItems: [
       {
         id: uuid(),
-        name: 'Інтеграція API',
+        name: 'API integration',
         quantity: 40,
         unitPrice: 120,
         currency: 'EUR',
@@ -217,7 +218,7 @@ const invoices: Invoice[] = [
     ],
     taxes: 960,
     discount: 0,
-    notes: 'Оплачено через Stripe',
+    notes: 'Paid via Stripe',
     attachments: [],
     payments: [
       {
@@ -241,7 +242,7 @@ const payrollRecords: PayrollRecord[] = [];
 const budgets: Budget[] = [
   {
     id: 'budget-marketing-2024',
-    name: 'Маркетинг 2024',
+    name: 'Marketing 2024',
     categoryId: 'cat-marketing',
     currency: 'UAH',
     period: 'yearly',
@@ -391,6 +392,10 @@ export const accountingService = {
     };
   },
 
+  async getCategories(): Promise<TransactionCategory[]> {
+    return [...categories];
+  },
+
   async getTransactions(): Promise<Transaction[]> {
     return [...transactions];
   },
@@ -462,7 +467,7 @@ export const accountingService = {
     return invoice;
   },
 
-  async recordInvoicePayment(invoiceId: string, amount: number, currency: string) {
+  async recordInvoicePayment(invoiceId: string, amount: number, currency: CurrencyCode) {
     const invoice = invoices.find((item) => item.id === invoiceId);
     if (!invoice) throw new Error('Invoice not found');
 
@@ -529,7 +534,7 @@ export const accountingService = {
       const baseSalary = employee.salary;
       const bonuses = [
         {
-          name: 'Performance бонус',
+          name: 'Performance bonus',
           amount: Number(new Decimal(baseSalary).mul(0.1).toFixed(2)),
           reason: 'KPI > 85%',
         },
@@ -550,7 +555,7 @@ export const accountingService = {
         overtimeAmount,
         grossSalary,
         netSalary: calculateNetSalary({ grossSalary, deductions }),
-        currency: employee.currency ?? 'USD',
+        currency: (employee.currency as CurrencyCode) ?? 'USD',
         period,
         status: request.approveImmediately ? 'processed' : 'pending',
         generatedAt: new Date().toISOString(),
@@ -647,9 +652,9 @@ export const accountingService = {
     const cashForecast = computeCashFlowForecast(accounts, transactions, baseCurrency, rates);
 
     const balanceSheet: BalanceSheetItem[] = [
-      { name: 'Грошові кошти', amount: profitLoss.figures.income - profitLoss.figures.expenses, type: 'asset' },
-      { name: 'Зобов\'язання', amount: balance.figures.liabilities, type: 'liability' },
-      { name: 'Власний капітал', amount: balance.figures.equity, type: 'equity' },
+      { name: 'Cash and cash equivalents', amount: profitLoss.figures.income - profitLoss.figures.expenses, type: 'asset' },
+      { name: 'Liabilities', amount: balance.figures.liabilities, type: 'liability' },
+      { name: 'Equity', amount: balance.figures.equity, type: 'equity' },
     ];
 
     return {
@@ -677,7 +682,7 @@ export const accountingService = {
       });
   },
 
-  async getBudgetsUsage(): Promise<{ id: string; usage: number }> {
+  async getBudgetsUsage(): Promise<{ id: string; usage: number }[]> {
     const rates = await this.getExchangeRates();
     return budgets.map((budget) => ({ id: budget.id, usage: calculateBudgetUsage(budget, transactions, rates) }));
   },

@@ -8,10 +8,10 @@ export const fetchAIOverview = async (): Promise<AIOverviewData> => fetchAIOverv
 export const fetchInsightGroups = async (): Promise<InsightGroup[]> => {
   const overview = await fetchAIOverview();
   return [
-    { title: 'CRM Рекомендації', insights: overview.crm.recommendations },
-    { title: 'HR Рекомендації', insights: overview.hr.recommendations },
-    { title: 'Комунікації', insights: overview.communications.autoReplies },
-    { title: 'Бухгалтерія', insights: overview.accounting.anomalies }
+    { title: 'CRM Recommendations', insights: overview.crm.recommendations },
+    { title: 'HR Recommendations', insights: overview.hr.recommendations },
+    { title: 'Communications', insights: overview.communications.autoReplies },
+    { title: 'Accounting', insights: overview.accounting.anomalies }
   ];
 };
 
@@ -20,13 +20,13 @@ export const fetchPredictionSummaries = async (): Promise<PredictionSummary[]> =
   return [
     {
       title: 'Cash Flow Forecast',
-      description: 'Базовий сценарій показує позитивний потік у найближчі 6 місяців.',
+      description: 'Baseline scenario shows positive cash flow over the next 6 months.',
       confidence: 0.83,
       forecast: overview.accounting.forecast
     },
     {
       title: 'Pipeline Conversion',
-      description: 'Очікуваний рівень закриття угод — 34% при активності вище 70%.',
+      description: 'Expected deal closing rate is 34% with activity above 70%.',
       confidence: 0.72,
       forecast: overview.accounting.forecast
     }

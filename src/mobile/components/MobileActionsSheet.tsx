@@ -43,10 +43,10 @@ export const MobileActionsSheet = ({ open, onClose }: MobileActionsSheetProps) =
     setProcessing(true);
     try {
       const { createWorker } = await import('tesseract.js');
-      const worker = await createWorker();
+      const worker = await createWorker('ukr+eng');
       const {
         data: { text }
-      } = await worker.recognize(snapshot, 'ukr+eng');
+      } = await worker.recognize(snapshot);
       setRecognizedText(text.trim());
       await worker.terminate();
     } finally {
@@ -61,6 +61,7 @@ export const MobileActionsSheet = ({ open, onClose }: MobileActionsSheetProps) =
     }
     setProcessing(true);
     try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const pdfjs: any = await import('pdfjs-dist');
       if ('GlobalWorkerOptions' in pdfjs) {
         pdfjs.GlobalWorkerOptions.workerSrc = pdfjs.GlobalWorkerOptions.workerSrc ??
@@ -69,7 +70,7 @@ export const MobileActionsSheet = ({ open, onClose }: MobileActionsSheetProps) =
       const data = await file.arrayBuffer();
       const loadingTask = pdfjs.getDocument({ data });
       const pdf = await loadingTask.promise;
-      setPdfInfo(`Знайдено сторінок: ${pdf.numPages}`);
+      setPdfInfo(`Pages found: ${pdf.numPages}`);
       await pdf.destroy();
     } finally {
       setProcessing(false);
@@ -89,7 +90,7 @@ export const MobileActionsSheet = ({ open, onClose }: MobileActionsSheetProps) =
   }, [snapshot]);
 
   return (
-    <BottomSheet isOpen={open} onClose={onClose} title="Швидкі дії">
+    <BottomSheet isOpen={open} onClose={onClose} title="Quick Actions">
       <div className="space-y-4 text-slate-100">
         <div className="overflow-hidden rounded-2xl border border-slate-800">
           <Webcam
@@ -108,7 +109,7 @@ export const MobileActionsSheet = ({ open, onClose }: MobileActionsSheetProps) =
             className="flex flex-col items-center gap-2 rounded-xl border border-slate-800 bg-slate-900 p-3 text-xs font-semibold"
           >
             <Camera className="h-5 w-5" />
-            <span>Фото</span>
+            <span>Photo</span>
           </button>
           <button
             type="button"
@@ -125,20 +126,20 @@ export const MobileActionsSheet = ({ open, onClose }: MobileActionsSheetProps) =
             className="flex flex-col items-center gap-2 rounded-xl border border-slate-800 bg-slate-900 p-3 text-xs font-semibold disabled:opacity-50"
           >
             <Share2 className="h-5 w-5" />
-            <span>Поділитись</span>
+            <span>Share</span>
           </button>
           <button
             type="button"
             onClick={() => {
               if (!('geolocation' in navigator)) {
-                setLocationInfo('Геолокація недоступна на пристрої');
+                setLocationInfo('Geolocation is not available on device');
                 return;
               }
               navigator.geolocation.getCurrentPosition(
                 ({ coords }) => {
-                  setLocationInfo(`Широта: ${coords.latitude.toFixed(4)}, Довгота: ${coords.longitude.toFixed(4)}`);
+                  setLocationInfo(`Latitude: ${coords.latitude.toFixed(4)}, Longitude: ${coords.longitude.toFixed(4)}`);
                 },
-                () => setLocationInfo('Не вдалося визначити геолокацію'),
+                () => setLocationInfo('Failed to determine geolocation'),
                 { enableHighAccuracy: true, timeout: 5000 }
               );
             }}
@@ -160,7 +161,7 @@ export const MobileActionsSheet = ({ open, onClose }: MobileActionsSheetProps) =
                 strokeLinejoin="round"
               />
             </svg>
-            <span>Локація</span>
+            <span>Location</span>
           </button>
         </div>
         <input
@@ -171,12 +172,12 @@ export const MobileActionsSheet = ({ open, onClose }: MobileActionsSheetProps) =
           onChange={handlePdfUpload}
         />
         <div className="space-y-2 rounded-2xl border border-slate-800 bg-slate-900/70 p-4">
-          <p className="text-xs text-slate-400">Розпізнаний текст</p>
+          <p className="text-xs text-slate-400">Recognized text</p>
           <animated.div
             style={pulseStyles}
             className="min-h-[80px] rounded-xl border border-slate-800 bg-slate-950/40 p-3 text-sm"
           >
-            {processing ? 'Обробка…' : recognizedText || 'Зробіть фото та натисніть «Розпізнати»'}
+            {processing ? 'Processing...' : recognizedText || 'Take a photo and click "Recognize"'}
           </animated.div>
           <div className="flex gap-3">
             <button
@@ -185,21 +186,21 @@ export const MobileActionsSheet = ({ open, onClose }: MobileActionsSheetProps) =
               disabled={!snapshot || processing}
               className="flex-1 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white disabled:opacity-50"
             >
-              Розпізнати
+              Recognize
             </button>
             <button
               type="button"
               onClick={() => setRecognizedText('')}
               className="rounded-lg border border-slate-700 px-4 py-2 text-sm"
             >
-              Очистити
+              Clear
             </button>
           </div>
         </div>
         {snapshot && (
           <div className="space-y-2 rounded-2xl border border-slate-800 bg-slate-900/70 p-4">
-            <p className="text-xs text-slate-400">Останній знімок</p>
-            <img src={snapshot} alt="Знімок" className="w-full rounded-xl" />
+            <p className="text-xs text-slate-400">Latest snapshot</p>
+            <img src={snapshot} alt="Snapshot" className="w-full rounded-xl" />
           </div>
         )}
         {pdfInfo && <p className="text-xs text-emerald-400">{pdfInfo}</p>}

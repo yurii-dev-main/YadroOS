@@ -8,7 +8,7 @@ export type AIChatMessage = {
 const OPENAI_CHAT_COMPLETIONS_URL = 'https://api.openai.com/v1/chat/completions';
 const DEFAULT_MODEL = 'gpt-4o-mini';
 const SYSTEM_PROMPT =
-  'Ви — корпоративний AI-радник YadroOS. Надавайте короткі, структуровані відповіді українською мовою з конкретними діями.';
+  'You are the YadroOS corporate AI advisor. Provide concise, structured responses in English with concrete actions.';
 
 const buildMessages = (messages: AIChatMessage[]) => {
   const normalized = messages.filter((message) => message.content?.trim());

@@ -41,7 +41,7 @@ export const TrainingCard: FC<TrainingCardProps> = ({
   const handleSubmitFeedback = (event: FormEvent) => {
     event.preventDefault();
     if (!feedbackEmployeeId) return;
-    onSubmitFeedback(training.id, feedbackEmployeeId, feedbackRating, feedbackComment || 'Без коментарів');
+    onSubmitFeedback(training.id, feedbackEmployeeId, feedbackRating, feedbackComment || 'No comments');
     setFeedbackEmployeeId('');
     setFeedbackRating(5);
     setFeedbackComment('');
@@ -63,15 +63,15 @@ export const TrainingCard: FC<TrainingCardProps> = ({
       <CardContent className="space-y-4 text-sm text-slate-300">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div>
-            <p>Інструктор: {training.instructor}</p>
-            <p>Дата: {formatDate(training.date)}</p>
-            <p>Тривалість: {training.duration} год.</p>
-            <p>Локація: {training.location}</p>
+            <p>Instructor: {training.instructor}</p>
+            <p>Date: {formatDate(training.date)}</p>
+            <p>Duration: {training.duration} hrs</p>
+            <p>Location: {training.location}</p>
           </div>
           <div>
-            <p>Статус: {training.status}</p>
-            <p>Вмістимість: {training.participants.length}/{training.capacity}</p>
-            <p>Матеріали:</p>
+            <p>Status: {training.status}</p>
+            <p>Capacity: {training.participants.length}/{training.capacity}</p>
+            <p>Materials:</p>
             <ul className="list-inside list-disc text-xs text-indigo-200">
               {training.materials.map((material) => (
                 <li key={material.id}>
@@ -85,7 +85,7 @@ export const TrainingCard: FC<TrainingCardProps> = ({
         </div>
 
         <div>
-          <h4 className="text-xs uppercase tracking-wide text-slate-400">Учасники</h4>
+          <h4 className="text-xs uppercase tracking-wide text-slate-400">Participants</h4>
           <ul className="mt-2 space-y-2">
             {training.participants.map((participant) => {
               const employeeName = getEmployeeName(employees, participant.employeeId);
@@ -97,8 +97,8 @@ export const TrainingCard: FC<TrainingCardProps> = ({
                   <div>
                     <p className="text-sm font-medium text-slate-100">{employeeName}</p>
                     <p className="text-xs text-slate-400">
-                      Відвідав: {participant.attended ? 'так' : 'ні'} | Відгук:{' '}
-                      {participant.feedbackSubmitted ? 'поданий' : 'немає'}
+                      Attended: {participant.attended ? 'yes' : 'no'} | Feedback:{' '}
+                      {participant.feedbackSubmitted ? 'submitted' : 'none'}
                     </p>
                   </div>
                   <div className="flex items-center gap-2 text-xs">
@@ -107,7 +107,7 @@ export const TrainingCard: FC<TrainingCardProps> = ({
                       className="rounded-md border border-emerald-500/40 px-3 py-1 text-emerald-300 hover:bg-emerald-500/10"
                       onClick={() => onMarkAttendance(training.id, participant.employeeId, !participant.attended)}
                     >
-                      {participant.attended ? 'Скасувати' : 'Відмітити'}
+                      {participant.attended ? 'Cancel' : 'Mark'}
                     </button>
                   </div>
                 </li>
@@ -117,14 +117,14 @@ export const TrainingCard: FC<TrainingCardProps> = ({
         </div>
 
         <form onSubmit={handleRegister} className="rounded-lg border border-slate-800 bg-slate-900/70 p-3">
-          <h4 className="text-xs uppercase tracking-wide text-slate-400">Реєстрація на тренінг</h4>
+          <h4 className="text-xs uppercase tracking-wide text-slate-400">Training Registration</h4>
           <div className="mt-2 flex flex-col gap-2 md:flex-row">
             <select
               value={selectedEmployeeId}
               onChange={(event) => setSelectedEmployeeId(event.target.value)}
               className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none md:w-1/2"
             >
-              <option value="">Оберіть співробітника</option>
+              <option value="">Select employee</option>
               {availableEmployees.map((employee) => (
                 <option key={employee.id} value={employee.id}>
                   {employee.name} — {employee.position}
@@ -135,20 +135,20 @@ export const TrainingCard: FC<TrainingCardProps> = ({
               type="submit"
               className="rounded-md border border-indigo-500 px-4 py-2 text-sm font-medium text-indigo-300 transition hover:bg-indigo-500/10 md:w-auto"
             >
-              Зареєструвати
+              Register
             </button>
           </div>
         </form>
 
         <form onSubmit={handleSubmitFeedback} className="rounded-lg border border-slate-800 bg-slate-900/70 p-3">
-          <h4 className="text-xs uppercase tracking-wide text-slate-400">Залишити відгук</h4>
+          <h4 className="text-xs uppercase tracking-wide text-slate-400">Leave Feedback</h4>
           <div className="mt-2 grid grid-cols-1 gap-2 md:grid-cols-3">
             <select
               value={feedbackEmployeeId}
               onChange={(event) => setFeedbackEmployeeId(event.target.value)}
               className="rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none"
             >
-              <option value="">Оберіть співробітника</option>
+              <option value="">Select employee</option>
               {training.participants.map((participant) => (
                 <option key={participant.employeeId} value={participant.employeeId}>
                   {getEmployeeName(employees, participant.employeeId)}
@@ -162,14 +162,14 @@ export const TrainingCard: FC<TrainingCardProps> = ({
             >
               {[5, 4, 3, 2, 1].map((rating) => (
                 <option key={rating} value={rating}>
-                  Оцінка {rating}
+                  Rating {rating}
                 </option>
               ))}
             </select>
             <input
               value={feedbackComment}
               onChange={(event) => setFeedbackComment(event.target.value)}
-              placeholder="Коментар"
+              placeholder="Comment"
               className="md:col-span-1 rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none"
             />
           </div>
@@ -178,7 +178,7 @@ export const TrainingCard: FC<TrainingCardProps> = ({
               type="submit"
               className="rounded-md border border-emerald-500 px-4 py-2 text-sm font-medium text-emerald-300 transition hover:bg-emerald-500/10"
             >
-              Надіслати
+              Submit
             </button>
           </div>
         </form>

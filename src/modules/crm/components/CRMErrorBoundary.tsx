@@ -26,8 +26,8 @@ export class CRMErrorBoundary extends Component<CRMErrorBoundaryProps, CRMErrorB
       return (
         this.props.fallback ?? (
           <div className="rounded-lg border border-danger/20 bg-danger/10 p-6 text-danger-foreground">
-            <h2 className="text-lg font-semibold">Щось пішло не так</h2>
-            <p className="mt-2 text-sm opacity-80">Оновіть сторінку або зверніться до адміністратора.</p>
+            <h2 className="text-lg font-semibold">Something went wrong</h2>
+            <p className="mt-2 text-sm opacity-80">Please refresh the page or contact your administrator.</p>
           </div>
         )
       );

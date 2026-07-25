@@ -188,16 +188,16 @@ const calculateLeadScore = (lead: LeadProfile): LeadScoreResult => {
   const rawScore = sizeScore + engagementScore + budgetScore + industryScore;
   const score = Math.round(Math.min(rawScore, 100));
 
-  const explanation = `Компанія у сегменті ${lead.industry} з бюджетом ${lead.budget.toLocaleString()} USD та рівнем залучення ${lead.engagement}%`;
+  const explanation = `Company in the ${lead.industry} segment with a budget of ${lead.budget.toLocaleString()} USD and an engagement level of ${lead.engagement}%`;
 
   return {
     lead,
     score,
     factors: [
-      { label: 'Розмір компанії', value: Math.round(sizeScore) },
-      { label: 'Залученість', value: Math.round(engagementScore) },
-      { label: 'Бюджет', value: Math.round(budgetScore) },
-      { label: 'Індустрія', value: Math.round(industryScore) }
+      { label: 'Company size', value: Math.round(sizeScore) },
+      { label: 'Engagement', value: Math.round(engagementScore) },
+      { label: 'Budget', value: Math.round(budgetScore) },
+      { label: 'Industry', value: Math.round(industryScore) }
     ],
     explanation
   };
@@ -222,16 +222,16 @@ const calculateDealProbability = (deal: DealProfile): DealProbabilityResult => {
   );
 
   const drivers = [
-    { label: 'Стадія угоди', impact: Math.round(stageWeight * 100) },
-    { label: 'Дні у стадії', impact: Math.round(timePenalty * 100) },
-    { label: 'Активність команди', impact: Math.round(activityBoost * 100) },
-    { label: 'Вартість угоди', impact: Math.round(valueInfluence * 100) }
+    { label: 'Deal stage', impact: Math.round(stageWeight * 100) },
+    { label: 'Days in stage', impact: Math.round(timePenalty * 100) },
+    { label: 'Team activity', impact: Math.round(activityBoost * 100) },
+    { label: 'Deal value', impact: Math.round(valueInfluence * 100) }
   ];
 
   const recommendations = [
-    probability < 60 && 'Заплануйте зустріч з економічним замовником',
-    deal.daysInStage > 20 && 'Оновіть наступні кроки, щоб уникнути застою',
-    deal.activityScore < 60 && 'Залучіть маркетинг для підтримки угоди'
+    probability < 60 && 'Schedule a meeting with the decision maker',
+    deal.daysInStage > 20 && 'Update next steps to avoid stagnation',
+    deal.activityScore < 60 && 'Involve marketing to support the deal'
   ].filter(Boolean) as string[];
 
   return {
@@ -240,7 +240,7 @@ const calculateDealProbability = (deal: DealProfile): DealProbabilityResult => {
     drivers,
     recommendations: recommendations.length
       ? recommendations
-      : ['Підтримуйте поточний темп взаємодії для успішного закриття']
+      : ['Maintain current interaction pace for successful closing']
   };
 };
 
@@ -276,10 +276,10 @@ const calculatePerformanceScore = (metric: PerformanceMetric): PerformanceScoreR
   const trend = normalizedScore > 85 ? 'improving' : normalizedScore < 65 ? 'declining' : 'stable';
 
   const highlights = [
-    metric.kpiScore > 85 && 'Перевиконання KPI',
-    metric.attendance > 95 && 'Відмінна відвідуваність',
-    metric.managerRating > 90 && 'Висока оцінка менеджера',
-    metric.peerReviews > 85 && 'Позитивні відгуки колег'
+    metric.kpiScore > 85 && 'KPI overachievement',
+    metric.attendance > 95 && 'Excellent attendance',
+    metric.managerRating > 90 && 'High manager rating',
+    metric.peerReviews > 85 && 'Positive peer reviews'
   ].filter(Boolean) as string[];
 
   return {
@@ -287,7 +287,7 @@ const calculatePerformanceScore = (metric: PerformanceMetric): PerformanceScoreR
     employeeName: metric.employeeName,
     normalizedScore,
     trend,
-    highlights: highlights.length ? highlights : ['Стабільна продуктивність']
+    highlights: highlights.length ? highlights : ['Stable performance']
   };
 };
 
@@ -317,14 +317,14 @@ const calculateBonusBreakdown = (
 
   const components: BonusBreakdown['components'] = [
     { label: 'KPI', weight: weights.kpi, value: metric.kpiScore },
-    { label: 'Відвідуваність', weight: weights.attendance, value: metric.attendance },
-    { label: 'Оцінка менеджера', weight: weights.manager, value: metric.managerRating },
-    { label: 'Відгуки колег', weight: weights.peer, value: metric.peerReviews }
+    { label: 'Attendance', weight: weights.attendance, value: metric.attendance },
+    { label: 'Manager rating', weight: weights.manager, value: metric.managerRating },
+    { label: 'Peer reviews', weight: weights.peer, value: metric.peerReviews }
   ];
 
   if (weights.client > 0) {
     components.push({
-      label: 'Відгуки клієнтів',
+      label: 'Client feedback',
       weight: weights.client,
       value: metric.clientFeedback ?? 0
     });
@@ -397,7 +397,7 @@ const forecastCashFlow = (historical: number[], horizon = 6): ForecastScenario =
     baseline.push(Math.round(current));
   }
 
-  return buildForecastScenario(baseline, 'Місяць');
+  return buildForecastScenario(baseline, 'Month');
 };
 
 const scoreLeads = (leads: LeadProfile[]): LeadScoreResult[] => leads.map(calculateLeadScore);
@@ -453,7 +453,7 @@ export const getAIOverview = (): AIOverviewData => {
       daysInStage: 12,
       activityScore: 88,
       value: 74000,
-      owner: 'Олена Гринь'
+      owner: 'Olena Hryn'
     },
     {
       id: 'deal-2',
@@ -462,7 +462,7 @@ export const getAIOverview = (): AIOverviewData => {
       daysInStage: 24,
       activityScore: 54,
       value: 32000,
-      owner: 'Ігор Коваль'
+      owner: 'Ihor Koval'
     }
   ];
 
@@ -472,7 +472,7 @@ export const getAIOverview = (): AIOverviewData => {
       channel: 'email',
       customer: 'NovaCom',
       sentiment: 'positive',
-      text: 'Команда підтримки спрацювала чудово, дякую за швидку відповідь!',
+      text: 'The support team did a great job, thank you for the quick response!',
       timestamp: new Date().toISOString()
     },
     {
@@ -480,7 +480,7 @@ export const getAIOverview = (): AIOverviewData => {
       channel: 'chat',
       customer: 'Delta Group',
       sentiment: 'negative',
-      text: 'Ми все ще очікуємо інтеграцію. Це затягується.',
+      text: 'We are still waiting for the integration. It is taking too long.',
       timestamp: new Date(Date.now() - 86400000).toISOString()
     }
   ];
@@ -488,7 +488,7 @@ export const getAIOverview = (): AIOverviewData => {
   const performanceMetrics: PerformanceMetric[] = [
     {
       employeeId: 'emp-1',
-      employeeName: 'Іван Петренко',
+      employeeName: 'Ivan Petrenko',
       department: 'Sales',
       kpiScore: 92,
       attendance: 98,
@@ -499,7 +499,7 @@ export const getAIOverview = (): AIOverviewData => {
     },
     {
       employeeId: 'emp-2',
-      employeeName: 'Олена Коваленко',
+      employeeName: 'Olena Kovalenko',
       department: 'Engineering',
       kpiScore: 78,
       attendance: 94,
@@ -526,24 +526,24 @@ export const getAIOverview = (): AIOverviewData => {
   const crmRecommendations: Recommendation[] = [
     {
       id: randomUUID(),
-      title: 'Найкращий час для контакту',
+      title: 'Best time to contact',
       description:
-        'NovaCom відповідає між 10:00-12:00, рекомендовано запланувати дзвінок у середу.',
+        'NovaCom responds between 10:00-12:00, recommended to schedule a call on Wednesday.',
       type: 'action',
       confidence: 0.86
     },
     {
       id: randomUUID(),
-      title: 'Наступний крок для Delta Group',
-      description: 'Запропонуйте воркшоп по впровадженню, щоб пришвидшити підписання договору.',
+      title: 'Next step for Delta Group',
+      description: 'Offer an implementation workshop to accelerate contract signing.',
       type: 'action',
       confidence: 0.74
     },
     {
       id: randomUUID(),
-      title: 'Ризик відтоку клієнта',
+      title: 'Client churn risk',
       description:
-        'Delta Group демонструє негативний тон листування та низьку активність останні 2 тижні.',
+        'Delta Group demonstrates a negative correspondence tone and low activity over the last 2 weeks.',
       type: 'alert',
       confidence: 0.69
     }
@@ -552,16 +552,16 @@ export const getAIOverview = (): AIOverviewData => {
   const hrRecommendations: Recommendation[] = [
     {
       id: randomUUID(),
-      title: 'Готовність до підвищення',
-      description: 'Іван Петренко: високий performance score та 36 місяців в компанії.',
+      title: 'Promotion readiness',
+      description: 'Ivan Petrenko: high performance score and 36 months in the company.',
       type: 'insight',
       confidence: 0.81
     },
     {
       id: randomUUID(),
-      title: 'Ризик звільнення',
+      title: 'Attrition risk',
       description:
-        'Олена Коваленко: зниження залученості (-9% останній місяць), рекомендовано провести зустріч.',
+        'Olena Kovalenko: engagement drop (-9% last month), recommended to hold a meeting.',
       type: 'alert',
       confidence: 0.66
     }
@@ -573,10 +573,10 @@ export const getAIOverview = (): AIOverviewData => {
       dealProbabilities: crmDealProbabilities,
       recommendations: crmRecommendations,
       sentimentTrend: [
-        { date: 'Тиждень 1', score: 0.68 },
-        { date: 'Тиждень 2', score: 0.71 },
-        { date: 'Тиждень 3', score: 0.64 },
-        { date: 'Тиждень 4', score: 0.76 }
+        { date: 'Week 1', score: 0.68 },
+        { date: 'Week 2', score: 0.71 },
+        { date: 'Week 3', score: 0.64 },
+        { date: 'Week 4', score: 0.76 }
       ],
       sentimentSamples
     },
@@ -587,17 +587,17 @@ export const getAIOverview = (): AIOverviewData => {
       talentMatches: [
         {
           employeeId: 'emp-1',
-          employeeName: 'Іван Петренко',
+          employeeName: 'Ivan Petrenko',
           matchScore: 0.87,
-          recommendedRole: 'Регіональний керівник продажів',
-          skillGaps: ['Стратегічне планування']
+          recommendedRole: 'Regional Sales Manager',
+          skillGaps: ['Strategic planning']
         },
         {
           employeeId: 'emp-2',
-          employeeName: 'Олена Коваленко',
+          employeeName: 'Olena Kovalenko',
           matchScore: 0.74,
-          recommendedRole: 'Технічний лід',
-          skillGaps: ['Керування командами', 'Комунікація з клієнтами']
+          recommendedRole: 'Tech Lead',
+          skillGaps: ['Team management', 'Customer communication']
         }
       ]
     },
@@ -607,31 +607,31 @@ export const getAIOverview = (): AIOverviewData => {
           id: randomUUID(),
           category: 'Billing',
           priority: 'urgent',
-          summary: 'Клієнт NovaCom очікує підтвердження оплати рахунку #INV-2045.',
-          suggestedActions: ['Перевірити оплату в банку', 'Надіслати підтвердження клієнту']
+          summary: 'Client NovaCom is awaiting confirmation of invoice #INV-2045 payment.',
+          suggestedActions: ['Check bank payment', 'Send confirmation to client']
         },
         {
           id: randomUUID(),
           category: 'Support',
           priority: 'normal',
-          summary: 'Delta Group потребує оновлення щодо інтеграції CRM.',
-          suggestedActions: ['Узгодити ETA з технічною командою', 'Підготувати email-оновлення']
+          summary: 'Delta Group needs an update regarding CRM integration.',
+          suggestedActions: ['Align ETA with technical team', 'Prepare email update']
         }
       ],
       autoReplies: [
         {
           id: randomUUID(),
-          title: 'Шаблон відповіді на затримку',
+          title: 'Delay response template',
           description:
-            'Дякуємо за ваше звернення! Ми працюємо над інтеграцією та надамо оновлення протягом 24 годин.',
+            'Thank you for reaching out! We are working on the integration and will provide an update within 24 hours.',
           type: 'action',
           confidence: 0.77
         },
         {
           id: randomUUID(),
-          title: 'Формулювання для узгодження рахунку',
+          title: 'Invoice reconciliation phrasing',
           description:
-            'Рахунок #INV-2045 опрацьовується фінансовим відділом. Підтвердження буде надіслане після звірки.',
+            'Invoice #INV-2045 is being processed by the finance department. Confirmation will be sent after reconciliation.',
           type: 'insight',
           confidence: 0.7
         }
@@ -641,22 +641,22 @@ export const getAIOverview = (): AIOverviewData => {
       expenses: [
         {
           id: randomUUID(),
-          statement: 'Витрати на логістику зросли на 8% через сезонний попит.',
-          category: 'Логістика',
+          statement: 'Logistics expenses increased by 8% due to seasonal demand.',
+          category: 'Logistics',
           delta: 0.08,
           unit: 'ratio'
         },
         {
           id: randomUUID(),
-          statement: 'Рівень витрат на інфраструктуру стабілізувався після оптимізації.',
-          category: 'Інфраструктура',
+          statement: 'Infrastructure spending level stabilized after optimization.',
+          category: 'Infrastructure',
           delta: 0.18,
           unit: 'ratio'
         },
         {
           id: randomUUID(),
-          statement: 'Порівняно з минулим місяцем витрати на маркетинг зменшились на 12%',
-          category: 'Маркетинг',
+          statement: 'Compared to last month, marketing expenses decreased by 12%',
+          category: 'Marketing',
           delta: -0.12,
           unit: 'ratio'
         }
@@ -664,16 +664,16 @@ export const getAIOverview = (): AIOverviewData => {
       anomalies: [
         {
           id: randomUUID(),
-          title: 'Потенційний дублікат рахунку',
-          description: 'Рахунок #INV-2045 ($4 200) дублює транзакцію від 12.05.2024',
+          title: 'Potential duplicate invoice',
+          description: 'Invoice #INV-2045 ($4,200) duplicates transaction from May 12, 2024',
           type: 'alert',
           confidence: 0.62
         },
         {
           id: randomUUID(),
-          title: 'Перевищення бюджету',
+          title: 'Budget overrun',
           description:
-            'Витрати R&D на 14% вище плану. Рекомендовано переглянути закупівлі обладнання.',
+            'R&D expenses are 14% above plan. Recommended to review equipment purchases.',
           type: 'alert',
           confidence: 0.71
         }
@@ -685,7 +685,7 @@ export const getAIOverview = (): AIOverviewData => {
         { id: 'metric-1', label: 'Revenue vs Forecast', value: '92%', change: -0.03 },
         { id: 'metric-2', label: 'Pipeline Value', value: '$3.8M', change: 0.08 },
         { id: 'metric-3', label: 'Headcount', value: 164, change: 0.02 },
-        { id: 'metric-4', label: 'Cash Runway', value: '8.5 місяців', change: -0.5 }
+        { id: 'metric-4', label: 'Cash Runway', value: '8.5 months', change: -0.5 }
       ],
       insights: [
         {
@@ -693,20 +693,20 @@ export const getAIOverview = (): AIOverviewData => {
           category: 'crm',
           severity: 'warning',
           message:
-            'Продажі відстають від прогнозу на 8%. Зосередьтесь на 3 угодах на стадії Negotiation.'
+            'Sales are lagging behind forecast by 8%. Focus on 3 deals in the Negotiation stage.'
         },
         {
           id: randomUUID(),
           category: 'hr',
           severity: 'info',
           message:
-            'Ризик плинності кадрів у відділі підтримки +6%. Рекомендовано запланувати 1-на-1.'
+            'Turnover risk in the support department +6%. Recommended to schedule 1-on-1s.'
         },
         {
           id: randomUUID(),
           category: 'finance',
           severity: 'critical',
-          message: 'Runway 8.5 місяців. Розгляньте оптимізацію маркетингового бюджету (-10%).'
+          message: 'Runway 8.5 months. Consider optimizing marketing budget (-10%).'
         }
       ],
       healthScore: 82

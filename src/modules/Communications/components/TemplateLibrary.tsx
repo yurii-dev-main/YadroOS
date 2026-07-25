@@ -28,7 +28,7 @@ export const TemplateLibrary = () => {
             className={`rounded-full px-3 py-1 ${activeCategory === 'all' ? 'bg-emerald-500/30 text-emerald-200' : 'bg-slate-800/60 text-slate-300'}`}
             onClick={() => setActiveCategory('all')}
           >
-            Усі шаблони
+            All templates
           </button>
           {categories.map((category) => (
             <button
@@ -43,39 +43,39 @@ export const TemplateLibrary = () => {
           ))}
         </div>
         <button className="rounded border border-slate-700 px-3 py-2 text-xs text-slate-300 hover:border-emerald-500 hover:text-emerald-300">
-          Додати шаблон
+          Add template
         </button>
       </header>
       <div className="grid gap-4 p-4 md:grid-cols-2">
         {filteredTemplates.map((template) => (
           <article key={template.id} className="rounded border border-slate-800 bg-slate-900/80 p-3 text-sm text-slate-200">
             <h4 className="text-base font-semibold text-emerald-200">{template.name}</h4>
-            <p className="mt-1 text-xs text-slate-400">Тема: {template.subject}</p>
+            <p className="mt-1 text-xs text-slate-400">Subject: {template.subject}</p>
             <div className="mt-2 rounded border border-slate-800 bg-slate-950/50 p-2 text-xs text-slate-300">
               <div dangerouslySetInnerHTML={{ __html: template.body }} />
             </div>
-            <div className="mt-2 text-xs text-slate-500">Змінні: {template.variables.join(', ') || 'Немає'}</div>
+            <div className="mt-2 text-xs text-slate-500">Variables: {template.variables.join(', ') || 'None'}</div>
           </article>
         ))}
         {!filteredTemplates.length && (
-          <p className="col-span-full text-center text-sm text-slate-500">Шаблони відсутні</p>
+          <p className="col-span-full text-center text-sm text-slate-500">No templates available</p>
         )}
       </div>
       <div className="border-t border-slate-800 bg-slate-950/40 p-4">
-        <h4 className="text-sm font-semibold text-slate-200">Автовідповідачі</h4>
+        <h4 className="text-sm font-semibold text-slate-200">Auto-responders</h4>
         <div className="mt-2 grid gap-3 md:grid-cols-3">
           {autoResponders.map((responder) => (
             <article key={responder.id} className="rounded border border-slate-800 bg-slate-900/80 p-3 text-xs text-slate-200">
               <div className="flex items-center justify-between">
                 <span className="uppercase tracking-wide text-slate-400">{responder.type.replace('_', ' ')}</span>
                 <span className={`text-[10px] ${responder.active ? 'text-emerald-300' : 'text-slate-500'}`}>
-                  {responder.active ? 'Активний' : 'Вимкнено'}
+                  {responder.active ? 'Active' : 'Disabled'}
                 </span>
               </div>
               <p className="mt-2 text-slate-300">{responder.message}</p>
               {responder.schedule && (
                 <p className="mt-2 text-slate-500">
-                  Розклад: {responder.schedule.start} — {responder.schedule.end}
+                  Schedule: {responder.schedule.start} — {responder.schedule.end}
                 </p>
               )}
             </article>

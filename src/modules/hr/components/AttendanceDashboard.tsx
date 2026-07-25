@@ -32,7 +32,7 @@ export const AttendanceDashboard: FC<AttendanceDashboardProps> = ({
     <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
       <Card className="border-slate-800 bg-slate-900/70">
         <CardHeader>
-          <CardTitle className="text-sm text-slate-400">Середня відвідуваність</CardTitle>
+          <CardTitle className="text-sm text-slate-400">Average Attendance</CardTitle>
         </CardHeader>
         <CardContent>
           <p className="text-3xl font-semibold text-emerald-300">{averageAttendance.toFixed(1)}%</p>
@@ -40,7 +40,7 @@ export const AttendanceDashboard: FC<AttendanceDashboardProps> = ({
       </Card>
       <Card className="border-slate-800 bg-slate-900/70">
         <CardHeader>
-          <CardTitle className="text-sm text-slate-400">Запізнення (місяць)</CardTitle>
+          <CardTitle className="text-sm text-slate-400">Late Arrivals (month)</CardTitle>
         </CardHeader>
         <CardContent>
           <p className="text-3xl font-semibold text-amber-300">{totalLateArrivals}</p>
@@ -48,7 +48,7 @@ export const AttendanceDashboard: FC<AttendanceDashboardProps> = ({
       </Card>
       <Card className="border-slate-800 bg-slate-900/70">
         <CardHeader>
-          <CardTitle className="text-sm text-slate-400">Активні відпустки</CardTitle>
+          <CardTitle className="text-sm text-slate-400">Active Leaves</CardTitle>
         </CardHeader>
         <CardContent>
           <p className="text-3xl font-semibold text-indigo-300">
@@ -60,7 +60,7 @@ export const AttendanceDashboard: FC<AttendanceDashboardProps> = ({
 
     <Card className="border-slate-800 bg-slate-900/70">
       <CardHeader>
-        <CardTitle className="text-lg text-slate-100">Графік присутності</CardTitle>
+        <CardTitle className="text-lg text-slate-100">Attendance Schedule</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4 text-sm text-slate-300">
         {records.map((record) => (
@@ -81,8 +81,8 @@ export const AttendanceDashboard: FC<AttendanceDashboardProps> = ({
                     {entry.checkIn} → {entry.checkOut}
                   </p>
                   <p className="text-xs text-slate-400">
-                    Локація: {entry.location ?? '—'} | Перерва: {entry.lunchBreakMinutes} хв | Овертайм:{' '}
-                    {entry.overtimeHours} год
+                    Location: {entry.location ?? '—'} | Lunch break: {entry.lunchBreakMinutes} min | Overtime:{' '}
+                    {entry.overtimeHours} hrs
                   </p>
                 </div>
               ))}
@@ -94,17 +94,17 @@ export const AttendanceDashboard: FC<AttendanceDashboardProps> = ({
 
     <Card className="border-slate-800 bg-slate-900/70">
       <CardHeader>
-        <CardTitle className="text-lg text-slate-100">Відпустки</CardTitle>
+        <CardTitle className="text-lg text-slate-100">Leaves</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4 text-sm text-slate-300">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-slate-800">
             <thead>
               <tr className="text-left text-xs uppercase text-slate-400">
-                <th className="px-3 py-2">Співробітник</th>
-                <th className="px-3 py-2">Тип</th>
-                <th className="px-3 py-2">Період</th>
-                <th className="px-3 py-2">Статус</th>
+                <th className="px-3 py-2">Employee</th>
+                <th className="px-3 py-2">Type</th>
+                <th className="px-3 py-2">Period</th>
+                <th className="px-3 py-2">Status</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800">
@@ -125,7 +125,7 @@ export const AttendanceDashboard: FC<AttendanceDashboardProps> = ({
         </div>
 
         <div>
-          <h4 className="text-xs uppercase tracking-wide text-slate-400">Баланс днів</h4>
+          <h4 className="text-xs uppercase tracking-wide text-slate-400">Days Balance</h4>
           <div className="mt-2 grid grid-cols-1 gap-3 md:grid-cols-2">
             {leaveBalances.map((balance) => (
               <div key={`${balance.employeeId}-${balance.type}`} className="rounded-md border border-slate-800 bg-slate-900/70 p-3">
@@ -134,7 +134,7 @@ export const AttendanceDashboard: FC<AttendanceDashboardProps> = ({
                 </p>
                 <p className="text-xs text-slate-400">{balance.type}</p>
                 <p className="text-sm text-indigo-300">
-                  Залишок: {balance.total - balance.used} днів з {balance.total}
+                  Remaining: {balance.total - balance.used} days of {balance.total}
                 </p>
               </div>
             ))}
@@ -145,7 +145,7 @@ export const AttendanceDashboard: FC<AttendanceDashboardProps> = ({
 
     <Card className="border-slate-800 bg-slate-900/70">
       <CardHeader>
-        <CardTitle className="text-lg text-slate-100">Аналітика</CardTitle>
+        <CardTitle className="text-lg text-slate-100">Analytics</CardTitle>
       </CardHeader>
       <CardContent className="grid grid-cols-1 gap-4 text-sm text-slate-300 md:grid-cols-2">
         {summaries.map((summary) => (
@@ -153,9 +153,9 @@ export const AttendanceDashboard: FC<AttendanceDashboardProps> = ({
             <p className="text-sm font-semibold text-slate-100">
               {getEmployeeName(employees, summary.employeeId)}
             </p>
-            <p>Відвідуваність: {summary.attendanceRate}%</p>
-            <p>Запізнення: {summary.lateArrivals}</p>
-            <p>Абсентеїзм: {summary.absenteeismRate}%</p>
+            <p>Attendance: {summary.attendanceRate}%</p>
+            <p>Late arrivals: {summary.lateArrivals}</p>
+            <p>Absenteeism: {summary.absenteeismRate}%</p>
           </div>
         ))}
       </CardContent>

@@ -60,7 +60,7 @@ const base32Encode = (bytes: Uint8Array): string => {
 };
 
 const base32Decode = (input: string): Uint8Array => {
-  let cleaned = input.toUpperCase().replace(/=+$/, '');
+  const cleaned = input.toUpperCase().replace(/=+$/, '');
   let buffer = 0;
   let bitsLeft = 0;
   const bytes: number[] = [];
@@ -153,8 +153,10 @@ export class TotpService {
   static async generateToken(secret: string, timestamp = Date.now(), step = DEFAULT_STEP, digits = 6): Promise<string> {
     const counter = getTimeCounter(timestamp, step);
     const decodedSecret = base32Decode(secret);
-    const key = await cryptoProvider.subtle.importKey('raw', decodedSecret, { name: 'HMAC', hash: 'SHA-1' }, false, ['sign']);
-    const signature = await cryptoProvider.subtle.sign('HMAC', key, counter);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const key = await cryptoProvider.subtle.importKey('raw', decodedSecret as any, { name: 'HMAC', hash: 'SHA-1' }, false, ['sign']);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const signature = await cryptoProvider.subtle.sign('HMAC', key, counter as any);
     const hmac = new Uint8Array(signature);
     const offset = hmac[hmac.length - 1] & 0x0f;
     const binary = ((hmac[offset] & 0x7f) << 24) | ((hmac[offset + 1] & 0xff) << 16) | ((hmac[offset + 2] & 0xff) << 8) | (hmac[offset + 3] & 0xff);

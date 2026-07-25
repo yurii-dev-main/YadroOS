@@ -28,7 +28,7 @@ export const EmployeesPage = () => {
       <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
         <Card className="border-slate-800 bg-slate-900/70">
           <CardHeader>
-            <CardTitle className="text-sm text-slate-400">Співробітники</CardTitle>
+            <CardTitle className="text-sm text-slate-400">Employees</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-3xl font-semibold text-indigo-300">{statistics.totalEmployees}</p>
@@ -36,7 +36,7 @@ export const EmployeesPage = () => {
         </Card>
         <Card className="border-slate-800 bg-slate-900/70">
           <CardHeader>
-            <CardTitle className="text-sm text-slate-400">Активні тренінги</CardTitle>
+            <CardTitle className="text-sm text-slate-400">Active Trainings</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-3xl font-semibold text-emerald-300">{statistics.activeTrainings}</p>
@@ -44,7 +44,7 @@ export const EmployeesPage = () => {
         </Card>
         <Card className="border-slate-800 bg-slate-900/70">
           <CardHeader>
-            <CardTitle className="text-sm text-slate-400">Відвідуваність</CardTitle>
+            <CardTitle className="text-sm text-slate-400">Attendance</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-3xl font-semibold text-emerald-300">{statistics.attendanceRate.toFixed(1)}%</p>
@@ -52,12 +52,12 @@ export const EmployeesPage = () => {
         </Card>
         <Card className="border-slate-800 bg-slate-900/70">
           <CardHeader>
-            <CardTitle className="text-sm text-slate-400">ТОП виконавці</CardTitle>
+            <CardTitle className="text-sm text-slate-400">Top Performers</CardTitle>
           </CardHeader>
           <CardContent className="space-y-1 text-sm text-slate-300">
             {statistics.topPerformers.map((highlight) => (
               <p key={highlight.employeeId}>
-                {hrService.getEmployeeById(highlight.employeeId)?.name ?? 'Невідомо'} — {highlight.score}
+                {hrService.getEmployeeById(highlight.employeeId)?.name ?? 'Unknown'} — {highlight.score}
               </p>
             ))}
           </CardContent>
@@ -82,8 +82,8 @@ export const EmployeesPage = () => {
       </div>
 
       <div>
-        <h3 className="text-lg font-semibold text-slate-100">Організаційна структура</h3>
-        <p className="text-sm text-slate-400">Drag-and-drop і експорт доступні у майбутніх релізах.</p>
+        <h3 className="text-lg font-semibold text-slate-100">Organizational Structure</h3>
+        <p className="text-sm text-slate-400">Drag-and-drop and export available in future releases.</p>
         <div className="mt-4">
           <OrgChartView data={orgChart} />
         </div>

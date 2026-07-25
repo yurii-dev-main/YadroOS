@@ -11,13 +11,13 @@ export const PayrollTable = ({ records, onGeneratePayslip }: PayrollTableProps) 
     <table className="min-w-full divide-y divide-slate-800 text-sm text-slate-200">
       <thead className="bg-slate-900/60 text-xs uppercase tracking-wide text-slate-400">
         <tr>
-          <th className="px-4 py-3 text-left">Працівник</th>
-          <th className="px-4 py-3 text-left">Період</th>
-          <th className="px-4 py-3 text-right">Брутто</th>
-          <th className="px-4 py-3 text-right">Нетто</th>
-          <th className="px-4 py-3 text-right">Бонуси</th>
-          <th className="px-4 py-3 text-right">Відрахування</th>
-          <th className="px-4 py-3 text-right">Статус</th>
+          <th className="px-4 py-3 text-left">Employee</th>
+          <th className="px-4 py-3 text-left">Period</th>
+          <th className="px-4 py-3 text-right">Gross</th>
+          <th className="px-4 py-3 text-right">Net</th>
+          <th className="px-4 py-3 text-right">Bonuses</th>
+          <th className="px-4 py-3 text-right">Deductions</th>
+          <th className="px-4 py-3 text-right">Status</th>
           <th className="px-4 py-3 text-right" />
         </tr>
       </thead>
@@ -61,6 +61,6 @@ export const PayrollTable = ({ records, onGeneratePayslip }: PayrollTableProps) 
         ))}
       </tbody>
     </table>
-    {!records.length && <p className="p-4 text-center text-xs text-slate-500">Дані про зарплати відсутні.</p>}
+    {!records.length && <p className="p-4 text-center text-xs text-slate-500">No payroll data available.</p>}
   </div>
 );

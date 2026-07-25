@@ -73,7 +73,7 @@ export const buildProfitAndLossReport = (
 
   return {
     type: 'profitAndLoss',
-    title: 'Звіт про прибутки та збитки',
+    title: 'Profit and Loss Statement',
     generatedAt: new Date().toISOString(),
     currency: baseCurrency,
     figures: {
@@ -93,7 +93,7 @@ export const buildCashFlowStatement = (
 
   transactions.forEach((transaction) => {
     const amount = convertCurrency(transaction.amount, transaction.currency, baseCurrency, exchangeRate);
-    const category = transaction.type === 'income' ? 'Операційна діяльність' : 'Операційні витрати';
+    const category = transaction.type === 'income' ? 'Operating Activities' : 'Operating Expenses';
     const key = transaction.categoryId ?? category;
 
     if (!grouped[key]) {
@@ -117,7 +117,7 @@ export const buildCashFlowStatement = (
   return {
     report: {
       type: 'cashFlow',
-      title: 'Звіт про рух грошових коштів',
+      title: 'Cash Flow Statement',
       generatedAt: new Date().toISOString(),
       currency: baseCurrency,
       figures: {
@@ -139,7 +139,7 @@ export const buildBalanceSheet = (
 
   return {
     type: 'balanceSheet',
-    title: 'Баланс',
+    title: 'Balance Sheet',
     generatedAt: new Date().toISOString(),
     currency: baseCurrency,
     figures: {
@@ -200,7 +200,7 @@ export const summarisePayroll = (
 
   return {
     type: 'tax',
-    title: 'Звіт по зарплаті та податках',
+    title: 'Payroll and Tax Report',
     generatedAt: new Date().toISOString(),
     currency: baseCurrency,
     figures,
@@ -265,12 +265,12 @@ export const calculateBudgetUsage = (
 export const projectFinancialForecast = (
   forecast: ForecastPoint[],
   exchangeRate?: ExchangeRate | null,
-  currency: CurrencyCode = 'UAH',
+  _currency: CurrencyCode = 'UAH',
 ): FinancialForecast => ({
   timeHorizon: '6m',
   points: forecast,
   assumptions: [
-    'Стабільні витрати на рівні попередніх шести місяців',
-    exchangeRate ? `Курс базової валюти: ${exchangeRate.base}` : 'Використано базову валюту компанії',
+    'Stable expenses at the level of the previous six months',
+    exchangeRate ? `Base currency rate: ${exchangeRate.base}` : 'Company base currency used',
   ],
 });

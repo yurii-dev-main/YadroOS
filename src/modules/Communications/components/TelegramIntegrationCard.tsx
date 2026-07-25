@@ -10,7 +10,7 @@ export const TelegramIntegrationCard = () => {
     webhookUrl: null,
     lastEventAt: null,
   });
-  const [statusMessage, setStatusMessage] = useState('Бот не підключено');
+  const [statusMessage, setStatusMessage] = useState('Bot not connected');
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -18,9 +18,9 @@ export const TelegramIntegrationCard = () => {
       try {
         const response = await telegramService.fetchStatus();
         setStatus(response);
-        setStatusMessage(response.connected ? 'Webhook активний.' : 'Бот не підключено');
+        setStatusMessage(response.connected ? 'Webhook active.' : 'Bot not connected');
       } catch (error) {
-        setStatusMessage('Не вдалося отримати статус підключення.');
+        setStatusMessage('Failed to get connection status.');
       } finally {
         setIsLoading(false);
       }
@@ -40,9 +40,9 @@ export const TelegramIntegrationCard = () => {
         webhookUrl: status.webhookUrl ?? 'https://api.yadroos.local/telegram/webhook',
       });
       setStatus(response);
-      setStatusMessage('Бот успішно підключено. Webhook активний.');
+      setStatusMessage('Bot connected successfully. Webhook active.');
     } catch (error) {
-      setStatusMessage('Не вдалося підключити Telegram бот.');
+      setStatusMessage('Failed to connect Telegram bot.');
     } finally {
       setIsLoading(false);
     }
@@ -50,27 +50,27 @@ export const TelegramIntegrationCard = () => {
 
   const sendTestMessage = () => {
     if (!isConnected) return;
-    setStatusMessage('Тестове повідомлення надіслано в Telegram.');
+    setStatusMessage('Test message sent to Telegram.');
   };
 
   const subtitle = useMemo(() => {
-    if (isLoading) return 'Оновлюємо статус інтеграції...';
-    if (!status.connected) return 'Підключення неактивне';
-    if (status.botName) return `Підключено: ${status.botName}`;
-    return 'Підключено';
+    if (isLoading) return 'Updating integration status...';
+    if (!status.connected) return 'Connection inactive';
+    if (status.botName) return `Connected: ${status.botName}`;
+    return 'Connected';
   }, [isLoading, status.botName, status.connected]);
 
   return (
     <section className="rounded-lg border border-slate-800 bg-slate-900/60 p-4">
       <header className="mb-3 flex items-center justify-between">
-        <h3 className="text-base font-semibold text-slate-100">Інтеграція Telegram</h3>
+        <h3 className="text-base font-semibold text-slate-100">Telegram Integration</h3>
         <span className={`text-xs ${isConnected ? 'text-emerald-300' : 'text-slate-500'}`}>
-          {isConnected ? 'Підключено' : 'Не підключено'}
+          {isConnected ? 'Connected' : 'Not connected'}
         </span>
       </header>
       <p className="text-xs text-slate-500">{subtitle}</p>
       <p className="text-sm text-slate-400">
-        Вкажіть токен бота для синхронізації чатів Telegram з внутрішньою системою. Повідомлення будуть доступні у
+        Provide a bot token to synchronize Telegram chats with the internal system. Messages will be available in the
         unified inbox.
       </p>
       <input
@@ -85,14 +85,14 @@ export const TelegramIntegrationCard = () => {
           onClick={handleConnect}
           disabled={isLoading}
         >
-          Підключити
+          Connect
         </button>
         <button
           className="rounded border border-sky-500 px-3 py-2 text-sky-300 hover:bg-sky-500/20 disabled:opacity-40"
           disabled={!isConnected || isLoading}
           onClick={sendTestMessage}
         >
-          Надіслати тест
+          Send test
         </button>
       </div>
       <p className="mt-3 text-xs text-slate-500">{statusMessage}</p>

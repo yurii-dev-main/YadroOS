@@ -1,107 +1,107 @@
 # YadroOS Platform
 
-YadroOS — модульная веб‑платформа для управления процессами организации (CRM, коммуникации, HR, финансы и мониторинг) с единым интерфейсом и общей технической базой. Репозиторий содержит фронтенд на React + TypeScript, собранный через Vite и стилизованный Tailwind CSS.
+YadroOS is a modular web platform for organizational process management (CRM, communications, HR, finance, and monitoring) featuring a unified interface and shared technical stack. The repository contains a React + TypeScript frontend built with Vite and styled with Tailwind CSS.
 
-## Ключевые возможности
-- CRM: клиенты, сделки, задачи и аналитика.
-- Коммуникации: единый почтовый ящик и мессенджер, интеграции с Telegram/IMAP/SMTP.
-- HR: база сотрудников, обучение, учёт времени, оценка эффективности.
-- Учёт и финансы: счета, транзакции, инвойсы, расчёт бонусов.
-- Аналитика и мониторинг: отчёты, панели мониторинга, AI‑подсказки.
+## Key Features
+- CRM: clients, deals, tasks, and analytics.
+- Communications: unified inbox and messenger, integrations with Telegram/IMAP/SMTP.
+- HR: employee database, training, time tracking, performance evaluation.
+- Accounting and Finance: invoices, transactions, billing, bonus calculation.
+- Analytics and Monitoring: reports, dashboards, AI suggestions.
 
-## Стек
+## Tech Stack
 - **Frontend:** React 18, TypeScript, Vite, Tailwind CSS, Zustand, React Router.
-- **Инфраструктура:** Nginx + PM2 (см. `ecosystem.config.js`, `nginx/`), опционально Docker.
-- **Тесты и качество:** ESLint, Prettier, unit‑тесты в каталоге `tests/`.
+- **Infrastructure:** Nginx + PM2 (see `ecosystem.config.js`, `nginx/`), optionally Docker.
+- **Testing and Quality:** ESLint, Prettier, unit tests in the `tests/` directory.
 
-## Структура репозитория
+## Repository Structure
 ```
 .
-├── docs/                 # Пользовательская, техническая и административная документация
-├── public/               # Статические ассеты для сборки Vite
-├── src/                  # Исходный код приложения
-│   ├── api/              # Клиентские обёртки над HTTP/REST
-│   ├── components/       # Переиспользуемые UI‑компоненты
-│   ├── layouts/          # Макеты страниц и оболочки
-│   ├── modules/          # Крупные бизнес‑модули (CRM, HR, финансы, коммуникации и т.д.)
-│   ├── pages/            # Маршрутизируемые страницы
-│   ├── services/         # Клиентские сервисы и интеграции
-│   ├── store/            # Управление состоянием (Zustand)
-│   └── utils/            # Утилиты и вспомогательные функции
-├── tests/                # Unit‑тесты
-├── vite.config.ts        # Конфигурация Vite
-└── tailwind.config.js    # Конфигурация Tailwind CSS
+├── docs/                 # User, technical, and administrative documentation
+├── public/               # Static assets for Vite build
+├── src/                  # Application source code
+│   ├── api/              # Client wrappers over HTTP/REST
+│   ├── components/       # Reusable UI components
+│   ├── layouts/          # Page layouts and shells
+│   ├── modules/          # Major business modules (CRM, HR, finance, communications, etc.)
+│   ├── pages/            # Routable pages
+│   ├── services/         # Client services and integrations
+│   ├── store/            # State management (Zustand)
+│   └── utils/            # Utilities and helper functions
+├── tests/                # Unit tests
+├── vite.config.ts        # Vite configuration
+└── tailwind.config.js    # Tailwind CSS configuration
 ```
 
-## Быстрый старт
-### Автоматическая подготовка окружения
+## Quick Start
+### Automated Environment Setup
 
-Для быстрого развёртывания на новой машине можно использовать скрипты установки зависимостей.
+For quick deployment on a new machine, dependency installation scripts can be used.
 
 **Ubuntu/Debian:**
 ```bash
 ./scripts/bootstrap.sh
 ```
-**Windows (PowerShell от имени администратора):**
+**Windows (PowerShell as Administrator):**
 ```powershell
 Set-ExecutionPolicy -Scope Process Bypass
 ./scripts/bootstrap.ps1
 ```
 
-Опциональные флаги:
-- `--skip-docker` — пропустить установку Docker.
-- `--skip-node` — пропустить установку Node.js.
-- `--skip-git` — пропустить установку git.
+Optional flags:
+- `--skip-docker` — skip Docker installation.
+- `--skip-node` — skip Node.js installation.
+- `--skip-git` — skip git installation.
 
 
-PowerShell флаги:
-- `-SkipDocker` — пропустить установку Docker Desktop.
-- `-SkipNode` — пропустить установку Node.js.
-- `-SkipGit` — пропустить установку git.
+PowerShell flags:
+- `-SkipDocker` — skip Docker Desktop installation.
+- `-SkipNode` — skip Node.js installation.
+- `-SkipGit` — skip git installation.
 
-После завершения перелогиньтесь, если вас добавили в группу `docker`.
+After completion, log out and log back in if you were added to the `docker` group.
 
-### Ручная установка
-1. Установите Node.js 20+ и npm.
-2. Установите зависимости:
+### Manual Installation
+1. Install Node.js 20+ and npm.
+2. Install dependencies:
    ```bash
    npm install
    ```
-3. Запустите дев‑сервер Vite (по умолчанию на http://localhost:5187/):
+3. Start the Vite dev server (default at http://localhost:5187/):
    ```bash
    npm run dev
    ```
 
-## Сборка и проверки
-- Сборка фронтенда:
+## Build and Checks
+- Frontend build:
   ```bash
   npm run build
   ```
-- Самодостаточная демо‑сборка в один HTML (для запуска без Node.js/сервера):
+- Self-contained single-HTML demo build (for running without Node.js/server):
   ```bash
   npm run build:single
   ```
-  После этого открыть `dist/index.html` напрямую (подходит для показа внешнего вида, маршруты работают через #).
-  Если в `dist/` остались папки `assets/`, удалите `dist/` и повторите `npm run build:single` или запустите `npm run build:single:clean`.
-- Проверка типов (TypeScript):
+  After this, open `dist/index.html` directly (suitable for UI demonstration, routes work via #).
+  If `assets/` folders remain in `dist/`, delete `dist/` and repeat `npm run build:single` or run `npm run build:single:clean`.
+- Type checking (TypeScript):
   ```bash
   npm run type-check
   ```
-- Предпросмотр production‑сборки:
+- Production build preview:
   ```bash
   npm run preview
   ```
-- Статический анализ и форматирование:
+- Static analysis and formatting:
   ```bash
   npm run lint
   npm run format
   ```
 
-## Документация
-- Обзор документации: [docs/README.md](docs/README.md)
-- Технические детали: `docs/technical/` (архитектура, API, база данных, гайд для разработчиков).
-- Руководства для пользователей: `docs/user/`.
-- Операционные инструкции: `docs/admin/`.
+## Documentation
+- Documentation overview: [docs/README.md](docs/README.md)
+- Technical details: `docs/technical/` (architecture, API, database, developer guide).
+- User guides: `docs/user/`.
+- Operational instructions: `docs/admin/`.
 
-## Вклад в проект
-См. [CONTRIBUTING.md](CONTRIBUTING.md) для правил ветвления, стиля и обязательных проверок перед коммитами.
+## Contributing
+See [CONTRIBUTING.md](CONTRIBUTING.md) for branching rules, code style, and required checks before committing.

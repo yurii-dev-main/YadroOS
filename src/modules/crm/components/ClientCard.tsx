@@ -24,19 +24,19 @@ export const ClientCard = ({ client, onOpen }: ClientCardProps) => (
 
     <div className="mt-6 grid grid-cols-2 gap-3 text-sm text-slate-300">
       <div>
-        <p className="text-xs uppercase tracking-wide text-slate-500">Менеджер</p>
+        <p className="text-xs uppercase tracking-wide text-slate-500">Manager</p>
         <p>{client.assignedTo}</p>
       </div>
       <div>
-        <p className="text-xs uppercase tracking-wide text-slate-500">Дохід</p>
+        <p className="text-xs uppercase tracking-wide text-slate-500">Revenue</p>
         <p className="font-semibold text-emerald-400">{formatCurrency(client.revenue)}</p>
       </div>
       <div>
-        <p className="text-xs uppercase tracking-wide text-slate-500">E-mail</p>
+        <p className="text-xs uppercase tracking-wide text-slate-500">Email</p>
         <p>{client.email}</p>
       </div>
       <div>
-        <p className="text-xs uppercase tracking-wide text-slate-500">Телефон</p>
+        <p className="text-xs uppercase tracking-wide text-slate-500">Phone</p>
         <p>{client.phone}</p>
       </div>
     </div>

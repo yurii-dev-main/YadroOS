@@ -2,6 +2,7 @@ import { v4 as uuid } from 'uuid';
 
 import { apiClient } from '../../../services/apiClient';
 import {
+  ActivityType,
   CRMActivity,
   CRMAnalyticsSummary,
   CRMClient,
@@ -64,9 +65,9 @@ export const subscribeToCRMEvents = (
 };
 
 const managers = [
-  { name: 'Олександр Петренко', avatar: 'https://i.pravatar.cc/150?img=1' },
-  { name: 'Марія Іванченко', avatar: 'https://i.pravatar.cc/150?img=2' },
-  { name: 'Ігор Сидоренко', avatar: 'https://i.pravatar.cc/150?img=3' }
+  { name: 'Oleksandr Petrenko', avatar: 'https://i.pravatar.cc/150?img=1' },
+  { name: 'Maria Ivanchenko', avatar: 'https://i.pravatar.cc/150?img=2' },
+  { name: 'Ihor Sydorenko', avatar: 'https://i.pravatar.cc/150?img=3' }
 ];
 
 const industries = ['FinTech', 'Retail', 'Healthcare', 'Manufacturing', 'Education'];
@@ -76,8 +77,8 @@ const generateMockClients = (): CRMClient[] => {
     const manager = managers[index % managers.length];
     return {
       id: uuid(),
-      name: `Клієнт ${index + 1}`,
-      company: `Компанія ${index + 1}`,
+      name: `Client ${index + 1}`,
+      company: `Company ${index + 1}`,
       email: `client${index + 1}@example.com`,
       phone: `+380 67 000 0${(index + 1).toString().padStart(2, '0')}`,
       website: `https://client${index + 1}.ua`,
@@ -88,7 +89,7 @@ const generateMockClients = (): CRMClient[] => {
       tags: [
         {
           id: uuid(),
-          label: index % 2 === 0 ? 'VIP' : 'Стратегічний',
+          label: index % 2 === 0 ? 'VIP' : 'Strategic',
           color: index % 2 === 0 ? '#38bdf8' : '#f97316'
         }
       ],
@@ -99,14 +100,14 @@ const generateMockClients = (): CRMClient[] => {
       lastContactedAt: new Date(Date.now() - index * 86400000).toISOString(),
       customFields: [
         { id: uuid(), label: 'CRM ID', value: `CRM-${1000 + index}` },
-        { id: uuid(), label: 'Сегмент', value: index % 2 === 0 ? 'Enterprise' : 'SMB' }
+        { id: uuid(), label: 'Segment', value: index % 2 === 0 ? 'Enterprise' : 'SMB' }
       ],
       files: [],
       notes: [
         {
           id: uuid(),
           author: manager.name,
-          content: 'Потребує оновлення пропозиції наступного тижня.',
+          content: 'Requires proposal update next week.',
           createdAt: new Date().toISOString()
         }
       ]
@@ -117,7 +118,7 @@ const generateMockClients = (): CRMClient[] => {
 const generateMockDeals = (clients: CRMClient[]): CRMDeal[] => {
   return clients.slice(0, 20).map((client, index) => ({
     id: uuid(),
-    title: `Угода ${client.company}`,
+    title: `Deal ${client.company}`,
     value: Math.floor(Math.random() * 200000) + 20000,
     clientId: client.id,
     clientName: client.name,
@@ -140,8 +141,8 @@ const generateMockActivities = (clients: CRMClient[]): CRMActivity[] => {
         createdAt: new Date(baseDate + 86400000).toISOString(),
         createdBy: client.assignedTo,
         duration: 12,
-        summary: 'Обговорили умови співпраці.',
-        notes: 'Потрібно надіслати презентацію.'
+        summary: 'Discussed terms of cooperation.',
+        notes: 'Need to send a presentation.'
       },
       {
         id: uuid(),
@@ -151,7 +152,7 @@ const generateMockActivities = (clients: CRMClient[]): CRMActivity[] => {
         createdBy: client.assignedTo,
         date: new Date(baseDate + 172800000).toISOString(),
         attendees: [client.assignedTo, client.name],
-        notes: 'Запланувати демо продукту.'
+        notes: 'Schedule a product demo.'
       },
       {
         id: uuid(),
@@ -159,7 +160,7 @@ const generateMockActivities = (clients: CRMClient[]): CRMActivity[] => {
         type: 'note',
         createdAt: new Date(baseDate + 259200000).toISOString(),
         createdBy: client.assignedTo,
-        content: 'Клієнт цікавиться кастомною інтеграцією.'
+        content: 'Client is interested in custom integration.'
       }
     ] as CRMActivity[];
   });
@@ -174,7 +175,7 @@ const normalizeActivityDate = (value?: string | null) => {
 const mapActivityFromApi = (activity: ActivityApiResponse): CRMActivity => {
   const creatorName = activity.creator
     ? `${activity.creator.firstName} ${activity.creator.lastName}`
-    : 'Система';
+    : 'System';
   const createdAt = normalizeActivityDate(activity.createdAt) ?? new Date().toISOString();
   const base = {
     id: activity.id,
@@ -237,11 +238,13 @@ const mapActivityFromApi = (activity: ActivityApiResponse): CRMActivity => {
 };
 
 const mapActivityToApi = (activity: Omit<CRMActivity, 'id' | 'createdAt'>) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const act = activity as any;
   const description =
-    'notes' in activity && activity.notes
-      ? activity.notes
-      : 'content' in activity
-        ? activity.content
+    'notes' in act && act.notes
+      ? act.notes
+      : 'content' in act
+        ? act.content
         : undefined;
 
   const payload: {
@@ -253,30 +256,30 @@ const mapActivityToApi = (activity: Omit<CRMActivity, 'id' | 'createdAt'>) => {
     date?: string;
     duration?: number;
   } = {
-    clientId: activity.clientId,
-    type: activity.type,
+    clientId: act.clientId,
+    type: act.type,
     description
   };
 
-  if ('summary' in activity && activity.summary) {
-    payload.subject = activity.summary;
+  if ('summary' in act && act.summary) {
+    payload.subject = act.summary;
   }
 
-  if ('subject' in activity && activity.subject) {
-    payload.subject = activity.subject;
+  if ('subject' in act && act.subject) {
+    payload.subject = act.subject;
   }
 
-  if (activity.type === 'task') {
-    payload.subject = 'status' in activity ? activity.status : payload.subject;
-    payload.date = 'deadline' in activity ? activity.deadline : payload.date;
+  if (act.type === 'task') {
+    payload.subject = 'status' in act ? act.status : payload.subject;
+    payload.date = 'deadline' in act ? act.deadline : payload.date;
   }
 
-  if (activity.type === 'meeting') {
-    payload.date = 'date' in activity ? activity.date : payload.date;
+  if (act.type === 'meeting') {
+    payload.date = 'date' in act ? act.date : payload.date;
   }
 
-  if ('duration' in activity && activity.duration) {
-    payload.duration = activity.duration;
+  if ('duration' in act && act.duration) {
+    payload.duration = act.duration;
   }
 
   return payload;
@@ -294,15 +297,15 @@ class CRMService {
       emailTemplates: [
         {
           id: uuid(),
-          name: 'Вітальний лист',
-          subject: 'Дякуємо за інтерес до YadroOS',
-          body: 'Вітаємо, {name}! Дякуємо за інтерес. Менеджер зв\'яжеться з вами найближчим часом.'
+          name: 'Welcome Email',
+          subject: 'Thank you for your interest in YadroOS',
+          body: 'Welcome, {name}! Thank you for your interest. A manager will contact you shortly.'
         },
         {
           id: uuid(),
           name: 'Follow-up',
-          subject: 'Чи залишилися питання?',
-          body: 'Доброго дня, {name}! Нагадуємо про нашу пропозицію. Будемо раді відповісти на питання.'
+          subject: 'Do you have any remaining questions?',
+          body: 'Hello, {name}! Reminding you about our proposal. We would be happy to answer any questions.'
         }
       ],
       campaigns: []
@@ -373,7 +376,7 @@ class CRMService {
 
   async getClient(id: string) {
     const client = this.store.clients.find((item) => item.id === id);
-    if (!client) throw new Error('Клієнта не знайдено');
+    if (!client) throw new Error('Client not found');
     return this.simulateLatency(client);
   }
 
@@ -393,7 +396,7 @@ class CRMService {
 
   async updateClient(id: string, updates: Partial<CRMClient>) {
     const index = this.store.clients.findIndex((client) => client.id === id);
-    if (index === -1) throw new Error('Клієнта не знайдено');
+    if (index === -1) throw new Error('Client not found');
     const updated: CRMClient = {
       ...this.store.clients[index],
       ...updates,
@@ -454,7 +457,7 @@ class CRMService {
 
   async updateDealStage(dealId: string, stage: DealStage) {
     const index = this.store.deals.findIndex((deal) => deal.id === dealId);
-    if (index === -1) throw new Error('Угоду не знайдено');
+    if (index === -1) throw new Error('Deal not found');
     this.store.deals[index] = {
       ...this.store.deals[index],
       stage,
@@ -466,7 +469,7 @@ class CRMService {
 
   async updateDeal(dealId: string, updates: Partial<CRMDeal>) {
     const index = this.store.deals.findIndex((deal) => deal.id === dealId);
-    if (index === -1) throw new Error('Угоду не знайдено');
+    if (index === -1) throw new Error('Deal not found');
     this.store.deals[index] = {
       ...this.store.deals[index],
       ...updates,
@@ -478,7 +481,7 @@ class CRMService {
 
   async createDeal(input: Omit<CRMDeal, 'id' | 'createdAt' | 'updatedAt' | 'clientName'>) {
     const client = this.store.clients.find((item) => item.id === input.clientId);
-    if (!client) throw new Error('Клієнта не знайдено для угоди');
+    if (!client) throw new Error('Client not found for deal');
     const deal: CRMDeal = {
       ...input,
       id: uuid(),
@@ -567,7 +570,7 @@ class CRMService {
 
   async sendCampaign(campaignId: string) {
     const campaign = this.store.campaigns.find((item) => item.id === campaignId);
-    if (!campaign) throw new Error('Розсилку не знайдено');
+    if (!campaign) throw new Error('Mailing campaign not found');
     campaign.status = 'sent';
     campaign.sentAt = new Date().toISOString();
     campaign.metrics = {

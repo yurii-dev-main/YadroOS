@@ -51,13 +51,13 @@ export const ChatWindow = ({ messages, activeUser, typingUsers, onSend, onTyping
           <MessageBubble key={message.id} message={message} isOwn={message.author.id === activeUser.id} />
         ))}
         {typingUsers.length > 0 && (
-          <div className="mt-2 text-xs text-slate-400">{typingUsers.length} користувач(і) друкують...</div>
+          <div className="mt-2 text-xs text-slate-400">{typingUsers.length} user(s) typing...</div>
         )}
       </div>
       <div className="border-t border-slate-800 bg-slate-900/40 p-4">
         <textarea
           className="h-24 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"
-          placeholder="Напишіть повідомлення, використовуйте / для швидких відповідей"
+          placeholder="Type a message, use / for quick responses"
           value={inputValue}
           onChange={(event) => handleInputChange(event.target.value)}
           onKeyDown={(event) => {
@@ -82,12 +82,12 @@ export const ChatWindow = ({ messages, activeUser, typingUsers, onSend, onTyping
           </div>
         )}
         <div className="mt-3 flex items-center justify-between text-xs text-slate-500">
-          <span>Підтримується drag-and-drop файлів, emoji, згадки @</span>
+          <span>File drag-and-drop, emoji, @mentions supported</span>
           <button
             className="rounded border border-emerald-500 px-4 py-2 text-emerald-300 hover:bg-emerald-500/20"
             onClick={handleSend}
           >
-            Надіслати
+            Send
           </button>
         </div>
       </div>

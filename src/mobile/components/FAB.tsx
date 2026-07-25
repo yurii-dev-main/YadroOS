@@ -52,7 +52,7 @@ export const FAB = ({ actions }: FABProps) => {
         type="button"
         onClick={() => setOpen((prev) => !prev)}
         className="flex h-16 w-16 items-center justify-center rounded-full bg-primary text-white shadow-xl transition active:scale-95"
-        aria-label="Швидкі дії"
+        aria-label="Quick actions"
       >
         <motion.span animate={{ rotate: open ? 45 : 0 }}>
           <Plus className="h-7 w-7" />

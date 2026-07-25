@@ -68,22 +68,22 @@ export const InvoiceBuilder = ({ defaultCurrency = 'USD', onCreate }: InvoiceBui
 
   return (
     <div className="space-y-4 rounded-lg border border-slate-800 bg-slate-900/60 p-4 text-sm text-slate-200">
-      <h3 className="text-base font-semibold text-slate-100">Конструктор інвойсів</h3>
+      <h3 className="text-base font-semibold text-slate-100">Invoice Builder</h3>
       <div className="grid gap-3 md:grid-cols-2">
         <div className="grid gap-2">
-          <Label htmlFor="clientName">Клієнт</Label>
+          <Label htmlFor="clientName">Client</Label>
           <Input id="clientName" value={clientName} onChange={(event) => setClientName(event.target.value)} />
         </div>
         <div className="grid gap-2">
-          <Label htmlFor="clientId">ID клієнта</Label>
+          <Label htmlFor="clientId">Client ID</Label>
           <Input id="clientId" value={clientId} onChange={(event) => setClientId(event.target.value)} placeholder="client-001" />
         </div>
         <div className="grid gap-2">
-          <Label htmlFor="projectId">Проєкт</Label>
+          <Label htmlFor="projectId">Project</Label>
           <Input id="projectId" value={projectId} onChange={(event) => setProjectId(event.target.value)} placeholder="project-001" />
         </div>
         <div className="grid gap-2">
-          <Label htmlFor="currency">Валюта</Label>
+          <Label htmlFor="currency">Currency</Label>
           <select
             id="currency"
             className="rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm"
@@ -100,11 +100,11 @@ export const InvoiceBuilder = ({ defaultCurrency = 'USD', onCreate }: InvoiceBui
           </select>
         </div>
         <div className="grid gap-2">
-          <Label htmlFor="issueDate">Дата</Label>
+          <Label htmlFor="issueDate">Date</Label>
           <Input id="issueDate" type="date" value={issueDate} onChange={(event) => setIssueDate(event.target.value)} />
         </div>
         <div className="grid gap-2">
-          <Label htmlFor="dueDate">Термін оплати</Label>
+          <Label htmlFor="dueDate">Due Date</Label>
           <Input id="dueDate" type="date" value={dueDate} onChange={(event) => setDueDate(event.target.value)} />
         </div>
       </div>
@@ -112,11 +112,11 @@ export const InvoiceBuilder = ({ defaultCurrency = 'USD', onCreate }: InvoiceBui
         {lineItems.map((item) => (
           <div key={item.id} className="grid gap-3 rounded-md border border-slate-800 bg-slate-900/80 p-3 md:grid-cols-6">
             <div className="md:col-span-2">
-              <Label className="text-xs text-slate-500">Позиція</Label>
+              <Label className="text-xs text-slate-500">Item</Label>
               <Input value={item.name} onChange={(event) => updateItem(item.id, { name: event.target.value })} />
             </div>
             <div>
-              <Label className="text-xs text-slate-500">К-сть</Label>
+              <Label className="text-xs text-slate-500">Qty</Label>
               <Input
                 type="number"
                 value={item.quantity}
@@ -124,7 +124,7 @@ export const InvoiceBuilder = ({ defaultCurrency = 'USD', onCreate }: InvoiceBui
               />
             </div>
             <div>
-              <Label className="text-xs text-slate-500">Ціна</Label>
+              <Label className="text-xs text-slate-500">Price</Label>
               <Input
                 type="number"
                 value={item.unitPrice}
@@ -132,7 +132,7 @@ export const InvoiceBuilder = ({ defaultCurrency = 'USD', onCreate }: InvoiceBui
               />
             </div>
             <div>
-              <Label className="text-xs text-slate-500">ПДВ</Label>
+              <Label className="text-xs text-slate-500">VAT</Label>
               <Input
                 type="number"
                 value={(item.taxRate ?? 0) * 100}
@@ -141,17 +141,17 @@ export const InvoiceBuilder = ({ defaultCurrency = 'USD', onCreate }: InvoiceBui
             </div>
             <div className="flex items-end justify-end">
               <Button type="button" variant="ghost" onClick={() => removeItem(item.id)}>
-                Видалити
+                Remove
               </Button>
             </div>
           </div>
         ))}
         <Button type="button" variant="outline" onClick={addItem}>
-          Додати позицію
+          Add item
         </Button>
       </div>
       <div className="grid gap-2">
-        <Label htmlFor="discount">Знижка, %</Label>
+        <Label htmlFor="discount">Discount, %</Label>
         <Input
           id="discount"
           type="number"
@@ -160,37 +160,37 @@ export const InvoiceBuilder = ({ defaultCurrency = 'USD', onCreate }: InvoiceBui
         />
       </div>
       <div className="grid gap-2">
-        <Label htmlFor="notes">Нотатки</Label>
+        <Label htmlFor="notes">Notes</Label>
         <textarea
           id="notes"
           value={notes}
           onChange={(event) => setNotes(event.target.value)}
-          placeholder="Умови оплати, додаткові інструкції"
+          placeholder="Payment terms, additional instructions"
           className="min-h-[120px] rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-secondary"
         />
       </div>
       <div className="rounded-md border border-slate-800 bg-slate-900/80 p-3 text-sm">
         <div className="flex items-center justify-between text-slate-400">
-          <span>Сума без ПДВ</span>
+          <span>Subtotal</span>
           <span className="text-slate-100">{subtotal.toFixed(2)} {currency}</span>
         </div>
         <div className="flex items-center justify-between text-slate-400">
-          <span>ПДВ</span>
+          <span>VAT</span>
           <span className="text-slate-100">{taxes.toFixed(2)} {currency}</span>
         </div>
         {discount > 0 && (
           <div className="flex items-center justify-between text-slate-400">
-            <span>Знижка</span>
+            <span>Discount</span>
             <span className="text-slate-100">-{(subtotal * discount).toFixed(2)} {currency}</span>
           </div>
         )}
         <div className="mt-2 flex items-center justify-between text-lg font-semibold text-secondary">
-          <span>До оплати</span>
+          <span>Total Due</span>
           <span>{total.toFixed(2)} {currency}</span>
         </div>
       </div>
       <Button type="button" variant="secondary" onClick={handleCreate}>
-        Створити інвойс
+        Create invoice
       </Button>
     </div>
   );

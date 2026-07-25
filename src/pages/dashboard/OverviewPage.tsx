@@ -2,9 +2,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/ca
 import { useAuthStore } from '../../store/authStore';
 
 const stats = [
-  { label: 'Активні члени DAO', value: '128', delta: '+14%' },
-  { label: 'Голосування цього місяця', value: '32', delta: '+6' },
-  { label: 'Розподіл бюджету', value: '₴860 000', delta: '82% використано' }
+  { label: 'Active DAO Members', value: '128', delta: '+14%' },
+  { label: 'Votes this Month', value: '32', delta: '+6' },
+  { label: 'Budget Allocation', value: '₴860 000', delta: '82% used' }
 ];
 
 export const OverviewPage = () => {
@@ -12,8 +12,8 @@ export const OverviewPage = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold text-slate-50">Вітаємо, {user?.name}</h1>
-        <p className="text-sm text-slate-400">Огляд діяльності вашої децентралізованої організації</p>
+        <h1 className="text-2xl font-semibold text-slate-50">Welcome, {user?.name}</h1>
+        <p className="text-sm text-slate-400">Overview of your decentralized organization's activity</p>
       </div>
       <div className="grid gap-4 md:grid-cols-3">
         {stats.map((stat) => (

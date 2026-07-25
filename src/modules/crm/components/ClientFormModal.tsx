@@ -33,7 +33,7 @@ const defaultValues: ClientFormValues = {
   size: 50,
   revenue: 50000,
   status: 'lead',
-  assignedTo: 'Олександр Петренко'
+  assignedTo: 'Oleksandr Petrenko'
 };
 
 export const ClientFormModal = ({ open, onClose, onSubmit, initialData }: ClientFormModalProps) => {
@@ -56,13 +56,13 @@ export const ClientFormModal = ({ open, onClose, onSubmit, initialData }: Client
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur">
       <div className="w-full max-w-2xl rounded-2xl border border-slate-700/60 bg-slate-900/90 p-8 shadow-2xl shadow-black/40">
         <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-xl font-semibold text-white">{initialData ? 'Редагування клієнта' : 'Новий клієнт'}</h2>
+          <h2 className="text-xl font-semibold text-white">{initialData ? 'Edit Client' : 'New Client'}</h2>
           <button
             type="button"
             className="rounded-lg border border-slate-600/60 px-3 py-1 text-sm text-slate-300 transition hover:border-slate-500 hover:text-white"
             onClick={onClose}
           >
-            Закрити
+            Close
           </button>
         </div>
 
@@ -74,7 +74,7 @@ export const ClientFormModal = ({ open, onClose, onSubmit, initialData }: Client
           })}
         >
           <label className="flex flex-col text-sm text-slate-200">
-            Ім'я контактної особи
+            Contact Person Name
             <input
               {...register('name', { required: true })}
               className="mt-1 rounded-lg border border-slate-700 bg-slate-900 px-3 py-2"
@@ -82,7 +82,7 @@ export const ClientFormModal = ({ open, onClose, onSubmit, initialData }: Client
           </label>
 
           <label className="flex flex-col text-sm text-slate-200">
-            Компанія
+            Company
             <input
               {...register('company', { required: true })}
               className="mt-1 rounded-lg border border-slate-700 bg-slate-900 px-3 py-2"
@@ -99,7 +99,7 @@ export const ClientFormModal = ({ open, onClose, onSubmit, initialData }: Client
           </label>
 
           <label className="flex flex-col text-sm text-slate-200">
-            Телефон
+            Phone
             <input
               {...register('phone', { required: true })}
               className="mt-1 rounded-lg border border-slate-700 bg-slate-900 px-3 py-2"
@@ -107,7 +107,7 @@ export const ClientFormModal = ({ open, onClose, onSubmit, initialData }: Client
           </label>
 
           <label className="flex flex-col text-sm text-slate-200">
-            Веб-сайт
+            Website
             <input
               {...register('website')}
               className="mt-1 rounded-lg border border-slate-700 bg-slate-900 px-3 py-2"
@@ -115,7 +115,7 @@ export const ClientFormModal = ({ open, onClose, onSubmit, initialData }: Client
           </label>
 
           <label className="flex flex-col text-sm text-slate-200">
-            Індустрія
+            Industry
             <input
               {...register('industry', { required: true })}
               className="mt-1 rounded-lg border border-slate-700 bg-slate-900 px-3 py-2"
@@ -123,7 +123,7 @@ export const ClientFormModal = ({ open, onClose, onSubmit, initialData }: Client
           </label>
 
           <label className="flex flex-col text-sm text-slate-200">
-            Кількість співробітників
+            Number of Employees
             <input
               type="number"
               {...register('size', { valueAsNumber: true })}
@@ -132,7 +132,7 @@ export const ClientFormModal = ({ open, onClose, onSubmit, initialData }: Client
           </label>
 
           <label className="flex flex-col text-sm text-slate-200">
-            Річний дохід
+            Annual Revenue
             <input
               type="number"
               {...register('revenue', { valueAsNumber: true })}
@@ -141,20 +141,20 @@ export const ClientFormModal = ({ open, onClose, onSubmit, initialData }: Client
           </label>
 
           <label className="flex flex-col text-sm text-slate-200">
-            Статус
+            Status
             <select
               {...register('status')}
               className="mt-1 rounded-lg border border-slate-700 bg-slate-900 px-3 py-2"
             >
-              <option value="lead">Лід</option>
-              <option value="active">Активний</option>
-              <option value="inactive">Неактивний</option>
-              <option value="lost">Втрачений</option>
+              <option value="lead">Lead</option>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+              <option value="lost">Lost</option>
             </select>
           </label>
 
           <label className="flex flex-col text-sm text-slate-200">
-            Призначено менеджеру
+            Assigned Manager
             <input
               {...register('assignedTo', { required: true })}
               className="mt-1 rounded-lg border border-slate-700 bg-slate-900 px-3 py-2"
@@ -167,14 +167,14 @@ export const ClientFormModal = ({ open, onClose, onSubmit, initialData }: Client
               onClick={onClose}
               className="rounded-lg border border-slate-600 px-4 py-2 text-sm text-slate-300 transition hover:border-slate-500 hover:text-white"
             >
-              Скасувати
+              Cancel
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
               className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {isSubmitting ? 'Збереження...' : 'Зберегти'}
+              {isSubmitting ? 'Saving...' : 'Save'}
             </button>
           </div>
         </form>

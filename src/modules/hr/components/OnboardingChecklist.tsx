@@ -11,14 +11,14 @@ interface OnboardingChecklistProps {
 export const OnboardingChecklist: FC<OnboardingChecklistProps> = ({ employees, plans }) => (
   <Card className="border-slate-800 bg-slate-900/70">
     <CardHeader>
-      <CardTitle className="text-lg text-slate-100">Онбординг</CardTitle>
+      <CardTitle className="text-lg text-slate-100">Onboarding</CardTitle>
     </CardHeader>
     <CardContent className="space-y-4 text-sm text-slate-300">
       {plans.map((plan) => (
         <div key={plan.employeeId} className="rounded-lg border border-slate-800 bg-slate-900/70 p-4">
           <div className="flex flex-col justify-between gap-2 md:flex-row md:items-center">
             <p className="text-sm font-semibold text-slate-100">
-              {getEmployeeName(employees, plan.employeeId)} — старт {formatDate(plan.startDate)}
+              {getEmployeeName(employees, plan.employeeId)} — start {formatDate(plan.startDate)}
             </p>
             <span className="text-xs text-slate-400">Buddy: {getEmployeeName(employees, plan.buddyId)}</span>
           </div>
@@ -34,11 +34,11 @@ export const OnboardingChecklist: FC<OnboardingChecklistProps> = ({ employees, p
                         : 'border border-amber-500/40 bg-amber-500/10 text-amber-300'
                     }`}
                   >
-                    {task.completed ? 'Завершено' : 'В процесі'}
+                    {task.completed ? 'Completed' : 'In progress'}
                   </span>
                 </div>
-                <p className="text-xs text-slate-400">Відповідальний: {task.owner}</p>
-                <p className="text-xs text-slate-400">Дедлайн: {formatDate(task.dueDate)}</p>
+                <p className="text-xs text-slate-400">Assignee: {task.owner}</p>
+                <p className="text-xs text-slate-400">Deadline: {formatDate(task.dueDate)}</p>
               </li>
             ))}
           </ul>

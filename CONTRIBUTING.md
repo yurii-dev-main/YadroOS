@@ -1,27 +1,27 @@
-# Вклад в YadroOS
+# Contributing to YadroOS
 
-Эти правила помогают сохранять единый стиль разработки и облегчать ревью.
+These guidelines help maintain a consistent development style and simplify code reviews.
 
-## Требования к окружению
-- Node.js 20+ и npm (версии из `.nvmrc`, если появится).
-- Установленные зависимости: `npm install`.
+## Environment Requirements
+- Node.js 20+ and npm (versions from `.nvmrc`, if added).
+- Installed dependencies: `npm install`.
 
-## Рабочий процесс
-1. **Ветвление.** Отводите отдельную ветку от `main` под задачу (`feature/<кратко>` или `fix/<кратко>`).
-2. **Согласованность кода.** Перед коммитом выполняйте:
+## Workflow
+1. **Branching.** Create a separate branch off `main` for each task (`feature/<short-desc>` or `fix/<short-desc>`).
+2. **Code Consistency.** Before committing, run:
    ```bash
    npm run lint
    npm run format
-   npm run build   # проверка типизации и сборки
+   npm run build   # type checking and build verification
    ```
-3. **Тесты.** Unit‑тесты храните в `tests/` рядом с проверяемым модулем. Добавляйте новые тесты к изменённой функциональности.
-4. **Коммиты.** Сообщения делайте осмысленными: что изменилось и зачем (например, `feat(hr): add onboarding checklist`).
-5. **PR.** В описании указывайте цель, основные изменения, проверки (lint/build/tests) и любые риски для деплоя.
+3. **Tests.** Store unit tests in `tests/` next to the module being tested. Add new tests for modified functionality.
+4. **Commits.** Make commit messages meaningful: what changed and why (for example, `feat(hr): add onboarding checklist`).
+5. **PR.** In the description, specify the objective, key changes, checks (lint/build/tests), and any deployment risks.
 
-## Кодстайл
-- TypeScript/React: следуйте существующим паттернам компонентов и хуков в `src/components` и `src/hooks`.
-- Импортируйте только нужное, избегайте необоснованного глобального состояния — предпочитайте локальные хуки и типы из `src/types`.
-- Стили пишите через Tailwind классы; для общих паттернов используйте готовые компоненты и утилиты.
+## Code Style
+- TypeScript/React: follow existing component and hook patterns in `src/components` and `src/hooks`.
+- Import only what is necessary, avoid unjustified global state — prefer local hooks and types from `src/types`.
+- Write styles using Tailwind classes; for common patterns, use pre-built components and utilities.
 
-## Документация
-При добавлении или изменении функциональности обновляйте релевантные файлы в `docs/` (пользовательские гайды, технические схемы, чеклисты админа) и отражайте изменения в `README.md` при необходимости.
+## Documentation
+When adding or modifying functionality, update relevant files in `docs/` (user guides, technical diagrams, admin checklists) and reflect changes in `README.md` if necessary.

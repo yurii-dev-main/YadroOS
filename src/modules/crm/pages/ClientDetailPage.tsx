@@ -15,11 +15,11 @@ import { CRMClient, CRMDeal, CRMNote } from '../types/crm.types';
 import { formatCurrency, formatNumber } from '../utils/crm.utils';
 
 const tabs = [
-  { id: 'overview', label: 'Огляд', icon: Edit2 },
-  { id: 'deals', label: 'Угоди', icon: Target },
-  { id: 'activity', label: 'Активності', icon: Activity },
-  { id: 'files', label: 'Файли', icon: Paperclip },
-  { id: 'notes', label: 'Нотатки', icon: FileText }
+  { id: 'overview', label: 'Overview', icon: Edit2 },
+  { id: 'deals', label: 'Deals', icon: Target },
+  { id: 'activity', label: 'Activities', icon: Activity },
+  { id: 'files', label: 'Files', icon: Paperclip },
+  { id: 'notes', label: 'Notes', icon: FileText }
 ] as const;
 
 type TabId = typeof tabs[number]['id'];
@@ -83,7 +83,7 @@ export const ClientDetailPage = () => {
     if (!client) return;
     const note: CRMNote = {
       id: uuid(),
-      author: 'Ви',
+      author: 'You',
       content,
       createdAt: new Date().toISOString()
     };
@@ -101,7 +101,7 @@ export const ClientDetailPage = () => {
   }), [client, deals]);
 
   if (!clientId) {
-    return <p className="text-sm text-slate-400">Клієнт не знайдений.</p>;
+    return <p className="text-sm text-slate-400">Client not found.</p>;
   }
 
   return (
@@ -112,10 +112,10 @@ export const ClientDetailPage = () => {
           onClick={() => navigate(-1)}
           className="flex items-center gap-2 text-sm text-slate-400 transition hover:text-white"
         >
-          <ArrowLeft className="h-4 w-4" /> Назад до списку
+          <ArrowLeft className="h-4 w-4" /> Back to list
         </button>
 
-        {loading && <p className="text-sm text-slate-400">Завантаження даних клієнта...</p>}
+        {loading && <p className="text-sm text-slate-400">Loading client data...</p>}
         {!loading && client && (
           <div className="flex flex-col gap-6 xl:flex-row">
             <div className="flex-1 space-y-6">
@@ -169,7 +169,7 @@ export const ClientDetailPage = () => {
                         }}
                         className="flex items-center gap-2 rounded-lg border border-slate-600/60 px-3 py-1 text-sm text-slate-300 transition hover:border-blue-500 hover:text-blue-300"
                       >
-                        <Edit2 className="h-4 w-4" /> Редагувати
+                        <Edit2 className="h-4 w-4" /> Edit
                       </button>
                     )}
                   </div>
@@ -186,7 +186,7 @@ export const ClientDetailPage = () => {
                     />
                   </label>
                   <label className="flex flex-col text-xs uppercase tracking-wide text-slate-500">
-                    Телефон
+                    Phone
                     <Input
                       value={client.phone}
                       onChange={(event) => setClient({ ...client, phone: event.target.value })}
@@ -195,7 +195,7 @@ export const ClientDetailPage = () => {
                     />
                   </label>
                   <label className="flex flex-col text-xs uppercase tracking-wide text-slate-500">
-                    Вебсайт
+                    Website
                     <Input
                       value={client.website ?? ''}
                       onChange={(event) => setClient({ ...client, website: event.target.value })}
@@ -204,7 +204,7 @@ export const ClientDetailPage = () => {
                     />
                   </label>
                   <label className="flex flex-col text-xs uppercase tracking-wide text-slate-500">
-                    Індустрія
+                    Industry
                     <Input
                       value={client.industry}
                       onChange={(event) => setClient({ ...client, industry: event.target.value })}
@@ -220,11 +220,11 @@ export const ClientDetailPage = () => {
                     <p className="text-lg font-semibold text-emerald-400">{overviewMetrics.lifetimeValue}</p>
                   </div>
                   <div>
-                    <p className="text-xs uppercase tracking-wide text-slate-500">Середня угода</p>
+                    <p className="text-xs uppercase tracking-wide text-slate-500">Average Deal</p>
                     <p className="text-lg font-semibold text-blue-300">{overviewMetrics.averageDeal}</p>
                   </div>
                   <div>
-                    <p className="text-xs uppercase tracking-wide text-slate-500">Кількість угод</p>
+                    <p className="text-xs uppercase tracking-wide text-slate-500">Deals Count</p>
                     <p className="text-lg font-semibold text-slate-200">{overviewMetrics.dealsCount}</p>
                   </div>
                 </div>
@@ -250,10 +250,10 @@ export const ClientDetailPage = () => {
                 <div className="mt-6">
                   {activeTab === 'overview' && client && (
                     <div className="space-y-4 text-sm text-slate-200">
-                      <p>Дата створення: {new Date(client.createdAt).toLocaleDateString()}</p>
-                      <p>Оновлено: {new Date(client.updatedAt).toLocaleDateString()}</p>
+                      <p>Created Date: {new Date(client.createdAt).toLocaleDateString()}</p>
+                      <p>Updated: {new Date(client.updatedAt).toLocaleDateString()}</p>
                       <div>
-                        <h4 className="text-sm font-semibold text-white">Кастомні поля</h4>
+                        <h4 className="text-sm font-semibold text-white">Custom Fields</h4>
                         <div className="mt-2 grid grid-cols-1 gap-3 md:grid-cols-2">
                           {client.customFields.map((field) => (
                             <div key={field.id} className="rounded-xl border border-slate-700/40 bg-slate-900/60 p-3">
@@ -273,18 +273,18 @@ export const ClientDetailPage = () => {
                           <div className="flex items-center justify-between">
                             <div>
                               <h4 className="text-lg font-semibold text-white">{deal.title}</h4>
-                              <p className="text-xs text-slate-400">Стадія: {deal.stage}</p>
+                              <p className="text-xs text-slate-400">Stage: {deal.stage}</p>
                             </div>
                             <span className="text-sm font-semibold text-emerald-400">{formatCurrency(deal.value)}</span>
                           </div>
                           <div className="mt-3 flex flex-wrap gap-6 text-xs text-slate-400">
-                            <span>Імовірність: {deal.probability}%</span>
-                            {deal.closeDate && <span>Закриття: {new Date(deal.closeDate).toLocaleDateString()}</span>}
-                            <span>Власник: {deal.owner}</span>
+                            <span>Probability: {deal.probability}%</span>
+                            {deal.closeDate && <span>Close: {new Date(deal.closeDate).toLocaleDateString()}</span>}
+                            <span>Owner: {deal.owner}</span>
                           </div>
                         </div>
                       ))}
-                      {deals.length === 0 && <p className="text-sm text-slate-400">У цього клієнта ще немає угод.</p>}
+                      {deals.length === 0 && <p className="text-sm text-slate-400">This client has no deals yet.</p>}
                     </div>
                   )}
 
@@ -296,11 +296,11 @@ export const ClientDetailPage = () => {
                           onClick={() => setShowActivityModal(true)}
                           className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-500"
                         >
-                          Додати активність
+                          Add Activity
                         </button>
                       </div>
                       {loadingActivities ? (
-                        <p className="text-sm text-slate-400">Завантаження активностей...</p>
+                        <p className="text-sm text-slate-400">Loading activities...</p>
                       ) : (
                         <ActivityLog activities={activities} filter={filter} onFilterChange={setFilter} />
                       )}
@@ -310,18 +310,18 @@ export const ClientDetailPage = () => {
                   {activeTab === 'files' && (
                     <div className="space-y-4">
                       <div className="rounded-2xl border border-slate-700/40 bg-slate-900/60 p-4 text-sm text-slate-200">
-                        <p>Файлів: {client.files.length}</p>
+                        <p>Files: {client.files.length}</p>
                         <button
                           type="button"
-                          onClick={() => alert('Функція завантаження файлів у демо режимі')}
+                          onClick={() => alert('File upload function in demo mode')}
                           className="mt-3 rounded-lg border border-slate-600/60 px-3 py-1 text-xs text-slate-300 transition hover:border-blue-500 hover:text-blue-300"
                         >
-                          Завантажити файл
+                          Upload file
                         </button>
                       </div>
                       {client.files.length === 0 && (
                         <div className="rounded-2xl border border-dashed border-slate-700/50 bg-slate-900/40 p-6 text-center text-sm text-slate-400">
-                          Ще немає файлів.
+                          No files yet.
                         </div>
                       )}
                     </div>
@@ -331,7 +331,7 @@ export const ClientDetailPage = () => {
                     <div className="space-y-4">
                       <div className="rounded-2xl border border-slate-700/40 bg-slate-900/60 p-4">
                         <textarea
-                          placeholder="Нова нотатка..."
+                          placeholder="New note..."
                           className="min-h-[120px] w-full rounded-xl border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-200"
                           onKeyDown={async (event) => {
                             if (event.key === 'Enter' && event.metaKey) {
@@ -342,7 +342,7 @@ export const ClientDetailPage = () => {
                             }
                           }}
                         />
-                        <p className="mt-2 text-xs text-slate-500">Натисніть ⌘ + Enter для збереження.</p>
+                        <p className="mt-2 text-xs text-slate-500">Press ⌘ + Enter to save.</p>
                       </div>
                       <div className="space-y-3">
                         {notes.map((note) => (
@@ -354,7 +354,7 @@ export const ClientDetailPage = () => {
                             <p className="mt-2 text-sm text-slate-200">{note.content}</p>
                           </div>
                         ))}
-                        {notes.length === 0 && <p className="text-sm text-slate-400">Ще немає нотаток.</p>}
+                        {notes.length === 0 && <p className="text-sm text-slate-400">No notes yet.</p>}
                       </div>
                     </div>
                   )}
@@ -369,9 +369,11 @@ export const ClientDetailPage = () => {
         <ActivityModal
           open={showActivityModal}
           onClose={() => setShowActivityModal(false)}
-          onSubmit={addActivity}
+          onSubmit={async (activity) => {
+            await addActivity(activity);
+          }}
           clientId={clientId}
-          creator={client?.assignedTo ?? 'Менеджер'}
+          creator={client?.assignedTo ?? 'Manager'}
         />
       </div>
     </CRMErrorBoundary>

@@ -27,16 +27,16 @@ export const calculateLeadScore = (lead: LeadProfile): LeadScoreResult => {
   const rawScore = sizeScore + engagementScore + budgetScore + industryScore;
   const score = Math.round(Math.min(rawScore, 100));
 
-  const explanation = `Компанія у сегменті ${lead.industry} з бюджетом ${lead.budget.toLocaleString()} USD та рівнем залучення ${lead.engagement}%`;
+  const explanation = `Company in ${lead.industry} segment with a budget of ${lead.budget.toLocaleString()} USD and an engagement level of ${lead.engagement}%`;
 
   return {
     lead,
     score,
     factors: [
-      { label: 'Розмір компанії', value: Math.round(sizeScore) },
-      { label: 'Залученість', value: Math.round(engagementScore) },
-      { label: 'Бюджет', value: Math.round(budgetScore) },
-      { label: 'Індустрія', value: Math.round(industryScore) }
+      { label: 'Company Size', value: Math.round(sizeScore) },
+      { label: 'Engagement', value: Math.round(engagementScore) },
+      { label: 'Budget', value: Math.round(budgetScore) },
+      { label: 'Industry', value: Math.round(industryScore) }
     ],
     explanation
   };
@@ -59,16 +59,16 @@ export const calculateDealProbability = (deal: DealProfile): DealProbabilityResu
   const probability = Math.round(Math.min(stageWeight * timePenalty * activityBoost * 100 + valueInfluence * 10, 100));
 
   const drivers = [
-    { label: 'Стадія угоди', impact: Math.round(stageWeight * 100) },
-    { label: 'Дні у стадії', impact: Math.round(timePenalty * 100) },
-    { label: 'Активність команди', impact: Math.round(activityBoost * 100) },
-    { label: 'Вартість угоди', impact: Math.round(valueInfluence * 100) }
+    { label: 'Deal Stage', impact: Math.round(stageWeight * 100) },
+    { label: 'Days in Stage', impact: Math.round(timePenalty * 100) },
+    { label: 'Team Activity', impact: Math.round(activityBoost * 100) },
+    { label: 'Deal Value', impact: Math.round(valueInfluence * 100) }
   ];
 
   const recommendations = [
-    probability < 60 && 'Заплануйте зустріч з економічним замовником',
-    deal.daysInStage > 20 && 'Оновіть наступні кроки, щоб уникнути застою',
-    deal.activityScore < 60 && 'Залучіть маркетинг для підтримки угоди'
+    probability < 60 && 'Schedule a meeting with the economic buyer',
+    deal.daysInStage > 20 && 'Update next steps to avoid stagnation',
+    deal.activityScore < 60 && 'Engage marketing to support the deal'
   ].filter(Boolean) as string[];
 
   return {
@@ -77,7 +77,7 @@ export const calculateDealProbability = (deal: DealProfile): DealProbabilityResu
     drivers,
     recommendations: recommendations.length
       ? recommendations
-      : ['Підтримуйте поточний темп взаємодії для успішного закриття']
+      : ['Maintain current interaction pace for a successful close']
   };
 };
 
@@ -114,10 +114,10 @@ export const calculatePerformanceScore = (metric: PerformanceMetric): Performanc
     normalizedScore > 85 ? 'improving' : normalizedScore < 65 ? 'declining' : 'stable';
 
   const highlights = [
-    metric.kpiScore > 85 && 'Перевиконання KPI',
-    metric.attendance > 95 && 'Відмінна відвідуваність',
-    metric.managerRating > 90 && 'Висока оцінка менеджера',
-    metric.peerReviews > 85 && 'Позитивні відгуки колег'
+    metric.kpiScore > 85 && 'Exceeding KPI',
+    metric.attendance > 95 && 'Excellent attendance',
+    metric.managerRating > 90 && 'High manager rating',
+    metric.peerReviews > 85 && 'Positive peer reviews'
   ].filter(Boolean) as string[];
 
   return {
@@ -125,7 +125,7 @@ export const calculatePerformanceScore = (metric: PerformanceMetric): Performanc
     employeeName: metric.employeeName,
     normalizedScore,
     trend,
-    highlights: highlights.length ? highlights : ['Стабільна продуктивність']
+    highlights: highlights.length ? highlights : ['Stable performance']
   };
 };
 
@@ -155,13 +155,13 @@ export const calculateBonusBreakdown = (
 
   const components: BonusBreakdown['components'] = [
     { label: 'KPI', weight: weights.kpi, value: metric.kpiScore },
-    { label: 'Відвідуваність', weight: weights.attendance, value: metric.attendance },
-    { label: 'Оцінка менеджера', weight: weights.manager, value: metric.managerRating },
-    { label: 'Відгуки колег', weight: weights.peer, value: metric.peerReviews }
+    { label: 'Attendance', weight: weights.attendance, value: metric.attendance },
+    { label: 'Manager Rating', weight: weights.manager, value: metric.managerRating },
+    { label: 'Peer Reviews', weight: weights.peer, value: metric.peerReviews }
   ];
 
   if (weights.client > 0) {
-    components.push({ label: 'Відгуки клієнтів', weight: weights.client, value: metric.clientFeedback ?? 0 });
+    components.push({ label: 'Client Feedback', weight: weights.client, value: metric.clientFeedback ?? 0 });
   }
 
   return {

@@ -19,7 +19,7 @@ const sampleTags: EmailTag[] = [
 const sampleClients: ClientSummary[] = [
   {
     id: 'client-1',
-    name: 'Марія Коваль',
+    name: 'Maria Koval',
     company: 'TechVision',
     email: 'maria.koval@techvision.ua',
     avatar: 'https://i.pravatar.cc/64?img=1',
@@ -27,7 +27,7 @@ const sampleClients: ClientSummary[] = [
   },
   {
     id: 'client-2',
-    name: 'Олег Гринь',
+    name: 'Oleh Hryn',
     company: 'GreenSoft',
     email: 'oleh@greensoft.io',
     avatar: 'https://i.pravatar.cc/64?img=22',
@@ -38,10 +38,10 @@ const sampleClients: ClientSummary[] = [
 const sampleEmails: EmailMessage[] = [
   {
     id: 'email-1',
-    subject: 'Підтвердження зустрічі',
-    preview: 'Доброго дня! Підтверджую зустріч на завтра...',
+    subject: 'Meeting confirmation',
+    preview: 'Hello! I confirm the meeting for tomorrow...',
     body:
-      'Доброго дня! Підтверджую зустріч на завтра о 14:00. Будь ласка, надішліть мені короткий порядок денний.',
+      'Hello! I confirm the meeting for tomorrow at 14:00. Please send me a short agenda.',
     from: 'maria.koval@techvision.ua',
     to: ['sales@yadroos.io'],
     date: '2024-02-05T07:32:00Z',
@@ -53,10 +53,10 @@ const sampleEmails: EmailMessage[] = [
   },
   {
     id: 'email-2',
-    subject: 'Запит на комерційну пропозицію',
-    preview: 'Доброго дня, цікавить інтеграція CRM...',
+    subject: 'Commercial proposal request',
+    preview: 'Hello, interested in CRM integration...',
     body:
-      'Доброго дня, цікавить інтеграція CRM та автоматизація комунікацій. Чи можемо обговорити деталі? Чекаю на відповідь.',
+      'Hello, I am interested in CRM integration and communication automation. Can we discuss the details? Looking forward to your reply.',
     from: 'oleh@greensoft.io',
     to: ['sales@yadroos.io'],
     date: '2024-02-04T16:12:00Z',
@@ -67,9 +67,9 @@ const sampleEmails: EmailMessage[] = [
   },
   {
     id: 'email-3',
-    subject: 'Щотижневий дайджест',
-    preview: 'Команда, ділюсь з оновленнями по проекту...',
-    body: 'Команда, ділюсь з оновленнями по проекту. Деталі у вкладеному файлі.',
+    subject: 'Weekly digest',
+    preview: 'Team, sharing project updates...',
+    body: 'Team, sharing project updates. Details in the attached file.',
     from: 'project-manager@yadroos.io',
     to: ['marketing@yadroos.io'],
     date: '2024-02-03T08:20:00Z',
@@ -87,28 +87,28 @@ const sampleEmails: EmailMessage[] = [
 ];
 
 const templateCategories: TemplateCategory[] = [
-  { id: 'welcome', name: 'Welcome', description: 'Листи для первинного контакту' },
-  { id: 'follow-up', name: 'Follow-up', description: 'Нагадування та супровід' },
-  { id: 'proposal', name: 'Proposal', description: 'Комерційні пропозиції' },
+  { id: 'welcome', name: 'Welcome', description: 'Emails for initial contact' },
+  { id: 'follow-up', name: 'Follow-up', description: 'Reminders and follow-up' },
+  { id: 'proposal', name: 'Proposal', description: 'Commercial proposals' },
 ];
 
 const emailTemplates: EmailTemplate[] = [
   {
     id: 'tmpl-1',
-    name: 'Welcome клієнт',
+    name: 'Welcome client',
     categoryId: 'welcome',
-    subject: 'Вітаємо, {{client_name}}!',
+    subject: 'Welcome, {{client_name}}!',
     body:
-      '<p>Вітаємо, {{client_name}}!</p><p>Раді бачити вас серед наших клієнтів. Найближчим часом менеджер зв\'яжеться з вами.</p>',
+      '<p>Welcome, {{client_name}}!</p><p>We are glad to see you among our clients. A manager will contact you shortly.</p>',
     variables: ['client_name'],
   },
   {
     id: 'tmpl-2',
-    name: 'Follow-up після демо',
+    name: 'Follow-up after demo',
     categoryId: 'follow-up',
-    subject: 'Як враження від демо, {{client_name}}?',
+    subject: 'How were your impressions of the demo, {{client_name}}?',
     body:
-      '<p>Добрий день, {{client_name}}!</p><p>Дякуємо за час на демо. Чи є питання щодо інтеграції?</p>',
+      '<p>Hello, {{client_name}}!</p><p>Thank you for your time on the demo. Do you have any questions regarding integration?</p>',
     variables: ['client_name'],
   },
 ];

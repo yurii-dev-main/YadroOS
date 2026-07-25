@@ -38,25 +38,25 @@ export const AccountForm = ({ onSubmit }: AccountFormProps) => {
       onSubmit={handleSubmit(submit)}
       className="grid gap-4 rounded-lg border border-slate-800 bg-slate-900/60 p-4 text-sm text-slate-200"
     >
-      <h3 className="text-base font-semibold text-slate-100">Новий рахунок</h3>
+      <h3 className="text-base font-semibold text-slate-100">New Account</h3>
       <div className="grid gap-2">
-        <Label htmlFor="name">Назва</Label>
+        <Label htmlFor="name">Name</Label>
         <Input id="name" {...register('name', { required: true })} placeholder="Monobank USD" />
       </div>
       <div className="grid gap-2">
-        <Label htmlFor="type">Тип</Label>
+        <Label htmlFor="type">Type</Label>
         <select
           id="type"
           className="rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm"
           {...register('type', { required: true })}
         >
-          <option value="bank">Банк</option>
-          <option value="cash">Готівка</option>
-          <option value="card">Карта</option>
+          <option value="bank">Bank</option>
+          <option value="cash">Cash</option>
+          <option value="card">Card</option>
         </select>
       </div>
       <div className="grid gap-2">
-        <Label htmlFor="currency">Валюта</Label>
+        <Label htmlFor="currency">Currency</Label>
         <select
           id="currency"
           className="rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm"
@@ -68,15 +68,15 @@ export const AccountForm = ({ onSubmit }: AccountFormProps) => {
         </select>
       </div>
       <div className="grid gap-2">
-        <Label htmlFor="balance">Початковий баланс</Label>
+        <Label htmlFor="balance">Initial Balance</Label>
         <Input id="balance" type="number" step="0.01" {...register('balance', { valueAsNumber: true })} />
       </div>
       <div className="grid gap-2">
-        <Label htmlFor="bankName">Банк</Label>
-        <Input id="bankName" {...register('bankName')} placeholder="Назва банку" />
+        <Label htmlFor="bankName">Bank</Label>
+        <Input id="bankName" {...register('bankName')} placeholder="Bank name" />
       </div>
       <div className="grid gap-2">
-        <Label htmlFor="accountNumber">Номер рахунку</Label>
+        <Label htmlFor="accountNumber">Account Number</Label>
         <Input id="accountNumber" {...register('accountNumber')} placeholder="2600..." />
       </div>
       <div className="grid gap-2">
@@ -84,10 +84,10 @@ export const AccountForm = ({ onSubmit }: AccountFormProps) => {
         <Input id="iban" {...register('iban')} placeholder="UA..." />
       </div>
       <div className="grid gap-2">
-        <Label htmlFor="color">Колір</Label>
+        <Label htmlFor="color">Color</Label>
         <Input id="color" type="color" {...register('color')} />
       </div>
-      <Button type="submit" variant="secondary" className="mt-2">Додати рахунок</Button>
+      <Button type="submit" variant="secondary" className="mt-2">Add Account</Button>
     </form>
   );
 };

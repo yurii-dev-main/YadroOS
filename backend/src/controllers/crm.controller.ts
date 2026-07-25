@@ -3,9 +3,9 @@ import { DealStage } from '@prisma/client';
 import { prisma } from '../lib/prisma';
 
 const getActorName = async (userId?: string) => {
-  if (!userId) return 'Система';
+  if (!userId) return 'System';
   const employee = await prisma.employee.findFirst({ where: { userId } });
-  if (!employee) return 'Система';
+  if (!employee) return 'System';
   return `${employee.firstName} ${employee.lastName}`;
 };
 
@@ -65,7 +65,7 @@ export const updateDeal = async (req: Request, res: Response) => {
         entityType: 'deal',
         entityId: updated.id,
         action: 'deal_closed',
-        description: `Менеджер ${actorName} закрив угоду ${updated.title}`
+        description: `Manager ${actorName} closed deal ${updated.title}`
       }
     });
   }

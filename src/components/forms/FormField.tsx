@@ -28,7 +28,8 @@ export const FormField = <TFieldValues extends FieldValues>({
       <Input id={name} type={type} autoComplete={autoComplete} placeholder={placeholder} {...register(name)} />
       <ErrorMessage
         errors={formState.errors}
-        name={name as string}
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        name={name as any}
         render={({ message }) => <p className="text-xs text-danger">{message}</p>}
       />
     </div>

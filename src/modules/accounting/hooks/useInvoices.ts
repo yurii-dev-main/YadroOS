@@ -7,6 +7,7 @@ import {
   InvoiceEmailOptions,
   InvoiceReminderConfig,
   PaymentReminder,
+  CurrencyCode,
 } from '../types/accounting.types';
 
 interface InvoiceState {
@@ -19,7 +20,7 @@ interface InvoiceState {
   loadInvoices: () => Promise<void>;
   createInvoice: (payload: Omit<Invoice, 'id' | 'status' | 'createdAt' | 'updatedAt' | 'number' | 'taxes'>) => Promise<Invoice>;
   sendInvoice: (invoiceId: string, options: InvoiceEmailOptions) => Promise<void>;
-  recordPayment: (invoiceId: string, amount: number, currency: string) => Promise<void>;
+  recordPayment: (invoiceId: string, amount: number, currency: CurrencyCode) => Promise<void>;
   generatePdf: (invoiceId: string) => void;
   scheduleReminders: (config: InvoiceReminderConfig) => Promise<void>;
   setSelectedInvoice: (invoiceId: string | null) => void;
@@ -46,7 +47,7 @@ const useInvoiceStore = create<InvoiceState>((set, get) => ({
     } catch (error) {
       set({
         loading: false,
-        error: error instanceof Error ? error.message : 'Не вдалося завантажити інвойси',
+        error: error instanceof Error ? error.message : 'Failed to load invoices',
       });
     }
   },
@@ -91,6 +92,6 @@ export const useInvoices = () => {
     if (!store.invoices.length && !store.loading) {
       void store.loadInvoices();
     }
-  }, [store.invoices.length, store.loading, store.loadInvoices]);
+  }, [store, store.invoices.length, store.loading, store.loadInvoices]);
   return store;
 };

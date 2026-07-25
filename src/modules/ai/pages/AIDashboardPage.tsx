@@ -17,11 +17,11 @@ export const AIDashboardPage = () => {
   const { data, loading, error } = useAI();
 
   if (loading) {
-    return <p className="text-sm text-slate-400">AI-аналітика завантажується…</p>;
+    return <p className="text-sm text-slate-400">AI analytics loading…</p>;
   }
 
   if (error || !data) {
-    return <p className="text-sm text-red-400">{error ?? 'Не вдалося завантажити AI-аналітику.'}</p>;
+    return <p className="text-sm text-red-400">{error ?? 'Failed to load AI analytics.'}</p>;
   }
 
   const topLead = data.crm.leadScores.at(0);
@@ -32,7 +32,7 @@ export const AIDashboardPage = () => {
       <section className="grid gap-6 lg:grid-cols-3">
         <Card className="col-span-1">
           <CardHeader>
-            <CardTitle>Якість найкращого ліда</CardTitle>
+            <CardTitle>Top Lead Quality</CardTitle>
           </CardHeader>
           <CardContent className="items-center">
             {topLead ? (
@@ -48,14 +48,14 @@ export const AIDashboardPage = () => {
                 </div>
               </div>
             ) : (
-              <p className="text-sm text-slate-400">Немає лідів для оцінки.</p>
+              <p className="text-sm text-slate-400">No leads for scoring.</p>
             )}
           </CardContent>
         </Card>
 
         <Card className="col-span-1">
           <CardHeader>
-            <CardTitle>Сентимент клієнтів</CardTitle>
+            <CardTitle>Customer Sentiment</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="h-48 w-full">
@@ -99,7 +99,7 @@ export const AIDashboardPage = () => {
             <CardTitle>Executive Health Score</CardTitle>
           </CardHeader>
           <CardContent className="items-center">
-            <ScoreGauge value={data.executive.healthScore} label="Здоровʼя компанії" suffix="" />
+            <ScoreGauge value={data.executive.healthScore} label="Company Health" suffix="" />
             <div className="mt-4 grid w-full gap-3">
               {data.executive.metrics.map((metric) => (
                 <div key={metric.id} className="flex items-center justify-between rounded-lg bg-slate-900/40 p-3 text-sm">
@@ -127,7 +127,7 @@ export const AIDashboardPage = () => {
       <section className="grid gap-6 lg:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle>CRM Рекомендації</CardTitle>
+            <CardTitle>CRM Recommendations</CardTitle>
           </CardHeader>
           <CardContent>
             <RecommendationList recommendations={data.crm.recommendations} />
@@ -144,7 +144,7 @@ export const AIDashboardPage = () => {
                 <div className="flex items-baseline justify-between">
                   <div>
                     <h3 className="text-lg font-semibold text-slate-100">{topPerformance.employeeName}</h3>
-                    <p className="text-xs uppercase tracking-wide text-slate-500">Тренд: {topPerformance.trend}</p>
+                    <p className="text-xs uppercase tracking-wide text-slate-500">Trend: {topPerformance.trend}</p>
                   </div>
                   <span className="text-3xl font-semibold text-emerald-400">{topPerformance.normalizedScore}</span>
                 </div>
@@ -155,7 +155,7 @@ export const AIDashboardPage = () => {
                 </ul>
               </div>
             ) : (
-              <p className="text-sm text-slate-400">Немає даних по співробітниках.</p>
+              <p className="text-sm text-slate-400">No employee data available.</p>
             )}
             <div className="rounded-lg border border-slate-800/60 bg-slate-900/40 p-4">
               <p className="text-xs uppercase tracking-widest text-slate-500">Succession Planning</p>
@@ -175,7 +175,7 @@ export const AIDashboardPage = () => {
       <section className="grid gap-6 lg:grid-cols-3">
         <Card className="lg:col-span-2">
           <CardHeader>
-            <CardTitle>Фінансові прогнози</CardTitle>
+            <CardTitle>Financial Forecasts</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid gap-4 md:grid-cols-2">
@@ -184,7 +184,7 @@ export const AIDashboardPage = () => {
                   <p className="text-sm text-slate-300">{expense.statement}</p>
                   {expense.delta !== undefined && (
                     <p className="text-xs text-slate-500">
-                      Зміна: {(expense.delta * 100).toFixed(1)}%
+                      Change: {(expense.delta * 100).toFixed(1)}%
                     </p>
                   )}
                 </div>
@@ -211,22 +211,22 @@ export const AIDashboardPage = () => {
 
         <Card>
           <CardHeader>
-            <CardTitle>Комунікації</CardTitle>
+            <CardTitle>Communications</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <h4 className="text-sm font-semibold uppercase tracking-widest text-slate-400">Пріоритетні листи</h4>
+              <h4 className="text-sm font-semibold uppercase tracking-widest text-slate-400">Priority Emails</h4>
               <ul className="mt-2 space-y-3 text-sm text-slate-300">
                 {data.communications.inbox.map((item) => (
                   <li key={item.id} className="rounded-lg border border-slate-800/60 bg-slate-900/40 p-3">
                     <p className="font-medium text-slate-100">{item.category}</p>
-                    <p className="text-xs text-slate-500">Пріоритет: {item.priority}</p>
+                    <p className="text-xs text-slate-500">Priority: {item.priority}</p>
                     <p>{item.summary}</p>
                   </li>
                 ))}
               </ul>
             </div>
-            <RecommendationList recommendations={data.communications.autoReplies} title="Швидкі відповіді" />
+            <RecommendationList recommendations={data.communications.autoReplies} title="Quick Replies" />
           </CardContent>
         </Card>
       </section>

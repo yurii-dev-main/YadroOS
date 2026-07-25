@@ -35,7 +35,7 @@ export const MessageBubble = ({ message, isOwn = false }: MessageBubbleProps) =>
           </div>
         ) : null}
         {message.mentions?.length ? (
-          <div className="mt-2 text-xs text-emerald-300">Згадані: {message.mentions.join(', ')}</div>
+          <div className="mt-2 text-xs text-emerald-300">Mentioned: {message.mentions.join(', ')}</div>
         ) : null}
       </div>
     </div>

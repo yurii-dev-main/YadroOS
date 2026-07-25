@@ -33,15 +33,15 @@ export const DealCard = ({ deal, stage, onQuickEdit }: DealCardProps) => {
           onClick={() => onQuickEdit(deal)}
           className="rounded-lg border border-slate-600/60 px-2 py-1 text-xs text-slate-300 opacity-0 transition group-hover:opacity-100"
         >
-          Редагувати
+          Edit
         </button>
       </div>
       <div className="text-xs text-slate-400">{deal.clientName}</div>
       <div className="flex items-center justify-between text-sm">
         <span className="font-semibold text-emerald-400">{formatCurrency(deal.value)}</span>
-        <span className="text-slate-400">Імовірність: {deal.probability}%</span>
+        <span className="text-slate-400">Probability: {deal.probability}%</span>
       </div>
-      {deal.closeDate && <div className="text-xs text-slate-500">Закриття: {new Date(deal.closeDate).toLocaleDateString()}</div>}
+      {deal.closeDate && <div className="text-xs text-slate-500">Closing: {new Date(deal.closeDate).toLocaleDateString()}</div>}
     </div>
   );
 };

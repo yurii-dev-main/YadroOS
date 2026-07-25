@@ -74,7 +74,7 @@ export const authService = {
     await delay();
     const stored = users.get(params.email.toLowerCase());
     if (!stored || stored.password !== params.password) {
-      throw new Error('Невірні дані для входу');
+      throw new Error('Invalid login credentials');
     }
     const tokens = createTokens(params.rememberMe);
     return { user: sanitizeUser(stored), tokens };
@@ -83,7 +83,7 @@ export const authService = {
     await delay();
     const key = params.email.toLowerCase();
     if (users.has(key)) {
-      throw new Error('Користувач вже існує');
+      throw new Error('User already exists');
     }
     const newUser = getDefaultUser(params);
     users.set(key, newUser);
@@ -93,7 +93,7 @@ export const authService = {
   async refresh(refreshToken: string): Promise<AuthTokens> {
     await delay(300);
     if (!refreshToken) {
-      throw new Error('Недійсний refresh токен');
+      throw new Error('Invalid refresh token');
     }
     return {
       accessToken: uuid(),
@@ -108,7 +108,7 @@ export const authService = {
     await delay(400);
     const stored = users.get(user.email.toLowerCase());
     if (!stored) {
-      throw new Error('Користувача не знайдено');
+      throw new Error('User not found');
     }
     const updated: StoredUser = {
       ...stored,
@@ -122,7 +122,7 @@ export const authService = {
     await delay(400);
     const userEntry = [...users.entries()].find(([, value]) => value.password === currentPassword);
     if (!userEntry) {
-      throw new Error('Невірний поточний пароль');
+      throw new Error('Invalid current password');
     }
     const [email, stored] = userEntry;
     users.set(email, { ...stored, password: newPassword });
@@ -131,7 +131,7 @@ export const authService = {
     await delay(400);
     const key = email.toLowerCase();
     if (!users.has(key)) {
-      throw new Error('Електронну адресу не знайдено');
+      throw new Error('Email address not found');
     }
     const token = uuid();
     resetTokens.set(token, key);
@@ -144,11 +144,11 @@ export const authService = {
     await delay(300);
     const email = resetTokens.get(token);
     if (!email) {
-      throw new Error('Невалідний токен');
+      throw new Error('Invalid token');
     }
     const stored = users.get(email);
     if (!stored) {
-      throw new Error('Користувача не знайдено');
+      throw new Error('User not found');
     }
     users.set(email, { ...stored, password: newPassword });
     resetTokens.delete(token);

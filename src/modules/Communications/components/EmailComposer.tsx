@@ -49,7 +49,7 @@ export const EmailComposer = ({ onSent, templates = [] }: EmailComposerProps) =>
       <div className="mb-3 flex flex-wrap items-center gap-2">
         <input
           className="flex-1 rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"
-          placeholder="Кому"
+          placeholder="To"
           value={draft.to.join(', ')}
           onChange={(event) => handleChange('to', event.target.value.split(',').map((item) => item.trim()))}
         />
@@ -58,7 +58,7 @@ export const EmailComposer = ({ onSent, templates = [] }: EmailComposerProps) =>
           value={selectedTemplate}
           onChange={(event) => applyTemplate(event.target.value)}
         >
-          <option value="">Шаблон</option>
+          <option value="">Template</option>
           {templates.map((template) => (
             <option key={template.id} value={template.id}>
               {template.name}
@@ -69,14 +69,14 @@ export const EmailComposer = ({ onSent, templates = [] }: EmailComposerProps) =>
 
       <input
         className="mb-3 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"
-        placeholder="Тема"
+        placeholder="Subject"
         value={draft.subject}
         onChange={(event) => handleChange('subject', event.target.value)}
       />
 
       <textarea
         className="mb-3 h-40 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"
-        placeholder="Повідомлення..."
+        placeholder="Message..."
         value={draft.body}
         onChange={(event) => handleChange('body', event.target.value)}
       />
@@ -84,10 +84,10 @@ export const EmailComposer = ({ onSent, templates = [] }: EmailComposerProps) =>
       <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-slate-400">
         <div className="flex items-center gap-3">
           <button className="rounded-md border border-slate-700 px-3 py-2 hover:border-emerald-500 hover:text-emerald-400">
-            Прикріпити файл
+            Attach file
           </button>
           <button className="rounded-md border border-slate-700 px-3 py-2 hover:border-sky-500 hover:text-sky-400">
-            Додати підпис
+            Add signature
           </button>
         </div>
 
@@ -96,7 +96,7 @@ export const EmailComposer = ({ onSent, templates = [] }: EmailComposerProps) =>
           disabled={isSending}
           className="rounded-md border border-emerald-500 bg-emerald-600/20 px-4 py-2 text-emerald-300 transition hover:bg-emerald-500/30 disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {isSending ? 'Відправка...' : 'Відправити'}
+          {isSending ? 'Sending...' : 'Send'}
         </button>
       </div>
     </div>

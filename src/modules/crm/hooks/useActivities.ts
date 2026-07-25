@@ -17,7 +17,7 @@ export const useActivities = (clientId?: string) => {
       setActivities(response);
       setError(null);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Не вдалося отримати активності');
+      setError(err instanceof Error ? err.message : 'Failed to fetch activities');
     } finally {
       setLoading(false);
     }

@@ -11,17 +11,17 @@ export const ExchangeRateWidget = ({ exchangeRate, onRefresh }: ExchangeRateWidg
   return (
     <Card className="border border-slate-800 bg-slate-900/60">
       <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle className="text-base text-slate-100">Курс валют</CardTitle>
+        <CardTitle className="text-base text-slate-100">Exchange Rates</CardTitle>
         {onRefresh && (
           <Button variant="outline" size="sm" onClick={onRefresh}>
-            Оновити
+            Refresh
           </Button>
         )}
       </CardHeader>
       <CardContent className="space-y-3 text-sm text-slate-300">
         {exchangeRate ? (
           <>
-            <p className="text-xs text-slate-500">Оновлено: {new Date(exchangeRate.updatedAt).toLocaleString('uk-UA')}</p>
+            <p className="text-xs text-slate-500">Updated: {new Date(exchangeRate.updatedAt).toLocaleString('uk-UA')}</p>
             <div className="grid grid-cols-3 gap-3 text-center">
               {Object.entries(exchangeRate.rates).map(([currency, rate]) => (
                 <div key={currency} className="rounded-md border border-slate-800 bg-slate-900/80 p-3">
@@ -30,10 +30,10 @@ export const ExchangeRateWidget = ({ exchangeRate, onRefresh }: ExchangeRateWidg
                 </div>
               ))}
             </div>
-            <p className="text-xs text-slate-500">Джерело: {exchangeRate.provider}</p>
+            <p className="text-xs text-slate-500">Source: {exchangeRate.provider}</p>
           </>
         ) : (
-          <p className="text-xs text-slate-500">Дані курсу будуть завантажені автоматично.</p>
+          <p className="text-xs text-slate-500">Exchange rate data will be loaded automatically.</p>
         )}
       </CardContent>
     </Card>

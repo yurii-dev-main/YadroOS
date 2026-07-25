@@ -14,9 +14,9 @@ export const defaultTaxConfiguration: TaxConfiguration = {
   pensionRate: 0.015,
   vatRate: 0.2,
   progressiveBrackets: [
-    { id: 'income-low', name: 'До 50 000', rate: 0.1, appliesTo: 'income' },
-    { id: 'income-mid', name: '50 000 - 150 000', rate: 0.18, appliesTo: 'income' },
-    { id: 'income-high', name: '150 000+', rate: 0.22, appliesTo: 'income' },
+    { id: 'income-low', name: 'Up to 50,000', rate: 0.1, appliesTo: 'income' },
+    { id: 'income-mid', name: '50,000 - 150,000', rate: 0.18, appliesTo: 'income' },
+    { id: 'income-high', name: '150,000+', rate: 0.22, appliesTo: 'income' },
   ],
 };
 
@@ -51,9 +51,9 @@ export const calculatePayrollDeductions = (
   const pension = salary.mul(config.pensionRate);
 
   return [
-    { name: 'ПДФО', amount: Number(incomeTax.toFixed(2)), type: 'tax' },
-    { name: 'ЄСВ', amount: Number(socialSecurity.toFixed(2)), type: 'insurance' },
-    { name: 'Пенсійний фонд', amount: Number(pension.toFixed(2)), type: 'pension' },
+    { name: 'PIT', amount: Number(incomeTax.toFixed(2)), type: 'tax' },
+    { name: 'SSI', amount: Number(socialSecurity.toFixed(2)), type: 'insurance' },
+    { name: 'Pension Fund', amount: Number(pension.toFixed(2)), type: 'pension' },
   ];
 };
 

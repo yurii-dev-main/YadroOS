@@ -21,7 +21,7 @@ export const useAI = () => {
         setState({ data: overview, loading: false, error: null });
       } catch (error) {
         if (!mounted) return;
-        setState({ data: null, loading: false, error: 'Не вдалося завантажити AI-дані' });
+        setState({ data: null, loading: false, error: 'Failed to load AI data' });
       }
     };
 

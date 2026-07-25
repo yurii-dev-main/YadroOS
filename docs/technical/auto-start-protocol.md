@@ -1,43 +1,43 @@
-# Протокол автоматического запуска БД и фронтенда
+# Database and Frontend Auto-Start Protocol
 
-Этот протокол описывает запуск локального окружения через единый скрипт, который поднимает нужные базы и backend в Docker, а затем запускает frontend.
+This protocol describes launching the local environment via a single script that brings up the required databases and backend in Docker, and then starts the frontend.
 
-## Предусловия
-- Docker Engine или Docker Desktop (с поддержкой `docker compose`).
-- Node.js 20+ и npm (для запуска фронтенда).
+## Prerequisites
+- Docker Engine or Docker Desktop (with `docker compose` support).
+- Node.js 20+ and npm (to run the frontend).
 
-## Состав окружения
-- PostgreSQL и backend поднимаются через `docker-compose.yml`.
-- Frontend запускается локально через Vite.
+## Environment Composition
+- PostgreSQL and backend are brought up via `docker-compose.yml`.
+- Frontend is launched locally via Vite.
 
-## Запуск
-1. Из корня репозитория выполните:
+## Launching
+1. From the repository root, run:
    ```bash
    ./scripts/start-local.sh
    ```
-2. Скрипт:
-   - поднимет сервисы `db` и `backend` через Docker Compose;
-   - установит зависимости, если отсутствует `node_modules`;
-   - запустит фронтенд командой `npm run dev`.
+2. The script will:
+   - bring up the `db` and `backend` services via Docker Compose;
+   - install dependencies if `node_modules` is missing;
+   - start the frontend using the `npm run dev` command.
 
-## Ожидаемые адреса
+## Expected Addresses
 - Frontend (Vite): http://localhost:5187
 - Backend API: http://localhost:3000
 - PostgreSQL: localhost:5432
 
-## Остановка
-- Остановить frontend: `Ctrl+C` в терминале, где запущен скрипт.
-- Остановить контейнеры:
+## Stopping
+- Stop frontend: `Ctrl+C` in the terminal where the script is running.
+- Stop containers:
   ```bash
   docker compose down
   ```
 
-## Диагностика
-- Статус контейнеров:
+## Troubleshooting
+- Container status:
   ```bash
   docker compose ps
   ```
-- Логи backend:
+- Backend logs:
   ```bash
   docker compose logs -f backend
   ```

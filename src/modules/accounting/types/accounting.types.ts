@@ -1,4 +1,3 @@
-import { Employee } from '../../hr/types/hr.types';
 
 export type CurrencyCode = 'USD' | 'EUR' | 'UAH';
 export type AccountType = 'bank' | 'cash' | 'card';

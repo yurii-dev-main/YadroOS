@@ -38,18 +38,18 @@ export const AnalyticsPage = () => {
       <div className="flex flex-col gap-6">
         <div className="flex flex-wrap items-center justify-between">
           <div>
-            <h1 className="text-2xl font-semibold text-white">Аналітика CRM</h1>
-            <p className="text-sm text-slate-400">Відстежуйте ключові показники та ефективність команди.</p>
+            <h1 className="text-2xl font-semibold text-white">CRM Analytics</h1>
+            <p className="text-sm text-slate-400">Track key metrics and team performance.</p>
           </div>
         </div>
 
-        {loading && <p className="text-sm text-slate-400">Завантаження аналітики...</p>}
+        {loading && <p className="text-sm text-slate-400">Loading analytics...</p>}
 
         {!loading && summary && (
           <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
             <div className="space-y-6 xl:col-span-2">
               <div className="rounded-3xl border border-slate-700/60 bg-slate-900/70 p-6 shadow-xl shadow-black/20">
-                <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-300">Нові клієнти</h2>
+                <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-300">New Clients</h2>
                 <div className="mt-4 h-64">
                   <ResponsiveContainer width="100%" height="100%">
                     <AreaChart data={summary.newClients}>
@@ -71,7 +71,7 @@ export const AnalyticsPage = () => {
 
               <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
                 <div className="rounded-3xl border border-slate-700/60 bg-slate-900/70 p-6 shadow-xl shadow-black/20">
-                  <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-300">Воронка</h2>
+                  <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-300">Funnel</h2>
                   <div className="mt-4 h-72">
                     <ResponsiveContainer width="100%" height="100%">
                       <FunnelChart>
@@ -85,7 +85,7 @@ export const AnalyticsPage = () => {
                 </div>
 
                 <div className="rounded-3xl border border-slate-700/60 bg-slate-900/70 p-6 shadow-xl shadow-black/20">
-                  <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-300">Прогноз доходу</h2>
+                  <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-300">Revenue Forecast</h2>
                   <div className="mt-4 h-72">
                     <ResponsiveContainer width="100%" height="100%">
                       <AreaChart data={summary.revenueForecast}>
@@ -103,10 +103,10 @@ export const AnalyticsPage = () => {
 
             <div className="space-y-6">
               <div className="rounded-3xl border border-slate-700/60 bg-slate-900/70 p-6 shadow-xl shadow-black/20">
-                <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-300">Огляд метрик</h2>
+                <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-300">Metrics Overview</h2>
                 <dl className="mt-4 space-y-3 text-sm text-slate-200">
                   <div className="flex items-center justify-between">
-                    <dt>Середній чек</dt>
+                    <dt>Average Deal Size</dt>
                     <dd className="font-semibold text-emerald-400">{formatCurrency(summary.averageDealSize)}</dd>
                   </div>
                   <div className="flex items-center justify-between">
@@ -121,7 +121,7 @@ export const AnalyticsPage = () => {
               </div>
 
               <div className="rounded-3xl border border-slate-700/60 bg-slate-900/70 p-6 shadow-xl shadow-black/20">
-                <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-300">Розподіл статусів</h2>
+                <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-300">Status Distribution</h2>
                 <div className="mt-4 h-64">
                   <ResponsiveContainer>
                     <PieChart>
@@ -133,16 +133,16 @@ export const AnalyticsPage = () => {
               </div>
 
               <div className="rounded-3xl border border-slate-700/60 bg-slate-900/70 p-6 shadow-xl shadow-black/20">
-                <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-300">Ефективність менеджерів</h2>
+                <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-300">Manager Performance</h2>
                 <div className="mt-4 max-h-64 space-y-3 overflow-y-auto pr-2">
                   {summary.managerPerformance.map((manager) => (
                     <div key={manager.manager} className="flex items-center justify-between rounded-2xl border border-slate-700/40 bg-slate-900/60 p-3 text-xs text-slate-300">
                       <div>
                         <p className="text-sm font-semibold text-white">{manager.manager}</p>
-                        <p>Угод: {manager.deals}</p>
+                        <p>Deals: {manager.deals}</p>
                       </div>
                       <div className="text-right">
-                        <p>Виграно: {manager.won}</p>
+                        <p>Won: {manager.won}</p>
                         <p className="font-semibold text-emerald-400">{formatCurrency(manager.revenue)}</p>
                       </div>
                     </div>

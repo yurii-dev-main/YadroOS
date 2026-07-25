@@ -12,7 +12,7 @@ export const EmployeesGrid: FC<EmployeesGridProps> = ({ employees, onSelect, sel
   if (!employees.length) {
     return (
       <div className="rounded-lg border border-dashed border-slate-700 bg-slate-900/70 p-6 text-center text-sm text-slate-400">
-        Співробітників не знайдено. Змініть фільтри.
+        No employees found. Adjust your filters.
       </div>
     );
   }

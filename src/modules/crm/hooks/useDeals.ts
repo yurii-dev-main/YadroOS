@@ -18,7 +18,7 @@ export const useDeals = () => {
       setDeals(response);
       setError(null);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Не вдалося завантажити угоди');
+      setError(err instanceof Error ? err.message : 'Failed to fetch deals');
     } finally {
       setLoading(false);
     }

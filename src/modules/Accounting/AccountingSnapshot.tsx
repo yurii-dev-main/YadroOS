@@ -1,9 +1,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
 
 const reports = [
-  { name: 'Баланс', amount: '₴1 230 000', status: 'Актуальний' },
-  { name: 'Витрати', amount: '₴420 000', status: 'Очікує підтвердження' },
-  { name: 'Податки', amount: '₴96 000', status: 'Оплачено' }
+  { name: 'Balance', amount: '₴1 230 000', status: 'Current' },
+  { name: 'Expenses', amount: '₴420 000', status: 'Pending confirmation' },
+  { name: 'Taxes', amount: '₴96 000', status: 'Paid' }
 ];
 
 export const AccountingSnapshot = () => (

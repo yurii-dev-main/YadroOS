@@ -40,7 +40,8 @@ const fromBase64 = (value: string): Uint8Array => {
 
 const importKey = async (rawKey: string) => {
   const keyBytes = fromBase64(rawKey);
-  return cryptoProvider.subtle.importKey('raw', keyBytes, 'AES-GCM', false, ['encrypt', 'decrypt']);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return cryptoProvider.subtle.importKey('raw', keyBytes as any, 'AES-GCM', false, ['encrypt', 'decrypt']);
 };
 
 const createIv = (length = 12) => {
@@ -54,7 +55,8 @@ export const encryptionService = {
     const key = await importKey(base64Key);
     const iv = createIv();
     const encoded = textEncoder.encode(plainText);
-    const cipherBuffer = await cryptoProvider.subtle.encrypt({ name: 'AES-GCM', iv }, key, encoded);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const cipherBuffer = await cryptoProvider.subtle.encrypt({ name: 'AES-GCM', iv: iv as any }, key, encoded as any);
     return {
       iv: toBase64(iv.buffer),
       cipherText: toBase64(cipherBuffer)
@@ -64,7 +66,8 @@ export const encryptionService = {
     const key = await importKey(base64Key);
     const iv = fromBase64(payload.iv);
     const data = fromBase64(payload.cipherText);
-    const plainBuffer = await cryptoProvider.subtle.decrypt({ name: 'AES-GCM', iv }, key, data);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const plainBuffer = await cryptoProvider.subtle.decrypt({ name: 'AES-GCM', iv: iv as any }, key, data as any);
     return textDecoder.decode(plainBuffer);
   }
 };

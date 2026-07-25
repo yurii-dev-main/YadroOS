@@ -30,7 +30,7 @@ const passwordSchema = z
   })
   .refine((values) => values.newPassword === values.confirmPassword, {
     path: ['confirmPassword'],
-    message: 'Паролі не співпадають'
+    message: 'Passwords do not match'
   });
 
 type PasswordFormValues = z.infer<typeof passwordSchema>;
@@ -120,7 +120,7 @@ export const ProfilePage = () => {
     <div className="grid gap-6 lg:grid-cols-3">
       <Card className="lg:col-span-1">
         <CardHeader>
-          <CardTitle>Аватар</CardTitle>
+          <CardTitle>Avatar</CardTitle>
         </CardHeader>
         <CardContent>
           <AvatarUploader value={user?.avatarUrl} onChange={handleAvatarChange} />
@@ -128,44 +128,44 @@ export const ProfilePage = () => {
       </Card>
       <Card className="lg:col-span-2">
         <CardHeader>
-          <CardTitle>Особисті дані</CardTitle>
+          <CardTitle>Personal Details</CardTitle>
         </CardHeader>
         <CardContent>
           <FormProvider {...profileMethods}>
             <form onSubmit={profileMethods.handleSubmit(onProfileSubmit)} className="space-y-5" noValidate>
-              <FormField<ProfileFormValues> name="name" label="Ім'я" />
-              <FormField<ProfileFormValues> name="company" label="Компанія" />
+              <FormField<ProfileFormValues> name="name" label="Name" />
+              <FormField<ProfileFormValues> name="company" label="Company" />
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-slate-200" htmlFor="language">
-                    Мова інтерфейсу
+                    Interface Language
                   </label>
                   <select
                     id="language"
                     className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm"
                     {...profileMethods.register('language')}
                   >
-                    <option value="uk">Українська</option>
+                    <option value="uk">Ukrainian</option>
                     <option value="en">English</option>
                   </select>
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-slate-200" htmlFor="theme">
-                    Тема
+                    Theme
                   </label>
                   <select
                     id="theme"
                     className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm"
                     {...profileMethods.register('theme')}
                   >
-                    <option value="dark">Темна</option>
-                    <option value="light">Світла</option>
-                    <option value="system">Системна</option>
+                    <option value="dark">Dark</option>
+                    <option value="light">Light</option>
+                    <option value="system">System</option>
                   </select>
                 </div>
               </div>
               <div className="space-y-2">
-                <p className="text-sm font-medium text-slate-200">Сповіщення</p>
+                <p className="text-sm font-medium text-slate-200">Notifications</p>
                 <div className="flex flex-col gap-3">
                   <Switch
                     checked={profileMethods.watch('emailNotifications')}
@@ -179,38 +179,38 @@ export const ProfilePage = () => {
                   />
                 </div>
               </div>
-              <Button type="submit">Зберегти</Button>
+              <Button type="submit">Save</Button>
             </form>
           </FormProvider>
         </CardContent>
       </Card>
       <Card className="lg:col-span-3">
         <CardHeader>
-          <CardTitle>Зміна паролю</CardTitle>
+          <CardTitle>Change Password</CardTitle>
         </CardHeader>
         <CardContent>
           <FormProvider {...passwordMethods}>
             <form onSubmit={passwordMethods.handleSubmit(onPasswordSubmit)} className="grid gap-4 md:grid-cols-3" noValidate>
               <FormField<PasswordFormValues>
                 name="currentPassword"
-                label="Поточний пароль"
+                label="Current Password"
                 type="password"
                 autoComplete="current-password"
               />
               <FormField<PasswordFormValues>
                 name="newPassword"
-                label="Новий пароль"
+                label="New Password"
                 type="password"
                 autoComplete="new-password"
               />
               <FormField<PasswordFormValues>
                 name="confirmPassword"
-                label="Підтвердження"
+                label="Confirm Password"
                 type="password"
                 autoComplete="new-password"
               />
               <div className="md:col-span-3">
-                <Button type="submit">Оновити пароль</Button>
+                <Button type="submit">Update Password</Button>
               </div>
             </form>
           </FormProvider>

@@ -49,7 +49,7 @@ interface ReportsDashboardProps {
 export const ReportsDashboard = ({ trend, categories, cashFlow, forecast }: ReportsDashboardProps) => (
   <div className="grid gap-6 xl:grid-cols-2">
     <div className="rounded-lg border border-slate-800 bg-slate-900/60 p-4">
-      <h4 className="text-sm font-semibold text-slate-100">Динаміка доходів та витрат</h4>
+      <h4 className="text-sm font-semibold text-slate-100">Income and Expense Trends</h4>
       <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={trend}>
@@ -58,14 +58,14 @@ export const ReportsDashboard = ({ trend, categories, cashFlow, forecast }: Repo
             <YAxis stroke="#64748b" />
             <Tooltip contentStyle={{ backgroundColor: '#0f172a', borderColor: '#1e293b' }} />
             <Legend />
-            <Line type="monotone" dataKey="income" stroke="#22c55e" strokeWidth={2} name="Дохід" />
-            <Line type="monotone" dataKey="expense" stroke="#f97316" strokeWidth={2} name="Витрати" />
+            <Line type="monotone" dataKey="income" stroke="#22c55e" strokeWidth={2} name="Income" />
+            <Line type="monotone" dataKey="expense" stroke="#f97316" strokeWidth={2} name="Expenses" />
           </LineChart>
         </ResponsiveContainer>
       </div>
     </div>
     <div className="rounded-lg border border-slate-800 bg-slate-900/60 p-4">
-      <h4 className="text-sm font-semibold text-slate-100">Структура витрат</h4>
+      <h4 className="text-sm font-semibold text-slate-100">Expense Structure</h4>
       <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
@@ -90,14 +90,14 @@ export const ReportsDashboard = ({ trend, categories, cashFlow, forecast }: Repo
             <YAxis stroke="#64748b" />
             <Tooltip contentStyle={{ backgroundColor: '#0f172a', borderColor: '#1e293b' }} />
             <Legend />
-            <Bar dataKey="inflow" fill="#22c55e" name="Надходження" />
-            <Bar dataKey="outflow" fill="#f43f5e" name="Витрати" />
+            <Bar dataKey="inflow" fill="#22c55e" name="Inflow" />
+            <Bar dataKey="outflow" fill="#f43f5e" name="Outflow" />
           </BarChart>
         </ResponsiveContainer>
       </div>
     </div>
     <div className="rounded-lg border border-slate-800 bg-slate-900/60 p-4">
-      <h4 className="text-sm font-semibold text-slate-100">Форкаст</h4>
+      <h4 className="text-sm font-semibold text-slate-100">Forecast</h4>
       <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={forecast}>
@@ -106,8 +106,8 @@ export const ReportsDashboard = ({ trend, categories, cashFlow, forecast }: Repo
             <YAxis stroke="#64748b" />
             <Tooltip contentStyle={{ backgroundColor: '#0f172a', borderColor: '#1e293b' }} />
             <Legend />
-            <Line type="monotone" dataKey="expectedIncome" stroke="#38bdf8" strokeWidth={2} name="Прогноз доходу" />
-            <Line type="monotone" dataKey="expectedExpense" stroke="#f97316" strokeWidth={2} name="Прогноз витрат" />
+            <Line type="monotone" dataKey="expectedIncome" stroke="#38bdf8" strokeWidth={2} name="Expected Income" />
+            <Line type="monotone" dataKey="expectedExpense" stroke="#f97316" strokeWidth={2} name="Expected Expenses" />
           </LineChart>
         </ResponsiveContainer>
       </div>

@@ -22,12 +22,12 @@ export const TransactionTable = ({ transactions, accounts, categories }: Transac
       <table className="min-w-full divide-y divide-slate-800 text-sm text-slate-200">
         <thead className="bg-slate-900/60 text-xs uppercase tracking-wide text-slate-400">
           <tr>
-            <th className="px-4 py-3 text-left">Дата</th>
-            <th className="px-4 py-3 text-left">Опис</th>
-            <th className="px-4 py-3 text-left">Рахунок</th>
-            <th className="px-4 py-3 text-left">Категорія</th>
-            <th className="px-4 py-3 text-right">Сума</th>
-            <th className="px-4 py-3 text-right">Статус</th>
+            <th className="px-4 py-3 text-left">Date</th>
+            <th className="px-4 py-3 text-left">Description</th>
+            <th className="px-4 py-3 text-left">Account</th>
+            <th className="px-4 py-3 text-left">Category</th>
+            <th className="px-4 py-3 text-right">Amount</th>
+            <th className="px-4 py-3 text-right">Status</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-slate-800 bg-slate-950/40">
@@ -52,7 +52,7 @@ export const TransactionTable = ({ transactions, accounts, categories }: Transac
                       <span className="text-xs text-slate-500">{transaction.tags.join(', ')}</span>
                     )}
                     {transaction.recurring && (
-                      <span className="text-[10px] uppercase text-amber-400">Повторюється {transaction.recurring.frequency}</span>
+                      <span className="text-[10px] uppercase text-amber-400">Repeats: {transaction.recurring.frequency}</span>
                     )}
                   </div>
                 </td>
@@ -78,7 +78,7 @@ export const TransactionTable = ({ transactions, accounts, categories }: Transac
         </tbody>
       </table>
       {!transactions.length && (
-        <p className="p-4 text-center text-xs text-slate-500">Транзакції відсутні за обраними фільтрами.</p>
+        <p className="p-4 text-center text-xs text-slate-500">No transactions found for the selected filters.</p>
       )}
     </div>
   );

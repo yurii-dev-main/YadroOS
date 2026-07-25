@@ -6,10 +6,10 @@ export const formatCurrency = (value: number) =>
 export const formatNumber = (value: number) => new Intl.NumberFormat('uk-UA').format(value);
 
 export const statusLabels: Record<ClientStatus, string> = {
-  lead: 'Лід',
-  active: 'Активний',
-  inactive: 'Неактивний',
-  lost: 'Втрачений'
+  lead: 'Lead',
+  active: 'Active',
+  inactive: 'Inactive',
+  lost: 'Lost'
 };
 
 export const statusBadgeStyles: Record<ClientStatus, string> = {
@@ -67,7 +67,7 @@ export const getRecentActivities = (activities: CRMActivity[], limit = 5) =>
 
 export const buildAnalyticsSnapshot = (clients: CRMClient[], deals: CRMDeal[]): CRMAnalyticsSummary => {
   const newClients = Array.from({ length: 6 }).map((_, index) => ({
-    period: `Місяць ${index + 1}`,
+    period: `Month ${index + 1}`,
     value: Math.floor(Math.random() * 12) + 5
   }));
 

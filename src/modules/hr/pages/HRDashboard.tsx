@@ -7,10 +7,10 @@ import { PerformancePage } from './PerformancePage';
 import { TrainingsPage } from './TrainingsPage';
 
 const tabs = [
-  { id: 'employees', label: 'Співробітники' },
-  { id: 'trainings', label: 'Тренінги' },
-  { id: 'attendance', label: 'Облік часу' },
-  { id: 'performance', label: 'Ефективність' },
+  { id: 'employees', label: 'Employees' },
+  { id: 'trainings', label: 'Trainings' },
+  { id: 'attendance', label: 'Time Tracking' },
+  { id: 'performance', label: 'Performance' },
   { id: 'lifecycle', label: 'On/Offboarding' },
 ] as const;
 
@@ -23,9 +23,9 @@ export const HRDashboard = () => {
     <div className="space-y-6">
       <Card className="border-slate-800 bg-slate-900/80">
         <CardHeader className="space-y-2">
-          <CardTitle className="text-2xl font-semibold text-slate-100">HR модуль</CardTitle>
+          <CardTitle className="text-2xl font-semibold text-slate-100">HR Module</CardTitle>
           <p className="text-sm text-slate-300">
-            Єдиний центр управління персоналом: профілі, тренінги, облік робочого часу, KPI та життєвий цикл співробітника.
+            Unified personnel management hub: profiles, trainings, time tracking, KPIs, and employee lifecycle.
           </p>
         </CardHeader>
         <CardContent>

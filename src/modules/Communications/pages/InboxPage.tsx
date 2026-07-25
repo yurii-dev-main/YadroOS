@@ -72,9 +72,9 @@ export const InboxPage = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-6">
           <div className="w-full max-w-3xl rounded-lg border border-slate-800 bg-slate-950 p-4 shadow-xl">
             <div className="mb-4 flex items-center justify-between">
-              <h3 className="text-lg font-semibold text-slate-100">Створення листа</h3>
+              <h3 className="text-lg font-semibold text-slate-100">Compose Email</h3>
               <button className="text-sm text-slate-400 hover:text-emerald-300" onClick={() => setShowComposer(false)}>
-                Закрити
+                Close
               </button>
             </div>
             <EmailComposer

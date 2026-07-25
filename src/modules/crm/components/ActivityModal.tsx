@@ -48,13 +48,13 @@ export const ActivityModal = ({ open, onClose, onSubmit, clientId, creator }: Ac
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur">
       <div className="w-full max-w-xl rounded-2xl border border-slate-700/60 bg-slate-900/95 p-6 shadow-2xl shadow-black/30">
         <div className="mb-4 flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-white">Нова активність</h3>
+          <h3 className="text-lg font-semibold text-white">New Activity</h3>
           <button
             type="button"
             onClick={onClose}
             className="rounded-lg border border-slate-600/60 px-3 py-1 text-sm text-slate-300 transition hover:border-slate-500 hover:text-white"
           >
-            Закрити
+            Close
           </button>
         </div>
 
@@ -75,21 +75,21 @@ export const ActivityModal = ({ open, onClose, onSubmit, clientId, creator }: Ac
           })}
         >
           <label className="flex flex-col text-sm text-slate-200">
-            Тип активності
+            Activity type
             <select
               {...register('type')}
               className="mt-1 rounded-lg border border-slate-700 bg-slate-900 px-3 py-2"
             >
-              <option value="call">Дзвінок</option>
-              <option value="meeting">Зустріч</option>
+              <option value="call">Call</option>
+              <option value="meeting">Meeting</option>
               <option value="email">Email</option>
-              <option value="note">Нотатка</option>
-              <option value="task">Завдання</option>
+              <option value="note">Note</option>
+              <option value="task">Task</option>
             </select>
           </label>
 
           <label className="flex flex-col text-sm text-slate-200">
-            Нотатки / опис
+            Notes / description
             <textarea
               {...register('notes')}
               className="mt-1 min-h-[120px] rounded-xl border border-slate-700 bg-slate-900 px-3 py-2"
@@ -98,7 +98,7 @@ export const ActivityModal = ({ open, onClose, onSubmit, clientId, creator }: Ac
 
           {(type === 'call' || type === 'meeting') && (
             <label className="flex flex-col text-sm text-slate-200">
-              Підсумок
+              Summary
               <textarea
                 {...register('summary')}
                 className="mt-1 min-h-[80px] rounded-xl border border-slate-700 bg-slate-900 px-3 py-2"
@@ -108,7 +108,7 @@ export const ActivityModal = ({ open, onClose, onSubmit, clientId, creator }: Ac
 
           {(type === 'call' || type === 'meeting') && (
             <label className="flex flex-col text-sm text-slate-200">
-              Тривалість (хв)
+              Duration (min)
               <input
                 type="number"
                 {...register('duration', { valueAsNumber: true })}
@@ -120,7 +120,7 @@ export const ActivityModal = ({ open, onClose, onSubmit, clientId, creator }: Ac
           {type === 'task' && (
             <div className="grid grid-cols-2 gap-4">
               <label className="flex flex-col text-sm text-slate-200">
-                Дедлайн
+                Deadline
                 <input
                   type="date"
                   {...register('deadline')}
@@ -128,14 +128,14 @@ export const ActivityModal = ({ open, onClose, onSubmit, clientId, creator }: Ac
                 />
               </label>
               <label className="flex flex-col text-sm text-slate-200">
-                Статус
+                Status
                 <select
                   {...register('status')}
                   className="mt-1 rounded-lg border border-slate-700 bg-slate-900 px-3 py-2"
                 >
-                  <option value="pending">Заплановано</option>
-                  <option value="in_progress">В роботі</option>
-                  <option value="completed">Виконано</option>
+                  <option value="pending">Scheduled</option>
+                  <option value="in_progress">In progress</option>
+                  <option value="completed">Completed</option>
                 </select>
               </label>
             </div>
@@ -147,14 +147,14 @@ export const ActivityModal = ({ open, onClose, onSubmit, clientId, creator }: Ac
               onClick={onClose}
               className="rounded-lg border border-slate-600 px-4 py-2 text-sm text-slate-300 transition hover:border-slate-500 hover:text-white"
             >
-              Скасувати
+              Cancel
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
               className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {isSubmitting ? 'Збереження...' : 'Додати'}
+              {isSubmitting ? 'Saving...' : 'Add'}
             </button>
           </div>
         </form>

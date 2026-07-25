@@ -12,10 +12,10 @@ export const PerformancePage = () => {
     <div className="space-y-6">
       <Card className="border-slate-800 bg-slate-900/70">
         <CardHeader>
-          <CardTitle className="text-lg text-slate-100">KPI та ефективність</CardTitle>
+          <CardTitle className="text-lg text-slate-100">KPI and Performance</CardTitle>
         </CardHeader>
         <CardContent className="text-sm text-slate-300">
-          Встановлюйте KPI, відстежуйте OKR та проводьте регулярні review. Контролюйте результати всієї команди.
+          Set KPIs, track OKRs, and conduct regular reviews. Control the results of the entire team.
         </CardContent>
       </Card>
 

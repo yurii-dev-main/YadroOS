@@ -24,7 +24,7 @@ export const PerformanceDashboard: FC<PerformanceDashboardProps> = ({
     <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
       <Card className="border-slate-800 bg-slate-900/70">
         <CardHeader>
-          <CardTitle className="text-sm text-slate-400">Середній бал оцінки</CardTitle>
+          <CardTitle className="text-sm text-slate-400">Average Evaluation Score</CardTitle>
         </CardHeader>
         <CardContent>
           <p className="text-3xl font-semibold text-emerald-300">{averageScore.toFixed(2)}</p>
@@ -32,7 +32,7 @@ export const PerformanceDashboard: FC<PerformanceDashboardProps> = ({
       </Card>
       <Card className="border-slate-800 bg-slate-900/70">
         <CardHeader>
-          <CardTitle className="text-sm text-slate-400">KPI в прогресі</CardTitle>
+          <CardTitle className="text-sm text-slate-400">KPIs in Progress</CardTitle>
         </CardHeader>
         <CardContent>
           <p className="text-3xl font-semibold text-indigo-300">{kpis.length}</p>
@@ -40,7 +40,7 @@ export const PerformanceDashboard: FC<PerformanceDashboardProps> = ({
       </Card>
       <Card className="border-slate-800 bg-slate-900/70">
         <CardHeader>
-          <CardTitle className="text-sm text-slate-400">Активні OKR</CardTitle>
+          <CardTitle className="text-sm text-slate-400">Active OKRs</CardTitle>
         </CardHeader>
         <CardContent>
           <p className="text-3xl font-semibold text-amber-300">{okrs.length}</p>
@@ -59,7 +59,7 @@ export const PerformanceDashboard: FC<PerformanceDashboardProps> = ({
             <p className="text-xs uppercase tracking-wide text-slate-400">{kpi.role}</p>
             <div className="mt-3">
               <div className="flex justify-between text-xs text-slate-400">
-                <span>Поточне значення</span>
+                <span>Current Value</span>
                 <span>
                   {kpi.current} {kpi.unit}
                 </span>
@@ -71,7 +71,7 @@ export const PerformanceDashboard: FC<PerformanceDashboardProps> = ({
                 />
               </div>
               <p className="mt-2 text-xs text-slate-400">
-                Ціль: {kpi.target} {kpi.unit}
+                Target: {kpi.target} {kpi.unit}
               </p>
             </div>
           </div>
@@ -107,7 +107,7 @@ export const PerformanceDashboard: FC<PerformanceDashboardProps> = ({
 
     <Card className="border-slate-800 bg-slate-900/70">
       <CardHeader>
-        <CardTitle className="text-lg text-slate-100">Відгуки та оцінювання</CardTitle>
+        <CardTitle className="text-lg text-slate-100">Reviews and Evaluations</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4 text-sm text-slate-300">
         {reviews.map((review) => (
@@ -120,11 +120,11 @@ export const PerformanceDashboard: FC<PerformanceDashboardProps> = ({
                 {review.type}
               </span>
             </div>
-            <p className="mt-2 text-sm text-emerald-300">Середній бал: {review.overallScore}</p>
+            <p className="mt-2 text-sm text-emerald-300">Overall score: {review.overallScore}</p>
             <p className="text-xs text-slate-400">Self: {review.selfAssessment}</p>
             <p className="text-xs text-slate-400">Manager: {review.managerAssessment}</p>
             <div className="mt-2">
-              <h4 className="text-xs uppercase tracking-wide text-slate-400">Цілі</h4>
+              <h4 className="text-xs uppercase tracking-wide text-slate-400">Goals</h4>
               <ul className="list-inside list-disc text-xs text-slate-300">
                 {review.goalsNextPeriod.map((goal) => (
                   <li key={goal}>{goal}</li>
@@ -132,7 +132,7 @@ export const PerformanceDashboard: FC<PerformanceDashboardProps> = ({
               </ul>
             </div>
             <div className="mt-2">
-              <h4 className="text-xs uppercase tracking-wide text-slate-400">360° фідбек</h4>
+              <h4 className="text-xs uppercase tracking-wide text-slate-400">360° Feedback</h4>
               <ul className="list-inside list-disc text-xs text-slate-300">
                 {review.feedback360.map((feedback) => (
                   <li key={feedback}>{feedback}</li>
@@ -146,7 +146,7 @@ export const PerformanceDashboard: FC<PerformanceDashboardProps> = ({
 
     <Card className="border-slate-800 bg-slate-900/70">
       <CardHeader>
-        <CardTitle className="text-lg text-slate-100">Відзнаки</CardTitle>
+        <CardTitle className="text-lg text-slate-100">Highlights</CardTitle>
       </CardHeader>
       <CardContent className="grid grid-cols-1 gap-4 md:grid-cols-3">
         {highlights.map((highlight) => (

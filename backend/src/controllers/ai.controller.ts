@@ -10,7 +10,7 @@ export const createChatCompletion = async (req: Request, res: Response) => {
   }
 
   if (messages.length === 0) {
-    return res.json({ content: 'Чим можу допомогти сьогодні?' });
+    return res.json({ content: 'How can I help you today?' });
   }
 
   const response = await generateAIResponse(

@@ -8,13 +8,13 @@ interface EmailBulkActionsProps {
 export const EmailBulkActions = ({ hasSelection, onMarkRead, onMoveTo, onDelete }: EmailBulkActionsProps) => {
   return (
     <div className="flex flex-wrap items-center gap-2 border-b border-slate-800 px-4 py-3 text-xs text-slate-400">
-      <span className="text-slate-500">Групові дії:</span>
+      <span className="text-slate-500">Bulk actions:</span>
       <button
         className="rounded border border-slate-700 px-3 py-1.5 hover:border-emerald-500 hover:text-emerald-400 disabled:opacity-40"
         disabled={!hasSelection}
         onClick={onMarkRead}
       >
-        Позначити як прочитані
+        Mark as read
       </button>
       <div className="flex items-center gap-1">
         <button
@@ -22,14 +22,14 @@ export const EmailBulkActions = ({ hasSelection, onMarkRead, onMoveTo, onDelete 
           disabled={!hasSelection}
           onClick={() => onMoveTo('inbox')}
         >
-          У вхідні
+          To Inbox
         </button>
         <button
           className="rounded border border-slate-700 px-3 py-1.5 hover:border-sky-500 hover:text-sky-400 disabled:opacity-40"
           disabled={!hasSelection}
           onClick={() => onMoveTo('trash')}
         >
-          В кошик
+          To Trash
         </button>
       </div>
       <button
@@ -37,7 +37,7 @@ export const EmailBulkActions = ({ hasSelection, onMarkRead, onMoveTo, onDelete 
         disabled={!hasSelection}
         onClick={onDelete}
       >
-        Видалити
+        Delete
       </button>
     </div>
   );

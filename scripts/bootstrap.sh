@@ -11,12 +11,12 @@ Options:
   --skip-git          Skip git installation
   --help              Show this help message
 
-This script installs базовые зависимости для презентационного запуска:
+This script installs basic dependencies for presentation launch:
 - git, curl
-- Node.js 20 (через репозиторий NodeSource)
+- Node.js 20 (via NodeSource repository)
 - Docker Engine + docker compose plugin
 
-Требуются права sudo.
+sudo privileges required.
 USAGE
 }
 
@@ -40,7 +40,7 @@ for arg in "$@"; do
       exit 0
       ;;
     *)
-      echo "Неизвестный аргумент: $arg" >&2
+      echo "Unknown argument: $arg" >&2
       print_usage
       exit 1
       ;;
@@ -50,7 +50,7 @@ for arg in "$@"; do
 
 require_sudo() {
   if ! command -v sudo >/dev/null 2>&1; then
-    echo "sudo не найден. Установите sudo и повторите." >&2
+    echo "sudo not found. Install sudo and try again." >&2
     exit 1
   fi
 }
@@ -60,32 +60,32 @@ ensure_command() {
   local pkg="$2"
 
   if command -v "$cmd" >/dev/null 2>&1; then
-    echo "✓ $cmd уже установлен"
+    echo "✓ $cmd is already installed"
     return
   fi
 
-  echo "→ Устанавливаю $pkg"
+  echo "→ Installing $pkg"
   sudo apt-get install -y "$pkg"
 }
 
 install_nodesource() {
   if command -v node >/dev/null 2>&1; then
-    echo "✓ Node.js уже установлен"
+    echo "✓ Node.js is already installed"
     return
   fi
 
-  echo "→ Добавляю репозиторий NodeSource"
+  echo "→ Adding NodeSource repository"
   curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
   sudo apt-get install -y nodejs
 }
 
 install_docker() {
   if command -v docker >/dev/null 2>&1; then
-    echo "✓ Docker уже установлен"
+    echo "✓ Docker is already installed"
     return
   fi
 
-  echo "→ Устанавливаю Docker Engine"
+  echo "→ Installing Docker Engine"
   sudo install -m 0755 -d /etc/apt/keyrings
   curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
   sudo chmod a+r /etc/apt/keyrings/docker.gpg
@@ -102,14 +102,14 @@ install_docker() {
   fi
 
   if ! id -nG "$USER" | grep -q "\bdocker\b"; then
-    echo "→ Добавляю пользователя $USER в группу docker (потребуется перелогин)"
+    echo "→ Adding user $USER to docker group (re-login required)"
     sudo usermod -aG docker "$USER"
   fi
 }
 
 main() {
   if [[ "${EUID}" -eq 0 ]]; then
-    echo "Скрипт не должен запускаться от root. Используйте обычного пользователя с sudo." >&2
+    echo "Script should not be run as root. Use a regular user with sudo." >&2
     exit 1
   fi
 
@@ -130,7 +130,7 @@ main() {
     install_docker
   fi
 
-  echo "Готово. Проверьте версии: node -v, npm -v, docker --version"
+  echo "Done. Check versions: node -v, npm -v, docker --version"
 }
 
 main

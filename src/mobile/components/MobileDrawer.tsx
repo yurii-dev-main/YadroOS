@@ -61,12 +61,12 @@ export const MobileDrawer = ({ isOpen, onClose, items }: MobileDrawerProps) => {
                 type="button"
                 onClick={onClose}
                 className="flex h-11 w-11 items-center justify-center rounded-full border border-slate-700"
-                aria-label="Закрити меню"
+                aria-label="Close menu"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
-            <nav className="flex flex-col gap-1 px-4 py-6" aria-label="Мобільна навігація">
+            <nav className="flex flex-col gap-1 px-4 py-6" aria-label="Mobile navigation">
               {menuItems.map((item) => {
                 const Icon = iconMap[item.icon] ?? LayoutDashboard;
                 const isActive = location.pathname.startsWith(item.to);

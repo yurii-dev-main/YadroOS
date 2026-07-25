@@ -30,17 +30,17 @@ export const EmployeeCard: FC<EmployeeCardProps> = ({ employee, onSelect, isSele
     </CardHeader>
     <CardContent className="space-y-3 text-sm text-slate-300">
       <div className="flex flex-col">
-        <span className="text-xs uppercase tracking-wide text-slate-400">Посада</span>
+        <span className="text-xs uppercase tracking-wide text-slate-400">Position</span>
         <span className="font-medium text-slate-100">{employee.position}</span>
         <span className="text-xs text-slate-400">{employee.department}</span>
       </div>
       <div className="flex justify-between text-xs">
         <div>
-          <span className="block text-slate-400">Дата найму</span>
+          <span className="block text-slate-400">Hire Date</span>
           <span className="font-medium text-slate-100">{formatDate(employee.hireDate)}</span>
         </div>
         <div className="text-right">
-          <span className="block text-slate-400">Зарплата</span>
+          <span className="block text-slate-400">Salary</span>
           <span className="font-medium text-emerald-300">
             {formatCurrency(employee.salary, employee.currency)}
           </span>

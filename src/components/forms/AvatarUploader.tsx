@@ -60,7 +60,8 @@ export const AvatarUploader: FC<AvatarUploaderProps> = ({ value, onChange }) => 
 
   const preview = useMemo(() => value ?? imageSrc, [imageSrc, value]);
 
-  const onCropComplete = useCallback((_, areaPixels: typeof croppedAreaPixels) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const onCropComplete = useCallback((_: any, areaPixels: typeof croppedAreaPixels) => {
     setCroppedAreaPixels(areaPixels);
   }, []);
 
@@ -93,15 +94,15 @@ export const AvatarUploader: FC<AvatarUploaderProps> = ({ value, onChange }) => 
             <img src={preview} alt="Avatar preview" className="h-full w-full object-cover" />
           ) : (
             <div className="flex h-full w-full items-center justify-center text-sm text-slate-400">
-              Немає
+              None
             </div>
           )}
         </div>
         <div className="space-y-2">
-          <input type="file" accept="image/*" onChange={handleFileChange} aria-label="Завантажити аватар" />
+          <input type="file" accept="image/*" onChange={handleFileChange} aria-label="Upload avatar" />
           {imageSrc && (
             <Button type="button" variant="secondary" onClick={handleApply}>
-              Застосувати
+              Apply
             </Button>
           )}
         </div>
@@ -127,7 +128,7 @@ export const AvatarUploader: FC<AvatarUploaderProps> = ({ value, onChange }) => 
               value={zoom}
               onChange={(event) => setZoom(Number(event.target.value))}
               className="w-full"
-              aria-label="Масштаб"
+              aria-label="Zoom"
             />
           </div>
         </div>

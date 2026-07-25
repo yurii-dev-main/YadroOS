@@ -32,17 +32,17 @@ export const InvoicesPage = () => {
           onRecordPayment={handleRecordPayment}
           onDownload={generatePdf}
         />
-        <InvoiceBuilder onCreate={createInvoice} />
+        <InvoiceBuilder onCreate={async (payload) => { await createInvoice(payload); }} />
       </div>
       <div className="rounded-lg border border-slate-800 bg-slate-900/60 p-4 text-sm text-slate-200">
-        <h3 className="text-base font-semibold text-slate-100">Нагадування про оплату</h3>
+        <h3 className="text-base font-semibold text-slate-100">Payment Reminders</h3>
         <div className="mt-4 grid gap-4 md:grid-cols-2">
           <div className="grid gap-2">
-            <span className="text-xs text-slate-500">Дні до дедлайну</span>
+            <span className="text-xs text-slate-500">Days before deadline</span>
             <Input value={daysBefore} onChange={(event) => setDaysBefore(event.target.value)} placeholder="7,1" />
           </div>
           <div className="grid gap-2">
-            <span className="text-xs text-slate-500">Дні після дедлайну</span>
+            <span className="text-xs text-slate-500">Days after deadline</span>
             <Input value={daysAfter} onChange={(event) => setDaysAfter(event.target.value)} placeholder="3,7" />
           </div>
         </div>
@@ -57,7 +57,7 @@ export const InvoicesPage = () => {
             })
           }
         >
-          Зберегти налаштування
+          Save settings
         </Button>
       </div>
     </div>

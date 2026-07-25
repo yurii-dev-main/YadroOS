@@ -30,13 +30,13 @@ export const AIInsightCard = ({ recommendation }: AIInsightCardProps) => {
           <span className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs uppercase tracking-wide ${badgeClass}`}>
             <Icon size={14} />
             {recommendation.type === 'action'
-              ? 'Наступний крок'
+              ? 'Next Step'
               : recommendation.type === 'alert'
-                ? 'Попередження'
+                ? 'Warning'
                 : 'Insight'}
           </span>
         </CardTitle>
-        <span className="text-xs text-slate-400">Впевненість {(recommendation.confidence * 100).toFixed(0)}%</span>
+        <span className="text-xs text-slate-400">Confidence {(recommendation.confidence * 100).toFixed(0)}%</span>
       </CardHeader>
       <CardContent className="gap-3">
         <h3 className="text-lg font-semibold text-slate-100">{recommendation.title}</h3>

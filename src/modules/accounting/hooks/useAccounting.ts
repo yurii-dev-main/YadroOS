@@ -18,10 +18,12 @@ import {
   ProjectProfitability,
   ReportSummary,
   Transaction,
+  TransactionCategory,
   TransferRequest,
 } from '../types/accounting.types';
 
 interface AccountingState {
+  categories: TransactionCategory[];
   accounts: Account[];
   transactions: Transaction[];
   budgets: Budget[];
@@ -66,6 +68,7 @@ const initialFilters: AccountingFilterState = {
 };
 
 const useAccountingStore = create<AccountingState>((set, get) => ({
+  categories: [],
   accounts: [],
   transactions: [],
   budgets: [],
@@ -88,7 +91,7 @@ const useAccountingStore = create<AccountingState>((set, get) => ({
   async load() {
     set({ loading: true, error: undefined });
     try {
-      const [accounts, transactions, budgets, cashBalances, auditLog, categoryBreakdown, clientProfitability, projectProfitability] =
+      const [accounts, transactions, budgets, cashBalances, auditLog, categoryBreakdown, clientProfitability, projectProfitability, categories] =
         await Promise.all([
           accountingService.getAccounts(),
           accountingService.getTransactions(),
@@ -98,6 +101,7 @@ const useAccountingStore = create<AccountingState>((set, get) => ({
           accountingService.getCategoryBreakdown(),
           accountingService.getClientProfitability(),
           accountingService.getProjectProfitability(),
+          accountingService.getCategories(),
         ]);
 
       const exchangeRate = await accountingService.getExchangeRates();
@@ -113,6 +117,7 @@ const useAccountingStore = create<AccountingState>((set, get) => ({
         categoryBreakdown,
         clientProfitability,
         projectProfitability,
+        categories,
         exchangeRate,
         dashboard,
         reports: reportsData.summaries,
@@ -126,7 +131,7 @@ const useAccountingStore = create<AccountingState>((set, get) => ({
     } catch (error) {
       set({
         loading: false,
-        error: error instanceof Error ? error.message : 'Не вдалося завантажити модуль бухгалтерії',
+        error: error instanceof Error ? error.message : 'Failed to load accounting module',
       });
     }
   },
@@ -214,6 +219,6 @@ export const useAccounting = () => {
     if (!store.initialized && !store.loading) {
       void store.load();
     }
-  }, [store.initialized, store.loading, store.load]);
+  }, [store, store.initialized, store.loading, store.load]);
   return store;
 };

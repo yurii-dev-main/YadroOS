@@ -26,7 +26,7 @@ export const BudgetsPage = () => {
       <BudgetManager budgets={budgets} onUpdate={updateBudget} />
       <Card className="border border-slate-800 bg-slate-900/60">
         <CardHeader>
-          <CardTitle className="text-sm font-semibold text-slate-100">Використання бюджетів</CardTitle>
+          <CardTitle className="text-sm font-semibold text-slate-100">Budget Usage</CardTitle>
         </CardHeader>
         <CardContent className="space-y-2 text-sm text-slate-300">
           {budgets.map((budget) => (
@@ -37,7 +37,7 @@ export const BudgetsPage = () => {
               </span>
             </div>
           ))}
-          {!budgets.length && <p className="text-xs text-slate-500">Немає даних для відображення.</p>}
+          {!budgets.length && <p className="text-xs text-slate-500">No data to display.</p>}
         </CardContent>
       </Card>
     </div>

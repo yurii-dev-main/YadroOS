@@ -45,5 +45,5 @@ export const forecastCashFlow = (historical: number[], horizon = 6): ForecastSce
     baseline.push(Math.round(current));
   }
 
-  return buildForecastScenario(baseline, 'Місяць');
+  return buildForecastScenario(baseline, 'Month');
 };
