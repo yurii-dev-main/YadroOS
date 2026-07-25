@@ -8,7 +8,11 @@ interface EmployeesGridProps {
   selectedEmployeeId?: string | null;
 }
 
-export const EmployeesGrid: FC<EmployeesGridProps> = ({ employees, onSelect, selectedEmployeeId }) => {
+export const EmployeesGrid: FC<EmployeesGridProps> = ({
+  employees,
+  onSelect,
+  selectedEmployeeId
+}) => {
   if (!employees.length) {
     return (
       <div className="rounded-lg border border-dashed border-slate-700 bg-slate-900/70 p-6 text-center text-sm text-slate-400">

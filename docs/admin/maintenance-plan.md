@@ -21,16 +21,19 @@ Regular maintenance schedule to keep the system healthy.
 ## Weekly Tasks (Manual - 30 min)
 
 ### Monday
+
 - Review error logs from Sentry
 - Check for unusual patterns in access logs
 - Verify scheduled jobs completed successfully
 
 ### Wednesday
+
 - Review open support tickets and assign owners
 - Validate database replication status and lag
 - Inspect Redis memory usage and key eviction metrics
 
 ### Friday
+
 - Run Lighthouse performance audit on staging
 - Spot check backup integrity by downloading latest archive
 - Confirm incident response checklist is up to date

@@ -23,7 +23,7 @@ export class UptimeMonitor {
       database: 'connected',
       redis: 'connected',
       version: '1.0.0',
-      uptime: Math.floor((typeof performance !== 'undefined' ? performance.now() : Date.now()))
+      uptime: Math.floor(typeof performance !== 'undefined' ? performance.now() : Date.now())
     };
 
     for (const handler of this.handlers) {

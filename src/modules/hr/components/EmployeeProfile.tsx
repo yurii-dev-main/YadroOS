@@ -87,7 +87,9 @@ export const EmployeeProfile: FC<EmployeeProfileProps> = ({ employee }) => {
         </CardHeader>
         <CardContent className="space-y-2 text-sm text-slate-300">
           {employee.trainings.length ? (
-            employee.trainings.map((trainingId) => <p key={trainingId}>Training ID: {trainingId}</p>)
+            employee.trainings.map((trainingId) => (
+              <p key={trainingId}>Training ID: {trainingId}</p>
+            ))
           ) : (
             <p>No trainings</p>
           )}

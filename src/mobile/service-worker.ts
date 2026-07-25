@@ -83,7 +83,9 @@ setCatchHandler(async ({ request }) => {
 
 self.addEventListener('sync', (event) => {
   if (event.tag === 'sync-pending-actions') {
-    event.waitUntil(self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(() => undefined));
+    event.waitUntil(
+      self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(() => undefined)
+    );
   }
 });
 

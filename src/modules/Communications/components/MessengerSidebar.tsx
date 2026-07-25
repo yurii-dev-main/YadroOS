@@ -7,7 +7,12 @@ interface MessengerSidebarProps {
   onCreateGroup: () => void;
 }
 
-export const MessengerSidebar = ({ threads, activeChatId, onSelect, onCreateGroup }: MessengerSidebarProps) => {
+export const MessengerSidebar = ({
+  threads,
+  activeChatId,
+  onSelect,
+  onCreateGroup
+}: MessengerSidebarProps) => {
   return (
     <aside className="flex h-full w-72 flex-col border-r border-slate-800 bg-slate-900/70">
       <div className="border-b border-slate-800 p-4">
@@ -34,15 +39,21 @@ export const MessengerSidebar = ({ threads, activeChatId, onSelect, onCreateGrou
             <div className="flex items-center justify-between text-sm text-slate-200">
               <span>{thread.title}</span>
               {thread.unreadCount ? (
-                <span className="rounded-full bg-emerald-500/30 px-2 py-0.5 text-xs text-emerald-200">{thread.unreadCount}</span>
+                <span className="rounded-full bg-emerald-500/30 px-2 py-0.5 text-xs text-emerald-200">
+                  {thread.unreadCount}
+                </span>
               ) : null}
             </div>
             <div className="text-xs text-slate-400">
-              {thread.lastMessage ? `${thread.lastMessage.author.name}: ${thread.lastMessage.content}` : 'No messages'}
+              {thread.lastMessage
+                ? `${thread.lastMessage.author.name}: ${thread.lastMessage.content}`
+                : 'No messages'}
             </div>
           </button>
         ))}
-        {!threads.length && <p className="p-4 text-center text-xs text-slate-500">No chats available</p>}
+        {!threads.length && (
+          <p className="p-4 text-center text-xs text-slate-500">No chats available</p>
+        )}
       </div>
     </aside>
   );

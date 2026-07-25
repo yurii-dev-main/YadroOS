@@ -18,10 +18,13 @@ export const EmployeesPage = () => {
     selectedEmployee,
     selectEmployee,
     orgChart,
-    statistics,
+    statistics
   } = useEmployees();
 
-  const departmentOptions = useMemo(() => departments.map((department) => department.name), [departments]);
+  const departmentOptions = useMemo(
+    () => departments.map((department) => department.name),
+    [departments]
+  );
 
   return (
     <div className="space-y-6">
@@ -47,7 +50,9 @@ export const EmployeesPage = () => {
             <CardTitle className="text-sm text-slate-400">Attendance</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-semibold text-emerald-300">{statistics.attendanceRate.toFixed(1)}%</p>
+            <p className="text-3xl font-semibold text-emerald-300">
+              {statistics.attendanceRate.toFixed(1)}%
+            </p>
           </CardContent>
         </Card>
         <Card className="border-slate-800 bg-slate-900/70">
@@ -57,7 +62,8 @@ export const EmployeesPage = () => {
           <CardContent className="space-y-1 text-sm text-slate-300">
             {statistics.topPerformers.map((highlight) => (
               <p key={highlight.employeeId}>
-                {hrService.getEmployeeById(highlight.employeeId)?.name ?? 'Unknown'} — {highlight.score}
+                {hrService.getEmployeeById(highlight.employeeId)?.name ?? 'Unknown'} —{' '}
+                {highlight.score}
               </p>
             ))}
           </CardContent>
@@ -83,7 +89,9 @@ export const EmployeesPage = () => {
 
       <div>
         <h3 className="text-lg font-semibold text-slate-100">Organizational Structure</h3>
-        <p className="text-sm text-slate-400">Drag-and-drop and export available in future releases.</p>
+        <p className="text-sm text-slate-400">
+          Drag-and-drop and export available in future releases.
+        </p>
         <div className="mt-4">
           <OrgChartView data={orgChart} />
         </div>

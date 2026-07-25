@@ -19,7 +19,7 @@ import {
   ReportSummary,
   Transaction,
   TransactionCategory,
-  TransferRequest,
+  TransferRequest
 } from '../types/accounting.types';
 
 interface AccountingState {
@@ -45,15 +45,25 @@ interface AccountingState {
   error?: string;
   load: () => Promise<void>;
   refreshExchangeRates: () => Promise<void>;
-  addAccount: (payload: Omit<Account, 'id' | 'isActive' | 'syncedAt' | 'reconciliationStatus'> & { balance?: number }) => Promise<Account>;
+  addAccount: (
+    payload: Omit<Account, 'id' | 'isActive' | 'syncedAt' | 'reconciliationStatus'> & {
+      balance?: number;
+    }
+  ) => Promise<Account>;
   transfer: (request: TransferRequest) => Promise<Transaction>;
-  addTransaction: (payload: Omit<Transaction, 'id' | 'createdAt' | 'updatedAt'>) => Promise<Transaction>;
+  addTransaction: (
+    payload: Omit<Transaction, 'id' | 'createdAt' | 'updatedAt'>
+  ) => Promise<Transaction>;
   importTransactions: (accountId: string) => Promise<number>;
   loadBudgets: () => Promise<void>;
   updateBudget: (budgetId: string, changes: Partial<Budget>) => Promise<void>;
   loadReports: () => Promise<void>;
   loadAuditLog: () => Promise<void>;
-  scheduleReminders: (config: { daysBeforeDue: number[]; daysAfterDue: number[]; enabled: boolean }) => Promise<void>;
+  scheduleReminders: (config: {
+    daysBeforeDue: number[];
+    daysAfterDue: number[];
+    enabled: boolean;
+  }) => Promise<void>;
   setFilters: (filters: Partial<AccountingFilterState>) => void;
   searchTransactions: () => Promise<Transaction[]>;
 }
@@ -64,7 +74,7 @@ const initialFilters: AccountingFilterState = {
   categories: [],
   clients: [],
   projects: [],
-  tags: [],
+  tags: []
 };
 
 const useAccountingStore = create<AccountingState>((set, get) => ({
@@ -91,18 +101,27 @@ const useAccountingStore = create<AccountingState>((set, get) => ({
   async load() {
     set({ loading: true, error: undefined });
     try {
-      const [accounts, transactions, budgets, cashBalances, auditLog, categoryBreakdown, clientProfitability, projectProfitability, categories] =
-        await Promise.all([
-          accountingService.getAccounts(),
-          accountingService.getTransactions(),
-          accountingService.getBudgets(),
-          accountingService.getCashBalances(),
-          accountingService.getAuditLog(),
-          accountingService.getCategoryBreakdown(),
-          accountingService.getClientProfitability(),
-          accountingService.getProjectProfitability(),
-          accountingService.getCategories(),
-        ]);
+      const [
+        accounts,
+        transactions,
+        budgets,
+        cashBalances,
+        auditLog,
+        categoryBreakdown,
+        clientProfitability,
+        projectProfitability,
+        categories
+      ] = await Promise.all([
+        accountingService.getAccounts(),
+        accountingService.getTransactions(),
+        accountingService.getBudgets(),
+        accountingService.getCashBalances(),
+        accountingService.getAuditLog(),
+        accountingService.getCategoryBreakdown(),
+        accountingService.getClientProfitability(),
+        accountingService.getProjectProfitability(),
+        accountingService.getCategories()
+      ]);
 
       const exchangeRate = await accountingService.getExchangeRates();
       const dashboard = await accountingService.getDashboardData(exchangeRate?.base ?? 'UAH');
@@ -126,12 +145,12 @@ const useAccountingStore = create<AccountingState>((set, get) => ({
         cashFlowForecast: reportsData.cashFlowForecast,
         loading: false,
         initialized: true,
-        error: undefined,
+        error: undefined
       });
     } catch (error) {
       set({
         loading: false,
-        error: error instanceof Error ? error.message : 'Failed to load accounting module',
+        error: error instanceof Error ? error.message : 'Failed to load accounting module'
       });
     }
   },
@@ -145,7 +164,7 @@ const useAccountingStore = create<AccountingState>((set, get) => ({
       reports: reportsData.summaries,
       cashFlow: reportsData.cashFlow,
       forecasts: reportsData.forecasts,
-      cashFlowForecast: reportsData.cashFlowForecast,
+      cashFlowForecast: reportsData.cashFlowForecast
     });
   },
   async addAccount(payload) {
@@ -157,7 +176,7 @@ const useAccountingStore = create<AccountingState>((set, get) => ({
     const transaction = await accountingService.transfer(request);
     const [accounts, transactions] = await Promise.all([
       accountingService.getAccounts(),
-      accountingService.getTransactions(),
+      accountingService.getTransactions()
     ]);
     set({ accounts, transactions });
     return transaction;
@@ -172,7 +191,7 @@ const useAccountingStore = create<AccountingState>((set, get) => ({
     const count = await accountingService.importTransactions(accountId);
     const [transactions, accounts] = await Promise.all([
       accountingService.getTransactions(),
-      accountingService.getAccounts(),
+      accountingService.getAccounts()
     ]);
     set({ transactions, accounts });
     return count;
@@ -184,7 +203,7 @@ const useAccountingStore = create<AccountingState>((set, get) => ({
   async updateBudget(budgetId, changes) {
     const budget = await accountingService.updateBudget(budgetId, changes);
     set({
-      budgets: get().budgets.map((item) => (item.id === budgetId ? budget : item)),
+      budgets: get().budgets.map((item) => (item.id === budgetId ? budget : item))
     });
   },
   async loadReports() {
@@ -194,7 +213,7 @@ const useAccountingStore = create<AccountingState>((set, get) => ({
       reports: reportsData.summaries,
       cashFlow: reportsData.cashFlow,
       forecasts: reportsData.forecasts,
-      cashFlowForecast: reportsData.cashFlowForecast,
+      cashFlowForecast: reportsData.cashFlowForecast
     });
   },
   async loadAuditLog() {
@@ -210,7 +229,7 @@ const useAccountingStore = create<AccountingState>((set, get) => ({
   },
   async searchTransactions() {
     return accountingService.searchTransactions(get().filters);
-  },
+  }
 }));
 
 export const useAccounting = () => {

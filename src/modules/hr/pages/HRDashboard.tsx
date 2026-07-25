@@ -11,7 +11,7 @@ const tabs = [
   { id: 'trainings', label: 'Trainings' },
   { id: 'attendance', label: 'Time Tracking' },
   { id: 'performance', label: 'Performance' },
-  { id: 'lifecycle', label: 'On/Offboarding' },
+  { id: 'lifecycle', label: 'On/Offboarding' }
 ] as const;
 
 type TabId = (typeof tabs)[number]['id'];
@@ -25,7 +25,8 @@ export const HRDashboard = () => {
         <CardHeader className="space-y-2">
           <CardTitle className="text-2xl font-semibold text-slate-100">HR Module</CardTitle>
           <p className="text-sm text-slate-300">
-            Unified personnel management hub: profiles, trainings, time tracking, KPIs, and employee lifecycle.
+            Unified personnel management hub: profiles, trainings, time tracking, KPIs, and employee
+            lifecycle.
           </p>
         </CardHeader>
         <CardContent>

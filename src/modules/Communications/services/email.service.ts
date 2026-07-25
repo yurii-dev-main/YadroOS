@@ -6,14 +6,14 @@ import {
   EmailSearchParams,
   EmailTag,
   EmailTemplate,
-  TemplateCategory,
+  TemplateCategory
 } from '../types/communication.types';
 import { filterEmails } from '../utils/email.utils';
 
 const sampleTags: EmailTag[] = [
   { id: 'vip', label: 'VIP', color: 'bg-red-500' },
   { id: 'finance', label: 'Finance', color: 'bg-emerald-500' },
-  { id: 'support', label: 'Support', color: 'bg-blue-500' },
+  { id: 'support', label: 'Support', color: 'bg-blue-500' }
 ];
 
 const sampleClients: ClientSummary[] = [
@@ -23,7 +23,7 @@ const sampleClients: ClientSummary[] = [
     company: 'TechVision',
     email: 'maria.koval@techvision.ua',
     avatar: 'https://i.pravatar.cc/64?img=1',
-    lastInteraction: '2024-02-05T08:40:00Z',
+    lastInteraction: '2024-02-05T08:40:00Z'
   },
   {
     id: 'client-2',
@@ -31,8 +31,8 @@ const sampleClients: ClientSummary[] = [
     company: 'GreenSoft',
     email: 'oleh@greensoft.io',
     avatar: 'https://i.pravatar.cc/64?img=22',
-    lastInteraction: '2024-02-05T06:12:00Z',
-  },
+    lastInteraction: '2024-02-05T06:12:00Z'
+  }
 ];
 
 const sampleEmails: EmailMessage[] = [
@@ -40,8 +40,7 @@ const sampleEmails: EmailMessage[] = [
     id: 'email-1',
     subject: 'Meeting confirmation',
     preview: 'Hello! I confirm the meeting for tomorrow...',
-    body:
-      'Hello! I confirm the meeting for tomorrow at 14:00. Please send me a short agenda.',
+    body: 'Hello! I confirm the meeting for tomorrow at 14:00. Please send me a short agenda.',
     from: 'maria.koval@techvision.ua',
     to: ['sales@yadroos.io'],
     date: '2024-02-05T07:32:00Z',
@@ -49,21 +48,20 @@ const sampleEmails: EmailMessage[] = [
     unread: true,
     starred: true,
     tags: [sampleTags[0]],
-    relatedClientId: 'client-1',
+    relatedClientId: 'client-1'
   },
   {
     id: 'email-2',
     subject: 'Commercial proposal request',
     preview: 'Hello, interested in CRM integration...',
-    body:
-      'Hello, I am interested in CRM integration and communication automation. Can we discuss the details? Looking forward to your reply.',
+    body: 'Hello, I am interested in CRM integration and communication automation. Can we discuss the details? Looking forward to your reply.',
     from: 'oleh@greensoft.io',
     to: ['sales@yadroos.io'],
     date: '2024-02-04T16:12:00Z',
     folder: 'inbox',
     unread: false,
     tags: [sampleTags[1]],
-    relatedClientId: 'client-2',
+    relatedClientId: 'client-2'
   },
   {
     id: 'email-3',
@@ -80,16 +78,16 @@ const sampleEmails: EmailMessage[] = [
         id: 'attach-1',
         name: 'weekly-report.pdf',
         size: 1024 * 400,
-        type: 'application/pdf',
-      },
-    ],
-  },
+        type: 'application/pdf'
+      }
+    ]
+  }
 ];
 
 const templateCategories: TemplateCategory[] = [
   { id: 'welcome', name: 'Welcome', description: 'Emails for initial contact' },
   { id: 'follow-up', name: 'Follow-up', description: 'Reminders and follow-up' },
-  { id: 'proposal', name: 'Proposal', description: 'Commercial proposals' },
+  { id: 'proposal', name: 'Proposal', description: 'Commercial proposals' }
 ];
 
 const emailTemplates: EmailTemplate[] = [
@@ -98,19 +96,17 @@ const emailTemplates: EmailTemplate[] = [
     name: 'Welcome client',
     categoryId: 'welcome',
     subject: 'Welcome, {{client_name}}!',
-    body:
-      '<p>Welcome, {{client_name}}!</p><p>We are glad to see you among our clients. A manager will contact you shortly.</p>',
-    variables: ['client_name'],
+    body: '<p>Welcome, {{client_name}}!</p><p>We are glad to see you among our clients. A manager will contact you shortly.</p>',
+    variables: ['client_name']
   },
   {
     id: 'tmpl-2',
     name: 'Follow-up after demo',
     categoryId: 'follow-up',
     subject: 'How were your impressions of the demo, {{client_name}}?',
-    body:
-      '<p>Hello, {{client_name}}!</p><p>Thank you for your time on the demo. Do you have any questions regarding integration?</p>',
-    variables: ['client_name'],
-  },
+    body: '<p>Hello, {{client_name}}!</p><p>Thank you for your time on the demo. Do you have any questions regarding integration?</p>',
+    variables: ['client_name']
+  }
 ];
 
 export const emailService = {
@@ -137,7 +133,7 @@ export const emailService = {
       bcc: draft.bcc,
       date: new Date().toISOString(),
       folder: 'sent',
-      unread: false,
+      unread: false
     };
     sampleEmails.unshift(newEmail);
     return newEmail;
@@ -177,7 +173,7 @@ export const emailService = {
     const newClient: ClientSummary = {
       id: uuid(),
       name: email.from.split('@')[0],
-      email: email.from,
+      email: email.from
     };
     sampleClients.push(newClient);
     email.relatedClientId = newClient.id;
@@ -202,5 +198,5 @@ export const emailService = {
   async fetchTemplates() {
     await new Promise((resolve) => setTimeout(resolve, 160));
     return emailTemplates;
-  },
+  }
 };

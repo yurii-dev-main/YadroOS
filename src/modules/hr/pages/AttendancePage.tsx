@@ -6,7 +6,8 @@ import { AttendanceDashboard } from '../components/AttendanceDashboard';
 
 export const AttendancePage = () => {
   const employees = useMemo(() => hrService.getEmployees(), []);
-  const { records, summaries, leaveRequests, leaveBalances, averageAttendance, totalLateArrivals } = useAttendance();
+  const { records, summaries, leaveRequests, leaveBalances, averageAttendance, totalLateArrivals } =
+    useAttendance();
 
   return (
     <div className="space-y-6">
@@ -15,7 +16,8 @@ export const AttendancePage = () => {
           <CardTitle className="text-lg text-slate-100">Time Tracking</CardTitle>
         </CardHeader>
         <CardContent className="text-sm text-slate-300">
-          Track check-ins, schedules, vacations, and sick leave. Report on attendance and monitor overtime.
+          Track check-ins, schedules, vacations, and sick leave. Report on attendance and monitor
+          overtime.
         </CardContent>
       </Card>
 

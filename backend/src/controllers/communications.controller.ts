@@ -35,9 +35,27 @@ type TelegramStatus = {
 };
 
 const teamMembers: ChatParticipant[] = [
-  { id: 'u-1', name: 'Anna Levchenko', avatar: 'https://i.pravatar.cc/64?img=15', role: 'Support', online: true },
-  { id: 'u-2', name: 'Serhii Polishchuk', avatar: 'https://i.pravatar.cc/64?img=18', role: 'Sales', online: true },
-  { id: 'u-3', name: 'Iryna Petrenko', avatar: 'https://i.pravatar.cc/64?img=25', role: 'Marketing', online: false }
+  {
+    id: 'u-1',
+    name: 'Anna Levchenko',
+    avatar: 'https://i.pravatar.cc/64?img=15',
+    role: 'Support',
+    online: true
+  },
+  {
+    id: 'u-2',
+    name: 'Serhii Polishchuk',
+    avatar: 'https://i.pravatar.cc/64?img=18',
+    role: 'Sales',
+    online: true
+  },
+  {
+    id: 'u-3',
+    name: 'Iryna Petrenko',
+    avatar: 'https://i.pravatar.cc/64?img=25',
+    role: 'Marketing',
+    online: false
+  }
 ];
 
 const chatThreads: ChatThread[] = [
@@ -128,7 +146,9 @@ const updateThreadWithMessage = (message: ChatMessage) => {
 export const listThreads = (_req: Request, res: Response) => {
   chatThreads.forEach((thread) => {
     if (!thread.lastMessage) {
-      const lastMessage = [...chatMessages].reverse().find((message) => message.chatId === thread.id);
+      const lastMessage = [...chatMessages]
+        .reverse()
+        .find((message) => message.chatId === thread.id);
       if (lastMessage) {
         thread.lastMessage = lastMessage;
       }
@@ -221,7 +241,10 @@ export const handleTelegramWebhook = (req: Request, res: Response) => {
   const from = message.from ?? {};
   const author: ChatParticipant = {
     id: `telegram-${from.id ?? randomUUID()}`,
-    name: [from.first_name, from.last_name].filter(Boolean).join(' ') || from.username || 'Telegram User'
+    name:
+      [from.first_name, from.last_name].filter(Boolean).join(' ') ||
+      from.username ||
+      'Telegram User'
   };
   const content = message.text ?? '[unsupported message]';
 

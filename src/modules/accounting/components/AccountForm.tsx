@@ -5,7 +5,11 @@ import { Label } from '../../../components/ui/label';
 import { Account, AccountType, CurrencyCode } from '../types/accounting.types';
 
 interface AccountFormProps {
-  onSubmit: (payload: Omit<Account, 'id' | 'isActive' | 'syncedAt' | 'reconciliationStatus'> & { balance?: number }) => Promise<void> | void;
+  onSubmit: (
+    payload: Omit<Account, 'id' | 'isActive' | 'syncedAt' | 'reconciliationStatus'> & {
+      balance?: number;
+    }
+  ) => Promise<void> | void;
 }
 
 type FormValues = {
@@ -24,8 +28,8 @@ export const AccountForm = ({ onSubmit }: AccountFormProps) => {
     defaultValues: {
       type: 'bank',
       currency: 'UAH',
-      balance: 0,
-    },
+      balance: 0
+    }
   });
 
   const submit = async (values: FormValues) => {
@@ -69,7 +73,12 @@ export const AccountForm = ({ onSubmit }: AccountFormProps) => {
       </div>
       <div className="grid gap-2">
         <Label htmlFor="balance">Initial Balance</Label>
-        <Input id="balance" type="number" step="0.01" {...register('balance', { valueAsNumber: true })} />
+        <Input
+          id="balance"
+          type="number"
+          step="0.01"
+          {...register('balance', { valueAsNumber: true })}
+        />
       </div>
       <div className="grid gap-2">
         <Label htmlFor="bankName">Bank</Label>
@@ -87,7 +96,9 @@ export const AccountForm = ({ onSubmit }: AccountFormProps) => {
         <Label htmlFor="color">Color</Label>
         <Input id="color" type="color" {...register('color')} />
       </div>
-      <Button type="submit" variant="secondary" className="mt-2">Add Account</Button>
+      <Button type="submit" variant="secondary" className="mt-2">
+        Add Account
+      </Button>
     </form>
   );
 };

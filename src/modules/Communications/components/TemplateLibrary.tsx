@@ -34,7 +34,9 @@ export const TemplateLibrary = () => {
             <button
               key={category.id}
               className={`rounded-full px-3 py-1 ${
-                activeCategory === category.id ? 'bg-emerald-500/30 text-emerald-200' : 'bg-slate-800/60 text-slate-300'
+                activeCategory === category.id
+                  ? 'bg-emerald-500/30 text-emerald-200'
+                  : 'bg-slate-800/60 text-slate-300'
               }`}
               onClick={() => setActiveCategory(category.id)}
             >
@@ -48,13 +50,18 @@ export const TemplateLibrary = () => {
       </header>
       <div className="grid gap-4 p-4 md:grid-cols-2">
         {filteredTemplates.map((template) => (
-          <article key={template.id} className="rounded border border-slate-800 bg-slate-900/80 p-3 text-sm text-slate-200">
+          <article
+            key={template.id}
+            className="rounded border border-slate-800 bg-slate-900/80 p-3 text-sm text-slate-200"
+          >
             <h4 className="text-base font-semibold text-emerald-200">{template.name}</h4>
             <p className="mt-1 text-xs text-slate-400">Subject: {template.subject}</p>
             <div className="mt-2 rounded border border-slate-800 bg-slate-950/50 p-2 text-xs text-slate-300">
               <div dangerouslySetInnerHTML={{ __html: template.body }} />
             </div>
-            <div className="mt-2 text-xs text-slate-500">Variables: {template.variables.join(', ') || 'None'}</div>
+            <div className="mt-2 text-xs text-slate-500">
+              Variables: {template.variables.join(', ') || 'None'}
+            </div>
           </article>
         ))}
         {!filteredTemplates.length && (
@@ -65,10 +72,17 @@ export const TemplateLibrary = () => {
         <h4 className="text-sm font-semibold text-slate-200">Auto-responders</h4>
         <div className="mt-2 grid gap-3 md:grid-cols-3">
           {autoResponders.map((responder) => (
-            <article key={responder.id} className="rounded border border-slate-800 bg-slate-900/80 p-3 text-xs text-slate-200">
+            <article
+              key={responder.id}
+              className="rounded border border-slate-800 bg-slate-900/80 p-3 text-xs text-slate-200"
+            >
               <div className="flex items-center justify-between">
-                <span className="uppercase tracking-wide text-slate-400">{responder.type.replace('_', ' ')}</span>
-                <span className={`text-[10px] ${responder.active ? 'text-emerald-300' : 'text-slate-500'}`}>
+                <span className="uppercase tracking-wide text-slate-400">
+                  {responder.type.replace('_', ' ')}
+                </span>
+                <span
+                  className={`text-[10px] ${responder.active ? 'text-emerald-300' : 'text-slate-500'}`}
+                >
                   {responder.active ? 'Active' : 'Disabled'}
                 </span>
               </div>

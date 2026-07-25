@@ -11,7 +11,7 @@ import {
   Cell,
   Legend,
   BarChart,
-  Bar,
+  Bar
 } from 'recharts';
 
 const colors = ['#6366f1', '#22c55e', '#f97316', '#a855f7', '#14b8a6', '#f43f5e'];
@@ -46,7 +46,12 @@ interface ReportsDashboardProps {
   forecast: ForecastPoint[];
 }
 
-export const ReportsDashboard = ({ trend, categories, cashFlow, forecast }: ReportsDashboardProps) => (
+export const ReportsDashboard = ({
+  trend,
+  categories,
+  cashFlow,
+  forecast
+}: ReportsDashboardProps) => (
   <div className="grid gap-6 xl:grid-cols-2">
     <div className="rounded-lg border border-slate-800 bg-slate-900/60 p-4">
       <h4 className="text-sm font-semibold text-slate-100">Income and Expense Trends</h4>
@@ -59,7 +64,13 @@ export const ReportsDashboard = ({ trend, categories, cashFlow, forecast }: Repo
             <Tooltip contentStyle={{ backgroundColor: '#0f172a', borderColor: '#1e293b' }} />
             <Legend />
             <Line type="monotone" dataKey="income" stroke="#22c55e" strokeWidth={2} name="Income" />
-            <Line type="monotone" dataKey="expense" stroke="#f97316" strokeWidth={2} name="Expenses" />
+            <Line
+              type="monotone"
+              dataKey="expense"
+              stroke="#f97316"
+              strokeWidth={2}
+              name="Expenses"
+            />
           </LineChart>
         </ResponsiveContainer>
       </div>
@@ -106,8 +117,20 @@ export const ReportsDashboard = ({ trend, categories, cashFlow, forecast }: Repo
             <YAxis stroke="#64748b" />
             <Tooltip contentStyle={{ backgroundColor: '#0f172a', borderColor: '#1e293b' }} />
             <Legend />
-            <Line type="monotone" dataKey="expectedIncome" stroke="#38bdf8" strokeWidth={2} name="Expected Income" />
-            <Line type="monotone" dataKey="expectedExpense" stroke="#f97316" strokeWidth={2} name="Expected Expenses" />
+            <Line
+              type="monotone"
+              dataKey="expectedIncome"
+              stroke="#38bdf8"
+              strokeWidth={2}
+              name="Expected Income"
+            />
+            <Line
+              type="monotone"
+              dataKey="expectedExpense"
+              stroke="#f97316"
+              strokeWidth={2}
+              name="Expected Expenses"
+            />
           </LineChart>
         </ResponsiveContainer>
       </div>

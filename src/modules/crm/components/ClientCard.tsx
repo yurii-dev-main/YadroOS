@@ -14,10 +14,14 @@ export const ClientCard = ({ client, onOpen }: ClientCardProps) => (
   >
     <div className="flex items-center justify-between">
       <div>
-        <h3 className="text-lg font-semibold text-slate-100 group-hover:text-white">{client.name}</h3>
+        <h3 className="text-lg font-semibold text-slate-100 group-hover:text-white">
+          {client.name}
+        </h3>
         <p className="text-sm text-slate-400">{client.company}</p>
       </div>
-      <span className={`rounded-full px-3 py-1 text-xs font-semibold ${statusBadgeStyles[client.status]}`}>
+      <span
+        className={`rounded-full px-3 py-1 text-xs font-semibold ${statusBadgeStyles[client.status]}`}
+      >
         {statusLabels[client.status]}
       </span>
     </div>

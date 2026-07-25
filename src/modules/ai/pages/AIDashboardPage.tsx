@@ -1,12 +1,5 @@
 import { TrendingDown, TrendingUp } from 'lucide-react';
-import {
-  Line,
-  LineChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis
-} from 'recharts';
+import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 import { Card, CardContent, CardHeader, CardTitle } from '../../../components/ui/card';
 import { ScoreGauge } from '../components/ScoreGauge';
@@ -61,7 +54,13 @@ export const AIDashboardPage = () => {
             <div className="h-48 w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={data.crm.sentimentTrend}>
-                  <XAxis dataKey="date" stroke="#94a3b8" fontSize={12} tickLine={false} axisLine={false} />
+                  <XAxis
+                    dataKey="date"
+                    stroke="#94a3b8"
+                    fontSize={12}
+                    tickLine={false}
+                    axisLine={false}
+                  />
                   <YAxis
                     stroke="#94a3b8"
                     domain={[0, 1]}
@@ -72,20 +71,35 @@ export const AIDashboardPage = () => {
                   />
                   <Tooltip
                     cursor={{ stroke: '#1d4ed8', strokeWidth: 1 }}
-                    contentStyle={{ background: '#0f172a', borderRadius: '0.75rem', border: '1px solid #1e293b' }}
+                    contentStyle={{
+                      background: '#0f172a',
+                      borderRadius: '0.75rem',
+                      border: '1px solid #1e293b'
+                    }}
                     labelStyle={{ color: '#cbd5f5' }}
                     formatter={(value: number) => `${Math.round(value * 100)}%`}
                   />
-                  <Line type="monotone" dataKey="score" stroke="#38bdf8" strokeWidth={3} dot={false} />
+                  <Line
+                    type="monotone"
+                    dataKey="score"
+                    stroke="#38bdf8"
+                    strokeWidth={3}
+                    dot={false}
+                  />
                 </LineChart>
               </ResponsiveContainer>
             </div>
             <div className="space-y-3 text-sm text-slate-300">
               {data.crm.sentimentSamples.map((sample) => (
-                <div key={sample.id} className="rounded-lg border border-slate-800/60 bg-slate-900/40 p-3">
+                <div
+                  key={sample.id}
+                  className="rounded-lg border border-slate-800/60 bg-slate-900/40 p-3"
+                >
                   <p className="font-medium text-slate-100">
                     {sample.customer}
-                    <span className="ml-2 text-xs uppercase text-slate-500">{sample.sentiment}</span>
+                    <span className="ml-2 text-xs uppercase text-slate-500">
+                      {sample.sentiment}
+                    </span>
                   </p>
                   <p>{sample.text}</p>
                 </div>
@@ -102,7 +116,10 @@ export const AIDashboardPage = () => {
             <ScoreGauge value={data.executive.healthScore} label="Company Health" suffix="" />
             <div className="mt-4 grid w-full gap-3">
               {data.executive.metrics.map((metric) => (
-                <div key={metric.id} className="flex items-center justify-between rounded-lg bg-slate-900/40 p-3 text-sm">
+                <div
+                  key={metric.id}
+                  className="flex items-center justify-between rounded-lg bg-slate-900/40 p-3 text-sm"
+                >
                   <div>
                     <p className="font-medium text-slate-100">{metric.label}</p>
                     <p className="text-slate-400">{metric.value}</p>
@@ -143,10 +160,16 @@ export const AIDashboardPage = () => {
               <div className="space-y-3">
                 <div className="flex items-baseline justify-between">
                   <div>
-                    <h3 className="text-lg font-semibold text-slate-100">{topPerformance.employeeName}</h3>
-                    <p className="text-xs uppercase tracking-wide text-slate-500">Trend: {topPerformance.trend}</p>
+                    <h3 className="text-lg font-semibold text-slate-100">
+                      {topPerformance.employeeName}
+                    </h3>
+                    <p className="text-xs uppercase tracking-wide text-slate-500">
+                      Trend: {topPerformance.trend}
+                    </p>
                   </div>
-                  <span className="text-3xl font-semibold text-emerald-400">{topPerformance.normalizedScore}</span>
+                  <span className="text-3xl font-semibold text-emerald-400">
+                    {topPerformance.normalizedScore}
+                  </span>
                 </div>
                 <ul className="list-disc space-y-2 pl-5 text-sm text-slate-300">
                   {topPerformance.highlights.map((highlight) => (
@@ -158,12 +181,17 @@ export const AIDashboardPage = () => {
               <p className="text-sm text-slate-400">No employee data available.</p>
             )}
             <div className="rounded-lg border border-slate-800/60 bg-slate-900/40 p-4">
-              <p className="text-xs uppercase tracking-widest text-slate-500">Succession Planning</p>
+              <p className="text-xs uppercase tracking-widest text-slate-500">
+                Succession Planning
+              </p>
               <ul className="mt-3 space-y-2 text-sm text-slate-300">
                 {data.hr.talentMatches.map((match) => (
                   <li key={match.employeeId}>
-                    <span className="font-medium text-slate-100">{match.employeeName}</span> → {match.recommendedRole}
-                    <span className="ml-2 text-xs text-slate-500">Match {(match.matchScore * 100).toFixed(0)}%</span>
+                    <span className="font-medium text-slate-100">{match.employeeName}</span> →{' '}
+                    {match.recommendedRole}
+                    <span className="ml-2 text-xs text-slate-500">
+                      Match {(match.matchScore * 100).toFixed(0)}%
+                    </span>
                   </li>
                 ))}
               </ul>
@@ -180,7 +208,10 @@ export const AIDashboardPage = () => {
           <CardContent>
             <div className="grid gap-4 md:grid-cols-2">
               {data.accounting.expenses.map((expense) => (
-                <div key={expense.id} className="rounded-lg border border-slate-800/60 bg-slate-900/40 p-4">
+                <div
+                  key={expense.id}
+                  className="rounded-lg border border-slate-800/60 bg-slate-900/40 p-4"
+                >
                   <p className="text-sm text-slate-300">{expense.statement}</p>
                   {expense.delta !== undefined && (
                     <p className="text-xs text-slate-500">
@@ -193,16 +224,47 @@ export const AIDashboardPage = () => {
             <div className="mt-6 h-56 w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={data.accounting.forecast.baseline}>
-                  <XAxis dataKey="period" stroke="#94a3b8" fontSize={12} tickLine={false} axisLine={false} />
+                  <XAxis
+                    dataKey="period"
+                    stroke="#94a3b8"
+                    fontSize={12}
+                    tickLine={false}
+                    axisLine={false}
+                  />
                   <YAxis stroke="#94a3b8" fontSize={12} tickLine={false} axisLine={false} />
                   <Tooltip
                     cursor={{ stroke: '#f472b6', strokeWidth: 1 }}
-                    contentStyle={{ background: '#0f172a', borderRadius: '0.75rem', border: '1px solid #1e293b' }}
+                    contentStyle={{
+                      background: '#0f172a',
+                      borderRadius: '0.75rem',
+                      border: '1px solid #1e293b'
+                    }}
                     labelStyle={{ color: '#cbd5f5' }}
                   />
-                  <Line type="monotone" dataKey="value" stroke="#f472b6" strokeWidth={3} dot={false} name="Baseline" />
-                  <Line type="monotone" dataKey="upperBound" stroke="#22d3ee" strokeDasharray="4 4" dot={false} name="Best" />
-                  <Line type="monotone" dataKey="lowerBound" stroke="#facc15" strokeDasharray="4 4" dot={false} name="Worst" />
+                  <Line
+                    type="monotone"
+                    dataKey="value"
+                    stroke="#f472b6"
+                    strokeWidth={3}
+                    dot={false}
+                    name="Baseline"
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="upperBound"
+                    stroke="#22d3ee"
+                    strokeDasharray="4 4"
+                    dot={false}
+                    name="Best"
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="lowerBound"
+                    stroke="#facc15"
+                    strokeDasharray="4 4"
+                    dot={false}
+                    name="Worst"
+                  />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -215,10 +277,15 @@ export const AIDashboardPage = () => {
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <h4 className="text-sm font-semibold uppercase tracking-widest text-slate-400">Priority Emails</h4>
+              <h4 className="text-sm font-semibold uppercase tracking-widest text-slate-400">
+                Priority Emails
+              </h4>
               <ul className="mt-2 space-y-3 text-sm text-slate-300">
                 {data.communications.inbox.map((item) => (
-                  <li key={item.id} className="rounded-lg border border-slate-800/60 bg-slate-900/40 p-3">
+                  <li
+                    key={item.id}
+                    className="rounded-lg border border-slate-800/60 bg-slate-900/40 p-3"
+                  >
                     <p className="font-medium text-slate-100">{item.category}</p>
                     <p className="text-xs text-slate-500">Priority: {item.priority}</p>
                     <p>{item.summary}</p>
@@ -226,7 +293,10 @@ export const AIDashboardPage = () => {
                 ))}
               </ul>
             </div>
-            <RecommendationList recommendations={data.communications.autoReplies} title="Quick Replies" />
+            <RecommendationList
+              recommendations={data.communications.autoReplies}
+              title="Quick Replies"
+            />
           </CardContent>
         </Card>
       </section>

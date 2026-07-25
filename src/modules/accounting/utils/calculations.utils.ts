@@ -12,14 +12,14 @@ import {
   PayrollRecord,
   ReportSummary,
   Transaction,
-  TransactionType,
+  TransactionType
 } from '../types/accounting.types';
 
 export const convertCurrency = (
   amount: number,
   from: CurrencyCode,
   to: CurrencyCode,
-  exchangeRate?: ExchangeRate | null,
+  exchangeRate?: ExchangeRate | null
 ): number => {
   if (!exchangeRate || from === to) {
     return Number(new Decimal(amount).toFixed(2));
@@ -41,32 +41,42 @@ export const convertCurrency = (
 export const calculateTotalBalance = (
   accounts: Account[],
   baseCurrency: CurrencyCode,
-  exchangeRate?: ExchangeRate | null,
+  exchangeRate?: ExchangeRate | null
 ): number =>
   accounts.reduce((acc, account) => {
-    const converted = convertCurrency(account.balance, account.currency, baseCurrency, exchangeRate);
+    const converted = convertCurrency(
+      account.balance,
+      account.currency,
+      baseCurrency,
+      exchangeRate
+    );
     return acc + converted;
   }, 0);
 
 export const aggregateTransactions = (
   transactions: Transaction[],
   baseCurrency: CurrencyCode,
-  exchangeRate?: ExchangeRate | null,
+  exchangeRate?: ExchangeRate | null
 ): Record<TransactionType, number> => {
   return transactions.reduce(
     (acc, transaction) => {
-      const amount = convertCurrency(transaction.amount, transaction.currency, baseCurrency, exchangeRate);
+      const amount = convertCurrency(
+        transaction.amount,
+        transaction.currency,
+        baseCurrency,
+        exchangeRate
+      );
       acc[transaction.type] += amount;
       return acc;
     },
-    { income: 0, expense: 0, transfer: 0 },
+    { income: 0, expense: 0, transfer: 0 }
   );
 };
 
 export const buildProfitAndLossReport = (
   transactions: Transaction[],
   baseCurrency: CurrencyCode,
-  exchangeRate?: ExchangeRate | null,
+  exchangeRate?: ExchangeRate | null
 ): ReportSummary => {
   const aggregated = aggregateTransactions(transactions, baseCurrency, exchangeRate);
   const grossProfit = aggregated.income - aggregated.expense;
@@ -79,20 +89,25 @@ export const buildProfitAndLossReport = (
     figures: {
       income: Number(grossProfit + aggregated.expense),
       expenses: Number(aggregated.expense),
-      grossProfit: Number(grossProfit),
-    },
+      grossProfit: Number(grossProfit)
+    }
   };
 };
 
 export const buildCashFlowStatement = (
   transactions: Transaction[],
   baseCurrency: CurrencyCode,
-  exchangeRate?: ExchangeRate | null,
+  exchangeRate?: ExchangeRate | null
 ): { report: ReportSummary; segments: CashFlowSegment[] } => {
   const grouped: Record<string, CashFlowSegment> = {};
 
   transactions.forEach((transaction) => {
-    const amount = convertCurrency(transaction.amount, transaction.currency, baseCurrency, exchangeRate);
+    const amount = convertCurrency(
+      transaction.amount,
+      transaction.currency,
+      baseCurrency,
+      exchangeRate
+    );
     const category = transaction.type === 'income' ? 'Operating Activities' : 'Operating Expenses';
     const key = transaction.categoryId ?? category;
 
@@ -100,7 +115,7 @@ export const buildCashFlowStatement = (
       grouped[key] = {
         name: key,
         inflow: 0,
-        outflow: 0,
+        outflow: 0
       };
     }
 
@@ -123,17 +138,17 @@ export const buildCashFlowStatement = (
       figures: {
         totalInflow,
         totalOutflow,
-        netCashFlow: totalInflow - totalOutflow,
-      },
+        netCashFlow: totalInflow - totalOutflow
+      }
     },
-    segments: Object.values(grouped),
+    segments: Object.values(grouped)
   };
 };
 
 export const buildBalanceSheet = (
   accounts: Account[],
   baseCurrency: CurrencyCode,
-  exchangeRate?: ExchangeRate | null,
+  exchangeRate?: ExchangeRate | null
 ): ReportSummary => {
   const totalAssets = calculateTotalBalance(accounts, baseCurrency, exchangeRate);
 
@@ -145,15 +160,15 @@ export const buildBalanceSheet = (
     figures: {
       assets: totalAssets,
       liabilities: totalAssets * 0.35,
-      equity: totalAssets * 0.65,
-    },
+      equity: totalAssets * 0.65
+    }
   };
 };
 
 export const calculateBudgetForecast = (
   budgets: Budget[],
   baseCurrency: CurrencyCode,
-  exchangeRate?: ExchangeRate | null,
+  exchangeRate?: ExchangeRate | null
 ): ForecastPoint[] => {
   const points: ForecastPoint[] = [];
   const now = new Date();
@@ -185,17 +200,32 @@ export const calculateBudgetForecast = (
 export const summarisePayroll = (
   records: PayrollRecord[],
   baseCurrency: CurrencyCode,
-  exchangeRate?: ExchangeRate | null,
+  exchangeRate?: ExchangeRate | null
 ): ReportSummary => {
   const figures = records.reduce(
     (acc, record) => {
-      acc.totalGross += convertCurrency(record.grossSalary, record.currency, baseCurrency, exchangeRate);
-      acc.totalNet += convertCurrency(record.netSalary, record.currency, baseCurrency, exchangeRate);
+      acc.totalGross += convertCurrency(
+        record.grossSalary,
+        record.currency,
+        baseCurrency,
+        exchangeRate
+      );
+      acc.totalNet += convertCurrency(
+        record.netSalary,
+        record.currency,
+        baseCurrency,
+        exchangeRate
+      );
       const deductions = record.deductions.reduce((sum, deduction) => sum + deduction.amount, 0);
-      acc.totalDeductions += convertCurrency(deductions, record.currency, baseCurrency, exchangeRate);
+      acc.totalDeductions += convertCurrency(
+        deductions,
+        record.currency,
+        baseCurrency,
+        exchangeRate
+      );
       return acc;
     },
-    { totalGross: 0, totalNet: 0, totalDeductions: 0 },
+    { totalGross: 0, totalNet: 0, totalDeductions: 0 }
   );
 
   return {
@@ -203,7 +233,7 @@ export const summarisePayroll = (
     title: 'Payroll and Tax Report',
     generatedAt: new Date().toISOString(),
     currency: baseCurrency,
-    figures,
+    figures
   };
 };
 
@@ -211,7 +241,7 @@ export const computeCashFlowForecast = (
   accounts: Account[],
   transactions: Transaction[],
   baseCurrency: CurrencyCode,
-  exchangeRate?: ExchangeRate | null,
+  exchangeRate?: ExchangeRate | null
 ): CashFlowForecast[] => {
   const monthlyTotals: Record<string, { inflow: number; outflow: number }> = {};
   transactions.forEach((transaction) => {
@@ -220,7 +250,12 @@ export const computeCashFlowForecast = (
       monthlyTotals[month] = { inflow: 0, outflow: 0 };
     }
 
-    const amount = convertCurrency(transaction.amount, transaction.currency, baseCurrency, exchangeRate);
+    const amount = convertCurrency(
+      transaction.amount,
+      transaction.currency,
+      baseCurrency,
+      exchangeRate
+    );
     if (transaction.type === 'income') {
       monthlyTotals[month].inflow += amount;
     }
@@ -238,11 +273,13 @@ export const computeCashFlowForecast = (
       runningBalance += totals.inflow - totals.outflow;
       return {
         month,
-        openingBalance: Number(new Decimal(runningBalance).minus(totals.inflow - totals.outflow).toFixed(2)),
+        openingBalance: Number(
+          new Decimal(runningBalance).minus(totals.inflow - totals.outflow).toFixed(2)
+        ),
         closingBalance: Number(new Decimal(runningBalance).toFixed(2)),
         inflow: Number(new Decimal(totals.inflow).toFixed(2)),
         outflow: Number(new Decimal(totals.outflow).toFixed(2)),
-        currency: baseCurrency,
+        currency: baseCurrency
       };
     });
 };
@@ -250,11 +287,18 @@ export const computeCashFlowForecast = (
 export const calculateBudgetUsage = (
   budget: Budget,
   transactions: Transaction[],
-  exchangeRate?: ExchangeRate | null,
+  exchangeRate?: ExchangeRate | null
 ): number => {
-  const relatedTransactions = transactions.filter((transaction) => transaction.categoryId === budget.categoryId);
+  const relatedTransactions = transactions.filter(
+    (transaction) => transaction.categoryId === budget.categoryId
+  );
   const spent = relatedTransactions.reduce((acc, transaction) => {
-    const amount = convertCurrency(transaction.amount, transaction.currency, budget.currency, exchangeRate);
+    const amount = convertCurrency(
+      transaction.amount,
+      transaction.currency,
+      budget.currency,
+      exchangeRate
+    );
     return acc + amount;
   }, 0);
 
@@ -265,12 +309,12 @@ export const calculateBudgetUsage = (
 export const projectFinancialForecast = (
   forecast: ForecastPoint[],
   exchangeRate?: ExchangeRate | null,
-  _currency: CurrencyCode = 'UAH',
+  _currency: CurrencyCode = 'UAH'
 ): FinancialForecast => ({
   timeHorizon: '6m',
   points: forecast,
   assumptions: [
     'Stable expenses at the level of the previous six months',
-    exchangeRate ? `Base currency rate: ${exchangeRate.base}` : 'Company base currency used',
-  ],
+    exchangeRate ? `Base currency rate: ${exchangeRate.base}` : 'Company base currency used'
+  ]
 });

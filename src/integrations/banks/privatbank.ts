@@ -27,9 +27,12 @@ export class PrivatBankIntegration extends AbstractBankIntegration {
     params?: CursorPaginationParams & { from?: string; to?: string }
   ) {
     return apiClient
-      .get(`${this.context.basePath}/connections/${connectionId}/accounts/${accountId}/statements`, {
-        params
-      })
+      .get(
+        `${this.context.basePath}/connections/${connectionId}/accounts/${accountId}/statements`,
+        {
+          params
+        }
+      )
       .then((response) => response.data);
   }
 

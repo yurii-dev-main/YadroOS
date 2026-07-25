@@ -25,7 +25,13 @@ const defaultValues: ActivityFormValues = {
   notes: ''
 };
 
-export const ActivityModal = ({ open, onClose, onSubmit, clientId, creator }: ActivityModalProps) => {
+export const ActivityModal = ({
+  open,
+  onClose,
+  onSubmit,
+  clientId,
+  creator
+}: ActivityModalProps) => {
   const {
     register,
     handleSubmit,

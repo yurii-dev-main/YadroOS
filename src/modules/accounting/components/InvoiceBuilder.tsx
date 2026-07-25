@@ -7,7 +7,9 @@ import { Invoice, InvoiceLineItem, CurrencyCode } from '../types/accounting.type
 
 interface InvoiceBuilderProps {
   defaultCurrency?: CurrencyCode;
-  onCreate: (invoice: Omit<Invoice, 'id' | 'number' | 'status' | 'createdAt' | 'updatedAt' | 'taxes'>) => Promise<void> | void;
+  onCreate: (
+    invoice: Omit<Invoice, 'id' | 'number' | 'status' | 'createdAt' | 'updatedAt' | 'taxes'>
+  ) => Promise<void> | void;
 }
 
 const emptyLine = (currency: CurrencyCode): InvoiceLineItem => ({
@@ -16,7 +18,7 @@ const emptyLine = (currency: CurrencyCode): InvoiceLineItem => ({
   quantity: 1,
   unitPrice: 0,
   currency,
-  taxRate: 0.2,
+  taxRate: 0.2
 });
 
 export const InvoiceBuilder = ({ defaultCurrency = 'USD', onCreate }: InvoiceBuilderProps) => {
@@ -31,7 +33,10 @@ export const InvoiceBuilder = ({ defaultCurrency = 'USD', onCreate }: InvoiceBui
   const [notes, setNotes] = useState('');
 
   const subtotal = lineItems.reduce((acc, item) => acc + item.quantity * item.unitPrice, 0);
-  const taxes = lineItems.reduce((acc, item) => acc + item.quantity * item.unitPrice * (item.taxRate ?? 0), 0);
+  const taxes = lineItems.reduce(
+    (acc, item) => acc + item.quantity * item.unitPrice * (item.taxRate ?? 0),
+    0
+  );
   const total = subtotal + taxes - subtotal * discount;
 
   const updateItem = (id: string, patch: Partial<InvoiceLineItem>) => {
@@ -39,7 +44,8 @@ export const InvoiceBuilder = ({ defaultCurrency = 'USD', onCreate }: InvoiceBui
   };
 
   const addItem = () => setLineItems((items) => [...items, emptyLine(currency)]);
-  const removeItem = (id: string) => setLineItems((items) => items.filter((item) => item.id !== id));
+  const removeItem = (id: string) =>
+    setLineItems((items) => items.filter((item) => item.id !== id));
 
   const handleCreate = async () => {
     if (!clientName.trim()) return;
@@ -55,7 +61,7 @@ export const InvoiceBuilder = ({ defaultCurrency = 'USD', onCreate }: InvoiceBui
       notes,
       attachments: [],
       branding: { accentColor: '#6366f1' },
-      payments: [],
+      payments: []
     } as Omit<Invoice, 'id' | 'number' | 'status' | 'createdAt' | 'updatedAt' | 'taxes'>);
 
     setClientName('');
@@ -72,15 +78,29 @@ export const InvoiceBuilder = ({ defaultCurrency = 'USD', onCreate }: InvoiceBui
       <div className="grid gap-3 md:grid-cols-2">
         <div className="grid gap-2">
           <Label htmlFor="clientName">Client</Label>
-          <Input id="clientName" value={clientName} onChange={(event) => setClientName(event.target.value)} />
+          <Input
+            id="clientName"
+            value={clientName}
+            onChange={(event) => setClientName(event.target.value)}
+          />
         </div>
         <div className="grid gap-2">
           <Label htmlFor="clientId">Client ID</Label>
-          <Input id="clientId" value={clientId} onChange={(event) => setClientId(event.target.value)} placeholder="client-001" />
+          <Input
+            id="clientId"
+            value={clientId}
+            onChange={(event) => setClientId(event.target.value)}
+            placeholder="client-001"
+          />
         </div>
         <div className="grid gap-2">
           <Label htmlFor="projectId">Project</Label>
-          <Input id="projectId" value={projectId} onChange={(event) => setProjectId(event.target.value)} placeholder="project-001" />
+          <Input
+            id="projectId"
+            value={projectId}
+            onChange={(event) => setProjectId(event.target.value)}
+            placeholder="project-001"
+          />
         </div>
         <div className="grid gap-2">
           <Label htmlFor="currency">Currency</Label>
@@ -101,19 +121,35 @@ export const InvoiceBuilder = ({ defaultCurrency = 'USD', onCreate }: InvoiceBui
         </div>
         <div className="grid gap-2">
           <Label htmlFor="issueDate">Date</Label>
-          <Input id="issueDate" type="date" value={issueDate} onChange={(event) => setIssueDate(event.target.value)} />
+          <Input
+            id="issueDate"
+            type="date"
+            value={issueDate}
+            onChange={(event) => setIssueDate(event.target.value)}
+          />
         </div>
         <div className="grid gap-2">
           <Label htmlFor="dueDate">Due Date</Label>
-          <Input id="dueDate" type="date" value={dueDate} onChange={(event) => setDueDate(event.target.value)} />
+          <Input
+            id="dueDate"
+            type="date"
+            value={dueDate}
+            onChange={(event) => setDueDate(event.target.value)}
+          />
         </div>
       </div>
       <div className="space-y-3">
         {lineItems.map((item) => (
-          <div key={item.id} className="grid gap-3 rounded-md border border-slate-800 bg-slate-900/80 p-3 md:grid-cols-6">
+          <div
+            key={item.id}
+            className="grid gap-3 rounded-md border border-slate-800 bg-slate-900/80 p-3 md:grid-cols-6"
+          >
             <div className="md:col-span-2">
               <Label className="text-xs text-slate-500">Item</Label>
-              <Input value={item.name} onChange={(event) => updateItem(item.id, { name: event.target.value })} />
+              <Input
+                value={item.name}
+                onChange={(event) => updateItem(item.id, { name: event.target.value })}
+              />
             </div>
             <div>
               <Label className="text-xs text-slate-500">Qty</Label>
@@ -136,7 +172,9 @@ export const InvoiceBuilder = ({ defaultCurrency = 'USD', onCreate }: InvoiceBui
               <Input
                 type="number"
                 value={(item.taxRate ?? 0) * 100}
-                onChange={(event) => updateItem(item.id, { taxRate: Number(event.target.value) / 100 })}
+                onChange={(event) =>
+                  updateItem(item.id, { taxRate: Number(event.target.value) / 100 })
+                }
               />
             </div>
             <div className="flex items-end justify-end">
@@ -172,21 +210,29 @@ export const InvoiceBuilder = ({ defaultCurrency = 'USD', onCreate }: InvoiceBui
       <div className="rounded-md border border-slate-800 bg-slate-900/80 p-3 text-sm">
         <div className="flex items-center justify-between text-slate-400">
           <span>Subtotal</span>
-          <span className="text-slate-100">{subtotal.toFixed(2)} {currency}</span>
+          <span className="text-slate-100">
+            {subtotal.toFixed(2)} {currency}
+          </span>
         </div>
         <div className="flex items-center justify-between text-slate-400">
           <span>VAT</span>
-          <span className="text-slate-100">{taxes.toFixed(2)} {currency}</span>
+          <span className="text-slate-100">
+            {taxes.toFixed(2)} {currency}
+          </span>
         </div>
         {discount > 0 && (
           <div className="flex items-center justify-between text-slate-400">
             <span>Discount</span>
-            <span className="text-slate-100">-{(subtotal * discount).toFixed(2)} {currency}</span>
+            <span className="text-slate-100">
+              -{(subtotal * discount).toFixed(2)} {currency}
+            </span>
           </div>
         )}
         <div className="mt-2 flex items-center justify-between text-lg font-semibold text-secondary">
           <span>Total Due</span>
-          <span>{total.toFixed(2)} {currency}</span>
+          <span>
+            {total.toFixed(2)} {currency}
+          </span>
         </div>
       </div>
       <Button type="button" variant="secondary" onClick={handleCreate}>

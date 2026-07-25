@@ -7,9 +7,18 @@ interface EmailContentProps {
   availableTags?: EmailTag[];
 }
 
-export const EmailContent = ({ email, onReply, onAssignClient, availableTags = [] }: EmailContentProps) => {
+export const EmailContent = ({
+  email,
+  onReply,
+  onAssignClient,
+  availableTags = []
+}: EmailContentProps) => {
   if (!email) {
-    return <div className="flex h-full items-center justify-center text-sm text-slate-500">Select an email from the list</div>;
+    return (
+      <div className="flex h-full items-center justify-center text-sm text-slate-500">
+        Select an email from the list
+      </div>
+    );
   }
 
   return (
@@ -23,7 +32,9 @@ export const EmailContent = ({ email, onReply, onAssignClient, availableTags = [
           <div className="flex items-center gap-2 text-xs text-slate-500">
             <span>{new Date(email.date).toLocaleString()}</span>
             {email.relatedClientId ? (
-              <span className="rounded bg-emerald-500/20 px-2 py-1 text-emerald-300">Linked to client</span>
+              <span className="rounded bg-emerald-500/20 px-2 py-1 text-emerald-300">
+                Linked to client
+              </span>
             ) : (
               <button
                 className="rounded border border-slate-700 px-2 py-1 hover:border-emerald-500 hover:text-emerald-400"
@@ -39,7 +50,10 @@ export const EmailContent = ({ email, onReply, onAssignClient, availableTags = [
           {email.cc?.length ? <span>CC: {email.cc.join(', ')}</span> : null}
           {email.bcc?.length ? <span>BCC: {email.bcc.join(', ')}</span> : null}
           {email.tags?.map((tag) => (
-            <span key={tag.id} className={`rounded-full px-2 py-0.5 text-[10px] ${tag.color} text-white`}>
+            <span
+              key={tag.id}
+              className={`rounded-full px-2 py-0.5 text-[10px] ${tag.color} text-white`}
+            >
               {tag.label}
             </span>
           ))}

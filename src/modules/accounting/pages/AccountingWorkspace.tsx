@@ -13,12 +13,13 @@ const sections = [
   { id: 'invoices', label: 'Invoices', component: InvoicesPage },
   { id: 'payroll', label: 'Payroll', component: PayrollPage },
   { id: 'reports', label: 'Reports', component: ReportsPage },
-  { id: 'budgets', label: 'Budgets', component: BudgetsPage },
+  { id: 'budgets', label: 'Budgets', component: BudgetsPage }
 ];
 
 export const AccountingWorkspace = () => {
   const [active, setActive] = useState(sections[0].id);
-  const ActiveComponent = sections.find((section) => section.id === active)?.component ?? AccountsPage;
+  const ActiveComponent =
+    sections.find((section) => section.id === active)?.component ?? AccountsPage;
 
   return (
     <div className="space-y-6">

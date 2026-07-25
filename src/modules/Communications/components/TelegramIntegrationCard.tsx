@@ -8,7 +8,7 @@ export const TelegramIntegrationCard = () => {
     connected: false,
     botName: null,
     webhookUrl: null,
-    lastEventAt: null,
+    lastEventAt: null
   });
   const [statusMessage, setStatusMessage] = useState('Bot not connected');
   const [isLoading, setIsLoading] = useState(true);
@@ -37,7 +37,7 @@ export const TelegramIntegrationCard = () => {
       const response = await telegramService.updateStatus({
         connected: true,
         botName: `Bot ${token.slice(0, 6).toUpperCase()}`,
-        webhookUrl: status.webhookUrl ?? 'https://api.yadroos.local/telegram/webhook',
+        webhookUrl: status.webhookUrl ?? 'https://api.yadroos.local/telegram/webhook'
       });
       setStatus(response);
       setStatusMessage('Bot connected successfully. Webhook active.');
@@ -70,8 +70,8 @@ export const TelegramIntegrationCard = () => {
       </header>
       <p className="text-xs text-slate-500">{subtitle}</p>
       <p className="text-sm text-slate-400">
-        Provide a bot token to synchronize Telegram chats with the internal system. Messages will be available in the
-        unified inbox.
+        Provide a bot token to synchronize Telegram chats with the internal system. Messages will be
+        available in the unified inbox.
       </p>
       <input
         className="mt-3 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"

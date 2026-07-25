@@ -6,11 +6,13 @@ interface MessageBubbleProps {
 }
 
 export const MessageBubble = ({ message, isOwn = false }: MessageBubbleProps) => {
-  const time = new Date(message.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const time = new Date(message.createdAt).toLocaleTimeString([], {
+    hour: '2-digit',
+    minute: '2-digit'
+  });
 
   return (
-    <div className={`flex ${isOwn ? 'justify-end' : 'justify-start'} py-1`}
-    >
+    <div className={`flex ${isOwn ? 'justify-end' : 'justify-start'} py-1`}>
       <div
         className={`max-w-[70%] rounded-lg border px-3 py-2 text-sm shadow-sm transition ${
           isOwn
@@ -27,7 +29,10 @@ export const MessageBubble = ({ message, isOwn = false }: MessageBubbleProps) =>
         {message.attachments?.length ? (
           <div className="mt-2 space-y-1 text-xs text-slate-300">
             {message.attachments.map((file) => (
-              <div key={file.id} className="flex items-center gap-2 rounded border border-slate-700/60 px-2 py-1">
+              <div
+                key={file.id}
+                className="flex items-center gap-2 rounded border border-slate-700/60 px-2 py-1"
+              >
                 <span>{file.name}</span>
                 <span className="text-slate-500">{file.type}</span>
               </div>
@@ -35,7 +40,9 @@ export const MessageBubble = ({ message, isOwn = false }: MessageBubbleProps) =>
           </div>
         ) : null}
         {message.mentions?.length ? (
-          <div className="mt-2 text-xs text-emerald-300">Mentioned: {message.mentions.join(', ')}</div>
+          <div className="mt-2 text-xs text-emerald-300">
+            Mentioned: {message.mentions.join(', ')}
+          </div>
         ) : null}
       </div>
     </div>

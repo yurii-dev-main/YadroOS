@@ -7,7 +7,7 @@ export const formatDate = (value: string) =>
   new Intl.DateTimeFormat('uk-UA', {
     year: 'numeric',
     month: 'short',
-    day: '2-digit',
+    day: '2-digit'
   }).format(new Date(value));
 
 export const getStatusLabel = (status: EmployeeStatus) => {

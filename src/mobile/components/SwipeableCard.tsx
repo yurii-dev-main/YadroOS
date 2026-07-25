@@ -16,7 +16,12 @@ export interface SwipeableCardProps {
   onLongPress?: () => void;
 }
 
-export const SwipeableCard = ({ children, leftAction, rightAction, onLongPress }: SwipeableCardProps) => {
+export const SwipeableCard = ({
+  children,
+  leftAction,
+  rightAction,
+  onLongPress
+}: SwipeableCardProps) => {
   const [offset, setOffset] = useState(0);
   const cardRef = useRef<HTMLDivElement>(null);
 

@@ -13,7 +13,7 @@ const statusOptions = [
   { label: 'All statuses', value: '' },
   { label: 'Active', value: 'active' },
   { label: 'On leave', value: 'on_leave' },
-  { label: 'Terminated', value: 'terminated' },
+  { label: 'Terminated', value: 'terminated' }
 ];
 
 export const EmployeeFilters: FC<EmployeeFiltersProps> = ({
@@ -21,7 +21,7 @@ export const EmployeeFilters: FC<EmployeeFiltersProps> = ({
   departments,
   positions,
   onChange,
-  onReset,
+  onReset
 }) => {
   const handleSelect = (event: ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = event.target;

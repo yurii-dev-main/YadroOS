@@ -10,8 +10,8 @@ import { usePWAContext } from '../mobile/context/PWAContext';
 const MOBILE_BREAKPOINT = 1024;
 
 export const DashboardLayout = () => {
-  const [isMobile, setIsMobile] = useState(
-    () => (typeof window !== 'undefined' ? window.innerWidth < MOBILE_BREAKPOINT : false)
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== 'undefined' ? window.innerWidth < MOBILE_BREAKPOINT : false
   );
   const { updateAvailable, refreshApp } = usePWAContext();
 
@@ -36,7 +36,11 @@ export const DashboardLayout = () => {
   );
 
   if (isMobile) {
-    return <MobileLayout updateAvailable={updateAvailable} onRefresh={refreshApp}>{content}</MobileLayout>;
+    return (
+      <MobileLayout updateAvailable={updateAvailable} onRefresh={refreshApp}>
+        {content}
+      </MobileLayout>
+    );
   }
 
   return (

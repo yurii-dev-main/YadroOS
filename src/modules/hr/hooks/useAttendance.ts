@@ -1,11 +1,6 @@
 import { useMemo } from 'react';
 import { hrService } from '../services/hr.service';
-import {
-  AttendanceRecord,
-  AttendanceSummary,
-  LeaveBalance,
-  LeaveRequest,
-} from '../types/hr.types';
+import { AttendanceRecord, AttendanceSummary, LeaveBalance, LeaveRequest } from '../types/hr.types';
 
 interface UseAttendanceResult {
   records: AttendanceRecord[];
@@ -27,7 +22,10 @@ export const useAttendance = (): UseAttendanceResult => {
     return summaries.reduce((acc, item) => acc + item.attendanceRate, 0) / summaries.length;
   }, [summaries]);
 
-  const totalLateArrivals = useMemo(() => summaries.reduce((acc, item) => acc + item.lateArrivals, 0), [summaries]);
+  const totalLateArrivals = useMemo(
+    () => summaries.reduce((acc, item) => acc + item.lateArrivals, 0),
+    [summaries]
+  );
 
   return {
     records,
@@ -35,6 +33,6 @@ export const useAttendance = (): UseAttendanceResult => {
     leaveBalances,
     summaries,
     averageAttendance,
-    totalLateArrivals,
+    totalLateArrivals
   };
 };

@@ -9,7 +9,8 @@ import { askAssistant } from '../services/ai.service';
 const initialMessage: ChatMessage = {
   id: 'welcome',
   role: 'assistant',
-  content: 'Hello! I am YadroOS AI Advisor. Ask about clients, employees, or finances — and I will generate the needed insight.',
+  content:
+    'Hello! I am YadroOS AI Advisor. Ask about clients, employees, or finances — and I will generate the needed insight.',
   timestamp: Date.now()
 };
 

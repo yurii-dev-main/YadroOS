@@ -96,7 +96,10 @@ export abstract class AbstractBankIntegration {
       .then((response) => response.data as StatementResponse);
   }
 
-  getSyncHistory(connectionId: string, params?: CursorPaginationParams): Promise<SyncHistoryResponse> {
+  getSyncHistory(
+    connectionId: string,
+    params?: CursorPaginationParams
+  ): Promise<SyncHistoryResponse> {
     return apiClient
       .get(`${this.context.basePath}/connections/${connectionId}/sync-history`, { params })
       .then((response) => response.data as SyncHistoryResponse);

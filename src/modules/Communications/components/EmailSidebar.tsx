@@ -10,7 +10,7 @@ const folders = [
   { id: 'inbox', label: 'Inbox' },
   { id: 'sent', label: 'Sent' },
   { id: 'drafts', label: 'Drafts' },
-  { id: 'trash', label: 'Trash' },
+  { id: 'trash', label: 'Trash' }
 ];
 
 export const EmailSidebar = ({ searchParams, onChange, onCompose }: EmailSidebarProps) => {

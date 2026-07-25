@@ -12,7 +12,7 @@ interface EmployeeCardProps {
 const statusColors: Record<Employee['status'], string> = {
   active: 'bg-emerald-500/10 text-emerald-300 border border-emerald-500/40',
   on_leave: 'bg-amber-500/10 text-amber-300 border border-amber-500/40',
-  terminated: 'bg-rose-500/10 text-rose-300 border border-rose-500/40',
+  terminated: 'bg-rose-500/10 text-rose-300 border border-rose-500/40'
 };
 
 export const EmployeeCard: FC<EmployeeCardProps> = ({ employee, onSelect, isSelected }) => (
@@ -24,7 +24,9 @@ export const EmployeeCard: FC<EmployeeCardProps> = ({ employee, onSelect, isSele
   >
     <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
       <CardTitle className="text-base font-semibold text-slate-100">{employee.name}</CardTitle>
-      <span className={`rounded-full px-2 py-1 text-xs font-medium ${statusColors[employee.status]}`}>
+      <span
+        className={`rounded-full px-2 py-1 text-xs font-medium ${statusColors[employee.status]}`}
+      >
         {getStatusLabel(employee.status)}
       </span>
     </CardHeader>

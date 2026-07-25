@@ -102,7 +102,8 @@ const createSecret = () => {
   return base32Encode(buffer);
 };
 
-const toHex = (bytes: Uint8Array) => Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0')).join('');
+const toHex = (bytes: Uint8Array) =>
+  Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0')).join('');
 
 const rememberDeviceStorageKey = (userId: string) => `yadroos-security-remembered-${userId}`;
 
@@ -150,16 +151,31 @@ export class TotpService {
     return false;
   }
 
-  static async generateToken(secret: string, timestamp = Date.now(), step = DEFAULT_STEP, digits = 6): Promise<string> {
+  static async generateToken(
+    secret: string,
+    timestamp = Date.now(),
+    step = DEFAULT_STEP,
+    digits = 6
+  ): Promise<string> {
     const counter = getTimeCounter(timestamp, step);
     const decodedSecret = base32Decode(secret);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const key = await cryptoProvider.subtle.importKey('raw', decodedSecret as any, { name: 'HMAC', hash: 'SHA-1' }, false, ['sign']);
+    const key = await cryptoProvider.subtle.importKey(
+      'raw',
+      decodedSecret as any,
+      { name: 'HMAC', hash: 'SHA-1' },
+      false,
+      ['sign']
+    );
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const signature = await cryptoProvider.subtle.sign('HMAC', key, counter as any);
     const hmac = new Uint8Array(signature);
     const offset = hmac[hmac.length - 1] & 0x0f;
-    const binary = ((hmac[offset] & 0x7f) << 24) | ((hmac[offset + 1] & 0xff) << 16) | ((hmac[offset + 2] & 0xff) << 8) | (hmac[offset + 3] & 0xff);
+    const binary =
+      ((hmac[offset] & 0x7f) << 24) |
+      ((hmac[offset + 1] & 0xff) << 16) |
+      ((hmac[offset + 2] & 0xff) << 8) |
+      (hmac[offset + 3] & 0xff);
     const otp = binary % 10 ** digits;
     return leftPad(String(otp), digits);
   }

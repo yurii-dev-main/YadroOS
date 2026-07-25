@@ -1,4 +1,3 @@
-
 export type CurrencyCode = 'USD' | 'EUR' | 'UAH';
 export type AccountType = 'bank' | 'cash' | 'card';
 export type TransactionType = 'income' | 'expense' | 'transfer';
@@ -261,7 +260,7 @@ export interface BulkImportResult<T> {
   processed: number;
   created: number;
   skipped: number;
-  errors: Array<{ row: number; message: string; raw: Partial<T> }>; 
+  errors: Array<{ row: number; message: string; raw: Partial<T> }>;
 }
 
 export interface PaymentReminder {

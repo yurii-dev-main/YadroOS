@@ -1,7 +1,18 @@
-import { CRMActivity, CRMClient, CRMDeal, CRMAnalyticsSummary, ClientStatus, DealStage } from '../types/crm.types';
+import {
+  CRMActivity,
+  CRMClient,
+  CRMDeal,
+  CRMAnalyticsSummary,
+  ClientStatus,
+  DealStage
+} from '../types/crm.types';
 
 export const formatCurrency = (value: number) =>
-  new Intl.NumberFormat('uk-UA', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(value);
+  new Intl.NumberFormat('uk-UA', {
+    style: 'currency',
+    currency: 'USD',
+    maximumFractionDigits: 0
+  }).format(value);
 
 export const formatNumber = (value: number) => new Intl.NumberFormat('uk-UA').format(value);
 
@@ -30,21 +41,26 @@ export const stageLabels: DealStage[] = [
 ];
 
 export const groupDealsByStage = (deals: CRMDeal[]) => {
-  return stageLabels.reduce<Record<DealStage, CRMDeal[]>>((acc, stage) => {
-    acc[stage] = deals.filter((deal) => deal.stage === stage);
-    return acc;
-  }, {
-    Lead: [],
-    'Contact Made': [],
-    Qualification: [],
-    Proposal: [],
-    Negotiation: [],
-    'Closed Won': [],
-    'Closed Lost': []
-  });
+  return stageLabels.reduce<Record<DealStage, CRMDeal[]>>(
+    (acc, stage) => {
+      acc[stage] = deals.filter((deal) => deal.stage === stage);
+      return acc;
+    },
+    {
+      Lead: [],
+      'Contact Made': [],
+      Qualification: [],
+      Proposal: [],
+      Negotiation: [],
+      'Closed Won': [],
+      'Closed Lost': []
+    }
+  );
 };
 
-export const calculateConversionRates = (deals: CRMDeal[]): Array<{ from: DealStage; to: DealStage; rate: number }> => {
+export const calculateConversionRates = (
+  deals: CRMDeal[]
+): Array<{ from: DealStage; to: DealStage; rate: number }> => {
   const grouped = groupDealsByStage(deals);
   const stages = stageLabels;
   const result: Array<{ from: DealStage; to: DealStage; rate: number }> = [];
@@ -63,15 +79,23 @@ export const calculateConversionRates = (deals: CRMDeal[]): Array<{ from: DealSt
 };
 
 export const getRecentActivities = (activities: CRMActivity[], limit = 5) =>
-  [...activities].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, limit);
+  [...activities]
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    .slice(0, limit);
 
-export const buildAnalyticsSnapshot = (clients: CRMClient[], deals: CRMDeal[]): CRMAnalyticsSummary => {
+export const buildAnalyticsSnapshot = (
+  clients: CRMClient[],
+  deals: CRMDeal[]
+): CRMAnalyticsSummary => {
   const newClients = Array.from({ length: 6 }).map((_, index) => ({
     period: `Month ${index + 1}`,
     value: Math.floor(Math.random() * 12) + 5
   }));
 
-  const funnel = stageLabels.map((stage) => ({ stage, value: deals.filter((deal) => deal.stage === stage).length }));
+  const funnel = stageLabels.map((stage) => ({
+    stage,
+    value: deals.filter((deal) => deal.stage === stage).length
+  }));
 
   const closedDeals = deals.filter((deal) => deal.stage === 'Closed Won');
   const totalClosed = closedDeals.reduce((acc, deal) => acc + deal.value, 0);
@@ -86,7 +110,9 @@ export const buildAnalyticsSnapshot = (clients: CRMClient[], deals: CRMDeal[]): 
     value: Math.round(totalClosed * (1 + index * 0.1))
   }));
 
-  const managerGroups = deals.reduce<Record<string, { deals: number; won: number; revenue: number }>>((acc, deal) => {
+  const managerGroups = deals.reduce<
+    Record<string, { deals: number; won: number; revenue: number }>
+  >((acc, deal) => {
     const manager = deal.owner;
     if (!acc[manager]) {
       acc[manager] = { deals: 0, won: 0, revenue: 0 };

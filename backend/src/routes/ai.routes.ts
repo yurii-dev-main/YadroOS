@@ -1,5 +1,9 @@
 import { Router } from 'express';
-import { createAIInsights, createChatCompletion, getAIInsights } from '../controllers/ai.controller';
+import {
+  createAIInsights,
+  createChatCompletion,
+  getAIInsights
+} from '../controllers/ai.controller';
 import { authMiddleware } from '../middleware/auth';
 
 const router = Router();

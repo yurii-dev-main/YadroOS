@@ -27,11 +27,13 @@ const groupByMonth = (transactions: Transaction[]) => {
 };
 
 export const ReportsPage = () => {
-  const { reports, cashFlow, forecasts, transactions, categoryBreakdown, cashFlowForecast } = useAccounting();
+  const { reports, cashFlow, forecasts, transactions, categoryBreakdown, cashFlowForecast } =
+    useAccounting();
   const trend = useMemo(() => groupByMonth(transactions), [transactions]);
   const categories = useMemo(
-    () => categoryBreakdown.map((category) => ({ name: category.categoryName, value: category.total })),
-    [categoryBreakdown],
+    () =>
+      categoryBreakdown.map((category) => ({ name: category.categoryName, value: category.total })),
+    [categoryBreakdown]
   );
   const forecast = forecasts[0]?.points ?? [];
 
@@ -40,8 +42,8 @@ export const ReportsPage = () => {
     const summarySheet = XLSX.utils.json_to_sheet(
       reports.map((report) => ({
         Title: report.title,
-        ...report.figures,
-      })),
+        ...report.figures
+      }))
     );
     const transactionsSheet = XLSX.utils.json_to_sheet(
       transactions.map((transaction) => ({
@@ -52,8 +54,8 @@ export const ReportsPage = () => {
         accountId: transaction.accountId,
         categoryId: transaction.categoryId,
         date: transaction.date,
-        description: transaction.description,
-      })),
+        description: transaction.description
+      }))
     );
     XLSX.utils.book_append_sheet(workbook, summarySheet, 'Summary');
     XLSX.utils.book_append_sheet(workbook, transactionsSheet, 'Transactions');
@@ -100,7 +102,10 @@ export const ReportsPage = () => {
         </CardHeader>
         <CardContent className="space-y-2 text-sm text-slate-300">
           {cashFlowForecast.map((item) => (
-            <div key={item.month} className="flex items-center justify-between rounded-md border border-slate-800 bg-slate-900/80 p-3">
+            <div
+              key={item.month}
+              className="flex items-center justify-between rounded-md border border-slate-800 bg-slate-900/80 p-3"
+            >
               <span className="text-xs uppercase text-slate-500">{item.month}</span>
               <div className="flex items-center gap-4">
                 <span className="text-emerald-300">Inflow: {item.inflow.toFixed(2)}</span>

@@ -15,6 +15,10 @@ export const Avatar: React.FC<AvatarProps> = ({ src, alt, fallback, className, .
     )}
     {...props}
   >
-    {src ? <img src={src} alt={alt} className="h-full w-full object-cover" /> : fallback.slice(0, 2)}
+    {src ? (
+      <img src={src} alt={alt} className="h-full w-full object-cover" />
+    ) : (
+      fallback.slice(0, 2)
+    )}
   </div>
 );

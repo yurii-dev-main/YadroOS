@@ -27,7 +27,9 @@ export const AIInsightCard = ({ recommendation }: AIInsightCardProps) => {
     <Card className="h-full border-slate-800/70 bg-slate-900/70">
       <CardHeader className="flex flex-row items-start justify-between gap-4">
         <CardTitle className="flex items-center gap-2 text-base">
-          <span className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs uppercase tracking-wide ${badgeClass}`}>
+          <span
+            className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs uppercase tracking-wide ${badgeClass}`}
+          >
             <Icon size={14} />
             {recommendation.type === 'action'
               ? 'Next Step'
@@ -36,7 +38,9 @@ export const AIInsightCard = ({ recommendation }: AIInsightCardProps) => {
                 : 'Insight'}
           </span>
         </CardTitle>
-        <span className="text-xs text-slate-400">Confidence {(recommendation.confidence * 100).toFixed(0)}%</span>
+        <span className="text-xs text-slate-400">
+          Confidence {(recommendation.confidence * 100).toFixed(0)}%
+        </span>
       </CardHeader>
       <CardContent className="gap-3">
         <h3 className="text-lg font-semibold text-slate-100">{recommendation.title}</h3>

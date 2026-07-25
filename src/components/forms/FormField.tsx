@@ -25,7 +25,13 @@ export const FormField = <TFieldValues extends FieldValues>({
   return (
     <div className="space-y-2">
       <Label htmlFor={name}>{label}</Label>
-      <Input id={name} type={type} autoComplete={autoComplete} placeholder={placeholder} {...register(name)} />
+      <Input
+        id={name}
+        type={type}
+        autoComplete={autoComplete}
+        placeholder={placeholder}
+        {...register(name)}
+      />
       <ErrorMessage
         errors={formState.errors}
         // eslint-disable-next-line @typescript-eslint/no-explicit-any

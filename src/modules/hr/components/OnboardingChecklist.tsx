@@ -15,16 +15,24 @@ export const OnboardingChecklist: FC<OnboardingChecklistProps> = ({ employees, p
     </CardHeader>
     <CardContent className="space-y-4 text-sm text-slate-300">
       {plans.map((plan) => (
-        <div key={plan.employeeId} className="rounded-lg border border-slate-800 bg-slate-900/70 p-4">
+        <div
+          key={plan.employeeId}
+          className="rounded-lg border border-slate-800 bg-slate-900/70 p-4"
+        >
           <div className="flex flex-col justify-between gap-2 md:flex-row md:items-center">
             <p className="text-sm font-semibold text-slate-100">
               {getEmployeeName(employees, plan.employeeId)} — start {formatDate(plan.startDate)}
             </p>
-            <span className="text-xs text-slate-400">Buddy: {getEmployeeName(employees, plan.buddyId)}</span>
+            <span className="text-xs text-slate-400">
+              Buddy: {getEmployeeName(employees, plan.buddyId)}
+            </span>
           </div>
           <ul className="mt-3 space-y-2">
             {plan.tasks.map((task) => (
-              <li key={task.id} className="rounded-md border border-slate-800 bg-slate-950/60 px-3 py-2">
+              <li
+                key={task.id}
+                className="rounded-md border border-slate-800 bg-slate-950/60 px-3 py-2"
+              >
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-slate-100">{task.title}</span>
                   <span

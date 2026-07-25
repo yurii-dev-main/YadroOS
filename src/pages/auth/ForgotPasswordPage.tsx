@@ -35,16 +35,17 @@ export const ForgotPasswordPage = () => {
       <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-6" noValidate>
         <div>
           <h2 className="text-xl font-semibold text-slate-50">Password Reset</h2>
-          <p className="text-sm text-slate-400">
-            Specify your email, we will send a reset link
-          </p>
+          <p className="text-sm text-slate-400">Specify your email, we will send a reset link</p>
         </div>
         <FormField<ForgotFormValues> name="email" label="Email" type="email" autoComplete="email" />
         <Button type="submit" className="w-full">
           Send instructions
         </Button>
         <p className="text-center text-sm text-slate-400">
-          Back to <Link to="/login" className="text-primary hover:underline">login</Link>
+          Back to{' '}
+          <Link to="/login" className="text-primary hover:underline">
+            login
+          </Link>
         </p>
       </form>
     </FormProvider>

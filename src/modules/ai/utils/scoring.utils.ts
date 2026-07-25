@@ -56,7 +56,9 @@ export const calculateDealProbability = (deal: DealProfile): DealProbabilityResu
   const activityBoost = 0.5 + deal.activityScore / 200;
   const valueInfluence = Math.min(deal.value / 50000, 1);
 
-  const probability = Math.round(Math.min(stageWeight * timePenalty * activityBoost * 100 + valueInfluence * 10, 100));
+  const probability = Math.round(
+    Math.min(stageWeight * timePenalty * activityBoost * 100 + valueInfluence * 10, 100)
+  );
 
   const drivers = [
     { label: 'Deal Stage', impact: Math.round(stageWeight * 100) },
@@ -110,8 +112,7 @@ export const calculatePerformanceScore = (metric: PerformanceMetric): Performanc
 
   const normalizedScore = Math.round(Math.min(rawScore * departmentFactor, 100));
 
-  const trend =
-    normalizedScore > 85 ? 'improving' : normalizedScore < 65 ? 'declining' : 'stable';
+  const trend = normalizedScore > 85 ? 'improving' : normalizedScore < 65 ? 'declining' : 'stable';
 
   const highlights = [
     metric.kpiScore > 85 && 'Exceeding KPI',
@@ -161,7 +162,11 @@ export const calculateBonusBreakdown = (
   ];
 
   if (weights.client > 0) {
-    components.push({ label: 'Client Feedback', weight: weights.client, value: metric.clientFeedback ?? 0 });
+    components.push({
+      label: 'Client Feedback',
+      weight: weights.client,
+      value: metric.clientFeedback ?? 0
+    });
   }
 
   return {

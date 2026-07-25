@@ -13,7 +13,10 @@ export const AccountCard = ({ account, onReconcile }: AccountCardProps) => {
       <CardHeader className="flex flex-row items-center justify-between gap-4">
         <CardTitle className="text-lg font-semibold text-slate-50">
           <span className="inline-flex items-center gap-2">
-            <span className="inline-block h-3 w-3 rounded-full" style={{ backgroundColor: account.color ?? '#4f46e5' }} />
+            <span
+              className="inline-block h-3 w-3 rounded-full"
+              style={{ backgroundColor: account.color ?? '#4f46e5' }}
+            />
             {account.name}
           </span>
         </CardTitle>
@@ -23,7 +26,10 @@ export const AccountCard = ({ account, onReconcile }: AccountCardProps) => {
         <div className="flex items-baseline justify-between">
           <span className="text-slate-400">Balance</span>
           <span className="text-2xl font-semibold text-emerald-400">
-            {account.balance.toLocaleString('uk-UA', { style: 'currency', currency: account.currency })}
+            {account.balance.toLocaleString('uk-UA', {
+              style: 'currency',
+              currency: account.currency
+            })}
           </span>
         </div>
         {account.bankName && (
@@ -46,7 +52,9 @@ export const AccountCard = ({ account, onReconcile }: AccountCardProps) => {
         )}
         <div className="flex items-center justify-between text-xs text-slate-500">
           <span>Sync</span>
-          <span>{account.syncedAt ? format(new Date(account.syncedAt), 'dd.MM.yyyy HH:mm') : '—'}</span>
+          <span>
+            {account.syncedAt ? format(new Date(account.syncedAt), 'dd.MM.yyyy HH:mm') : '—'}
+          </span>
         </div>
         <div className="flex items-center justify-between text-xs">
           <span className="text-slate-500">Status</span>

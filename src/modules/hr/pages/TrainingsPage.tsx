@@ -11,13 +11,21 @@ const statusOptions = [
   { label: 'Scheduled', value: 'scheduled' },
   { label: 'Ongoing', value: 'ongoing' },
   { label: 'Completed', value: 'completed' },
-  { label: 'Cancelled', value: 'cancelled' },
+  { label: 'Cancelled', value: 'cancelled' }
 ];
 
 export const TrainingsPage = () => {
   const employees = useMemo(() => hrService.getEmployees(), []);
-  const { trainings, selectedTraining, filters, setFilters, selectTraining, register, markAttendance, submitFeedback } =
-    useTrainings();
+  const {
+    trainings,
+    selectedTraining,
+    filters,
+    setFilters,
+    selectTraining,
+    register,
+    markAttendance,
+    submitFeedback
+  } = useTrainings();
 
   return (
     <div className="space-y-6">

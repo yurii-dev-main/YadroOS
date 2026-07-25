@@ -9,7 +9,7 @@ const channelLabels: Record<'all' | CommunicationChannel, string> = {
   all: 'All channels',
   email: 'Email',
   internal: 'Internal chats',
-  telegram: 'Telegram',
+  telegram: 'Telegram'
 };
 
 export const UnifiedInboxPanel = ({ items }: UnifiedInboxPanelProps) => {
@@ -31,7 +31,9 @@ export const UnifiedInboxPanel = ({ items }: UnifiedInboxPanelProps) => {
             <button
               key={key}
               className={`rounded-full px-3 py-1 text-xs transition ${
-                channel === key ? 'bg-emerald-500/30 text-emerald-200' : 'bg-slate-800/60 text-slate-300'
+                channel === key
+                  ? 'bg-emerald-500/30 text-emerald-200'
+                  : 'bg-slate-800/60 text-slate-300'
               }`}
               onClick={() => setChannel(key)}
             >
@@ -57,7 +59,11 @@ export const UnifiedInboxPanel = ({ items }: UnifiedInboxPanelProps) => {
                 <div className="flex items-center gap-2 text-sm text-slate-200">
                   <span>{item.title}</span>
                   <span className="text-xs capitalize text-slate-500">{item.channel}</span>
-                  {item.priority === 'high' && <span className="rounded bg-rose-500/30 px-2 py-0.5 text-[10px] text-rose-200">Urgent</span>}
+                  {item.priority === 'high' && (
+                    <span className="rounded bg-rose-500/30 px-2 py-0.5 text-[10px] text-rose-200">
+                      Urgent
+                    </span>
+                  )}
                 </div>
                 <p className="mt-1 line-clamp-2 text-xs text-slate-400">{item.preview}</p>
                 {item.relatedClient && (
@@ -75,11 +81,15 @@ export const UnifiedInboxPanel = ({ items }: UnifiedInboxPanelProps) => {
                   </button>
                 </div>
               </div>
-              <span className="text-xs text-slate-500">{new Date(item.timestamp).toLocaleString()}</span>
+              <span className="text-xs text-slate-500">
+                {new Date(item.timestamp).toLocaleString()}
+              </span>
             </div>
           </article>
         ))}
-        {!filteredItems.length && <p className="p-6 text-center text-xs text-slate-500">No messages</p>}
+        {!filteredItems.length && (
+          <p className="p-6 text-center text-xs text-slate-500">No messages</p>
+        )}
       </div>
     </section>
   );

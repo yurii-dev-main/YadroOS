@@ -15,7 +15,7 @@ export const TransactionsPage = () => {
     addTransaction,
     filters,
     setFilters,
-    searchTransactions,
+    searchTransactions
   } = useAccounting();
   const [filtered, setFiltered] = useState<Transaction[]>(transactions);
   const [recurring, setRecurring] = useState<RecurringTransactionInsight[]>([]);

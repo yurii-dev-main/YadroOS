@@ -6,7 +6,12 @@ import type { AuthState, Role, User } from '../types/auth';
 
 interface AuthActions {
   login: (params: { email: string; password: string; rememberMe: boolean }) => Promise<void>;
-  register: (params: { email: string; password: string; name: string; company: string }) => Promise<void>;
+  register: (params: {
+    email: string;
+    password: string;
+    name: string;
+    company: string;
+  }) => Promise<void>;
   refreshTokens: () => Promise<void>;
   logout: () => Promise<void>;
   updateUser: (user: Partial<User>) => Promise<void>;

@@ -27,7 +27,6 @@ interface PasswordChangeParams {
 const users = new Map<string, StoredUser>();
 const resetTokens = new Map<string, string>();
 
-
 const createTokens = (rememberMe: boolean): AuthTokens => {
   const expiresIn = rememberMe ? 1000 * 60 * 60 * 24 : 1000 * 60 * 15;
   return {
@@ -56,7 +55,10 @@ const getDefaultUser = (params: RegisterParams, role: Role = 'VIEWER'): StoredUs
   }
 });
 
-const seedAdmin = getDefaultUser({ email: 'admin@dao.ua', password: 'Admin123', name: 'Admin', company: 'Yadro DAO' }, 'ADMIN');
+const seedAdmin = getDefaultUser(
+  { email: 'admin@dao.ua', password: 'Admin123', name: 'Admin', company: 'Yadro DAO' },
+  'ADMIN'
+);
 users.set(seedAdmin.email.toLowerCase(), seedAdmin);
 
 const sanitizeUser = (user: StoredUser): User => ({

@@ -18,7 +18,7 @@ export const PerformanceDashboard: FC<PerformanceDashboardProps> = ({
   okrs,
   reviews,
   highlights,
-  averageScore,
+  averageScore
 }) => (
   <div className="space-y-4">
     <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -95,7 +95,10 @@ export const PerformanceDashboard: FC<PerformanceDashboardProps> = ({
                     <span className="text-xs text-indigo-300">{kr.progress}%</span>
                   </div>
                   <div className="mt-1 h-1.5 rounded-full bg-slate-800">
-                    <div className="h-1.5 rounded-full bg-emerald-500" style={{ width: `${kr.progress}%` }} />
+                    <div
+                      className="h-1.5 rounded-full bg-emerald-500"
+                      style={{ width: `${kr.progress}%` }}
+                    />
                   </div>
                 </li>
               ))}
@@ -150,7 +153,10 @@ export const PerformanceDashboard: FC<PerformanceDashboardProps> = ({
       </CardHeader>
       <CardContent className="grid grid-cols-1 gap-4 md:grid-cols-3">
         {highlights.map((highlight) => (
-          <div key={highlight.employeeId} className="rounded-lg border border-emerald-500/40 bg-emerald-500/10 p-4 text-center">
+          <div
+            key={highlight.employeeId}
+            className="rounded-lg border border-emerald-500/40 bg-emerald-500/10 p-4 text-center"
+          >
             <p className="text-sm font-semibold text-emerald-100">
               {getEmployeeName(employees, highlight.employeeId)}
             </p>

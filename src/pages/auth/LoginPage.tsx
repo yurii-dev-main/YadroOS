@@ -33,7 +33,9 @@ export const LoginPage = () => {
       await login(data);
       navigate('/dashboard');
     } catch (error) {
-      methods.setError('email', { message: error instanceof Error ? error.message : 'Login error' });
+      methods.setError('email', {
+        message: error instanceof Error ? error.message : 'Login error'
+      });
     }
   };
 

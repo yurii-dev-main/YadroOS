@@ -3,7 +3,10 @@ import autoTable from 'jspdf-autotable';
 import { format } from 'date-fns';
 import { Invoice, PayrollRecord, PayslipGenerationOptions } from '../types/accounting.types';
 
-export const generateInvoicePdf = (invoice: Invoice, options?: { companyName?: string; address?: string }) => {
+export const generateInvoicePdf = (
+  invoice: Invoice,
+  options?: { companyName?: string; address?: string }
+) => {
   const doc = new jsPDF();
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(18);
@@ -26,9 +29,9 @@ export const generateInvoicePdf = (invoice: Invoice, options?: { companyName?: s
         item.quantity.toString(),
         `${item.unitPrice.toFixed(2)} ${item.currency}`,
         `${((item.taxRate ?? 0) * 100).toFixed(2)}%`,
-        `${total.toFixed(2)} ${item.currency}`,
+        `${total.toFixed(2)} ${item.currency}`
       ];
-    }),
+    })
   });
 
   const subtotal = invoice.lineItems.reduce((acc, item) => acc + item.quantity * item.unitPrice, 0);
@@ -50,10 +53,7 @@ export const generateInvoicePdf = (invoice: Invoice, options?: { companyName?: s
   return doc;
 };
 
-export const generatePayslipPdf = (
-  record: PayrollRecord,
-  options?: PayslipGenerationOptions,
-) => {
+export const generatePayslipPdf = (record: PayrollRecord, options?: PayslipGenerationOptions) => {
   const doc = new jsPDF();
   doc.setFontSize(16);
   doc.text('Payslip', 14, 20);
@@ -67,7 +67,11 @@ export const generatePayslipPdf = (
   doc.text('Bonuses', 14, bonusStart);
   doc.setFont('helvetica', 'normal');
   record.bonuses.forEach((bonus, index) => {
-    doc.text(`${bonus.name}: ${bonus.amount.toFixed(2)} ${record.currency}`, 14, bonusStart + 8 * (index + 1));
+    doc.text(
+      `${bonus.name}: ${bonus.amount.toFixed(2)} ${record.currency}`,
+      14,
+      bonusStart + 8 * (index + 1)
+    );
   });
 
   const deductionsY = bonusStart + 8 * (record.bonuses.length + 2);
@@ -78,7 +82,7 @@ export const generatePayslipPdf = (
     doc.text(
       `${deduction.name}: -${deduction.amount.toFixed(2)} ${record.currency}`,
       14,
-      deductionsY + 8 * (index + 1),
+      deductionsY + 8 * (index + 1)
     );
   });
 

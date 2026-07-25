@@ -5,7 +5,7 @@ import {
   Employee,
   EmployeeStatus,
   HRStatistics,
-  OrgChartNode,
+  OrgChartNode
 } from '../types/hr.types';
 
 export interface EmployeeFilterState {
@@ -71,7 +71,7 @@ export const useEmployees = (): UseEmployeesResult => {
 
   const selectedEmployee = useMemo(
     () => employees.find((employee) => employee.id === selectedEmployeeId),
-    [employees, selectedEmployeeId],
+    [employees, selectedEmployeeId]
   );
 
   return {
@@ -85,6 +85,6 @@ export const useEmployees = (): UseEmployeesResult => {
     selectEmployee: setSelectedEmployeeId,
     orgChart,
     statistics,
-    isLoading,
+    isLoading
   };
 };

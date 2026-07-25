@@ -518,10 +518,7 @@ export const getAIOverview = (): AIOverviewData => {
   const crmDealProbabilities = evaluateDealProbabilities(deals);
   const performanceScores = scorePerformance(performanceMetrics);
   const bonusModels = buildBonusModels(performanceMetrics, baseSalaries, 1.08);
-  const cashForecast = forecastCashFlow(
-    [280000, 305000, 330000, 350000, 365000, 384000],
-    6
-  );
+  const cashForecast = forecastCashFlow([280000, 305000, 330000, 350000, 365000, 384000], 6);
 
   const crmRecommendations: Recommendation[] = [
     {
@@ -699,8 +696,7 @@ export const getAIOverview = (): AIOverviewData => {
           id: randomUUID(),
           category: 'hr',
           severity: 'info',
-          message:
-            'Turnover risk in the support department +6%. Recommended to schedule 1-on-1s.'
+          message: 'Turnover risk in the support department +6%. Recommended to schedule 1-on-1s.'
         },
         {
           id: randomUUID(),

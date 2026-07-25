@@ -16,7 +16,8 @@ import type {
   PerformanceScoreResult
 } from '../types/ai.types';
 
-export const scoreLeads = (leads: LeadProfile[]): LeadScoreResult[] => leads.map(calculateLeadScore);
+export const scoreLeads = (leads: LeadProfile[]): LeadScoreResult[] =>
+  leads.map(calculateLeadScore);
 
 export const evaluateDealProbabilities = (deals: DealProfile[]): DealProbabilityResult[] =>
   deals.map(calculateDealProbability);

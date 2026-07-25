@@ -22,7 +22,7 @@ const tabs = [
   { id: 'notes', label: 'Notes', icon: FileText }
 ] as const;
 
-type TabId = typeof tabs[number]['id'];
+type TabId = (typeof tabs)[number]['id'];
 
 export const ClientDetailPage = () => {
   const { clientId } = useParams();
@@ -36,7 +36,13 @@ export const ClientDetailPage = () => {
   const [notes, setNotes] = useState<CRMNote[]>([]);
   const [showActivityModal, setShowActivityModal] = useState(false);
 
-  const { activities, filter, setFilter, addActivity, loading: loadingActivities } = useActivities(clientId);
+  const {
+    activities,
+    filter,
+    setFilter,
+    addActivity,
+    loading: loadingActivities
+  } = useActivities(clientId);
 
   useEffect(() => {
     if (!clientId) return;
@@ -94,11 +100,16 @@ export const ClientDetailPage = () => {
     setNotes(updated.notes);
   };
 
-  const overviewMetrics = useMemo(() => ({
-    lifetimeValue: client ? formatCurrency(client.revenue * 4) : '—',
-    averageDeal: deals.length ? formatCurrency(deals.reduce((acc, deal) => acc + deal.value, 0) / deals.length) : '—',
-    dealsCount: formatNumber(deals.length)
-  }), [client, deals]);
+  const overviewMetrics = useMemo(
+    () => ({
+      lifetimeValue: client ? formatCurrency(client.revenue * 4) : '—',
+      averageDeal: deals.length
+        ? formatCurrency(deals.reduce((acc, deal) => acc + deal.value, 0) / deals.length)
+        : '—',
+      dealsCount: formatNumber(deals.length)
+    }),
+    [client, deals]
+  );
 
   if (!clientId) {
     return <p className="text-sm text-slate-400">Client not found.</p>;
@@ -217,15 +228,21 @@ export const ClientDetailPage = () => {
                 <div className="mt-6 grid grid-cols-3 gap-4 rounded-2xl border border-slate-700/40 bg-slate-900/60 p-4 text-sm text-slate-200">
                   <div>
                     <p className="text-xs uppercase tracking-wide text-slate-500">LTV</p>
-                    <p className="text-lg font-semibold text-emerald-400">{overviewMetrics.lifetimeValue}</p>
+                    <p className="text-lg font-semibold text-emerald-400">
+                      {overviewMetrics.lifetimeValue}
+                    </p>
                   </div>
                   <div>
                     <p className="text-xs uppercase tracking-wide text-slate-500">Average Deal</p>
-                    <p className="text-lg font-semibold text-blue-300">{overviewMetrics.averageDeal}</p>
+                    <p className="text-lg font-semibold text-blue-300">
+                      {overviewMetrics.averageDeal}
+                    </p>
                   </div>
                   <div>
                     <p className="text-xs uppercase tracking-wide text-slate-500">Deals Count</p>
-                    <p className="text-lg font-semibold text-slate-200">{overviewMetrics.dealsCount}</p>
+                    <p className="text-lg font-semibold text-slate-200">
+                      {overviewMetrics.dealsCount}
+                    </p>
                   </div>
                 </div>
 
@@ -256,8 +273,13 @@ export const ClientDetailPage = () => {
                         <h4 className="text-sm font-semibold text-white">Custom Fields</h4>
                         <div className="mt-2 grid grid-cols-1 gap-3 md:grid-cols-2">
                           {client.customFields.map((field) => (
-                            <div key={field.id} className="rounded-xl border border-slate-700/40 bg-slate-900/60 p-3">
-                              <p className="text-xs uppercase tracking-wide text-slate-500">{field.label}</p>
+                            <div
+                              key={field.id}
+                              className="rounded-xl border border-slate-700/40 bg-slate-900/60 p-3"
+                            >
+                              <p className="text-xs uppercase tracking-wide text-slate-500">
+                                {field.label}
+                              </p>
                               <p className="text-sm text-slate-200">{field.value}</p>
                             </div>
                           ))}
@@ -269,22 +291,31 @@ export const ClientDetailPage = () => {
                   {activeTab === 'deals' && (
                     <div className="space-y-4">
                       {deals.map((deal) => (
-                        <div key={deal.id} className="rounded-2xl border border-slate-700/40 bg-slate-900/60 p-4">
+                        <div
+                          key={deal.id}
+                          className="rounded-2xl border border-slate-700/40 bg-slate-900/60 p-4"
+                        >
                           <div className="flex items-center justify-between">
                             <div>
                               <h4 className="text-lg font-semibold text-white">{deal.title}</h4>
                               <p className="text-xs text-slate-400">Stage: {deal.stage}</p>
                             </div>
-                            <span className="text-sm font-semibold text-emerald-400">{formatCurrency(deal.value)}</span>
+                            <span className="text-sm font-semibold text-emerald-400">
+                              {formatCurrency(deal.value)}
+                            </span>
                           </div>
                           <div className="mt-3 flex flex-wrap gap-6 text-xs text-slate-400">
                             <span>Probability: {deal.probability}%</span>
-                            {deal.closeDate && <span>Close: {new Date(deal.closeDate).toLocaleDateString()}</span>}
+                            {deal.closeDate && (
+                              <span>Close: {new Date(deal.closeDate).toLocaleDateString()}</span>
+                            )}
                             <span>Owner: {deal.owner}</span>
                           </div>
                         </div>
                       ))}
-                      {deals.length === 0 && <p className="text-sm text-slate-400">This client has no deals yet.</p>}
+                      {deals.length === 0 && (
+                        <p className="text-sm text-slate-400">This client has no deals yet.</p>
+                      )}
                     </div>
                   )}
 
@@ -302,7 +333,11 @@ export const ClientDetailPage = () => {
                       {loadingActivities ? (
                         <p className="text-sm text-slate-400">Loading activities...</p>
                       ) : (
-                        <ActivityLog activities={activities} filter={filter} onFilterChange={setFilter} />
+                        <ActivityLog
+                          activities={activities}
+                          filter={filter}
+                          onFilterChange={setFilter}
+                        />
                       )}
                     </div>
                   )}
@@ -346,7 +381,10 @@ export const ClientDetailPage = () => {
                       </div>
                       <div className="space-y-3">
                         {notes.map((note) => (
-                          <div key={note.id} className="rounded-2xl border border-slate-700/40 bg-slate-900/50 p-4">
+                          <div
+                            key={note.id}
+                            className="rounded-2xl border border-slate-700/40 bg-slate-900/50 p-4"
+                          >
                             <div className="flex items-center justify-between text-xs text-slate-500">
                               <span>{note.author}</span>
                               <span>{new Date(note.createdAt).toLocaleString()}</span>
@@ -354,7 +392,9 @@ export const ClientDetailPage = () => {
                             <p className="mt-2 text-sm text-slate-200">{note.content}</p>
                           </div>
                         ))}
-                        {notes.length === 0 && <p className="text-sm text-slate-400">No notes yet.</p>}
+                        {notes.length === 0 && (
+                          <p className="text-sm text-slate-400">No notes yet.</p>
+                        )}
                       </div>
                     </div>
                   )}
@@ -362,7 +402,12 @@ export const ClientDetailPage = () => {
               </div>
             </div>
 
-            <ClientSidebar client={client} activities={activities} onAddTag={handleAddTag} onRemoveTag={handleRemoveTag} />
+            <ClientSidebar
+              client={client}
+              activities={activities}
+              onAddTag={handleAddTag}
+              onRemoveTag={handleRemoveTag}
+            />
           </div>
         )}
 

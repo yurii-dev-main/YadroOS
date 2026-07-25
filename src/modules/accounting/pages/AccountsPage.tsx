@@ -16,7 +16,7 @@ export const AccountsPage = () => {
     refreshExchangeRates,
     transfer,
     importTransactions,
-    loading,
+    loading
   } = useAccounting();
   const [transferAmount, setTransferAmount] = useState(0);
   const [fromAccount, setFromAccount] = useState<string>('');
@@ -31,7 +31,7 @@ export const AccountsPage = () => {
       toAccountId: toAccount,
       amount: transferAmount,
       currency,
-      description,
+      description
     });
     setTransferAmount(0);
     setDescription('');
@@ -116,7 +116,10 @@ export const AccountsPage = () => {
               </div>
               <div className="grid gap-2">
                 <span className="text-xs text-slate-500">Description</span>
-                <Input value={description} onChange={(event) => setDescription(event.target.value)} />
+                <Input
+                  value={description}
+                  onChange={(event) => setDescription(event.target.value)}
+                />
               </div>
             </div>
             <div className="mt-4 flex flex-wrap items-center gap-2">
@@ -132,8 +135,15 @@ export const AccountsPage = () => {
           </div>
         </div>
         <div className="space-y-6">
-          <AccountForm onSubmit={async (payload) => { await addAccount(payload); }} />
-          <ExchangeRateWidget exchangeRate={exchangeRate} onRefresh={() => refreshExchangeRates()} />
+          <AccountForm
+            onSubmit={async (payload) => {
+              await addAccount(payload);
+            }}
+          />
+          <ExchangeRateWidget
+            exchangeRate={exchangeRate}
+            onRefresh={() => refreshExchangeRates()}
+          />
           <ReconciliationPanel accounts={accounts} />
         </div>
       </div>

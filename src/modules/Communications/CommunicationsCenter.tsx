@@ -6,7 +6,7 @@ import { UnifiedInboxPage } from './pages/UnifiedInboxPage';
 const tabs = [
   { id: 'inbox', label: 'Email Inbox' },
   { id: 'messenger', label: 'Internal Messenger' },
-  { id: 'unified', label: 'Unified Inbox' },
+  { id: 'unified', label: 'Unified Inbox' }
 ];
 
 export const CommunicationsCenter = () => {
@@ -26,7 +26,9 @@ export const CommunicationsCenter = () => {
             <button
               key={tab.id}
               className={`rounded-full px-4 py-2 transition ${
-                activeTab === tab.id ? 'bg-emerald-500/30 text-emerald-200' : 'bg-slate-800/60 text-slate-300'
+                activeTab === tab.id
+                  ? 'bg-emerald-500/30 text-emerald-200'
+                  : 'bg-slate-800/60 text-slate-300'
               }`}
               onClick={() => setActiveTab(tab.id as typeof activeTab)}
             >

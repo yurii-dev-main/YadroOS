@@ -2,7 +2,13 @@ import { useForm } from 'react-hook-form';
 import { Button } from '../../../components/ui/button';
 import { Input } from '../../../components/ui/input';
 import { Label } from '../../../components/ui/label';
-import { Account, Transaction, TransactionCategory, TransactionType, CurrencyCode } from '../types/accounting.types';
+import {
+  Account,
+  Transaction,
+  TransactionCategory,
+  TransactionType,
+  CurrencyCode
+} from '../types/accounting.types';
 
 interface TransactionFormProps {
   accounts: Account[];
@@ -23,14 +29,19 @@ type FormValues = {
   tags?: string;
 };
 
-export const TransactionForm = ({ accounts, categories, defaultCurrency = 'UAH', onSubmit }: TransactionFormProps) => {
+export const TransactionForm = ({
+  accounts,
+  categories,
+  defaultCurrency = 'UAH',
+  onSubmit
+}: TransactionFormProps) => {
   const { register, handleSubmit, watch, reset } = useForm<FormValues>({
     defaultValues: {
       type: 'expense',
       amount: 0,
       currency: defaultCurrency,
-      date: new Date().toISOString().slice(0, 10),
-    },
+      date: new Date().toISOString().slice(0, 10)
+    }
   });
 
   const type = watch('type');
@@ -42,7 +53,7 @@ export const TransactionForm = ({ accounts, categories, defaultCurrency = 'UAH',
       amount: Number(rest.amount),
       status: 'completed',
       tags: tags ? tags.split(',').map((tag) => tag.trim()) : [],
-      attachments: [],
+      attachments: []
     };
 
     await onSubmit(payload);
@@ -69,7 +80,12 @@ export const TransactionForm = ({ accounts, categories, defaultCurrency = 'UAH',
       </div>
       <div className="grid gap-2">
         <Label htmlFor="amount">Amount</Label>
-        <Input id="amount" type="number" step="0.01" {...register('amount', { valueAsNumber: true, required: true })} />
+        <Input
+          id="amount"
+          type="number"
+          step="0.01"
+          {...register('amount', { valueAsNumber: true, required: true })}
+        />
       </div>
       <div className="grid gap-2">
         <Label htmlFor="currency">Currency</Label>

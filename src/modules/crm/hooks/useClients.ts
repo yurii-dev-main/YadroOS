@@ -74,78 +74,91 @@ export const useClients = () => {
     fetchClients();
   }, [fetchClients]);
 
-  const addClient = useCallback(
-    async (input: Parameters<typeof crmService.createClient>[0]) => {
-      const optimisticClient: CRMClient = {
-        ...input,
-        id: uuid(),
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        notes: input.notes ?? [],
-        files: input.files ?? []
-      };
-      setClients((prev) => [optimisticClient, ...prev]);
+  const addClient = useCallback(async (input: Parameters<typeof crmService.createClient>[0]) => {
+    const optimisticClient: CRMClient = {
+      ...input,
+      id: uuid(),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      notes: input.notes ?? [],
+      files: input.files ?? []
+    };
+    setClients((prev) => [optimisticClient, ...prev]);
+    try {
+      const client = await crmService.createClient(input);
+      setClients((prev) => [client, ...prev.filter((item) => item.id !== optimisticClient.id)]);
+      setTotal((prev) => prev + 1);
+      return client;
+    } catch (err) {
+      setClients((prev) => prev.filter((item) => item.id !== optimisticClient.id));
+      throw err;
+    }
+  }, []);
+
+  const updateClient = useCallback(
+    async (id: string, updates: Partial<CRMClient>) => {
+      const snapshot = [...clients];
+      setClients((prev) =>
+        prev.map((client) => (client.id === id ? { ...client, ...updates } : client))
+      );
       try {
-        const client = await crmService.createClient(input);
-        setClients((prev) => [client, ...prev.filter((item) => item.id !== optimisticClient.id)]);
-        setTotal((prev) => prev + 1);
-        return client;
+        const updated = await crmService.updateClient(id, updates);
+        setClients((prev) => prev.map((client) => (client.id === id ? updated : client)));
+        return updated;
       } catch (err) {
-        setClients((prev) => prev.filter((item) => item.id !== optimisticClient.id));
+        setClients(snapshot);
         throw err;
       }
     },
-    []
+    [clients]
   );
 
-  const updateClient = useCallback(async (id: string, updates: Partial<CRMClient>) => {
-    const snapshot = [...clients];
-    setClients((prev) => prev.map((client) => (client.id === id ? { ...client, ...updates } : client)));
-    try {
-      const updated = await crmService.updateClient(id, updates);
-      setClients((prev) => prev.map((client) => (client.id === id ? updated : client)));
-      return updated;
-    } catch (err) {
-      setClients(snapshot);
-      throw err;
-    }
-  }, [clients]);
+  const deleteClient = useCallback(
+    async (id: string) => {
+      const snapshot = [...clients];
+      setClients((prev) => prev.filter((client) => client.id !== id));
+      try {
+        await crmService.deleteClient(id);
+        setTotal((prev) => Math.max(0, prev - 1));
+      } catch (err) {
+        setClients(snapshot);
+        throw err;
+      }
+    },
+    [clients]
+  );
 
-  const deleteClient = useCallback(async (id: string) => {
-    const snapshot = [...clients];
-    setClients((prev) => prev.filter((client) => client.id !== id));
-    try {
-      await crmService.deleteClient(id);
-      setTotal((prev) => Math.max(0, prev - 1));
-    } catch (err) {
-      setClients(snapshot);
-      throw err;
-    }
-  }, [clients]);
+  const bulkUpdate = useCallback(
+    async (ids: string[], updates: Partial<CRMClient>) => {
+      const snapshot = [...clients];
+      setClients((prev) =>
+        prev.map((client) => (ids.includes(client.id) ? { ...client, ...updates } : client))
+      );
+      try {
+        await crmService.bulkUpdate(ids, updates);
+        setSelectedIds([]);
+      } catch (err) {
+        setClients(snapshot);
+        throw err;
+      }
+    },
+    [clients]
+  );
 
-  const bulkUpdate = useCallback(async (ids: string[], updates: Partial<CRMClient>) => {
-    const snapshot = [...clients];
-    setClients((prev) => prev.map((client) => (ids.includes(client.id) ? { ...client, ...updates } : client)));
-    try {
-      await crmService.bulkUpdate(ids, updates);
-      setSelectedIds([]);
-    } catch (err) {
-      setClients(snapshot);
-      throw err;
-    }
-  }, [clients]);
-
-  const bulkDelete = useCallback(async (ids: string[]) => {
-    const snapshot = [...clients];
-    setClients((prev) => prev.filter((client) => !ids.includes(client.id)));
-    try {
-      await crmService.bulkDelete(ids);
-      setSelectedIds([]);
-    } catch (err) {
-      setClients(snapshot);
-      throw err;
-    }
-  }, [clients]);
+  const bulkDelete = useCallback(
+    async (ids: string[]) => {
+      const snapshot = [...clients];
+      setClients((prev) => prev.filter((client) => !ids.includes(client.id)));
+      try {
+        await crmService.bulkDelete(ids);
+        setSelectedIds([]);
+      } catch (err) {
+        setClients(snapshot);
+        throw err;
+      }
+    },
+    [clients]
+  );
 
   const toggleSelection = useCallback((id: string) => {
     setSelectedIds((prev) =>
@@ -161,42 +174,66 @@ export const useClients = () => {
     }
   }, [selectedIds.length, clients]);
 
-  const pagination = useMemo(() => ({
-    page,
-    pageSize,
-    total,
-    setPage,
-    setPageSize
-  }), [page, pageSize, total]);
+  const pagination = useMemo(
+    () => ({
+      page,
+      pageSize,
+      total,
+      setPage,
+      setPageSize
+    }),
+    [page, pageSize, total]
+  );
 
-  const state = useMemo(() => ({
-    clients,
-    loading,
-    error,
-    total,
-    search,
-    filters,
-    sort,
-    viewMode,
-    selectedIds
-  }), [clients, loading, error, total, search, filters, sort, viewMode, selectedIds]);
+  const state = useMemo(
+    () => ({
+      clients,
+      loading,
+      error,
+      total,
+      search,
+      filters,
+      sort,
+      viewMode,
+      selectedIds
+    }),
+    [clients, loading, error, total, search, filters, sort, viewMode, selectedIds]
+  );
 
-  const actions = useMemo(() => ({
-    setSearch,
-    setFilters,
-    setSort,
-    setViewMode,
-    setPage,
-    setPageSize,
-    toggleSelection,
-    toggleSelectAll,
-    refresh,
-    addClient,
-    updateClient,
-    deleteClient,
-    bulkUpdate,
-    bulkDelete
-  }), [setSearch, setFilters, setSort, setViewMode, setPage, setPageSize, toggleSelection, toggleSelectAll, refresh, addClient, updateClient, deleteClient, bulkUpdate, bulkDelete]);
+  const actions = useMemo(
+    () => ({
+      setSearch,
+      setFilters,
+      setSort,
+      setViewMode,
+      setPage,
+      setPageSize,
+      toggleSelection,
+      toggleSelectAll,
+      refresh,
+      addClient,
+      updateClient,
+      deleteClient,
+      bulkUpdate,
+      bulkDelete
+    }),
+    [
+      setSearch,
+      setFilters,
+      setSort,
+      setViewMode,
+      setPage,
+      setPageSize,
+      toggleSelection,
+      toggleSelectAll,
+      refresh,
+      addClient,
+      updateClient,
+      deleteClient,
+      bulkUpdate,
+      bulkDelete
+    ]
+  );
 
   return {
     ...state,

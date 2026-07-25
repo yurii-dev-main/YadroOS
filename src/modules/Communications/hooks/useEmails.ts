@@ -1,6 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { emailService } from '../services/email.service';
-import { ClientSummary, EmailMessage, EmailSearchParams, EmailTag } from '../types/communication.types';
+import {
+  ClientSummary,
+  EmailMessage,
+  EmailSearchParams,
+  EmailTag
+} from '../types/communication.types';
 
 export const useEmails = (initialParams: EmailSearchParams = {}) => {
   const [emails, setEmails] = useState<EmailMessage[]>([]);
@@ -27,7 +32,9 @@ export const useEmails = (initialParams: EmailSearchParams = {}) => {
   }, []);
 
   const toggleSelect = useCallback((id: string) => {
-    setSelectedIds((prev) => (prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]));
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
   }, []);
 
   const selectAll = useCallback(() => {
@@ -46,11 +53,13 @@ export const useEmails = (initialParams: EmailSearchParams = {}) => {
     async (folder: EmailMessage['folder']) => {
       await emailService.moveToFolder(selectedIds, folder);
       setEmails((prev) =>
-        prev.map((email) => (selectedIds.includes(email.id) ? { ...email, folder, unread: false } : email)),
+        prev.map((email) =>
+          selectedIds.includes(email.id) ? { ...email, folder, unread: false } : email
+        )
       );
       clearSelection();
     },
-    [clearSelection, selectedIds],
+    [clearSelection, selectedIds]
   );
 
   const attachToClient = useCallback(async (emailId: string, clientId: string) => {
@@ -65,8 +74,12 @@ export const useEmails = (initialParams: EmailSearchParams = {}) => {
   }, []);
 
   const bulkMarkRead = useCallback(async () => {
-    await Promise.all(selectedIds.map((id) => emailService.updateEmailStatus(id, { unread: false })));
-    setEmails((prev) => prev.map((email) => (selectedIds.includes(email.id) ? { ...email, unread: false } : email)));
+    await Promise.all(
+      selectedIds.map((id) => emailService.updateEmailStatus(id, { unread: false }))
+    );
+    setEmails((prev) =>
+      prev.map((email) => (selectedIds.includes(email.id) ? { ...email, unread: false } : email))
+    );
     clearSelection();
   }, [clearSelection, selectedIds]);
 
@@ -88,6 +101,6 @@ export const useEmails = (initialParams: EmailSearchParams = {}) => {
     attachToClient,
     createClientFromEmail,
     bulkMarkRead,
-    refresh: () => fetchEmails(searchParams),
+    refresh: () => fetchEmails(searchParams)
   };
 };

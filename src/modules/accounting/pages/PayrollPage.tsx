@@ -17,9 +17,11 @@ export const PayrollPage = () => {
 
   const handleMarkPaid = async () => {
     await markPaid({
-      payrollRecordIds: records.filter((record) => record.status !== 'paid').map((record) => record.id),
+      payrollRecordIds: records
+        .filter((record) => record.status !== 'paid')
+        .map((record) => record.id),
       accountId: 'acc-mono',
-      executedBy: 'finance-admin',
+      executedBy: 'finance-admin'
     });
   };
 
@@ -30,7 +32,11 @@ export const PayrollPage = () => {
         <div className="mt-4 grid gap-4 md:grid-cols-4">
           <div className="grid gap-2">
             <span className="text-xs text-slate-500">Period</span>
-            <Input type="month" value={period} onChange={(event) => setPeriod(event.target.value)} />
+            <Input
+              type="month"
+              value={period}
+              onChange={(event) => setPeriod(event.target.value)}
+            />
           </div>
           <label className="flex items-center gap-2 text-xs text-slate-400">
             <input

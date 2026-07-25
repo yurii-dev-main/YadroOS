@@ -24,7 +24,11 @@ export interface MobileLayoutProps {
   onRefresh?: () => void;
 }
 
-export const MobileLayout = ({ children, updateAvailable = false, onRefresh }: MobileLayoutProps) => {
+export const MobileLayout = ({
+  children,
+  updateAvailable = false,
+  onRefresh
+}: MobileLayoutProps) => {
   const { isOnline } = useOnlineStatus();
   const { install, canInstall } = useInstallPrompt();
   const [drawerOpen, setDrawerOpen] = useState(false);

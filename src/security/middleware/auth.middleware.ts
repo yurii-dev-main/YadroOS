@@ -85,7 +85,12 @@ export class AuthSecurityManager {
     };
 
     if (state.lockedUntil && now < state.lockedUntil) {
-      return { allowed: false, requireCaptcha: true, lockedUntil: state.lockedUntil, retryAfter: state.lockedUntil - now };
+      return {
+        allowed: false,
+        requireCaptcha: true,
+        lockedUntil: state.lockedUntil,
+        retryAfter: state.lockedUntil - now
+      };
     }
 
     state.attempts += 1;

@@ -1,7 +1,9 @@
 # System Architecture
 
 ## Overview
+
 Integrated CRM platform for decentralized organizations with modules:
+
 - CRM (Client Relationship Management)
 - Communications (Unified inbox)
 - HR (Human Resources)
@@ -42,6 +44,7 @@ Integrated CRM platform for decentralized organizations with modules:
 ## Technology Stack
 
 ### Frontend
+
 - React 18.2+ (UI library)
 - TypeScript 5.3+ (Type safety)
 - Vite 5+ (Build tool)
@@ -53,6 +56,7 @@ Integrated CRM platform for decentralized organizations with modules:
 - Framer Motion (Animations)
 
 ### Backend
+
 - Node.js 20+ (Runtime)
 - Express 4+ (Web framework)
 - TypeScript (Type safety)
@@ -62,6 +66,7 @@ Integrated CRM platform for decentralized organizations with modules:
 - JWT (Authentication)
 
 ### Infrastructure
+
 - Nginx (Reverse proxy)
 - PM2 (Process manager)
 - Docker (Containerization - optional)
@@ -69,6 +74,7 @@ Integrated CRM platform for decentralized organizations with modules:
 - Let's Encrypt (SSL)
 
 ### External Services
+
 - OpenAI API / Claude API (AI)
 - Sentry (Error tracking)
 - UptimeRobot (Monitoring)
@@ -76,30 +82,35 @@ Integrated CRM platform for decentralized organizations with modules:
 ## Module Architecture
 
 ### 1. CRM Module
+
 - Client management
 - Deal pipeline (Kanban)
 - Activity tracking
 - Analytics dashboard
 
 ### 2. Communications Module
+
 - Email client (IMAP/SMTP)
 - Internal messenger (WebSocket)
 - Telegram integration
 - Unified inbox
 
 ### 3. HR Module
+
 - Employee database
 - Training system
 - Time tracking
 - Performance management
 
 ### 4. Accounting Module
+
 - Account management
 - Transactions
 - Invoicing
 - Payroll (AI-driven bonuses)
 
 ### 5. AI Module
+
 - Lead scoring
 - Performance analysis
 - Bonus calculation
@@ -108,6 +119,7 @@ Integrated CRM platform for decentralized organizations with modules:
 ## Database Schema
 
 ### Core Tables
+
 - users (authentication, roles)
 - employees (HR data)
 - clients (CRM)
@@ -119,6 +131,7 @@ Integrated CRM platform for decentralized organizations with modules:
 - messages (communications)
 
 ### Relationships
+
 - Users 1:1 Employees
 - Clients 1:N Deals
 - Deals 1:N Activities
@@ -132,6 +145,7 @@ See: docs/technical/database-schema.md for full ER diagram
 RESTful API at /api/v1/
 
 ### Endpoints Structure
+
 ```
 /api/v1/auth          - Authentication
 /api/v1/users         - User management
@@ -149,17 +163,20 @@ RESTful API at /api/v1/
 ```
 
 ### Authentication
+
 - JWT tokens (access + refresh)
 - 2FA support (TOTP)
 - Role-based authorization
 
 ### Rate Limiting
+
 - 100 requests/minute per user
 - 500 requests/minute per IP
 
 ## Security Model
 
 ### Authentication & Authorization
+
 - Password: bcrypt (12 rounds)
 - JWT tokens (1h expiry)
 - Refresh tokens (7 days)
@@ -167,12 +184,14 @@ RESTful API at /api/v1/
 - RBAC (6 roles: Admin, Manager, Operator, Accountant, HR, Viewer)
 
 ### Data Protection
+
 - Encryption at rest: AES-256-GCM
 - Encryption in transit: TLS 1.3
 - Sensitive data fields encrypted
 - Audit logging for all operations
 
 ### Input Validation
+
 - Backend validation (Zod schemas)
 - SQL injection prevention (Prisma/parameterized queries)
 - XSS protection (sanitization)
@@ -182,6 +201,7 @@ RESTful API at /api/v1/
 ## Deployment Architecture
 
 ### Production Environment
+
 ```
 ┌─────────────────────────────────┐
 │         Cloudflare CDN          │
@@ -215,6 +235,7 @@ RESTful API at /api/v1/
 ```
 
 ### Scaling Strategy
+
 - Horizontal scaling (add more app servers)
 - Database read replicas
 - Redis clustering
@@ -222,6 +243,7 @@ RESTful API at /api/v1/
 - Load balancing (round-robin)
 
 ## Performance Targets
+
 - Page load: < 2 seconds
 - API response: < 500ms (p95)
 - Database queries: < 100ms
@@ -229,6 +251,7 @@ RESTful API at /api/v1/
 - Concurrent users: 500+
 
 ## Monitoring & Logging
+
 - Application: Sentry
 - Uptime: UptimeRobot
 - Logs: Centralized (ELK stack or CloudWatch)

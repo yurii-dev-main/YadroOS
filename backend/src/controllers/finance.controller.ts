@@ -8,7 +8,11 @@ const decimalToNumber = (value: any): number => {
 };
 
 export const getProfitAndLoss = async (req: Request, res: Response) => {
-  const { from, to, currency = 'USD' } = req.query as {
+  const {
+    from,
+    to,
+    currency = 'USD'
+  } = req.query as {
     from?: string;
     to?: string;
     currency?: string;
@@ -48,10 +52,21 @@ export const getProfitAndLoss = async (req: Request, res: Response) => {
 };
 
 export const createInvoice = async (req: Request, res: Response) => {
-  const { clientId, amount, currency = 'USD', issueDate, dueDate, taxRate = 0.2, status } = req.body;
-  const lineItems = req.body.lineItems as Array<{ quantity: number; unitPrice: number }> | undefined;
+  const {
+    clientId,
+    amount,
+    currency = 'USD',
+    issueDate,
+    dueDate,
+    taxRate = 0.2,
+    status
+  } = req.body;
+  const lineItems = req.body.lineItems as
+    | Array<{ quantity: number; unitPrice: number }>
+    | undefined;
 
-  const subtotal = lineItems?.reduce((acc, item) => acc + item.quantity * item.unitPrice, 0) ?? Number(amount);
+  const subtotal =
+    lineItems?.reduce((acc, item) => acc + item.quantity * item.unitPrice, 0) ?? Number(amount);
   const taxAmount = subtotal * taxRate;
   const totalAmount = subtotal + taxAmount;
 

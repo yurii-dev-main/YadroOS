@@ -126,27 +126,48 @@ export const PipelinePage = () => {
               >
                 <label className="flex flex-col text-xs uppercase tracking-wide text-slate-400">
                   Deal Title
-                  <input {...register('title', { required: true })} className="mt-1 rounded-lg border border-slate-700 bg-slate-900 px-3 py-2" />
+                  <input
+                    {...register('title', { required: true })}
+                    className="mt-1 rounded-lg border border-slate-700 bg-slate-900 px-3 py-2"
+                  />
                 </label>
                 <label className="flex flex-col text-xs uppercase tracking-wide text-slate-400">
                   Client
-                  <input {...register('clientId', { required: true })} placeholder="Client ID" className="mt-1 rounded-lg border border-slate-700 bg-slate-900 px-3 py-2" />
+                  <input
+                    {...register('clientId', { required: true })}
+                    placeholder="Client ID"
+                    className="mt-1 rounded-lg border border-slate-700 bg-slate-900 px-3 py-2"
+                  />
                 </label>
                 <label className="flex flex-col text-xs uppercase tracking-wide text-slate-400">
                   Value
-                  <input type="number" {...register('value', { valueAsNumber: true })} className="mt-1 rounded-lg border border-slate-700 bg-slate-900 px-3 py-2" />
+                  <input
+                    type="number"
+                    {...register('value', { valueAsNumber: true })}
+                    className="mt-1 rounded-lg border border-slate-700 bg-slate-900 px-3 py-2"
+                  />
                 </label>
                 <label className="flex flex-col text-xs uppercase tracking-wide text-slate-400">
                   Probability
-                  <input type="number" {...register('probability', { valueAsNumber: true })} className="mt-1 rounded-lg border border-slate-700 bg-slate-900 px-3 py-2" />
+                  <input
+                    type="number"
+                    {...register('probability', { valueAsNumber: true })}
+                    className="mt-1 rounded-lg border border-slate-700 bg-slate-900 px-3 py-2"
+                  />
                 </label>
                 <label className="flex flex-col text-xs uppercase tracking-wide text-slate-400">
                   Owner
-                  <input {...register('owner', { required: true })} className="mt-1 rounded-lg border border-slate-700 bg-slate-900 px-3 py-2" />
+                  <input
+                    {...register('owner', { required: true })}
+                    className="mt-1 rounded-lg border border-slate-700 bg-slate-900 px-3 py-2"
+                  />
                 </label>
                 <label className="flex flex-col text-xs uppercase tracking-wide text-slate-400">
                   Stage
-                  <select {...register('stage')} className="mt-1 rounded-lg border border-slate-700 bg-slate-900 px-3 py-2">
+                  <select
+                    {...register('stage')}
+                    className="mt-1 rounded-lg border border-slate-700 bg-slate-900 px-3 py-2"
+                  >
                     {stageLabels.map((stage) => (
                       <option key={stage} value={stage}>
                         {stage}

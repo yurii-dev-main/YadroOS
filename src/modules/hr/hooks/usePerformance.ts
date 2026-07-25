@@ -26,6 +26,6 @@ export const usePerformance = (): UsePerformanceResult => {
     okrs,
     reviews,
     highlights,
-    averageScore,
+    averageScore
   };
 };

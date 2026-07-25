@@ -99,7 +99,12 @@ export const AvatarUploader: FC<AvatarUploaderProps> = ({ value, onChange }) => 
           )}
         </div>
         <div className="space-y-2">
-          <input type="file" accept="image/*" onChange={handleFileChange} aria-label="Upload avatar" />
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            aria-label="Upload avatar"
+          />
           {imageSrc && (
             <Button type="button" variant="secondary" onClick={handleApply}>
               Apply

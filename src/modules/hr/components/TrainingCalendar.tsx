@@ -6,7 +6,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { Training } from '../types/hr.types';
 
 const locales = {
-  'en-US': enUS,
+  'en-US': enUS
 };
 
 const localizer = dateFnsLocalizer({
@@ -14,7 +14,7 @@ const localizer = dateFnsLocalizer({
   parse,
   startOfWeek: (date: Date) => startOfWeek(date, { weekStartsOn: 1 }),
   getDay,
-  locales,
+  locales
 });
 
 interface TrainingCalendarProps {
@@ -29,7 +29,7 @@ const eventPropGetter: EventPropGetter<any> = (event: any) => {
     scheduled: '#6366f1',
     ongoing: '#f59e0b',
     completed: '#10b981',
-    cancelled: '#f87171',
+    cancelled: '#f87171'
   }[training.status];
 
   return {
@@ -38,8 +38,8 @@ const eventPropGetter: EventPropGetter<any> = (event: any) => {
       backgroundColor: `${statusColor}33`,
       color: statusColor,
       borderRadius: '8px',
-      padding: '4px 8px',
-    },
+      padding: '4px 8px'
+    }
   };
 };
 
@@ -51,9 +51,9 @@ export const TrainingCalendar: FC<TrainingCalendarProps> = ({ trainings, onSelec
         title: training.title,
         start: new Date(training.date),
         end: addHours(new Date(training.date), training.duration),
-        resource: training,
+        resource: training
       })),
-    [trainings],
+    [trainings]
   );
 
   return (
@@ -77,7 +77,7 @@ export const TrainingCalendar: FC<TrainingCalendarProps> = ({ trainings, onSelec
           date: 'Date',
           time: 'Time',
           event: 'Event',
-          showMore: (total: number) => `+${total} more`,
+          showMore: (total: number) => `+${total} more`
         }}
         views={['month', 'agenda']}
         // eslint-disable-next-line @typescript-eslint/no-explicit-any

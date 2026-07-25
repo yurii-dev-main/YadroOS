@@ -47,8 +47,8 @@ export const useMessages = () => {
           setTypingUsers((prev) => Array.from(new Set([...prev, userId])));
           setTimeout(() => setTypingUsers((prev) => prev.filter((id) => id !== userId)), 1500);
         }
-      },
-    },
+      }
+    }
   });
 
   const sendMessage = useCallback(
@@ -59,7 +59,7 @@ export const useMessages = () => {
       setTypingUsers((prev) => prev.filter((id) => id !== author.id));
       return newMessage;
     },
-    [activeChatId],
+    [activeChatId]
   );
 
   const markTyping = useCallback(
@@ -69,10 +69,13 @@ export const useMessages = () => {
       await chatService.updateTypingStatus();
       setTimeout(() => setTypingUsers((prev) => prev.filter((id) => id !== authorId)), 1000);
     },
-    [activeChatId],
+    [activeChatId]
   );
 
-  const activeThread = useMemo(() => threads.find((thread) => thread.id === activeChatId), [threads, activeChatId]);
+  const activeThread = useMemo(
+    () => threads.find((thread) => thread.id === activeChatId),
+    [threads, activeChatId]
+  );
 
   return {
     threads,
@@ -83,6 +86,6 @@ export const useMessages = () => {
     typingUsers,
     sendMessage,
     markTyping,
-    refreshThreads: loadThreads,
+    refreshThreads: loadThreads
   };
 };

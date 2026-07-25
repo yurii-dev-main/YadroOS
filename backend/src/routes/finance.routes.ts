@@ -6,7 +6,11 @@ import { authMiddleware, checkRole } from '../middleware/auth';
 const router = Router();
 
 router.use(authMiddleware);
-router.get('/reports/pnl', checkRole([Role.ADMIN, Role.ACCOUNTANT, Role.MANAGER]), getProfitAndLoss);
+router.get(
+  '/reports/pnl',
+  checkRole([Role.ADMIN, Role.ACCOUNTANT, Role.MANAGER]),
+  getProfitAndLoss
+);
 router.post('/invoices', checkRole([Role.ADMIN, Role.ACCOUNTANT]), createInvoice);
 
 export default router;

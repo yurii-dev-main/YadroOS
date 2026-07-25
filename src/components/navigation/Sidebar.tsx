@@ -50,7 +50,10 @@ export const Sidebar = () => {
           <Menu className="h-5 w-5" />
         </button>
       </div>
-      <nav className={cn('space-y-1 px-4 py-6', !isOpen && 'hidden lg:block')} aria-label="Main navigation">
+      <nav
+        className={cn('space-y-1 px-4 py-6', !isOpen && 'hidden lg:block')}
+        aria-label="Main navigation"
+      >
         {items.map((item) => {
           const Icon = iconMap[item.icon] ?? LayoutDashboard;
           const isActive = location.pathname.startsWith(item.to);
@@ -60,7 +63,9 @@ export const Sidebar = () => {
               to={item.to}
               className={cn(
                 'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
-                isActive ? 'bg-primary/20 text-primary' : 'text-slate-300 hover:bg-slate-900 hover:text-slate-50'
+                isActive
+                  ? 'bg-primary/20 text-primary'
+                  : 'text-slate-300 hover:bg-slate-900 hover:text-slate-50'
               )}
             >
               <Icon className="h-4 w-4" />

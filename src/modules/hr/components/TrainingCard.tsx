@@ -8,7 +8,12 @@ interface TrainingCardProps {
   employees: Employee[];
   onRegister: (trainingId: string, employeeId: string) => void;
   onMarkAttendance: (trainingId: string, employeeId: string, attended: boolean) => void;
-  onSubmitFeedback: (trainingId: string, employeeId: string, rating: number, comments: string) => void;
+  onSubmitFeedback: (
+    trainingId: string,
+    employeeId: string,
+    rating: number,
+    comments: string
+  ) => void;
 }
 
 export const TrainingCard: FC<TrainingCardProps> = ({
@@ -16,7 +21,7 @@ export const TrainingCard: FC<TrainingCardProps> = ({
   employees,
   onRegister,
   onMarkAttendance,
-  onSubmitFeedback,
+  onSubmitFeedback
 }) => {
   const [selectedEmployeeId, setSelectedEmployeeId] = useState('');
   const [feedbackEmployeeId, setFeedbackEmployeeId] = useState('');
@@ -26,9 +31,10 @@ export const TrainingCard: FC<TrainingCardProps> = ({
   const availableEmployees = useMemo(
     () =>
       employees.filter(
-        (employee) => !training.participants.some((participant) => participant.employeeId === employee.id),
+        (employee) =>
+          !training.participants.some((participant) => participant.employeeId === employee.id)
       ),
-    [employees, training.participants],
+    [employees, training.participants]
   );
 
   const handleRegister = (event: FormEvent) => {
@@ -41,7 +47,12 @@ export const TrainingCard: FC<TrainingCardProps> = ({
   const handleSubmitFeedback = (event: FormEvent) => {
     event.preventDefault();
     if (!feedbackEmployeeId) return;
-    onSubmitFeedback(training.id, feedbackEmployeeId, feedbackRating, feedbackComment || 'No comments');
+    onSubmitFeedback(
+      training.id,
+      feedbackEmployeeId,
+      feedbackRating,
+      feedbackComment || 'No comments'
+    );
     setFeedbackEmployeeId('');
     setFeedbackRating(5);
     setFeedbackComment('');
@@ -70,7 +81,9 @@ export const TrainingCard: FC<TrainingCardProps> = ({
           </div>
           <div>
             <p>Status: {training.status}</p>
-            <p>Capacity: {training.participants.length}/{training.capacity}</p>
+            <p>
+              Capacity: {training.participants.length}/{training.capacity}
+            </p>
             <p>Materials:</p>
             <ul className="list-inside list-disc text-xs text-indigo-200">
               {training.materials.map((material) => (
@@ -105,7 +118,9 @@ export const TrainingCard: FC<TrainingCardProps> = ({
                     <button
                       type="button"
                       className="rounded-md border border-emerald-500/40 px-3 py-1 text-emerald-300 hover:bg-emerald-500/10"
-                      onClick={() => onMarkAttendance(training.id, participant.employeeId, !participant.attended)}
+                      onClick={() =>
+                        onMarkAttendance(training.id, participant.employeeId, !participant.attended)
+                      }
                     >
                       {participant.attended ? 'Cancel' : 'Mark'}
                     </button>
@@ -116,7 +131,10 @@ export const TrainingCard: FC<TrainingCardProps> = ({
           </ul>
         </div>
 
-        <form onSubmit={handleRegister} className="rounded-lg border border-slate-800 bg-slate-900/70 p-3">
+        <form
+          onSubmit={handleRegister}
+          className="rounded-lg border border-slate-800 bg-slate-900/70 p-3"
+        >
           <h4 className="text-xs uppercase tracking-wide text-slate-400">Training Registration</h4>
           <div className="mt-2 flex flex-col gap-2 md:flex-row">
             <select
@@ -140,7 +158,10 @@ export const TrainingCard: FC<TrainingCardProps> = ({
           </div>
         </form>
 
-        <form onSubmit={handleSubmitFeedback} className="rounded-lg border border-slate-800 bg-slate-900/70 p-3">
+        <form
+          onSubmit={handleSubmitFeedback}
+          className="rounded-lg border border-slate-800 bg-slate-900/70 p-3"
+        >
           <h4 className="text-xs uppercase tracking-wide text-slate-400">Leave Feedback</h4>
           <div className="mt-2 grid grid-cols-1 gap-2 md:grid-cols-3">
             <select

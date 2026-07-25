@@ -74,9 +74,7 @@ export const crmRoutes = {
       .then((response) => response.data);
   },
   markDealAsWon(dealId: string) {
-    return apiClient
-      .post<CrmDeal>(`/crm/deals/${dealId}/win`)
-      .then((response) => response.data);
+    return apiClient.post<CrmDeal>(`/crm/deals/${dealId}/win`).then((response) => response.data);
   },
   importDeals(payload: FormData) {
     return apiClient

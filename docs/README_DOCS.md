@@ -3,11 +3,13 @@
 The `docs/` tree is divided by audience to quickly find the necessary materials.
 
 ## Overview
+
 - **User** — user guides for CRM, communications, HR, and finance (`docs/user/`).
 - **Technical** — architecture, API, database schema, and developer guide (`docs/technical/`).
 - **Admin/Operations** — instructions for deployment and maintenance (`docs/admin/`).
 
 ## Quick Navigation
+
 - Getting started with the product: `docs/user/getting-started.md`.
 - Architecture and stack: `docs/technical/architecture.md`.
 - API and integrations: `docs/technical/api-reference.md`.

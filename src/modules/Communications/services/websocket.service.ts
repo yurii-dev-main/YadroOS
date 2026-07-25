@@ -53,5 +53,5 @@ export const websocketService = {
     const socket = sockets.get(channel);
     socket?.disconnect();
     sockets.delete(channel);
-  },
+  }
 };

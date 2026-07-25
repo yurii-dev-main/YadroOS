@@ -24,7 +24,9 @@ declare global {
       captureException: CaptureFunction;
       captureMessage: (message: string, level?: string) => void;
       setUser: (user: Record<string, unknown> | null) => void;
-      configureScope: (callback: (scope: { setTag: (key: string, value: string) => void }) => void) => void;
+      configureScope: (
+        callback: (scope: { setTag: (key: string, value: string) => void }) => void
+      ) => void;
     };
   }
 }
@@ -40,7 +42,11 @@ export class ErrorTracker {
     }
 
     if (typeof window !== 'undefined' && window.Sentry) {
-      window.Sentry.init({ dsn: this.config.dsn, environment: this.config.environment, release: this.config.release });
+      window.Sentry.init({
+        dsn: this.config.dsn,
+        environment: this.config.environment,
+        release: this.config.release
+      });
       this.initialized = true;
       logger.info('Sentry initialized');
     } else {

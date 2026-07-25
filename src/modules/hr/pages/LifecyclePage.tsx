@@ -16,8 +16,8 @@ export const LifecyclePage = () => {
           <CardTitle className="text-lg text-slate-100">Onboarding / Offboarding</CardTitle>
         </CardHeader>
         <CardContent className="text-sm text-slate-300">
-          Control the entire employee lifecycle: from the first day to the final settlement. Tasks, access, documents,
-          and equipment are under full HR control.
+          Control the entire employee lifecycle: from the first day to the final settlement. Tasks,
+          access, documents, and equipment are under full HR control.
         </CardContent>
       </Card>
 

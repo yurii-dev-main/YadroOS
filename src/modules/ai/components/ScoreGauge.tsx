@@ -24,12 +24,7 @@ export const ScoreGauge = ({ value, label, size = 180, suffix = '%' }: ScoreGaug
             endAngle={-45}
             data={chartData}
           >
-            <RadialBar
-              background
-              dataKey="value"
-              cornerRadius={12}
-              fill="#38bdf8"
-            />
+            <RadialBar background dataKey="value" cornerRadius={12} fill="#38bdf8" />
           </RadialBarChart>
         </ResponsiveContainer>
       </div>

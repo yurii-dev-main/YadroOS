@@ -8,7 +8,9 @@ export default defineConfig({
     __DEMO_SINGLEFILE__: JSON.stringify(true)
   },
   transformIndexHtml: (html) =>
-    html.replace(/<link\s+rel="manifest"[^>]*>\s*/i, '').replace(/<link\s+rel="apple-touch-icon"[^>]*>\s*/i, ''),
+    html
+      .replace(/<link\s+rel="manifest"[^>]*>\s*/i, '')
+      .replace(/<link\s+rel="apple-touch-icon"[^>]*>\s*/i, ''),
   plugins: [
     react(),
     viteSingleFile({

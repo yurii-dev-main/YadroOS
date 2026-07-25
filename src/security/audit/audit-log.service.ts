@@ -58,7 +58,9 @@ const toBase64 = (value: string) => {
 
 const digest = async (value: string) => {
   const hashBuffer = await cryptoProvider.subtle.digest('SHA-256', toBuffer(value));
-  return Array.from(new Uint8Array(hashBuffer), (byte) => byte.toString(16).padStart(2, '0')).join('');
+  return Array.from(new Uint8Array(hashBuffer), (byte) => byte.toString(16).padStart(2, '0')).join(
+    ''
+  );
 };
 
 const readStorage = (): StoredAuditEntry[] => {
@@ -101,14 +103,18 @@ export class AuditLogService {
     }
   }
 
-  async record<TPayload>(params: Omit<AuditLogEntry<TPayload>, 'id' | 'createdAt' | 'hash'>): Promise<AuditLogEntry<TPayload>> {
+  async record<TPayload>(
+    params: Omit<AuditLogEntry<TPayload>, 'id' | 'createdAt' | 'hash'>
+  ): Promise<AuditLogEntry<TPayload>> {
     const entry: AuditLogEntry<TPayload> = {
       ...params,
       id: randomUuid(),
       createdAt: Date.now(),
       hash: ''
     };
-    entry.hash = await digest(`${entry.userId}-${entry.resource}-${entry.createdAt}-${JSON.stringify(entry.payload)}`);
+    entry.hash = await digest(
+      `${entry.userId}-${entry.resource}-${entry.createdAt}-${JSON.stringify(entry.payload)}`
+    );
     const encrypted = await this.encryptEntry(entry);
     const stored = readStorage();
     stored.push(encrypted);

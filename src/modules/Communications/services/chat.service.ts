@@ -5,18 +5,24 @@ import {
   ChatParticipant,
   ChatThread,
   MessageSearchParams,
-  NotificationPreferences,
+  NotificationPreferences
 } from '../types/communication.types';
 import { apiClient } from '../../../services/apiClient';
 
 const cannedResponses: CannedResponse[] = [
-  { id: 'cr-1', shortcut: '/thanks', title: 'Thank You', content: 'Thank you for reaching out! We are already working on your request.' },
+  {
+    id: 'cr-1',
+    shortcut: '/thanks',
+    title: 'Thank You',
+    content: 'Thank you for reaching out! We are already working on your request.'
+  },
   {
     id: 'cr-2',
     shortcut: '/schedule',
     title: 'Offer a call',
-    content: 'Would it be convenient for you to discuss the details on a short call tomorrow at 12:00?',
-  },
+    content:
+      'Would it be convenient for you to discuss the details on a short call tomorrow at 12:00?'
+  }
 ];
 
 const autoResponders: AutoResponder[] = [
@@ -24,14 +30,14 @@ const autoResponders: AutoResponder[] = [
     id: 'auto-1',
     type: 'out_of_office',
     active: false,
-    message: 'Hello! We are currently out of office, we will get back to you within 24 hours.',
+    message: 'Hello! We are currently out of office, we will get back to you within 24 hours.'
   },
   {
     id: 'auto-2',
     type: 'business_hours',
     active: true,
-    message: 'Welcome! We work from 9:00 to 18:00. We will reply as soon as we are online.',
-  },
+    message: 'Welcome! We work from 9:00 to 18:00. We will reply as soon as we are online.'
+  }
 ];
 
 const notificationPreferences: NotificationPreferences = {
@@ -44,13 +50,13 @@ const notificationPreferences: NotificationPreferences = {
     startHour: 9,
     endHour: 18,
     timezone: 'Europe/Kyiv',
-    days: [1, 2, 3, 4, 5],
+    days: [1, 2, 3, 4, 5]
   },
   channelPreferences: {
     email: true,
     internal: true,
-    telegram: false,
-  },
+    telegram: false
+  }
 };
 
 export const chatService = {
@@ -60,7 +66,9 @@ export const chatService = {
   },
 
   async fetchMessages(chatId: string) {
-    const response = await apiClient.get<ChatMessage[]>(`/v1/communications/threads/${chatId}/messages`);
+    const response = await apiClient.get<ChatMessage[]>(
+      `/v1/communications/threads/${chatId}/messages`
+    );
     return response.data;
   },
 
@@ -73,7 +81,7 @@ export const chatService = {
     const response = await apiClient.post<ChatMessage>('/v1/communications/messages', {
       chatId,
       author,
-      content,
+      content
     });
     return response.data;
   },
@@ -102,5 +110,5 @@ export const chatService = {
     await new Promise((resolve) => setTimeout(resolve, 200));
     Object.assign(notificationPreferences, prefs);
     return notificationPreferences;
-  },
+  }
 };

@@ -4,7 +4,7 @@ import {
   PayrollDeduction,
   PayrollRecord,
   TaxConfiguration,
-  TaxBracket,
+  TaxBracket
 } from '../types/accounting.types';
 
 export const defaultTaxConfiguration: TaxConfiguration = {
@@ -16,8 +16,8 @@ export const defaultTaxConfiguration: TaxConfiguration = {
   progressiveBrackets: [
     { id: 'income-low', name: 'Up to 50,000', rate: 0.1, appliesTo: 'income' },
     { id: 'income-mid', name: '50,000 - 150,000', rate: 0.18, appliesTo: 'income' },
-    { id: 'income-high', name: '150,000+', rate: 0.22, appliesTo: 'income' },
-  ],
+    { id: 'income-high', name: '150,000+', rate: 0.22, appliesTo: 'income' }
+  ]
 };
 
 export const calculateProgressiveTax = (amount: number, brackets: TaxBracket[]): number => {
@@ -31,7 +31,9 @@ export const calculateProgressiveTax = (amount: number, brackets: TaxBracket[]):
 
   sorted.forEach((bracket, index) => {
     const nextBracket = sorted[index + 1];
-    const limit = nextBracket ? new Decimal(amount).mul(nextBracket.rate / bracket.rate) : remaining;
+    const limit = nextBracket
+      ? new Decimal(amount).mul(nextBracket.rate / bracket.rate)
+      : remaining;
     const taxable = Decimal.min(remaining, limit);
 
     tax = tax.add(taxable.mul(bracket.rate));
@@ -43,7 +45,7 @@ export const calculateProgressiveTax = (amount: number, brackets: TaxBracket[]):
 
 export const calculatePayrollDeductions = (
   grossSalary: number,
-  config: TaxConfiguration = defaultTaxConfiguration,
+  config: TaxConfiguration = defaultTaxConfiguration
 ): PayrollDeduction[] => {
   const salary = new Decimal(grossSalary);
   const incomeTax = salary.mul(config.incomeTaxRate);
@@ -53,21 +55,24 @@ export const calculatePayrollDeductions = (
   return [
     { name: 'PIT', amount: Number(incomeTax.toFixed(2)), type: 'tax' },
     { name: 'SSI', amount: Number(socialSecurity.toFixed(2)), type: 'insurance' },
-    { name: 'Pension Fund', amount: Number(pension.toFixed(2)), type: 'pension' },
+    { name: 'Pension Fund', amount: Number(pension.toFixed(2)), type: 'pension' }
   ];
 };
 
 export const calculateNetSalary = (
-  record: Pick<PayrollRecord, 'grossSalary' | 'deductions'>,
+  record: Pick<PayrollRecord, 'grossSalary' | 'deductions'>
 ): number => {
   const gross = new Decimal(record.grossSalary);
-  const deductions = record.deductions.reduce((acc, deduction) => acc.add(deduction.amount), new Decimal(0));
+  const deductions = record.deductions.reduce(
+    (acc, deduction) => acc.add(deduction.amount),
+    new Decimal(0)
+  );
   return Number(gross.minus(deductions).toFixed(2));
 };
 
 export const calculateInvoiceTaxes = (
   invoice: Invoice,
-  config: TaxConfiguration = defaultTaxConfiguration,
+  config: TaxConfiguration = defaultTaxConfiguration
 ): number => {
   const taxableAmount = invoice.lineItems.reduce((acc, item) => {
     const price = new Decimal(item.quantity).mul(item.unitPrice);
@@ -76,7 +81,8 @@ export const calculateInvoiceTaxes = (
   }, new Decimal(0));
 
   const vatRate = invoice.lineItems.some((item) => item.taxRate !== undefined)
-    ? invoice.lineItems.reduce((acc, item) => acc + (item.taxRate ?? config.vatRate), 0) / invoice.lineItems.length
+    ? invoice.lineItems.reduce((acc, item) => acc + (item.taxRate ?? config.vatRate), 0) /
+      invoice.lineItems.length
     : config.vatRate;
 
   return Number(taxableAmount.mul(vatRate).toFixed(2));
@@ -97,12 +103,12 @@ export const calculateDiscountedAmount = (invoice: Invoice): number => {
 
 export const applyTaxConfiguration = (invoice: Invoice, config: TaxConfiguration): Invoice => ({
   ...invoice,
-  taxes: calculateInvoiceTaxes(invoice, config),
+  taxes: calculateInvoiceTaxes(invoice, config)
 });
 
 export const calculateTaxLiability = (
   records: PayrollRecord[],
-  config: TaxConfiguration = defaultTaxConfiguration,
+  config: TaxConfiguration = defaultTaxConfiguration
 ): number => {
   return records.reduce((acc, record) => {
     const deductions = record.deductions.filter((deduction) => deduction.type === 'tax');

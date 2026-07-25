@@ -30,7 +30,10 @@ export const BudgetsPage = () => {
         </CardHeader>
         <CardContent className="space-y-2 text-sm text-slate-300">
           {budgets.map((budget) => (
-            <div key={budget.id} className="flex items-center justify-between rounded-md border border-slate-800 bg-slate-900/80 p-3">
+            <div
+              key={budget.id}
+              className="flex items-center justify-between rounded-md border border-slate-800 bg-slate-900/80 p-3"
+            >
               <span>{budget.name}</span>
               <span className={usage[budget.id] > 90 ? 'text-rose-300' : 'text-emerald-300'}>
                 {usage[budget.id] ?? 0}%

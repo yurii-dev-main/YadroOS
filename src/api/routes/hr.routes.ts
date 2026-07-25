@@ -37,7 +37,9 @@ export const hrRoutes = {
         .then((response) => response.data);
     }
 
-    return apiClient.post<EmployeeRecord>('/hr/employees', payload).then((response) => response.data);
+    return apiClient
+      .post<EmployeeRecord>('/hr/employees', payload)
+      .then((response) => response.data);
   },
   archiveEmployee(employeeId: string) {
     return apiClient.delete(`/hr/employees/${employeeId}`).then(() => undefined);

@@ -12,10 +12,17 @@ export class PerformanceManager {
   private cache: CacheManager<unknown>;
 
   constructor(private readonly budget: PerformanceBudget) {
-    this.cache = createCacheManager({ ttlMs: 60 * 1000, maxEntries: 100, namespace: 'performance' });
+    this.cache = createCacheManager({
+      ttlMs: 60 * 1000,
+      maxEntries: 100,
+      namespace: 'performance'
+    });
   }
 
-  trackMetric(name: Parameters<typeof performanceMetrics.register>[0], handler: Parameters<typeof performanceMetrics.register>[1]) {
+  trackMetric(
+    name: Parameters<typeof performanceMetrics.register>[0],
+    handler: Parameters<typeof performanceMetrics.register>[1]
+  ) {
     performanceMetrics.register(name, handler);
   }
 

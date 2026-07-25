@@ -15,19 +15,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Run ESLint
         run: npm run lint
-      
+
       - name: Check formatting
         run: npm run format:check
 
@@ -40,17 +40,17 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Type check
         run: npm run type-check
 
   test:
     name: Unit & Integration Tests
     runs-on: ubuntu-latest
-    
+
     services:
       postgres:
         image: postgres:15
@@ -64,7 +64,7 @@ jobs:
           --health-retries 5
         ports:
           - 5432:5432
-      
+
       redis:
         image: redis:7
         options: >-
@@ -74,32 +74,32 @@ jobs:
           --health-retries 5
         ports:
           - 6379:6379
-    
+
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Run migrations
         run: npm run db:migrate:test
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/crm_test
-      
+
       - name: Run tests
         run: npm run test:coverage
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/crm_test
           REDIS_URL: redis://localhost:6379
-      
-      - name: Upload coverage
-        uses: codecov/codecov-action@v3
-        with:
-          files: ./coverage/coverage-final.json
+
+      # - name: Upload coverage
+      #   uses: codecov/codecov-action@v3
+      #   with:
+      #     files: ./coverage/coverage-final.json
 
   e2e:
     name: E2E Tests
@@ -110,19 +110,19 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Install Playwright
         run: npx playwright install --with-deps
-      
+
       - name: Build app
         run: npm run build
-      
+
       - name: Run E2E tests
         run: npm run test:e2e
-      
+
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v3
@@ -140,13 +140,13 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Build
         run: npm run build
-      
+
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -161,16 +161,16 @@ jobs:
     environment:
       name: staging
       url: https://staging.yourcompany.com
-    
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Download build artifacts
         uses: actions/download-artifact@v3
         with:
           name: dist
           path: dist/
-      
+
       - name: Deploy to staging
         uses: appleboy/ssh-action@master
         with:
@@ -192,16 +192,16 @@ jobs:
     environment:
       name: production
       url: https://app.yourcompany.com
-    
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Download build artifacts
         uses: actions/download-artifact@v3
         with:
           name: dist
           path: dist/
-      
+
       - name: Create backup
         uses: appleboy/ssh-action@master
         with:
@@ -211,7 +211,7 @@ jobs:
           script: |
             cd /var/www/crm
             ./scripts/backup.sh
-      
+
       - name: Deploy to production
         uses: appleboy/ssh-action@master
         with:
@@ -221,12 +221,12 @@ jobs:
           script: |
             cd /var/www/crm
             ./scripts/deploy.sh
-      
+
       - name: Health check
         run: |
           sleep 10
           curl -f https://app.yourcompany.com/health || exit 1
-      
+
       - name: Notify on success
         if: success()
         uses: 8398a7/action-slack@v3
@@ -234,7 +234,7 @@ jobs:
           status: ${{ job.status }}
           text: '🎉 Deployment to production successful!'
           webhook_url: ${{ secrets.SLACK_WEBHOOK }}
-      
+
       - name: Rollback on failure
         if: failure()
         uses: appleboy/ssh-action@master

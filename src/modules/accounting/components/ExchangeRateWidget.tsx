@@ -21,10 +21,15 @@ export const ExchangeRateWidget = ({ exchangeRate, onRefresh }: ExchangeRateWidg
       <CardContent className="space-y-3 text-sm text-slate-300">
         {exchangeRate ? (
           <>
-            <p className="text-xs text-slate-500">Updated: {new Date(exchangeRate.updatedAt).toLocaleString('uk-UA')}</p>
+            <p className="text-xs text-slate-500">
+              Updated: {new Date(exchangeRate.updatedAt).toLocaleString('uk-UA')}
+            </p>
             <div className="grid grid-cols-3 gap-3 text-center">
               {Object.entries(exchangeRate.rates).map(([currency, rate]) => (
-                <div key={currency} className="rounded-md border border-slate-800 bg-slate-900/80 p-3">
+                <div
+                  key={currency}
+                  className="rounded-md border border-slate-800 bg-slate-900/80 p-3"
+                >
                   <p className="text-xs uppercase text-slate-500">{currency}</p>
                   <p className="text-lg font-semibold text-slate-100">{rate.toFixed(3)}</p>
                 </div>

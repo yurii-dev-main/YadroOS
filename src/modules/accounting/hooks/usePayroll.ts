@@ -7,7 +7,7 @@ import {
   PayrollRecord,
   PayrollRunRequest,
   PaymentExecutionRequest,
-  PayslipGenerationOptions,
+  PayslipGenerationOptions
 } from '../types/accounting.types';
 
 interface PayrollState {
@@ -39,14 +39,19 @@ const usePayrollStore = create<PayrollState>((set, get) => ({
           period: record.period,
           runDate: record.generatedAt,
           paymentDate: record.paidAt ?? record.generatedAt,
-          status: record.status === 'paid' ? 'paid' : record.status === 'processed' ? 'processed' : 'scheduled',
+          status:
+            record.status === 'paid'
+              ? 'paid'
+              : record.status === 'processed'
+                ? 'processed'
+                : 'scheduled'
         }));
         set({ calendar });
       }
     } catch (error) {
       set({
         loading: false,
-        error: error instanceof Error ? error.message : 'Failed to load payroll data',
+        error: error instanceof Error ? error.message : 'Failed to load payroll data'
       });
     }
   },
@@ -57,12 +62,12 @@ const usePayrollStore = create<PayrollState>((set, get) => ({
       set({
         records: [...records, ...get().records],
         lastRun: request.period,
-        loading: false,
+        loading: false
       });
     } catch (error) {
       set({
         loading: false,
-        error: error instanceof Error ? error.message : 'Failed to run payroll calculation',
+        error: error instanceof Error ? error.message : 'Failed to run payroll calculation'
       });
     }
   },
@@ -76,7 +81,7 @@ const usePayrollStore = create<PayrollState>((set, get) => ({
     if (!record) return;
     const doc = generatePayslipPdf(record, options);
     doc.save(`Payslip-${record.employeeName}-${record.period}.pdf`);
-  },
+  }
 }));
 
 export const usePayroll = () => {

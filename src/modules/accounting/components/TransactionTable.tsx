@@ -10,7 +10,7 @@ interface TransactionTableProps {
 const statusColor: Record<Transaction['status'], string> = {
   pending: 'text-amber-300',
   completed: 'text-emerald-300',
-  cancelled: 'text-rose-300',
+  cancelled: 'text-rose-300'
 };
 
 export const TransactionTable = ({ transactions, accounts, categories }: TransactionTableProps) => {
@@ -33,7 +33,9 @@ export const TransactionTable = ({ transactions, accounts, categories }: Transac
         <tbody className="divide-y divide-slate-800 bg-slate-950/40">
           {transactions.map((transaction) => {
             const account = accountMap.get(transaction.accountId);
-            const category = transaction.categoryId ? categoryMap.get(transaction.categoryId) : undefined;
+            const category = transaction.categoryId
+              ? categoryMap.get(transaction.categoryId)
+              : undefined;
             const amountClass =
               transaction.type === 'income'
                 ? 'text-emerald-300'
@@ -47,12 +49,16 @@ export const TransactionTable = ({ transactions, accounts, categories }: Transac
                 </td>
                 <td className="px-4 py-3">
                   <div className="flex flex-col">
-                    <span className="font-medium text-slate-100">{transaction.description ?? '—'}</span>
+                    <span className="font-medium text-slate-100">
+                      {transaction.description ?? '—'}
+                    </span>
                     {transaction.tags && transaction.tags.length > 0 && (
                       <span className="text-xs text-slate-500">{transaction.tags.join(', ')}</span>
                     )}
                     {transaction.recurring && (
-                      <span className="text-[10px] uppercase text-amber-400">Repeats: {transaction.recurring.frequency}</span>
+                      <span className="text-[10px] uppercase text-amber-400">
+                        Repeats: {transaction.recurring.frequency}
+                      </span>
                     )}
                   </div>
                 </td>
@@ -60,14 +66,19 @@ export const TransactionTable = ({ transactions, accounts, categories }: Transac
                   <div className="flex flex-col">
                     <span>{account?.name ?? '—'}</span>
                     {transaction.toAccountId && (
-                      <span className="text-xs text-slate-500">→ {accountMap.get(transaction.toAccountId)?.name}</span>
+                      <span className="text-xs text-slate-500">
+                        → {accountMap.get(transaction.toAccountId)?.name}
+                      </span>
                     )}
                   </div>
                 </td>
                 <td className="px-4 py-3 text-slate-300">{category?.name ?? '—'}</td>
                 <td className={`px-4 py-3 text-right font-semibold ${amountClass}`}>
                   {transaction.type === 'expense' ? '-' : '+'}
-                  {transaction.amount.toLocaleString('uk-UA', { style: 'currency', currency: transaction.currency })}
+                  {transaction.amount.toLocaleString('uk-UA', {
+                    style: 'currency',
+                    currency: transaction.currency
+                  })}
                 </td>
                 <td className="px-4 py-3 text-right text-xs uppercase tracking-wide">
                   <span className={statusColor[transaction.status]}>{transaction.status}</span>
@@ -78,7 +89,9 @@ export const TransactionTable = ({ transactions, accounts, categories }: Transac
         </tbody>
       </table>
       {!transactions.length && (
-        <p className="p-4 text-center text-xs text-slate-500">No transactions found for the selected filters.</p>
+        <p className="p-4 text-center text-xs text-slate-500">
+          No transactions found for the selected filters.
+        </p>
       )}
     </div>
   );

@@ -3,6 +3,7 @@
 ## Prerequisites
 
 ### Required Software
+
 - Node.js 20+ ([download](https://nodejs.org))
 - PostgreSQL 15+ ([download](https://www.postgresql.org/download/))
 - Redis 7+ ([download](https://redis.io/download))
@@ -10,6 +11,7 @@
 - Code editor (VS Code recommended)
 
 ### Recommended VS Code Extensions
+
 - ESLint
 - Prettier
 - TypeScript and JavaScript Language Features
@@ -20,17 +22,20 @@
 ## Getting Started
 
 ### 1. Clone Repository
+
 ```bash
 git clone https://github.com/yourcompany/crm-platform.git
 cd crm-platform
 ```
 
 ### 2. Install Dependencies
+
 ```bash
 npm install
 ```
 
 ### 3. Setup Environment
+
 ```bash
 # Copy example env file
 cp .env.example .env
@@ -40,6 +45,7 @@ nano .env
 ```
 
 Required environment variables:
+
 ```bash
 # Database
 DATABASE_URL=postgresql://postgres:password@localhost:5432/crm_dev
@@ -55,6 +61,7 @@ OPENAI_API_KEY=sk-...
 ```
 
 ### 4. Setup Database
+
 ```bash
 # Create database
 npm run db:create
@@ -67,25 +74,30 @@ npm run db:seed
 ```
 
 This will create:
+
 - Admin user (admin@test.com / password123)
 - 10 test clients
 - 5 test employees
 - Sample deals and activities
 
 ### 5. Start Development Server
+
 ```bash
 # Start all services
 npm run dev
 ```
 
 This starts:
+
 - Frontend dev server: http://localhost:3000
 - Backend API: http://localhost:3001
 - Database: localhost:5432
 - Redis: localhost:6379
 
 ### 6. Login
+
 Navigate to http://localhost:3000 and login:
+
 - Email: admin@test.com
 - Password: password123
 
@@ -146,6 +158,7 @@ crm-platform/
 ## Code Style Guide
 
 ### TypeScript
+
 - Use strict mode
 - No `any` types (use `unknown` if needed)
 - Prefer interfaces over types for objects
@@ -163,10 +176,11 @@ interface User {
 type User = {
   id: any;
   name: any;
-}
+};
 ```
 
 ### React Components
+
 - Functional components with hooks
 - Use TypeScript for props
 - Destructure props
@@ -195,6 +209,7 @@ export function Btn(props: any) {
 ```
 
 ### Naming Conventions
+
 - Components: PascalCase (UserProfile.tsx)
 - Functions: camelCase (getUserById)
 - Constants: UPPER_SNAKE_CASE (API_BASE_URL)
@@ -202,6 +217,7 @@ export function Btn(props: any) {
 - CSS classes: kebab-case (btn-primary)
 
 ### File Organization
+
 - One component per file
 - Co-locate related files
 - Index files for barrel exports
@@ -210,6 +226,7 @@ export function Btn(props: any) {
 ## Git Workflow
 
 ### Branch Strategy
+
 ```
 main          - Production-ready code
 develop       - Development branch
@@ -219,7 +236,9 @@ hotfix/*      - Emergency fixes
 ```
 
 ### Commit Messages
+
 Follow Conventional Commits:
+
 ```bash
 feat(crm): add client search functionality
 fix(auth): resolve token refresh issue
@@ -229,6 +248,7 @@ test(accounting): add invoice tests
 ```
 
 ### Pull Request Process
+
 1. Create feature branch from develop
 2. Make changes
 3. Write/update tests
@@ -242,6 +262,7 @@ test(accounting): add invoice tests
 ## Testing
 
 ### Unit Tests (Jest)
+
 ```bash
 # Run all tests
 npm run test
@@ -254,6 +275,7 @@ npm run test:coverage
 ```
 
 Example test:
+
 ```typescript
 import { calculateBonus } from './bonus.utils';
 
@@ -261,20 +283,22 @@ describe('calculateBonus', () => {
   it('should calculate bonus correctly', () => {
     const salary = 1000;
     const performanceCoefficient = 1.2;
-    
+
     const result = calculateBonus(salary, performanceCoefficient);
-    
+
     expect(result).toBe(1200);
   });
 });
 ```
 
 ### Integration Tests (Supertest)
+
 ```bash
 npm run test:integration
 ```
 
 ### E2E Tests (Playwright)
+
 ```bash
 # Install browsers
 npx playwright install
@@ -289,6 +313,7 @@ npm run test:e2e:ui
 ## Common Tasks
 
 ### Adding a New Feature
+
 1. Create feature branch
 2. Create module structure
 3. Define TypeScript types
@@ -299,6 +324,7 @@ npm run test:e2e:ui
 8. Update documentation
 
 ### Creating API Endpoint
+
 ```typescript
 // server/routes/clients.routes.ts
 import { Router } from 'express';
@@ -313,6 +339,7 @@ export default router;
 ```
 
 ### Adding Database Migration
+
 ```bash
 # Create migration
 npx prisma migrate dev --name add_user_phone
@@ -327,6 +354,7 @@ npm run db:reset
 ## Troubleshooting
 
 ### Database Connection Issues
+
 ```bash
 # Check PostgreSQL status
 sudo systemctl status postgresql
@@ -339,6 +367,7 @@ psql -U postgres -d crm_dev
 ```
 
 ### Port Already in Use
+
 ```bash
 # Find process using port
 lsof -i :3000
@@ -348,6 +377,7 @@ kill -9 <PID>
 ```
 
 ### Node Modules Issues
+
 ```bash
 # Clear cache and reinstall
 rm -rf node_modules package-lock.json
@@ -355,6 +385,7 @@ npm install
 ```
 
 ### Build Errors
+
 ```bash
 # Clear build cache
 rm -rf dist .vite

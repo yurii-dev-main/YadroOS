@@ -64,7 +64,8 @@ export const MobileActionsSheet = ({ open, onClose }: MobileActionsSheetProps) =
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const pdfjs: any = await import('pdfjs-dist');
       if ('GlobalWorkerOptions' in pdfjs) {
-        pdfjs.GlobalWorkerOptions.workerSrc = pdfjs.GlobalWorkerOptions.workerSrc ??
+        pdfjs.GlobalWorkerOptions.workerSrc =
+          pdfjs.GlobalWorkerOptions.workerSrc ??
           new URL('pdfjs-dist/build/pdf.worker.min.js', import.meta.url).toString();
       }
       const data = await file.arrayBuffer();
@@ -137,7 +138,9 @@ export const MobileActionsSheet = ({ open, onClose }: MobileActionsSheetProps) =
               }
               navigator.geolocation.getCurrentPosition(
                 ({ coords }) => {
-                  setLocationInfo(`Latitude: ${coords.latitude.toFixed(4)}, Longitude: ${coords.longitude.toFixed(4)}`);
+                  setLocationInfo(
+                    `Latitude: ${coords.latitude.toFixed(4)}, Longitude: ${coords.longitude.toFixed(4)}`
+                  );
                 },
                 () => setLocationInfo('Failed to determine geolocation'),
                 { enableHighAccuracy: true, timeout: 5000 }

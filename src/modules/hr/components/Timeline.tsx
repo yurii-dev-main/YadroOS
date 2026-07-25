@@ -17,7 +17,10 @@ export const Timeline: FC<TimelineProps> = ({ events }) => {
         .slice()
         .sort((a, b) => b.date.localeCompare(a.date))
         .map((event) => (
-          <li key={event.id} className="relative rounded-lg border border-slate-800 bg-slate-900/60 p-4">
+          <li
+            key={event.id}
+            className="relative rounded-lg border border-slate-800 bg-slate-900/60 p-4"
+          >
             <span className="absolute -left-2 top-4 h-4 w-4 rounded-full border border-indigo-500 bg-slate-900" />
             <div className="flex items-center justify-between text-xs text-slate-400">
               <span>{getTimelineLabel(event.type)}</span>

@@ -7,10 +7,10 @@ const mockExchangeRates: ExchangeRate = {
   rates: {
     UAH: 1,
     USD: 0.026,
-    EUR: 0.024,
+    EUR: 0.024
   },
   updatedAt: new Date().toISOString(),
-  provider: 'Mock FX Provider',
+  provider: 'Mock FX Provider'
 };
 
 const bankTransactions: Transaction[] = [
@@ -26,7 +26,7 @@ const bankTransactions: Transaction[] = [
     status: 'completed',
     tags: ['monobank', 'imported'],
     createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
   },
   {
     id: uuid(),
@@ -40,8 +40,8 @@ const bankTransactions: Transaction[] = [
     status: 'completed',
     tags: ['privatbank', 'imported'],
     createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
+    updatedAt: new Date().toISOString()
+  }
 ];
 
 export const bankIntegrationService = {
@@ -49,7 +49,7 @@ export const bankIntegrationService = {
     await new Promise((resolve) => setTimeout(resolve, 400));
     return {
       ...mockExchangeRates,
-      updatedAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
     };
   },
 
@@ -63,7 +63,7 @@ export const bankIntegrationService = {
     return bankTransactions.map((transaction) => ({
       ...transaction,
       id: uuid(),
-      description: `${transaction.description} (CSV)`,
+      description: `${transaction.description} (CSV)`
     }));
-  },
+  }
 };

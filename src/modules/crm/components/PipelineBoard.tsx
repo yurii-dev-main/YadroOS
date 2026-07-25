@@ -12,16 +12,33 @@ interface PipelineBoardProps {
   onQuickEdit: (deal: CRMDeal) => void;
 }
 
-const Column = ({ stage, deals, onQuickEdit }: { stage: DealStage; deals: CRMDeal[]; onQuickEdit: (deal: CRMDeal) => void }) => {
+const Column = ({
+  stage,
+  deals,
+  onQuickEdit
+}: {
+  stage: DealStage;
+  deals: CRMDeal[];
+  onQuickEdit: (deal: CRMDeal) => void;
+}) => {
   const { setNodeRef } = useDroppable({ id: stage, data: { stage } });
 
   return (
-    <div ref={setNodeRef} className="flex h-full flex-col gap-4 rounded-3xl border border-slate-700/40 bg-slate-900/50 p-4 shadow-lg shadow-black/20">
+    <div
+      ref={setNodeRef}
+      className="flex h-full flex-col gap-4 rounded-3xl border border-slate-700/40 bg-slate-900/50 p-4 shadow-lg shadow-black/20"
+    >
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-300">{stage}</h3>
-        <span className="rounded-full bg-slate-800/80 px-2 py-1 text-xs text-slate-400">{deals.length}</span>
+        <span className="rounded-full bg-slate-800/80 px-2 py-1 text-xs text-slate-400">
+          {deals.length}
+        </span>
       </div>
-      <SortableContext id={stage} items={deals.map((deal) => deal.id)} strategy={verticalListSortingStrategy}>
+      <SortableContext
+        id={stage}
+        items={deals.map((deal) => deal.id)}
+        strategy={verticalListSortingStrategy}
+      >
         <div className="flex flex-1 flex-col gap-3">
           {deals.map((deal) => (
             <div key={deal.id} data-stage={stage}>
@@ -42,11 +59,15 @@ const Column = ({ stage, deals, onQuickEdit }: { stage: DealStage; deals: CRMDea
 export const PipelineBoard = ({ groupedDeals, onMoveDeal, onQuickEdit }: PipelineBoardProps) => {
   const [activeDeal, setActiveDeal] = useState<CRMDeal | null>(null);
 
-  const columns = useMemo(() => stageLabels.map((stage) => ({
-    id: stage,
-    title: stage,
-    deals: groupedDeals[stage]
-  })), [groupedDeals]);
+  const columns = useMemo(
+    () =>
+      stageLabels.map((stage) => ({
+        id: stage,
+        title: stage,
+        deals: groupedDeals[stage]
+      })),
+    [groupedDeals]
+  );
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
@@ -63,7 +84,9 @@ export const PipelineBoard = ({ groupedDeals, onMoveDeal, onQuickEdit }: Pipelin
     <DndContext
       onDragStart={(event) => {
         const { active } = event;
-        const deal = columns.flatMap((column) => column.deals).find((item) => item.id === active.id);
+        const deal = columns
+          .flatMap((column) => column.deals)
+          .find((item) => item.id === active.id);
         if (deal) setActiveDeal(deal);
       }}
       onDragEnd={handleDragEnd}
@@ -71,7 +94,12 @@ export const PipelineBoard = ({ groupedDeals, onMoveDeal, onQuickEdit }: Pipelin
     >
       <div className="grid grid-cols-1 gap-6 md:grid-cols-4 xl:grid-cols-7">
         {columns.map((column) => (
-          <Column key={column.id} stage={column.id} deals={column.deals} onQuickEdit={onQuickEdit} />
+          <Column
+            key={column.id}
+            stage={column.id}
+            deals={column.deals}
+            onQuickEdit={onQuickEdit}
+          />
         ))}
       </div>
 
@@ -84,7 +112,9 @@ export const PipelineBoard = ({ groupedDeals, onMoveDeal, onQuickEdit }: Pipelin
             </div>
             <div className="mt-2 text-xs text-slate-400">{activeDeal.clientName}</div>
             <div className="mt-3 flex items-center justify-between text-sm">
-              <span className="font-semibold text-emerald-400">{formatCurrency(activeDeal.value)}</span>
+              <span className="font-semibold text-emerald-400">
+                {formatCurrency(activeDeal.value)}
+              </span>
               <span className="text-slate-400">{activeDeal.probability}%</span>
             </div>
           </div>

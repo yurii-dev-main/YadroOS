@@ -37,7 +37,8 @@ export class PerformanceMetrics {
     const observer = new PerformanceObserver((list) => {
       list.getEntries().forEach((entry) => {
         const handlers = this.handlers.get(metric) ?? [];
-        const value = 'value' in entry ? (entry as PerformanceEntry & { value: number }).value : entry.duration;
+        const value =
+          'value' in entry ? (entry as PerformanceEntry & { value: number }).value : entry.duration;
         handlers.forEach((handler) => handler(value));
       });
     });

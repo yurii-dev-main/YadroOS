@@ -9,11 +9,11 @@ export const PayrollDashboard = ({ records }: PayrollDashboardProps) => {
   const totalNet = records.reduce((acc, record) => acc + record.netSalary, 0);
   const totalDeductions = records.reduce(
     (acc, record) => acc + record.deductions.reduce((sum, deduction) => sum + deduction.amount, 0),
-    0,
+    0
   );
   const totalBonuses = records.reduce(
     (acc, record) => acc + record.bonuses.reduce((sum, bonus) => sum + bonus.amount, 0),
-    0,
+    0
   );
   const currency = records[0]?.currency ?? 'UAH';
 

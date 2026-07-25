@@ -13,6 +13,6 @@ export const useLifecycle = (): UseLifecycleResult => {
 
   return {
     onboardingPlans,
-    offboardingChecklists,
+    offboardingChecklists
   };
 };

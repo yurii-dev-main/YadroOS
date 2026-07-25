@@ -37,46 +37,55 @@ export const useDeals = () => {
     return unsubscribe;
   }, [fetchDeals]);
 
-  const moveDeal = useCallback(async (dealId: string, stage: DealStage) => {
-    const snapshot = [...deals];
-    setDeals((prev) => prev.map((deal) => (deal.id === dealId ? { ...deal, stage } : deal)));
-    try {
-      await crmService.updateDealStage(dealId, stage);
-    } catch (err) {
-      setDeals(snapshot);
-      throw err;
-    }
-  }, [deals]);
+  const moveDeal = useCallback(
+    async (dealId: string, stage: DealStage) => {
+      const snapshot = [...deals];
+      setDeals((prev) => prev.map((deal) => (deal.id === dealId ? { ...deal, stage } : deal)));
+      try {
+        await crmService.updateDealStage(dealId, stage);
+      } catch (err) {
+        setDeals(snapshot);
+        throw err;
+      }
+    },
+    [deals]
+  );
 
-  const updateDeal = useCallback(async (dealId: string, updates: Partial<CRMDeal>) => {
-    const snapshot = [...deals];
-    setDeals((prev) => prev.map((deal) => (deal.id === dealId ? { ...deal, ...updates } : deal)));
-    try {
-      await crmService.updateDeal(dealId, updates);
-    } catch (err) {
-      setDeals(snapshot);
-      throw err;
-    }
-  }, [deals]);
+  const updateDeal = useCallback(
+    async (dealId: string, updates: Partial<CRMDeal>) => {
+      const snapshot = [...deals];
+      setDeals((prev) => prev.map((deal) => (deal.id === dealId ? { ...deal, ...updates } : deal)));
+      try {
+        await crmService.updateDeal(dealId, updates);
+      } catch (err) {
+        setDeals(snapshot);
+        throw err;
+      }
+    },
+    [deals]
+  );
 
-  const addDeal = useCallback(async (input: Omit<CRMDeal, 'id' | 'createdAt' | 'updatedAt' | 'clientName'>) => {
-    const optimistic: CRMDeal = {
-      ...input,
-      id: uuid(),
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      clientName: '—'
-    };
-    setDeals((prev) => [optimistic, ...prev]);
-    try {
-      const created = await crmService.createDeal(input);
-      setDeals((prev) => [created, ...prev.filter((deal) => deal.id !== optimistic.id)]);
-      return created;
-    } catch (err) {
-      setDeals((prev) => prev.filter((deal) => deal.id !== optimistic.id));
-      throw err;
-    }
-  }, []);
+  const addDeal = useCallback(
+    async (input: Omit<CRMDeal, 'id' | 'createdAt' | 'updatedAt' | 'clientName'>) => {
+      const optimistic: CRMDeal = {
+        ...input,
+        id: uuid(),
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        clientName: '—'
+      };
+      setDeals((prev) => [optimistic, ...prev]);
+      try {
+        const created = await crmService.createDeal(input);
+        setDeals((prev) => [created, ...prev.filter((deal) => deal.id !== optimistic.id)]);
+        return created;
+      } catch (err) {
+        setDeals((prev) => prev.filter((deal) => deal.id !== optimistic.id));
+        throw err;
+      }
+    },
+    []
+  );
 
   const grouped = useMemo(() => groupDealsByStage(deals), [deals]);
 

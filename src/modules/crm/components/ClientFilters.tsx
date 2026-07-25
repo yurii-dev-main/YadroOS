@@ -10,7 +10,13 @@ interface ClientFiltersProps {
   onReset: () => void;
 }
 
-export const ClientFilters = ({ filters, managers, industries, onChange, onReset }: ClientFiltersProps) => {
+export const ClientFilters = ({
+  filters,
+  managers,
+  industries,
+  onChange,
+  onReset
+}: ClientFiltersProps) => {
   const handleSelect = (key: keyof CRMClientFilters) => (event: ChangeEvent<HTMLSelectElement>) => {
     onChange({
       ...filters,

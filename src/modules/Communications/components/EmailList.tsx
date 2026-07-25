@@ -41,12 +41,18 @@ export const EmailList = ({ emails, selectedIds, onSelect, onOpen }: EmailListPr
                 <span>•</span>
                 <span>{email.from}</span>
                 {email.attachments?.map((attachment) => (
-                  <span key={attachment.id} className="rounded bg-slate-800 px-2 py-0.5 text-slate-400">
+                  <span
+                    key={attachment.id}
+                    className="rounded bg-slate-800 px-2 py-0.5 text-slate-400"
+                  >
                     {attachment.name} ({formatAttachmentSize(attachment.size)})
                   </span>
                 ))}
                 {email.tags?.map((tag) => (
-                  <span key={tag.id} className={`rounded-full px-2 py-0.5 text-[10px] ${tag.color} text-white`}>
+                  <span
+                    key={tag.id}
+                    className={`rounded-full px-2 py-0.5 text-[10px] ${tag.color} text-white`}
+                  >
                     {tag.label}
                   </span>
                 ))}
@@ -56,7 +62,11 @@ export const EmailList = ({ emails, selectedIds, onSelect, onOpen }: EmailListPr
           </div>
         </article>
       ))}
-      {!emails.length && <p className="p-6 text-center text-sm text-slate-500">No emails matching the selected criteria.</p>}
+      {!emails.length && (
+        <p className="p-6 text-center text-sm text-slate-500">
+          No emails matching the selected criteria.
+        </p>
+      )}
     </div>
   );
 };

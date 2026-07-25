@@ -11,7 +11,10 @@ interface DealCardProps {
 }
 
 export const DealCard = ({ deal, stage, onQuickEdit }: DealCardProps) => {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: deal.id, data: { stage } });
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: deal.id,
+    data: { stage }
+  });
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
@@ -41,7 +44,11 @@ export const DealCard = ({ deal, stage, onQuickEdit }: DealCardProps) => {
         <span className="font-semibold text-emerald-400">{formatCurrency(deal.value)}</span>
         <span className="text-slate-400">Probability: {deal.probability}%</span>
       </div>
-      {deal.closeDate && <div className="text-xs text-slate-500">Closing: {new Date(deal.closeDate).toLocaleDateString()}</div>}
+      {deal.closeDate && (
+        <div className="text-xs text-slate-500">
+          Closing: {new Date(deal.closeDate).toLocaleDateString()}
+        </div>
+      )}
     </div>
   );
 };

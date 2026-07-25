@@ -1,4 +1,12 @@
-import { PrismaClient, Role, ClientStatus, DealStage, TransactionType, AccountType, InvoiceStatus } from '@prisma/client';
+import {
+  PrismaClient,
+  Role,
+  ClientStatus,
+  DealStage,
+  TransactionType,
+  AccountType,
+  InvoiceStatus
+} from '@prisma/client';
 import bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();

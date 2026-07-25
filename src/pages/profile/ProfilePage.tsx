@@ -105,7 +105,10 @@ export const ProfilePage = () => {
   };
 
   const onPasswordSubmit = async (values: PasswordFormValues) => {
-    await changePassword({ currentPassword: values.currentPassword, newPassword: values.newPassword });
+    await changePassword({
+      currentPassword: values.currentPassword,
+      newPassword: values.newPassword
+    });
     passwordMethods.reset();
   };
 
@@ -132,7 +135,11 @@ export const ProfilePage = () => {
         </CardHeader>
         <CardContent>
           <FormProvider {...profileMethods}>
-            <form onSubmit={profileMethods.handleSubmit(onProfileSubmit)} className="space-y-5" noValidate>
+            <form
+              onSubmit={profileMethods.handleSubmit(onProfileSubmit)}
+              className="space-y-5"
+              noValidate
+            >
               <FormField<ProfileFormValues> name="name" label="Name" />
               <FormField<ProfileFormValues> name="company" label="Company" />
               <div className="grid gap-4 md:grid-cols-2">
@@ -169,12 +176,16 @@ export const ProfilePage = () => {
                 <div className="flex flex-col gap-3">
                   <Switch
                     checked={profileMethods.watch('emailNotifications')}
-                    onCheckedChange={(checked) => profileMethods.setValue('emailNotifications', checked)}
+                    onCheckedChange={(checked) =>
+                      profileMethods.setValue('emailNotifications', checked)
+                    }
                     label="Email"
                   />
                   <Switch
                     checked={profileMethods.watch('pushNotifications')}
-                    onCheckedChange={(checked) => profileMethods.setValue('pushNotifications', checked)}
+                    onCheckedChange={(checked) =>
+                      profileMethods.setValue('pushNotifications', checked)
+                    }
                     label="Push"
                   />
                 </div>
@@ -190,7 +201,11 @@ export const ProfilePage = () => {
         </CardHeader>
         <CardContent>
           <FormProvider {...passwordMethods}>
-            <form onSubmit={passwordMethods.handleSubmit(onPasswordSubmit)} className="grid gap-4 md:grid-cols-3" noValidate>
+            <form
+              onSubmit={passwordMethods.handleSubmit(onPasswordSubmit)}
+              className="grid gap-4 md:grid-cols-3"
+              noValidate
+            >
               <FormField<PasswordFormValues>
                 name="currentPassword"
                 label="Current Password"

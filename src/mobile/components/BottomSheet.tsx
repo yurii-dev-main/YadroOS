@@ -38,8 +38,12 @@ export const BottomSheet = ({ isOpen, onClose, title, children }: BottomSheetPro
             {...handlers}
           >
             <div className="mx-auto mb-4 h-1.5 w-12 rounded-full bg-slate-600" />
-            {title && <h3 className="mb-4 text-center text-base font-semibold text-slate-100">{title}</h3>}
-            <div className="max-h-[70vh] overflow-y-auto pr-1 text-sm text-slate-200">{children}</div>
+            {title && (
+              <h3 className="mb-4 text-center text-base font-semibold text-slate-100">{title}</h3>
+            )}
+            <div className="max-h-[70vh] overflow-y-auto pr-1 text-sm text-slate-200">
+              {children}
+            </div>
           </motion.div>
         </>
       )}

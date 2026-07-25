@@ -50,7 +50,18 @@ export const getTransactionById = async (req: Request, res: Response) => {
 };
 
 export const createTransaction = async (req: Request, res: Response) => {
-  const { accountId, toAccountId, type, amount, currency, category, description, date, clientId, status } = req.body;
+  const {
+    accountId,
+    toAccountId,
+    type,
+    amount,
+    currency,
+    category,
+    description,
+    date,
+    clientId,
+    status
+  } = req.body;
 
   const transaction = await prisma.transaction.create({
     data: {
@@ -73,7 +84,18 @@ export const createTransaction = async (req: Request, res: Response) => {
 
 export const updateTransaction = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { accountId, toAccountId, type, amount, currency, category, description, date, clientId, status } = req.body;
+  const {
+    accountId,
+    toAccountId,
+    type,
+    amount,
+    currency,
+    category,
+    description,
+    date,
+    clientId,
+    status
+  } = req.body;
 
   const existing = await prisma.transaction.findUnique({ where: { id } });
   if (!existing) {

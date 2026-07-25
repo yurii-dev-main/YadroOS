@@ -32,22 +32,32 @@ export const PayrollTable = ({ records, onGeneratePayslip }: PayrollTableProps) 
             </td>
             <td className="px-4 py-3 text-xs text-slate-400">{record.period}</td>
             <td className="px-4 py-3 text-right text-emerald-300">
-              {record.grossSalary.toLocaleString('uk-UA', { style: 'currency', currency: record.currency })}
+              {record.grossSalary.toLocaleString('uk-UA', {
+                style: 'currency',
+                currency: record.currency
+              })}
             </td>
             <td className="px-4 py-3 text-right text-slate-100">
-              {record.netSalary.toLocaleString('uk-UA', { style: 'currency', currency: record.currency })}
+              {record.netSalary.toLocaleString('uk-UA', {
+                style: 'currency',
+                currency: record.currency
+              })}
             </td>
             <td className="px-4 py-3 text-right text-emerald-400">
-              {record.bonuses.reduce((acc, bonus) => acc + bonus.amount, 0).toLocaleString('uk-UA', {
-                style: 'currency',
-                currency: record.currency,
-              })}
+              {record.bonuses
+                .reduce((acc, bonus) => acc + bonus.amount, 0)
+                .toLocaleString('uk-UA', {
+                  style: 'currency',
+                  currency: record.currency
+                })}
             </td>
             <td className="px-4 py-3 text-right text-rose-300">
-              {record.deductions.reduce((acc, deduction) => acc + deduction.amount, 0).toLocaleString('uk-UA', {
-                style: 'currency',
-                currency: record.currency,
-              })}
+              {record.deductions
+                .reduce((acc, deduction) => acc + deduction.amount, 0)
+                .toLocaleString('uk-UA', {
+                  style: 'currency',
+                  currency: record.currency
+                })}
             </td>
             <td className="px-4 py-3 text-right text-xs uppercase text-slate-400">
               {record.status}
@@ -61,6 +71,8 @@ export const PayrollTable = ({ records, onGeneratePayslip }: PayrollTableProps) 
         ))}
       </tbody>
     </table>
-    {!records.length && <p className="p-4 text-center text-xs text-slate-500">No payroll data available.</p>}
+    {!records.length && (
+      <p className="p-4 text-center text-xs text-slate-500">No payroll data available.</p>
+    )}
   </div>
 );

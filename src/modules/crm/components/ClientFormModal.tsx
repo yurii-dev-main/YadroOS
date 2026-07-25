@@ -56,7 +56,9 @@ export const ClientFormModal = ({ open, onClose, onSubmit, initialData }: Client
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur">
       <div className="w-full max-w-2xl rounded-2xl border border-slate-700/60 bg-slate-900/90 p-8 shadow-2xl shadow-black/40">
         <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-xl font-semibold text-white">{initialData ? 'Edit Client' : 'New Client'}</h2>
+          <h2 className="text-xl font-semibold text-white">
+            {initialData ? 'Edit Client' : 'New Client'}
+          </h2>
           <button
             type="button"
             className="rounded-lg border border-slate-600/60 px-3 py-1 text-sm text-slate-300 transition hover:border-slate-500 hover:text-white"

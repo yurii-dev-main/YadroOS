@@ -61,4 +61,5 @@ export class CacheManager<T = unknown> {
   }
 }
 
-export const createCacheManager = <T>(options: CacheStrategyOptions) => new CacheManager<T>(options);
+export const createCacheManager = <T>(options: CacheStrategyOptions) =>
+  new CacheManager<T>(options);

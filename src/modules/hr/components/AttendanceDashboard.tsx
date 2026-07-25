@@ -5,7 +5,7 @@ import {
   AttendanceSummary,
   Employee,
   LeaveBalance,
-  LeaveRequest,
+  LeaveRequest
 } from '../types/hr.types';
 import { formatDate, getEmployeeName } from '../utils/hr.utils';
 
@@ -26,7 +26,7 @@ export const AttendanceDashboard: FC<AttendanceDashboardProps> = ({
   leaveRequests,
   leaveBalances,
   averageAttendance,
-  totalLateArrivals,
+  totalLateArrivals
 }) => (
   <div className="space-y-4">
     <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -64,7 +64,10 @@ export const AttendanceDashboard: FC<AttendanceDashboardProps> = ({
       </CardHeader>
       <CardContent className="space-y-4 text-sm text-slate-300">
         {records.map((record) => (
-          <div key={record.employeeId} className="rounded-lg border border-slate-800 bg-slate-900/70 p-4">
+          <div
+            key={record.employeeId}
+            className="rounded-lg border border-slate-800 bg-slate-900/70 p-4"
+          >
             <div className="flex flex-col justify-between gap-2 md:flex-row md:items-center">
               <p className="text-sm font-semibold text-slate-100">
                 {getEmployeeName(employees, record.employeeId)}
@@ -75,14 +78,17 @@ export const AttendanceDashboard: FC<AttendanceDashboardProps> = ({
             </div>
             <div className="mt-3 grid grid-cols-1 gap-2 md:grid-cols-2">
               {record.entries.map((entry) => (
-                <div key={entry.date} className="rounded-md border border-slate-800 bg-slate-950/60 p-3">
+                <div
+                  key={entry.date}
+                  className="rounded-md border border-slate-800 bg-slate-950/60 p-3"
+                >
                   <p className="text-xs text-slate-400">{formatDate(entry.date)}</p>
                   <p className="text-sm text-slate-100">
                     {entry.checkIn} → {entry.checkOut}
                   </p>
                   <p className="text-xs text-slate-400">
-                    Location: {entry.location ?? '—'} | Lunch break: {entry.lunchBreakMinutes} min | Overtime:{' '}
-                    {entry.overtimeHours} hrs
+                    Location: {entry.location ?? '—'} | Lunch break: {entry.lunchBreakMinutes} min |
+                    Overtime: {entry.overtimeHours} hrs
                   </p>
                 </div>
               ))}
@@ -128,7 +134,10 @@ export const AttendanceDashboard: FC<AttendanceDashboardProps> = ({
           <h4 className="text-xs uppercase tracking-wide text-slate-400">Days Balance</h4>
           <div className="mt-2 grid grid-cols-1 gap-3 md:grid-cols-2">
             {leaveBalances.map((balance) => (
-              <div key={`${balance.employeeId}-${balance.type}`} className="rounded-md border border-slate-800 bg-slate-900/70 p-3">
+              <div
+                key={`${balance.employeeId}-${balance.type}`}
+                className="rounded-md border border-slate-800 bg-slate-900/70 p-3"
+              >
                 <p className="text-sm font-semibold text-slate-100">
                   {getEmployeeName(employees, balance.employeeId)}
                 </p>
@@ -149,7 +158,10 @@ export const AttendanceDashboard: FC<AttendanceDashboardProps> = ({
       </CardHeader>
       <CardContent className="grid grid-cols-1 gap-4 text-sm text-slate-300 md:grid-cols-2">
         {summaries.map((summary) => (
-          <div key={summary.employeeId} className="rounded-md border border-slate-800 bg-slate-900/70 p-4">
+          <div
+            key={summary.employeeId}
+            className="rounded-md border border-slate-800 bg-slate-900/70 p-4"
+          >
             <p className="text-sm font-semibold text-slate-100">
               {getEmployeeName(employees, summary.employeeId)}
             </p>

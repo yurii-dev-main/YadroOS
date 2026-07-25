@@ -10,10 +10,15 @@ interface AccountListProps {
   onReconcile?: (accountId: string) => void;
 }
 
-export const AccountList = ({ accounts, exchangeRate, baseCurrency, onReconcile }: AccountListProps) => {
+export const AccountList = ({
+  accounts,
+  exchangeRate,
+  baseCurrency,
+  onReconcile
+}: AccountListProps) => {
   const total = useMemo(
     () => calculateTotalBalance(accounts, baseCurrency, exchangeRate),
-    [accounts, baseCurrency, exchangeRate],
+    [accounts, baseCurrency, exchangeRate]
   );
 
   return (

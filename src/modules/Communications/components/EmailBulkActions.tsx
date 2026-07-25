@@ -5,7 +5,12 @@ interface EmailBulkActionsProps {
   onDelete: () => void;
 }
 
-export const EmailBulkActions = ({ hasSelection, onMarkRead, onMoveTo, onDelete }: EmailBulkActionsProps) => {
+export const EmailBulkActions = ({
+  hasSelection,
+  onMarkRead,
+  onMoveTo,
+  onDelete
+}: EmailBulkActionsProps) => {
   return (
     <div className="flex flex-wrap items-center gap-2 border-b border-slate-800 px-4 py-3 text-xs text-slate-400">
       <span className="text-slate-500">Bulk actions:</span>

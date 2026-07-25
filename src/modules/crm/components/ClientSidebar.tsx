@@ -1,5 +1,11 @@
 import { CRMActivity, CRMClient } from '../types/crm.types';
-import { formatCurrency, formatNumber, getRecentActivities, statusBadgeStyles, statusLabels } from '../utils/crm.utils';
+import {
+  formatCurrency,
+  formatNumber,
+  getRecentActivities,
+  statusBadgeStyles,
+  statusLabels
+} from '../utils/crm.utils';
 
 interface ClientSidebarProps {
   client: CRMClient;
@@ -8,20 +14,29 @@ interface ClientSidebarProps {
   onRemoveTag: (tagId: string) => void;
 }
 
-export const ClientSidebar = ({ client, activities, onAddTag, onRemoveTag }: ClientSidebarProps) => {
+export const ClientSidebar = ({
+  client,
+  activities,
+  onAddTag,
+  onRemoveTag
+}: ClientSidebarProps) => {
   const recent = getRecentActivities(activities, 5);
 
   return (
     <aside className="flex w-full max-w-xs flex-col gap-6 rounded-3xl border border-slate-700/40 bg-slate-900/60 p-6 shadow-xl shadow-black/30">
       <div className="flex flex-col gap-3">
         <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-400">Status</h3>
-        <span className={`w-fit rounded-full px-4 py-1 text-xs font-semibold ${statusBadgeStyles[client.status]}`}>
+        <span
+          className={`w-fit rounded-full px-4 py-1 text-xs font-semibold ${statusBadgeStyles[client.status]}`}
+        >
           {statusLabels[client.status]}
         </span>
         <div className="grid grid-cols-2 gap-4 text-sm text-slate-200">
           <div>
             <p className="text-xs uppercase tracking-wide text-slate-500">Last Contact</p>
-            <p>{client.lastContactedAt ? new Date(client.lastContactedAt).toLocaleDateString() : '—'}</p>
+            <p>
+              {client.lastContactedAt ? new Date(client.lastContactedAt).toLocaleDateString() : '—'}
+            </p>
           </div>
           <div>
             <p className="text-xs uppercase tracking-wide text-slate-500">Deals</p>
@@ -81,13 +96,20 @@ export const ClientSidebar = ({ client, activities, onAddTag, onRemoveTag }: Cli
       </div>
 
       <div className="flex flex-col gap-3">
-        <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-400">Recent Activities</h3>
+        <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-400">
+          Recent Activities
+        </h3>
         <div className="flex flex-col gap-3">
           {recent.map((activity) => (
-            <div key={activity.id} className="rounded-xl border border-slate-700/40 bg-slate-900/50 p-3">
+            <div
+              key={activity.id}
+              className="rounded-xl border border-slate-700/40 bg-slate-900/50 p-3"
+            >
               <p className="text-xs uppercase tracking-wide text-slate-500">{activity.type}</p>
               <p className="mt-1 text-sm text-slate-200">{activity.notes || '—'}</p>
-              <p className="mt-2 text-xs text-slate-500">{new Date(activity.createdAt).toLocaleString()}</p>
+              <p className="mt-2 text-xs text-slate-500">
+                {new Date(activity.createdAt).toLocaleString()}
+              </p>
             </div>
           ))}
           {recent.length === 0 && <p className="text-xs text-slate-500">No activities yet.</p>}

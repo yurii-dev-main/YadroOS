@@ -1,7 +1,11 @@
 import { ChangeEvent } from 'react';
 import { Button } from '../../../components/ui/button';
 import { Input } from '../../../components/ui/input';
-import { AccountingFilterState, TransactionCategory, TransactionType } from '../types/accounting.types';
+import {
+  AccountingFilterState,
+  TransactionCategory,
+  TransactionType
+} from '../types/accounting.types';
 
 interface TransactionFiltersProps {
   filters: AccountingFilterState;
@@ -13,10 +17,15 @@ interface TransactionFiltersProps {
 const typeLabels: Record<TransactionType, string> = {
   income: 'Income',
   expense: 'Expense',
-  transfer: 'Transfer',
+  transfer: 'Transfer'
 };
 
-export const TransactionFilters = ({ filters, categories, onFiltersChange, onSearch }: TransactionFiltersProps) => {
+export const TransactionFilters = ({
+  filters,
+  categories,
+  onFiltersChange,
+  onSearch
+}: TransactionFiltersProps) => {
   const toggleType = (type: TransactionType) => {
     const current = new Set(filters.types);
     if (current.has(type)) {
@@ -30,7 +39,9 @@ export const TransactionFilters = ({ filters, categories, onFiltersChange, onSea
   const handleDateChange = (key: 'from' | 'to') => (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     const next = { ...filters.dateRange, [key]: value };
-    onFiltersChange({ dateRange: next.from || next.to ? (next as { from: string; to: string }) : undefined });
+    onFiltersChange({
+      dateRange: next.from || next.to ? (next as { from: string; to: string }) : undefined
+    });
   };
 
   return (
@@ -54,11 +65,19 @@ export const TransactionFilters = ({ filters, categories, onFiltersChange, onSea
       <div className="grid gap-3 md:grid-cols-3">
         <div className="grid gap-2">
           <span className="text-xs text-slate-500">From</span>
-          <Input type="date" value={filters.dateRange?.from ?? ''} onChange={handleDateChange('from')} />
+          <Input
+            type="date"
+            value={filters.dateRange?.from ?? ''}
+            onChange={handleDateChange('from')}
+          />
         </div>
         <div className="grid gap-2">
           <span className="text-xs text-slate-500">To</span>
-          <Input type="date" value={filters.dateRange?.to ?? ''} onChange={handleDateChange('to')} />
+          <Input
+            type="date"
+            value={filters.dateRange?.to ?? ''}
+            onChange={handleDateChange('to')}
+          />
         </div>
         <div className="grid gap-2">
           <span className="text-xs text-slate-500">Category</span>
@@ -83,7 +102,9 @@ export const TransactionFilters = ({ filters, categories, onFiltersChange, onSea
           <Input
             placeholder="Search by description or tags"
             value={filters.tags[0] ?? ''}
-            onChange={(event) => onFiltersChange({ tags: event.target.value ? [event.target.value] : [] })}
+            onChange={(event) =>
+              onFiltersChange({ tags: event.target.value ? [event.target.value] : [] })
+            }
           />
         </div>
         {onSearch && (

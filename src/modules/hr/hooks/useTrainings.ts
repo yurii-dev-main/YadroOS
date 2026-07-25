@@ -14,7 +14,12 @@ interface UseTrainingsResult {
   selectTraining: (id: string | null) => void;
   register: (trainingId: string, employeeId: string) => void;
   markAttendance: (trainingId: string, employeeId: string, attended: boolean) => void;
-  submitFeedback: (trainingId: string, employeeId: string, rating: number, comments: string) => void;
+  submitFeedback: (
+    trainingId: string,
+    employeeId: string,
+    rating: number,
+    comments: string
+  ) => void;
 }
 
 export const useTrainings = (): UseTrainingsResult => {
@@ -31,7 +36,7 @@ export const useTrainings = (): UseTrainingsResult => {
   const selectedTraining = useMemo(
     () => (selectedTrainingId ? hrService.getTrainingById(selectedTrainingId) : undefined),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [selectedTrainingId, version],
+    [selectedTrainingId, version]
   );
 
   const update = () => setVersion((prev) => prev + 1);
@@ -53,6 +58,6 @@ export const useTrainings = (): UseTrainingsResult => {
     submitFeedback: (trainingId, employeeId, rating, comments) => {
       hrService.submitTrainingFeedback(trainingId, { employeeId, rating, comments });
       update();
-    },
+    }
   };
 };

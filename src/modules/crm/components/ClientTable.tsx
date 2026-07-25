@@ -68,9 +68,15 @@ export const ClientTable = ({
                 </button>
               </th>
             ))}
-            <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-400">Manager</th>
-            <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-400">Status</th>
-            <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-400">Tags</th>
+            <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-400">
+              Manager
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-400">
+              Status
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-400">
+              Tags
+            </th>
           </tr>
         </thead>
         <tbody className="divide-y divide-slate-800/60">
@@ -108,15 +114,23 @@ export const ClientTable = ({
                 </td>
                 <td className="px-6 py-4">
                   <div className="flex flex-col">
-                    <span className="font-medium text-slate-100 group-hover:text-white">{client.name}</span>
+                    <span className="font-medium text-slate-100 group-hover:text-white">
+                      {client.name}
+                    </span>
                     <span className="text-xs text-slate-400">{client.company}</span>
                   </div>
                 </td>
-                <td className="px-6 py-4 text-sm text-slate-300">{new Date(client.createdAt).toLocaleDateString()}</td>
-                <td className="px-6 py-4 text-sm font-semibold text-emerald-400">{formatCurrency(client.revenue)}</td>
+                <td className="px-6 py-4 text-sm text-slate-300">
+                  {new Date(client.createdAt).toLocaleDateString()}
+                </td>
+                <td className="px-6 py-4 text-sm font-semibold text-emerald-400">
+                  {formatCurrency(client.revenue)}
+                </td>
                 <td className="px-6 py-4 text-sm text-slate-300">{client.assignedTo}</td>
                 <td className="px-6 py-4">
-                  <span className={`inline-flex rounded-full px-3 py-1 text-xs font-medium ${statusBadgeStyles[client.status]}`}>
+                  <span
+                    className={`inline-flex rounded-full px-3 py-1 text-xs font-medium ${statusBadgeStyles[client.status]}`}
+                  >
                     {statusLabels[client.status]}
                   </span>
                 </td>

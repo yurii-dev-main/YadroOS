@@ -1,6 +1,11 @@
 import { v4 as uuid } from 'uuid';
 
-import type { AIOverviewData, ChatMessage, InsightGroup, PredictionSummary } from '../types/ai.types';
+import type {
+  AIOverviewData,
+  ChatMessage,
+  InsightGroup,
+  PredictionSummary
+} from '../types/ai.types';
 import { fetchAIOverview as fetchAIOverviewFromApi, generateAIResponse } from './openai.service';
 
 export const fetchAIOverview = async (): Promise<AIOverviewData> => fetchAIOverviewFromApi();

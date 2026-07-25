@@ -19,9 +19,7 @@ export const aiRoutes = {
       .then((response) => response.data);
   },
   getInsight(insightId: string) {
-    return apiClient
-      .get<AiInsight>(`/ai/insights/${insightId}`)
-      .then((response) => response.data);
+    return apiClient.get<AiInsight>(`/ai/insights/${insightId}`).then((response) => response.data);
   },
   markInsightResolved(insightId: string) {
     return apiClient

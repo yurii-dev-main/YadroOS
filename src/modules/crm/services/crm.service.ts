@@ -53,9 +53,7 @@ const emitEvent = (payload: CRMEventPayload) => {
   crmEventTarget.dispatchEvent(new CustomEvent<CRMEventPayload>('crm:event', { detail: payload }));
 };
 
-export const subscribeToCRMEvents = (
-  callback: (payload: CRMEventPayload) => void
-) => {
+export const subscribeToCRMEvents = (callback: (payload: CRMEventPayload) => void) => {
   const handler = (event: Event) => {
     const custom = event as CustomEvent<CRMEventPayload>;
     callback(custom.detail);
@@ -218,9 +216,10 @@ const mapActivityFromApi = (activity: ActivityApiResponse): CRMActivity => {
       };
     case 'task': {
       const rawStatus = activity.subject ?? '';
-      const status = rawStatus === 'pending' || rawStatus === 'in_progress' || rawStatus === 'completed'
-        ? rawStatus
-        : 'pending';
+      const status =
+        rawStatus === 'pending' || rawStatus === 'in_progress' || rawStatus === 'completed'
+          ? rawStatus
+          : 'pending';
       return {
         ...base,
         type: 'task',
@@ -241,11 +240,7 @@ const mapActivityToApi = (activity: Omit<CRMActivity, 'id' | 'createdAt'>) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const act = activity as any;
   const description =
-    'notes' in act && act.notes
-      ? act.notes
-      : 'content' in act
-        ? act.content
-        : undefined;
+    'notes' in act && act.notes ? act.notes : 'content' in act ? act.content : undefined;
 
   const payload: {
     clientId: string;
@@ -318,13 +313,23 @@ class CRMService {
 
   private applyFilters(clients: CRMClient[], filters: CRMClientFilters) {
     return clients.filter((client) => {
-      const statusMatch = !filters.status || filters.status === 'all' || client.status === filters.status;
-      const industryMatch = !filters.industry || filters.industry === 'all' || client.industry === filters.industry;
-      const assignedMatch = !filters.assignedTo || filters.assignedTo === 'all' || client.assignedTo === filters.assignedTo;
-      const dateMatch = !filters.dateRange
-        || (!filters.dateRange.from || new Date(client.createdAt) >= new Date(filters.dateRange.from))
-        && (!filters.dateRange.to || new Date(client.createdAt) <= new Date(filters.dateRange.to));
-      const tagsMatch = !filters.tagIds || !filters.tagIds.length || filters.tagIds.every((tagId) => client.tags.some((tag) => tag.id === tagId));
+      const statusMatch =
+        !filters.status || filters.status === 'all' || client.status === filters.status;
+      const industryMatch =
+        !filters.industry || filters.industry === 'all' || client.industry === filters.industry;
+      const assignedMatch =
+        !filters.assignedTo ||
+        filters.assignedTo === 'all' ||
+        client.assignedTo === filters.assignedTo;
+      const dateMatch =
+        !filters.dateRange ||
+        ((!filters.dateRange.from ||
+          new Date(client.createdAt) >= new Date(filters.dateRange.from)) &&
+          (!filters.dateRange.to || new Date(client.createdAt) <= new Date(filters.dateRange.to)));
+      const tagsMatch =
+        !filters.tagIds ||
+        !filters.tagIds.length ||
+        filters.tagIds.every((tagId) => client.tags.some((tag) => tag.id === tagId));
       return statusMatch && industryMatch && assignedMatch && dateMatch && tagsMatch;
     });
   }
@@ -352,7 +357,9 @@ class CRMService {
   private applySort(clients: CRMClient[], sort: CRMClientSort) {
     return [...clients].sort((a, b) => {
       if (sort.field === 'name') {
-        return sort.direction === 'asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
+        return sort.direction === 'asc'
+          ? a.name.localeCompare(b.name)
+          : b.name.localeCompare(a.name);
       }
       if (sort.field === 'createdAt') {
         return sort.direction === 'asc'
@@ -380,7 +387,12 @@ class CRMService {
     return this.simulateLatency(client);
   }
 
-  async createClient(input: Omit<CRMClient, 'id' | 'createdAt' | 'updatedAt' | 'notes' | 'files'> & { notes?: CRMNote[]; files?: CRMFile[] }) {
+  async createClient(
+    input: Omit<CRMClient, 'id' | 'createdAt' | 'updatedAt' | 'notes' | 'files'> & {
+      notes?: CRMNote[];
+      files?: CRMFile[];
+    }
+  ) {
     const client: CRMClient = {
       ...input,
       id: uuid(),
@@ -430,7 +442,9 @@ class CRMService {
   async bulkDelete(ids: string[]) {
     this.store.clients = this.store.clients.filter((client) => !ids.includes(client.id));
     this.store.deals = this.store.deals.filter((deal) => !ids.includes(deal.clientId));
-    this.store.activities = this.store.activities.filter((activity) => !ids.includes(activity.clientId));
+    this.store.activities = this.store.activities.filter(
+      (activity) => !ids.includes(activity.clientId)
+    );
     emitEvent({ type: 'clients:updated' });
     return this.simulateLatency(true);
   }
@@ -502,7 +516,10 @@ class CRMService {
   }
 
   async createActivity(activity: Omit<CRMActivity, 'id' | 'createdAt'>) {
-    const response = await apiClient.post<ActivityApiResponse>('/activities', mapActivityToApi(activity));
+    const response = await apiClient.post<ActivityApiResponse>(
+      '/activities',
+      mapActivityToApi(activity)
+    );
     const mapped = mapActivityFromApi(response.data);
     emitEvent({ type: 'activities:updated', resourceId: mapped.clientId });
     return mapped;
@@ -524,7 +541,20 @@ class CRMService {
       .map((row) => row.trim())
       .filter(Boolean)
       .map((row) => {
-        const [id, name, company, email, phone, website, industry, size, revenue, status, assignedTo, tags] = row.split(',');
+        const [
+          id,
+          name,
+          company,
+          email,
+          phone,
+          website,
+          industry,
+          size,
+          revenue,
+          status,
+          assignedTo,
+          tags
+        ] = row.split(',');
         const manager = managers[Math.floor(Math.random() * managers.length)];
         return {
           id: id || uuid(),
@@ -542,7 +572,9 @@ class CRMService {
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
           lastContactedAt: new Date().toISOString(),
-          tags: (tags?.split('|') ?? []).filter(Boolean).map((label) => ({ id: uuid(), label, color: '#64748b' })),
+          tags: (tags?.split('|') ?? [])
+            .filter(Boolean)
+            .map((label) => ({ id: uuid(), label, color: '#64748b' })),
           customFields: [],
           files: [],
           notes: []

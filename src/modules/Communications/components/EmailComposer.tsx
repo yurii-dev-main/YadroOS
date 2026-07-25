@@ -11,7 +11,7 @@ const defaultDraft: EmailDraft = {
   id: 'composer',
   subject: '',
   body: '',
-  to: [],
+  to: []
 };
 
 export const EmailComposer = ({ onSent, templates = [] }: EmailComposerProps) => {
@@ -30,7 +30,7 @@ export const EmailComposer = ({ onSent, templates = [] }: EmailComposerProps) =>
     setDraft((prev) => ({
       ...prev,
       subject: template.subject,
-      body: template.body,
+      body: template.body
     }));
   };
 
@@ -51,7 +51,12 @@ export const EmailComposer = ({ onSent, templates = [] }: EmailComposerProps) =>
           className="flex-1 rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"
           placeholder="To"
           value={draft.to.join(', ')}
-          onChange={(event) => handleChange('to', event.target.value.split(',').map((item) => item.trim()))}
+          onChange={(event) =>
+            handleChange(
+              'to',
+              event.target.value.split(',').map((item) => item.trim())
+            )
+          }
         />
         <select
           className="rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-200"

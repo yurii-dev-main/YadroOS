@@ -1,7 +1,12 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import { prisma } from '../lib/prisma';
-import { createAccessToken, createRefreshToken, getRefreshTokenMaxAge, verifyRefreshToken } from '../utils/tokens';
+import {
+  createAccessToken,
+  createRefreshToken,
+  getRefreshTokenMaxAge,
+  verifyRefreshToken
+} from '../utils/tokens';
 
 const refreshCookieOptions = {
   httpOnly: true,
@@ -55,7 +60,10 @@ export const refresh = async (req: Request, res: Response) => {
     return res.status(401).json({ message: 'Invalid refresh token' });
   }
 
-  const user = await prisma.user.findUnique({ where: { id: payload.userId }, include: { employee: true } });
+  const user = await prisma.user.findUnique({
+    where: { id: payload.userId },
+    include: { employee: true }
+  });
   if (!user || !user.isActive) {
     return res.status(401).json({ message: 'User not found or inactive' });
   }
@@ -76,7 +84,10 @@ export const me = async (req: Request, res: Response) => {
   if (!req.user) {
     return res.status(401).json({ message: 'Unauthorized' });
   }
-  const user = await prisma.user.findUnique({ where: { id: req.user.userId }, include: { employee: true } });
+  const user = await prisma.user.findUnique({
+    where: { id: req.user.userId },
+    include: { employee: true }
+  });
   if (!user) {
     return res.status(404).json({ message: 'User not found' });
   }

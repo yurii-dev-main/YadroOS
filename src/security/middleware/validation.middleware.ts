@@ -28,7 +28,9 @@ export const validationMiddleware = {
     const sanitized = sanitizeValue(payload);
     const result = schema.safeParse(sanitized);
     if (!result.success) {
-      throw new ValidationError(result.error.errors.map((issue) => `${issue.path.join('.') || 'root'}: ${issue.message}`));
+      throw new ValidationError(
+        result.error.errors.map((issue) => `${issue.path.join('.') || 'root'}: ${issue.message}`)
+      );
     }
     return result.data;
   },

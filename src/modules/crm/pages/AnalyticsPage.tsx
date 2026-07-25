@@ -49,7 +49,9 @@ export const AnalyticsPage = () => {
           <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
             <div className="space-y-6 xl:col-span-2">
               <div className="rounded-3xl border border-slate-700/60 bg-slate-900/70 p-6 shadow-xl shadow-black/20">
-                <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-300">New Clients</h2>
+                <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-300">
+                  New Clients
+                </h2>
                 <div className="mt-4 h-64">
                   <ResponsiveContainer width="100%" height="100%">
                     <AreaChart data={summary.newClients}>
@@ -62,8 +64,20 @@ export const AnalyticsPage = () => {
                       <CartesianGrid strokeDasharray="3 3" stroke="rgba(148, 163, 184, 0.2)" />
                       <XAxis dataKey="period" stroke="#94a3b8" />
                       <YAxis stroke="#94a3b8" />
-                      <Tooltip contentStyle={{ backgroundColor: '#0f172a', borderRadius: 12, border: '1px solid rgba(148,163,184,0.3)' }} />
-                      <Area type="monotone" dataKey="value" stroke="#3b82f6" fillOpacity={1} fill="url(#colorNew)" />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: '#0f172a',
+                          borderRadius: 12,
+                          border: '1px solid rgba(148,163,184,0.3)'
+                        }}
+                      />
+                      <Area
+                        type="monotone"
+                        dataKey="value"
+                        stroke="#3b82f6"
+                        fillOpacity={1}
+                        fill="url(#colorNew)"
+                      />
                     </AreaChart>
                   </ResponsiveContainer>
                 </div>
@@ -71,13 +85,20 @@ export const AnalyticsPage = () => {
 
               <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
                 <div className="rounded-3xl border border-slate-700/60 bg-slate-900/70 p-6 shadow-xl shadow-black/20">
-                  <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-300">Funnel</h2>
+                  <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-300">
+                    Funnel
+                  </h2>
                   <div className="mt-4 h-72">
                     <ResponsiveContainer width="100%" height="100%">
                       <FunnelChart>
                         <Tooltip />
                         <Funnel dataKey="value" data={summary.funnel} fill="#3b82f6">
-                          <LabelList position="right" fill="#e2e8f0" stroke="none" dataKey="stage" />
+                          <LabelList
+                            position="right"
+                            fill="#e2e8f0"
+                            stroke="none"
+                            dataKey="stage"
+                          />
                         </Funnel>
                       </FunnelChart>
                     </ResponsiveContainer>
@@ -85,15 +106,30 @@ export const AnalyticsPage = () => {
                 </div>
 
                 <div className="rounded-3xl border border-slate-700/60 bg-slate-900/70 p-6 shadow-xl shadow-black/20">
-                  <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-300">Revenue Forecast</h2>
+                  <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-300">
+                    Revenue Forecast
+                  </h2>
                   <div className="mt-4 h-72">
                     <ResponsiveContainer width="100%" height="100%">
                       <AreaChart data={summary.revenueForecast}>
                         <CartesianGrid strokeDasharray="3 3" stroke="rgba(148, 163, 184, 0.2)" />
                         <XAxis dataKey="month" stroke="#94a3b8" />
                         <YAxis stroke="#94a3b8" />
-                        <Tooltip formatter={(value: number) => formatCurrency(value)} contentStyle={{ backgroundColor: '#0f172a', borderRadius: 12, border: '1px solid rgba(148,163,184,0.3)' }} />
-                        <Area type="monotone" dataKey="value" stroke="#22d3ee" fill="#22d3ee" fillOpacity={0.3} />
+                        <Tooltip
+                          formatter={(value: number) => formatCurrency(value)}
+                          contentStyle={{
+                            backgroundColor: '#0f172a',
+                            borderRadius: 12,
+                            border: '1px solid rgba(148,163,184,0.3)'
+                          }}
+                        />
+                        <Area
+                          type="monotone"
+                          dataKey="value"
+                          stroke="#22d3ee"
+                          fill="#22d3ee"
+                          fillOpacity={0.3}
+                        />
                       </AreaChart>
                     </ResponsiveContainer>
                   </div>
@@ -103,11 +139,15 @@ export const AnalyticsPage = () => {
 
             <div className="space-y-6">
               <div className="rounded-3xl border border-slate-700/60 bg-slate-900/70 p-6 shadow-xl shadow-black/20">
-                <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-300">Metrics Overview</h2>
+                <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-300">
+                  Metrics Overview
+                </h2>
                 <dl className="mt-4 space-y-3 text-sm text-slate-200">
                   <div className="flex items-center justify-between">
                     <dt>Average Deal Size</dt>
-                    <dd className="font-semibold text-emerald-400">{formatCurrency(summary.averageDealSize)}</dd>
+                    <dd className="font-semibold text-emerald-400">
+                      {formatCurrency(summary.averageDealSize)}
+                    </dd>
                   </div>
                   <div className="flex items-center justify-between">
                     <dt>LTV</dt>
@@ -121,11 +161,22 @@ export const AnalyticsPage = () => {
               </div>
 
               <div className="rounded-3xl border border-slate-700/60 bg-slate-900/70 p-6 shadow-xl shadow-black/20">
-                <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-300">Status Distribution</h2>
+                <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-300">
+                  Status Distribution
+                </h2>
                 <div className="mt-4 h-64">
                   <ResponsiveContainer>
                     <PieChart>
-                      <Pie data={summary.statusDistribution} dataKey="value" nameKey="status" cx="50%" cy="50%" outerRadius={80} fill="#3b82f6" label />
+                      <Pie
+                        data={summary.statusDistribution}
+                        dataKey="value"
+                        nameKey="status"
+                        cx="50%"
+                        cy="50%"
+                        outerRadius={80}
+                        fill="#3b82f6"
+                        label
+                      />
                       <Tooltip />
                     </PieChart>
                   </ResponsiveContainer>
@@ -133,17 +184,24 @@ export const AnalyticsPage = () => {
               </div>
 
               <div className="rounded-3xl border border-slate-700/60 bg-slate-900/70 p-6 shadow-xl shadow-black/20">
-                <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-300">Manager Performance</h2>
+                <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-300">
+                  Manager Performance
+                </h2>
                 <div className="mt-4 max-h-64 space-y-3 overflow-y-auto pr-2">
                   {summary.managerPerformance.map((manager) => (
-                    <div key={manager.manager} className="flex items-center justify-between rounded-2xl border border-slate-700/40 bg-slate-900/60 p-3 text-xs text-slate-300">
+                    <div
+                      key={manager.manager}
+                      className="flex items-center justify-between rounded-2xl border border-slate-700/40 bg-slate-900/60 p-3 text-xs text-slate-300"
+                    >
                       <div>
                         <p className="text-sm font-semibold text-white">{manager.manager}</p>
                         <p>Deals: {manager.deals}</p>
                       </div>
                       <div className="text-right">
                         <p>Won: {manager.won}</p>
-                        <p className="font-semibold text-emerald-400">{formatCurrency(manager.revenue)}</p>
+                        <p className="font-semibold text-emerald-400">
+                          {formatCurrency(manager.revenue)}
+                        </p>
                       </div>
                     </div>
                   ))}

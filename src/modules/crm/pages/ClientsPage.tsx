@@ -38,8 +38,14 @@ export const ClientsPage = ({ onOpenClient }: { onOpenClient: (id: string) => vo
   const [openForm, setOpenForm] = useState(false);
   const [importing, setImporting] = useState(false);
 
-  const managers = useMemo(() => Array.from(new Set(clients.map((client) => client.assignedTo))), [clients]);
-  const industries = useMemo(() => Array.from(new Set(clients.map((client) => client.industry))), [clients]);
+  const managers = useMemo(
+    () => Array.from(new Set(clients.map((client) => client.assignedTo))),
+    [clients]
+  );
+  const industries = useMemo(
+    () => Array.from(new Set(clients.map((client) => client.industry))),
+    [clients]
+  );
 
   const handleCreate = async (values: ClientFormValues) => {
     await addClient({
@@ -81,7 +87,9 @@ export const ClientsPage = ({ onOpenClient }: { onOpenClient: (id: string) => vo
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold text-white">Client Database</h1>
-          <p className="text-sm text-slate-400">Full control over all clients, deals, and interactions.</p>
+          <p className="text-sm text-slate-400">
+            Full control over all clients, deals, and interactions.
+          </p>
         </div>
         <div className="flex items-center gap-3">
           <button
@@ -151,10 +159,22 @@ export const ClientsPage = ({ onOpenClient }: { onOpenClient: (id: string) => vo
         managers={managers}
         industries={industries}
         onChange={setFilters}
-        onReset={() => setFilters({ status: 'all', industry: 'all', assignedTo: 'all', tagIds: [], dateRange: undefined })}
+        onReset={() =>
+          setFilters({
+            status: 'all',
+            industry: 'all',
+            assignedTo: 'all',
+            tagIds: [],
+            dateRange: undefined
+          })
+        }
       />
 
-      {error && <p className="rounded-xl border border-red-500/40 bg-red-500/10 p-4 text-sm text-red-300">{error}</p>}
+      {error && (
+        <p className="rounded-xl border border-red-500/40 bg-red-500/10 p-4 text-sm text-red-300">
+          {error}
+        </p>
+      )}
 
       {selectedIds.length > 0 && (
         <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-blue-500/40 bg-blue-500/10 p-4 text-sm text-blue-100">
@@ -219,7 +239,8 @@ export const ClientsPage = ({ onOpenClient }: { onOpenClient: (id: string) => vo
           {pagination.total > 0 ? (
             <>
               Showing {(pagination.page - 1) * pagination.pageSize + 1}–
-              {Math.min(pagination.page * pagination.pageSize, pagination.total)} of {pagination.total}
+              {Math.min(pagination.page * pagination.pageSize, pagination.total)} of{' '}
+              {pagination.total}
             </>
           ) : (
             'No results'
@@ -246,11 +267,7 @@ export const ClientsPage = ({ onOpenClient }: { onOpenClient: (id: string) => vo
         </div>
       </div>
 
-      <ClientFormModal
-        open={openForm}
-        onClose={() => setOpenForm(false)}
-        onSubmit={handleCreate}
-      />
+      <ClientFormModal open={openForm} onClose={() => setOpenForm(false)} onSubmit={handleCreate} />
 
       {importing && <p className="text-xs text-slate-500">Importing clients...</p>}
     </div>

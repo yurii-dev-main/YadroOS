@@ -1,4 +1,13 @@
-import { LayoutDashboard, Menu, MessageSquare, Receipt, UserCircle, UserSquare2, Users, X } from 'lucide-react';
+import {
+  LayoutDashboard,
+  Menu,
+  MessageSquare,
+  Receipt,
+  UserCircle,
+  UserSquare2,
+  Users,
+  X
+} from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';

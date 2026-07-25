@@ -21,10 +21,10 @@ export const NotificationSettingsForm = () => {
             ...prev,
             channelPreferences: {
               ...prev.channelPreferences,
-              [channel]: !prev.channelPreferences[channel],
-            },
+              [channel]: !prev.channelPreferences[channel]
+            }
           }
-        : prev,
+        : prev
     );
   };
 
@@ -45,7 +45,9 @@ export const NotificationSettingsForm = () => {
               type="checkbox"
               className="rounded border-slate-700 bg-slate-900"
               checked={preferences.desktop}
-              onChange={(event) => setPreferences({ ...preferences, desktop: event.target.checked })}
+              onChange={(event) =>
+                setPreferences({ ...preferences, desktop: event.target.checked })
+              }
             />
             Browser push notifications
           </label>
@@ -63,7 +65,9 @@ export const NotificationSettingsForm = () => {
               type="checkbox"
               className="rounded border-slate-700 bg-slate-900"
               checked={preferences.doNotDisturb}
-              onChange={(event) => setPreferences({ ...preferences, doNotDisturb: event.target.checked })}
+              onChange={(event) =>
+                setPreferences({ ...preferences, doNotDisturb: event.target.checked })
+              }
             />
             Do not disturb
           </label>
@@ -74,7 +78,12 @@ export const NotificationSettingsForm = () => {
             <select
               className="mt-1 w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-200"
               value={preferences.emailDigest}
-              onChange={(event) => setPreferences({ ...preferences, emailDigest: event.target.value as typeof preferences.emailDigest })}
+              onChange={(event) =>
+                setPreferences({
+                  ...preferences,
+                  emailDigest: event.target.value as typeof preferences.emailDigest
+                })
+              }
             >
               <option value="daily">Daily</option>
               <option value="weekly">Weekly</option>
@@ -85,13 +94,18 @@ export const NotificationSettingsForm = () => {
             <span className="text-xs uppercase text-slate-500">Channels</span>
             <div className="mt-2 space-y-2">
               {Object.entries(preferences.channelPreferences).map(([channel, enabled]) => (
-                <label key={channel} className="flex items-center justify-between rounded border border-slate-800 px-3 py-2">
+                <label
+                  key={channel}
+                  className="flex items-center justify-between rounded border border-slate-800 px-3 py-2"
+                >
                   <span className="text-xs uppercase tracking-wide text-slate-400">{channel}</span>
                   <input
                     type="checkbox"
                     className="rounded border-slate-700 bg-slate-900"
                     checked={enabled}
-                    onChange={() => toggleChannel(channel as keyof NotificationPreferences['channelPreferences'])}
+                    onChange={() =>
+                      toggleChannel(channel as keyof NotificationPreferences['channelPreferences'])
+                    }
                   />
                 </label>
               ))}

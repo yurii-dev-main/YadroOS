@@ -11,7 +11,13 @@ interface ChatWindowProps {
   onTyping: () => void;
 }
 
-export const ChatWindow = ({ messages, activeUser, typingUsers, onSend, onTyping }: ChatWindowProps) => {
+export const ChatWindow = ({
+  messages,
+  activeUser,
+  typingUsers,
+  onSend,
+  onTyping
+}: ChatWindowProps) => {
   const [inputValue, setInputValue] = useState('');
   const [responses, setResponses] = useState<CannedResponse[]>([]);
   const [showResponses, setShowResponses] = useState(false);
@@ -48,7 +54,11 @@ export const ChatWindow = ({ messages, activeUser, typingUsers, onSend, onTyping
     <div className="flex h-full flex-col">
       <div ref={containerRef} className="flex-1 overflow-y-auto bg-slate-950/30 p-4">
         {messages.map((message) => (
-          <MessageBubble key={message.id} message={message} isOwn={message.author.id === activeUser.id} />
+          <MessageBubble
+            key={message.id}
+            message={message}
+            isOwn={message.author.id === activeUser.id}
+          />
         ))}
         {typingUsers.length > 0 && (
           <div className="mt-2 text-xs text-slate-400">{typingUsers.length} user(s) typing...</div>

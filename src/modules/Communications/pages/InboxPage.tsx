@@ -23,7 +23,7 @@ export const InboxPage = () => {
     bulkMarkRead,
     moveToFolder,
     attachToClient,
-    createClientFromEmail,
+    createClientFromEmail
   } = useEmails({ folder: 'inbox' });
 
   useEffect(() => {
@@ -56,7 +56,12 @@ export const InboxPage = () => {
             onMoveTo={(folder) => moveToFolder(folder)}
             onDelete={() => moveToFolder('trash')}
           />
-          <EmailList emails={emails} selectedIds={selectedIds} onSelect={toggleSelect} onOpen={handleOpenEmail} />
+          <EmailList
+            emails={emails}
+            selectedIds={selectedIds}
+            onSelect={toggleSelect}
+            onOpen={handleOpenEmail}
+          />
         </div>
         <div className="flex min-w-0 flex-1 flex-col">
           <EmailContent
@@ -73,7 +78,10 @@ export const InboxPage = () => {
           <div className="w-full max-w-3xl rounded-lg border border-slate-800 bg-slate-950 p-4 shadow-xl">
             <div className="mb-4 flex items-center justify-between">
               <h3 className="text-lg font-semibold text-slate-100">Compose Email</h3>
-              <button className="text-sm text-slate-400 hover:text-emerald-300" onClick={() => setShowComposer(false)}>
+              <button
+                className="text-sm text-slate-400 hover:text-emerald-300"
+                onClick={() => setShowComposer(false)}
+              >
                 Close
               </button>
             </div>

@@ -36,12 +36,27 @@ export const BudgetManager = ({ budgets, onUpdate }: BudgetManagerProps) => {
                 <p className="text-xs text-slate-500">Period: {budget.period}</p>
               </div>
               <div className="text-right text-xs text-slate-400">
-                <p>Allocated: {budget.allocatedAmount.toLocaleString('uk-UA', { style: 'currency', currency: budget.currency })}</p>
-                <p>Spent: {budget.spentAmount.toLocaleString('uk-UA', { style: 'currency', currency: budget.currency })}</p>
+                <p>
+                  Allocated:{' '}
+                  {budget.allocatedAmount.toLocaleString('uk-UA', {
+                    style: 'currency',
+                    currency: budget.currency
+                  })}
+                </p>
+                <p>
+                  Spent:{' '}
+                  {budget.spentAmount.toLocaleString('uk-UA', {
+                    style: 'currency',
+                    currency: budget.currency
+                  })}
+                </p>
               </div>
             </div>
             <div className="mt-3 h-2 rounded-full bg-slate-800">
-              <div className="h-full rounded-full bg-secondary" style={{ width: `${Math.min(100, usage)}%` }} />
+              <div
+                className="h-full rounded-full bg-secondary"
+                style={{ width: `${Math.min(100, usage)}%` }}
+              />
             </div>
             <div className="mt-3 flex flex-wrap items-center gap-2">
               {editing === budget.id ? (

@@ -5,7 +5,11 @@ const createConfidenceBand = (value: number, variance: number): [number, number]
   return [Math.max(value - margin, 0), value + margin];
 };
 
-export const buildForecastScenario = (baseline: number[], labelPrefix: string, variance = 0.12): ForecastScenario => {
+export const buildForecastScenario = (
+  baseline: number[],
+  labelPrefix: string,
+  variance = 0.12
+): ForecastScenario => {
   const baselinePoints: ForecastPoint[] = baseline.map((value, index) => {
     const period = `${labelPrefix} ${index + 1}`;
     const [lowerBound, upperBound] = createConfidenceBand(value, variance);

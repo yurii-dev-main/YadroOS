@@ -36,12 +36,17 @@ export const RegisterPage = () => {
   const registerUser = useAuthStore((state) => state.register);
   const navigate = useNavigate();
 
-  const onSubmit = async ({ confirmPassword: _confirmPassword, ...payload }: RegisterFormValues) => {
+  const onSubmit = async ({
+    confirmPassword: _confirmPassword,
+    ...payload
+  }: RegisterFormValues) => {
     try {
       await registerUser(payload);
       navigate('/dashboard');
     } catch (error) {
-      methods.setError('email', { message: error instanceof Error ? error.message : 'Registration error' });
+      methods.setError('email', {
+        message: error instanceof Error ? error.message : 'Registration error'
+      });
     }
   };
 
@@ -54,7 +59,12 @@ export const RegisterPage = () => {
         </div>
         <FormField<RegisterFormValues> name="name" label="Name" autoComplete="name" />
         <FormField<RegisterFormValues> name="company" label="Company" autoComplete="organization" />
-        <FormField<RegisterFormValues> name="email" label="Email" type="email" autoComplete="email" />
+        <FormField<RegisterFormValues>
+          name="email"
+          label="Email"
+          type="email"
+          autoComplete="email"
+        />
         <FormField<RegisterFormValues>
           name="password"
           label="Password"

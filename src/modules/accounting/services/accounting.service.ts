@@ -25,14 +25,13 @@ import {
   PaymentReminder,
   PayrollRecord,
   PayrollRunRequest,
-
   ProjectProfitability,
   RecurringTransactionInsight,
   ReportSummary,
   Transaction,
   TransactionCategory,
   TransferRequest,
-  CurrencyCode,
+  CurrencyCode
 } from '../types/accounting.types';
 import { bankIntegrationService } from './bank-integration.service';
 import {
@@ -41,7 +40,7 @@ import {
   calculateNetSalary,
   calculatePayrollDeductions,
   calculateTaxLiability,
-  defaultTaxConfiguration,
+  defaultTaxConfiguration
 } from '../utils/tax.utils';
 import {
   aggregateTransactions,
@@ -54,7 +53,7 @@ import {
   computeCashFlowForecast,
   convertCurrency,
   projectFinancialForecast,
-  summarisePayroll,
+  summarisePayroll
 } from '../utils/calculations.utils';
 
 const accounts: Account[] = [
@@ -70,7 +69,7 @@ const accounts: Account[] = [
     color: '#1f2937',
     isActive: true,
     syncedAt: new Date().toISOString(),
-    reconciliationStatus: 'clean',
+    reconciliationStatus: 'clean'
   },
   {
     id: 'acc-privat',
@@ -84,7 +83,7 @@ const accounts: Account[] = [
     color: '#16a34a',
     isActive: true,
     syncedAt: new Date().toISOString(),
-    reconciliationStatus: 'pending',
+    reconciliationStatus: 'pending'
   },
   {
     id: 'acc-cash',
@@ -95,8 +94,8 @@ const accounts: Account[] = [
     color: '#f97316',
     isActive: true,
     syncedAt: new Date().toISOString(),
-    reconciliationStatus: 'clean',
-  },
+    reconciliationStatus: 'clean'
+  }
 ];
 
 const categories: TransactionCategory[] = [
@@ -109,7 +108,7 @@ const categories: TransactionCategory[] = [
   { id: 'cat-marketing', name: 'Marketing', type: 'expense', color: '#a855f7' },
   { id: 'cat-development', name: 'Development', type: 'expense' },
   { id: 'cat-travel', name: 'Travel', type: 'expense' },
-  { id: 'cat-custom', name: 'Custom Categories', type: 'mixed' },
+  { id: 'cat-custom', name: 'Custom Categories', type: 'mixed' }
 ];
 
 const transactions: Transaction[] = [
@@ -128,7 +127,7 @@ const transactions: Transaction[] = [
     clientId: 'client-1',
     projectId: 'project-1',
     createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
   },
   {
     id: uuid(),
@@ -143,7 +142,7 @@ const transactions: Transaction[] = [
     attachments: [],
     tags: ['payroll'],
     createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
   },
   {
     id: uuid(),
@@ -159,8 +158,8 @@ const transactions: Transaction[] = [
     attachments: [],
     tags: ['office'],
     createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
+    updatedAt: new Date().toISOString()
+  }
 ];
 
 const invoices: Invoice[] = [
@@ -181,8 +180,8 @@ const invoices: Invoice[] = [
         quantity: 120,
         unitPrice: 80,
         currency: 'USD',
-        taxRate: 0.2,
-      },
+        taxRate: 0.2
+      }
     ],
     taxes: 1920,
     discount: 0.05,
@@ -191,10 +190,10 @@ const invoices: Invoice[] = [
     payments: [],
     branding: {
       logoUrl: '/logo.svg',
-      accentColor: '#6366f1',
+      accentColor: '#6366f1'
     },
     createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
   },
   {
     id: uuid(),
@@ -213,8 +212,8 @@ const invoices: Invoice[] = [
         quantity: 40,
         unitPrice: 120,
         currency: 'EUR',
-        taxRate: 0.2,
-      },
+        taxRate: 0.2
+      }
     ],
     taxes: 960,
     discount: 0,
@@ -227,15 +226,15 @@ const invoices: Invoice[] = [
         currency: 'EUR',
         date: format(addMonths(new Date(), -2), 'yyyy-MM-18'),
         method: 'online',
-        reference: 'stripe-2024-0003',
-      },
+        reference: 'stripe-2024-0003'
+      }
     ],
     branding: {
-      accentColor: '#f97316',
+      accentColor: '#f97316'
     },
     createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
+    updatedAt: new Date().toISOString()
+  }
 ];
 
 const payrollRecords: PayrollRecord[] = [];
@@ -253,8 +252,8 @@ const budgets: Budget[] = [
     alertsEnabled: true,
     history: [
       { date: `${new Date().getFullYear()}-01-31`, amount: 120000 },
-      { date: `${new Date().getFullYear()}-02-28`, amount: 95000 },
-    ],
+      { date: `${new Date().getFullYear()}-02-28`, amount: 95000 }
+    ]
   },
   {
     id: 'budget-rd-q2',
@@ -267,8 +266,8 @@ const budgets: Budget[] = [
     allocatedAmount: 180000,
     spentAmount: 42000,
     alertsEnabled: true,
-    history: [{ date: `${new Date().getFullYear()}-04-30`, amount: 28000 }],
-  },
+    history: [{ date: `${new Date().getFullYear()}-04-30`, amount: 28000 }]
+  }
 ];
 
 const reminders: PaymentReminder[] = [];
@@ -279,7 +278,7 @@ const recordAudit = (event: Omit<AccountingAuditEvent, 'id' | 'timestamp'>) => {
   auditLog.unshift({
     ...event,
     id: uuid(),
-    timestamp: new Date().toISOString(),
+    timestamp: new Date().toISOString()
   });
 };
 
@@ -304,7 +303,7 @@ const processTransactionBalance = (transaction: Transaction) => {
       transaction.amount,
       transaction.currency,
       target.currency,
-      exchangeRate,
+      exchangeRate
     );
 
     account.balance = Number(new Decimal(account.balance).minus(amount).toFixed(2));
@@ -317,18 +316,26 @@ export const accountingService = {
     return [...accounts];
   },
 
-  async createAccount(payload: Omit<Account, 'id' | 'balance' | 'isActive'> & { balance?: number }) {
+  async createAccount(
+    payload: Omit<Account, 'id' | 'balance' | 'isActive'> & { balance?: number }
+  ) {
     const account: Account = {
       ...payload,
       id: uuid(),
       balance: payload.balance ?? 0,
       isActive: true,
       syncedAt: new Date().toISOString(),
-      reconciliationStatus: 'pending',
+      reconciliationStatus: 'pending'
     };
 
     accounts.push(account);
-    recordAudit({ entity: 'account', entityId: account.id, action: 'create', performedBy: 'system', performedByRole: 'accountant' });
+    recordAudit({
+      entity: 'account',
+      entityId: account.id,
+      action: 'create',
+      performedBy: 'system',
+      performedByRole: 'accountant'
+    });
     return account;
   },
 
@@ -337,7 +344,13 @@ export const accountingService = {
     if (index === -1) throw new Error('Account not found');
 
     accounts[index] = { ...accounts[index], ...payload };
-    recordAudit({ entity: 'account', entityId: accountId, action: 'update', performedBy: 'system', performedByRole: 'accountant' });
+    recordAudit({
+      entity: 'account',
+      entityId: accountId,
+      action: 'update',
+      performedBy: 'system',
+      performedByRole: 'accountant'
+    });
     return accounts[index];
   },
 
@@ -351,7 +364,12 @@ export const accountingService = {
       throw new Error('Insufficient funds');
     }
 
-    const convertedAmount = convertCurrency(request.amount, request.currency, to.currency, exchangeRate);
+    const convertedAmount = convertCurrency(
+      request.amount,
+      request.currency,
+      to.currency,
+      exchangeRate
+    );
 
     from.balance = Number(new Decimal(from.balance).minus(amount).toFixed(2));
     to.balance = Number(new Decimal(to.balance).add(convertedAmount).toFixed(2));
@@ -367,11 +385,17 @@ export const accountingService = {
       description: request.description ?? `Transfer to ${to.name}`,
       status: 'completed',
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
     };
 
     transactions.unshift(transaction);
-    recordAudit({ entity: 'transaction', entityId: transaction.id, action: 'create', performedBy: 'system', performedByRole: 'accountant' });
+    recordAudit({
+      entity: 'transaction',
+      entityId: transaction.id,
+      action: 'create',
+      performedBy: 'system',
+      performedByRole: 'accountant'
+    });
     return transaction;
   },
 
@@ -383,12 +407,19 @@ export const accountingService = {
     account.reconciliationStatus = Math.abs(variance) < 1 ? 'clean' : 'mismatch';
     account.syncedAt = new Date().toISOString();
 
-    recordAudit({ entity: 'account', entityId: accountId, action: 'reconcile', performedBy: 'system', performedByRole: 'accountant', metadata: { variance } });
+    recordAudit({
+      entity: 'account',
+      entityId: accountId,
+      action: 'reconcile',
+      performedBy: 'system',
+      performedByRole: 'accountant',
+      metadata: { variance }
+    });
     return {
       accountId,
       statementBalance,
       variance,
-      date: new Date().toISOString(),
+      date: new Date().toISOString()
     };
   },
 
@@ -405,11 +436,17 @@ export const accountingService = {
       ...payload,
       id: uuid(),
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
     };
     transactions.unshift(transaction);
     processTransactionBalance(transaction);
-    recordAudit({ entity: 'transaction', entityId: transaction.id, action: 'create', performedBy: 'system', performedByRole: 'accountant' });
+    recordAudit({
+      entity: 'transaction',
+      entityId: transaction.id,
+      action: 'create',
+      performedBy: 'system',
+      performedByRole: 'accountant'
+    });
     return transaction;
   },
 
@@ -419,7 +456,14 @@ export const accountingService = {
       transactions.unshift(transaction);
       processTransactionBalance(transaction);
     });
-    recordAudit({ entity: 'transaction', entityId: accountId, action: 'import', performedBy: 'system', performedByRole: 'accountant', metadata: { count: imported.length } });
+    recordAudit({
+      entity: 'transaction',
+      entityId: accountId,
+      action: 'import',
+      performedBy: 'system',
+      performedByRole: 'accountant',
+      metadata: { count: imported.length }
+    });
     return imported.length;
   },
 
@@ -430,7 +474,14 @@ export const accountingService = {
       processTransactionBalance(transaction);
     });
 
-    recordAudit({ entity: 'transaction', entityId: 'bulk', action: 'import', performedBy: 'system', performedByRole: 'accountant', metadata: { count: imported.length } });
+    recordAudit({
+      entity: 'transaction',
+      entityId: 'bulk',
+      action: 'import',
+      performedBy: 'system',
+      performedByRole: 'accountant',
+      metadata: { count: imported.length }
+    });
     return imported.length;
   },
 
@@ -438,7 +489,9 @@ export const accountingService = {
     return invoices.map((invoice) => applyTaxConfiguration(invoice, defaultTaxConfiguration));
   },
 
-  async createInvoice(payload: Omit<Invoice, 'id' | 'status' | 'createdAt' | 'updatedAt' | 'number' | 'taxes'>) {
+  async createInvoice(
+    payload: Omit<Invoice, 'id' | 'status' | 'createdAt' | 'updatedAt' | 'number' | 'taxes'>
+  ) {
     const taxes = payload.lineItems.reduce((acc, item) => {
       const rate = item.taxRate ?? defaultTaxConfiguration.vatRate;
       return acc + item.quantity * item.unitPrice * rate;
@@ -451,10 +504,16 @@ export const accountingService = {
       status: 'draft',
       taxes,
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
     };
     invoices.unshift(invoice);
-    recordAudit({ entity: 'invoice', entityId: invoice.id, action: 'create', performedBy: 'system', performedByRole: 'accountant' });
+    recordAudit({
+      entity: 'invoice',
+      entityId: invoice.id,
+      action: 'create',
+      performedBy: 'system',
+      performedByRole: 'accountant'
+    });
     return invoice;
   },
 
@@ -463,7 +522,14 @@ export const accountingService = {
     if (!invoice) throw new Error('Invoice not found');
     invoice.status = status;
     invoice.updatedAt = new Date().toISOString();
-    recordAudit({ entity: 'invoice', entityId: invoiceId, action: 'update', performedBy: 'system', performedByRole: 'accountant', metadata: { status } });
+    recordAudit({
+      entity: 'invoice',
+      entityId: invoiceId,
+      action: 'update',
+      performedBy: 'system',
+      performedByRole: 'accountant',
+      metadata: { status }
+    });
     return invoice;
   },
 
@@ -477,7 +543,7 @@ export const accountingService = {
       currency,
       date: format(new Date(), 'yyyy-MM-dd'),
       method: 'bank_transfer' as const,
-      reference: `manual-${Date.now()}`,
+      reference: `manual-${Date.now()}`
     };
 
     invoice.payments = [...(invoice.payments ?? []), payment];
@@ -491,7 +557,14 @@ export const accountingService = {
     }
 
     invoice.updatedAt = new Date().toISOString();
-    recordAudit({ entity: 'invoice', entityId: invoiceId, action: 'update', performedBy: 'system', performedByRole: 'accountant', metadata: { payment } });
+    recordAudit({
+      entity: 'invoice',
+      entityId: invoiceId,
+      action: 'update',
+      performedBy: 'system',
+      performedByRole: 'accountant',
+      metadata: { payment }
+    });
     return payment;
   },
 
@@ -505,7 +578,7 @@ export const accountingService = {
             invoiceId: invoice.id,
             sentAt: new Date(new Date(invoice.dueDate).getTime() - days * 86400000).toISOString(),
             channel: 'email',
-            status: 'scheduled',
+            status: 'scheduled'
           });
         });
       });
@@ -518,7 +591,14 @@ export const accountingService = {
 
     invoice.status = 'sent';
     invoice.updatedAt = new Date().toISOString();
-    recordAudit({ entity: 'invoice', entityId: invoiceId, action: 'update', performedBy: 'system', performedByRole: 'accountant', metadata: { email: options.to } });
+    recordAudit({
+      entity: 'invoice',
+      entityId: invoiceId,
+      action: 'update',
+      performedBy: 'system',
+      performedByRole: 'accountant',
+      metadata: { email: options.to }
+    });
     return true;
   },
 
@@ -536,13 +616,20 @@ export const accountingService = {
         {
           name: 'Performance bonus',
           amount: Number(new Decimal(baseSalary).mul(0.1).toFixed(2)),
-          reason: 'KPI > 85%',
-        },
+          reason: 'KPI > 85%'
+        }
       ];
 
       const deductions = calculatePayrollDeductions(baseSalary, defaultTaxConfiguration);
-      const overtimeAmount = request.includeOvertime ? Number(new Decimal(baseSalary).mul(0.05).toFixed(2)) : 0;
-      const grossSalary = Number(new Decimal(baseSalary).add(overtimeAmount).add(bonuses.reduce((acc, bonus) => acc + bonus.amount, 0)).toFixed(2));
+      const overtimeAmount = request.includeOvertime
+        ? Number(new Decimal(baseSalary).mul(0.05).toFixed(2))
+        : 0;
+      const grossSalary = Number(
+        new Decimal(baseSalary)
+          .add(overtimeAmount)
+          .add(bonuses.reduce((acc, bonus) => acc + bonus.amount, 0))
+          .toFixed(2)
+      );
 
       const record: PayrollRecord = {
         id: uuid(),
@@ -558,11 +645,17 @@ export const accountingService = {
         currency: (employee.currency as CurrencyCode) ?? 'USD',
         period,
         status: request.approveImmediately ? 'processed' : 'pending',
-        generatedAt: new Date().toISOString(),
+        generatedAt: new Date().toISOString()
       };
 
       payrollRecords.unshift(record);
-      recordAudit({ entity: 'payroll', entityId: record.id, action: 'create', performedBy: 'system', performedByRole: 'accountant' });
+      recordAudit({
+        entity: 'payroll',
+        entityId: record.id,
+        action: 'create',
+        performedBy: 'system',
+        performedByRole: 'accountant'
+      });
     });
 
     return payrollRecords.filter((record) => record.period === period);
@@ -574,7 +667,13 @@ export const accountingService = {
       if (record) {
         record.status = 'paid';
         record.paidAt = new Date().toISOString();
-        recordAudit({ entity: 'payroll', entityId: recordId, action: 'pay', performedBy: request.executedBy, performedByRole: 'accountant' });
+        recordAudit({
+          entity: 'payroll',
+          entityId: recordId,
+          action: 'pay',
+          performedBy: request.executedBy,
+          performedByRole: 'accountant'
+        });
       }
     });
     return true;
@@ -589,7 +688,13 @@ export const accountingService = {
     if (!budget) throw new Error('Budget not found');
 
     Object.assign(budget, changes);
-    recordAudit({ entity: 'budget', entityId: budgetId, action: 'update', performedBy: 'system', performedByRole: 'accountant' });
+    recordAudit({
+      entity: 'budget',
+      entityId: budgetId,
+      action: 'update',
+      performedBy: 'system',
+      performedByRole: 'accountant'
+    });
     return budget;
   },
 
@@ -602,11 +707,19 @@ export const accountingService = {
 
   async refreshExchangeRates(): Promise<ExchangeRate> {
     exchangeRate = await bankIntegrationService.fetchExchangeRates();
-    recordAudit({ entity: 'report', entityId: 'fx', action: 'update', performedBy: 'system', performedByRole: 'accountant' });
+    recordAudit({
+      entity: 'report',
+      entityId: 'fx',
+      action: 'update',
+      performedBy: 'system',
+      performedByRole: 'accountant'
+    });
     return exchangeRate;
   },
 
-  async getDashboardData(baseCurrency: 'UAH' | 'USD' | 'EUR' = 'UAH'): Promise<AccountingDashboardData> {
+  async getDashboardData(
+    baseCurrency: 'UAH' | 'USD' | 'EUR' = 'UAH'
+  ): Promise<AccountingDashboardData> {
     const rates = await this.getExchangeRates();
     const totalBalance = calculateTotalBalance(accounts, baseCurrency, rates);
     const totals = aggregateTransactions(transactions, baseCurrency, rates);
@@ -624,12 +737,19 @@ export const accountingService = {
             period: payroll[0].period,
             totalEmployees: payroll.length,
             totalNetAmount: payroll.reduce((acc, record) => acc + record.netSalary, 0),
-            totalDeductions: payroll.reduce((acc, record) => acc + record.deductions.reduce((sum, deduction) => sum + deduction.amount, 0), 0),
-            totalBonuses: payroll.reduce((acc, record) => acc + record.bonuses.reduce((sum, bonus) => sum + bonus.amount, 0), 0),
-            currency: payroll[0].currency,
+            totalDeductions: payroll.reduce(
+              (acc, record) =>
+                acc + record.deductions.reduce((sum, deduction) => sum + deduction.amount, 0),
+              0
+            ),
+            totalBonuses: payroll.reduce(
+              (acc, record) => acc + record.bonuses.reduce((sum, bonus) => sum + bonus.amount, 0),
+              0
+            ),
+            currency: payroll[0].currency
           }
         : null,
-      exchangeRate: rates,
+      exchangeRate: rates
     };
   },
 
@@ -643,7 +763,11 @@ export const accountingService = {
   }> {
     const rates = await this.getExchangeRates();
     const profitLoss = buildProfitAndLossReport(transactions, baseCurrency, rates);
-    const { report: cashFlowReport, segments } = buildCashFlowStatement(transactions, baseCurrency, rates);
+    const { report: cashFlowReport, segments } = buildCashFlowStatement(
+      transactions,
+      baseCurrency,
+      rates
+    );
     const balance = buildBalanceSheet(accounts, baseCurrency, rates);
     const payrollReport = summarisePayroll(payrollRecords, baseCurrency, rates);
     const forecastPoints = calculateBudgetForecast(budgets, baseCurrency, rates);
@@ -652,9 +776,13 @@ export const accountingService = {
     const cashForecast = computeCashFlowForecast(accounts, transactions, baseCurrency, rates);
 
     const balanceSheet: BalanceSheetItem[] = [
-      { name: 'Cash and cash equivalents', amount: profitLoss.figures.income - profitLoss.figures.expenses, type: 'asset' },
+      {
+        name: 'Cash and cash equivalents',
+        amount: profitLoss.figures.income - profitLoss.figures.expenses,
+        type: 'asset'
+      },
       { name: 'Liabilities', amount: balance.figures.liabilities, type: 'liability' },
-      { name: 'Equity', amount: balance.figures.equity, type: 'equity' },
+      { name: 'Equity', amount: balance.figures.equity, type: 'equity' }
     ];
 
     return {
@@ -663,31 +791,51 @@ export const accountingService = {
       forecasts: [forecast],
       balanceSheet,
       taxLiability,
-      cashFlowForecast: cashForecast,
+      cashFlowForecast: cashForecast
     };
   },
 
-  async getCategoryBreakdown(baseCurrency: 'UAH' | 'USD' | 'EUR' = 'UAH'): Promise<CategorisedExpense[]> {
+  async getCategoryBreakdown(
+    baseCurrency: 'UAH' | 'USD' | 'EUR' = 'UAH'
+  ): Promise<CategorisedExpense[]> {
     const rates = await this.getExchangeRates();
     return categories
       .filter((category) => category.type !== 'income')
       .map((category) => {
         const total = transactions
-          .filter((transaction) => transaction.categoryId === category.id && transaction.type === 'expense')
+          .filter(
+            (transaction) =>
+              transaction.categoryId === category.id && transaction.type === 'expense'
+          )
           .reduce((acc, transaction) => {
-            const amount = convertCurrency(transaction.amount, transaction.currency, baseCurrency, rates);
+            const amount = convertCurrency(
+              transaction.amount,
+              transaction.currency,
+              baseCurrency,
+              rates
+            );
             return acc + amount;
           }, 0);
-        return { categoryId: category.id, categoryName: category.name, total, currency: baseCurrency };
+        return {
+          categoryId: category.id,
+          categoryName: category.name,
+          total,
+          currency: baseCurrency
+        };
       });
   },
 
   async getBudgetsUsage(): Promise<{ id: string; usage: number }[]> {
     const rates = await this.getExchangeRates();
-    return budgets.map((budget) => ({ id: budget.id, usage: calculateBudgetUsage(budget, transactions, rates) }));
+    return budgets.map((budget) => ({
+      id: budget.id,
+      usage: calculateBudgetUsage(budget, transactions, rates)
+    }));
   },
 
-  async getClientProfitability(baseCurrency: 'UAH' | 'USD' | 'EUR' = 'UAH'): Promise<ClientProfitability[]> {
+  async getClientProfitability(
+    baseCurrency: 'UAH' | 'USD' | 'EUR' = 'UAH'
+  ): Promise<ClientProfitability[]> {
     const rates = await this.getExchangeRates();
     const clients = new Map<string, ClientProfitability>();
 
@@ -700,7 +848,7 @@ export const accountingService = {
           revenue: 0,
           expenses: 0,
           margin: 0,
-          currency: baseCurrency,
+          currency: baseCurrency
         });
       }
       const summary = clients.get(transaction.clientId)!;
@@ -716,7 +864,9 @@ export const accountingService = {
     return Array.from(clients.values());
   },
 
-  async getProjectProfitability(baseCurrency: 'UAH' | 'USD' | 'EUR' = 'UAH'): Promise<ProjectProfitability[]> {
+  async getProjectProfitability(
+    baseCurrency: 'UAH' | 'USD' | 'EUR' = 'UAH'
+  ): Promise<ProjectProfitability[]> {
     const rates = await this.getExchangeRates();
     const projects = new Map<string, ProjectProfitability>();
 
@@ -729,7 +879,7 @@ export const accountingService = {
           revenue: 0,
           expenses: 0,
           margin: 0,
-          currency: baseCurrency,
+          currency: baseCurrency
         });
       }
       const summary = projects.get(transaction.projectId)!;
@@ -763,11 +913,17 @@ export const accountingService = {
 
   async searchTransactions(filters: AccountingFilterState): Promise<Transaction[]> {
     return transactions.filter((transaction) => {
-      if (filters.accountIds.length && !filters.accountIds.includes(transaction.accountId)) return false;
+      if (filters.accountIds.length && !filters.accountIds.includes(transaction.accountId))
+        return false;
       if (filters.types.length && !filters.types.includes(transaction.type)) return false;
-      if (filters.categories.length && (!transaction.categoryId || !filters.categories.includes(transaction.categoryId))) return false;
+      if (
+        filters.categories.length &&
+        (!transaction.categoryId || !filters.categories.includes(transaction.categoryId))
+      )
+        return false;
       if (filters.dateRange) {
-        if (transaction.date < filters.dateRange.from || transaction.date > filters.dateRange.to) return false;
+        if (transaction.date < filters.dateRange.from || transaction.date > filters.dateRange.to)
+          return false;
       }
       return true;
     });
@@ -781,7 +937,7 @@ export const accountingService = {
         nextRun: transaction.recurring!.nextRun,
         description: transaction.description ?? '',
         estimatedAnnualCost: transaction.amount * 12,
-        currency: transaction.currency,
+        currency: transaction.currency
       }));
   },
 
@@ -794,14 +950,14 @@ export const accountingService = {
         amount: payment.amount,
         currency: payment.currency,
         date: payment.date,
-        status: invoice.status,
-      })),
+        status: invoice.status
+      }))
     );
 
     return {
       clientId,
       clientName: clientInvoices[0]?.clientName ?? clientId,
-      payments,
+      payments
     };
-  },
+  }
 };

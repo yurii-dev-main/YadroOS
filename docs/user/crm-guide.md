@@ -3,6 +3,7 @@
 Complete guide to managing clients and deals.
 
 ## Table of Contents
+
 1. [Managing Clients](#managing-clients)
 2. [Sales Pipeline](#sales-pipeline)
 3. [Activity Tracking](#activity-tracking)
@@ -24,6 +25,7 @@ You'll see all your clients in a list or grid view.
 [Screenshot: Client list]
 
 **Features**:
+
 - **Search**: Type client name, email, or company
 - **Filter**: By status, assigned person, tags
 - **Sort**: By name, date added, revenue
@@ -32,12 +34,14 @@ You'll see all your clients in a list or grid view.
 ### Adding a New Client
 
 **Method 1: Quick Add**
+
 1. Click + button (bottom right)
 2. Select "Add Client"
 3. Fill required fields (name, email)
 4. Click "Save"
 
 **Method 2: Detailed Add**
+
 1. Go to CRM → Clients
 2. Click "New Client" button
 3. Fill all information:
@@ -58,6 +62,7 @@ You'll see all your clients in a list or grid view.
 4. Click "Save changes"
 
 **Quick Edit**:
+
 - Click pencil icon next to any field
 - Edit inline
 - Press Enter to save
@@ -67,6 +72,7 @@ You'll see all your clients in a list or grid view.
 Click any client to see their detailed card.
 
 **Tabs**:
+
 - **Overview**: Basic information and stats
 - **Deals**: All deals with this client
 - **Activity**: History of interactions
@@ -76,6 +82,7 @@ Click any client to see their detailed card.
 [Screenshot: Client card with tabs]
 
 **Quick Actions** (top right):
+
 - 📞 Call
 - ✉️ Email
 - 📅 Schedule meeting
@@ -97,6 +104,7 @@ Have clients in a spreadsheet? Import them!
 [Screenshot: Import wizard]
 
 **Tips**:
+
 - Required fields: Name, Email
 - Use consistent formatting
 - Check for duplicates before import
@@ -137,11 +145,13 @@ Have clients in a spreadsheet? Import them!
 ### Moving Deals
 
 **Drag and Drop**:
+
 - Grab deal card
 - Drag to new stage
 - Drop
 
 **Or manually**:
+
 - Open deal
 - Change stage dropdown
 - Save
@@ -149,6 +159,7 @@ Have clients in a spreadsheet? Import them!
 ### Deal Card
 
 Each deal shows:
+
 - Client name
 - Deal value ($)
 - Probability (%)
@@ -162,6 +173,7 @@ Click to see full details.
 ### Pipeline Analytics
 
 View metrics:
+
 - **Total Pipeline Value**: Sum of all open deals
 - **Win Rate**: % of deals closed won
 - **Average Deal Size**: Mean deal value
@@ -184,6 +196,7 @@ View metrics:
 ### Logging an Activity
 
 **Quick Log**:
+
 1. Open client or deal
 2. Click "Log Activity"
 3. Select type
@@ -191,6 +204,7 @@ View metrics:
 5. Save
 
 **Detailed Log**:
+
 1. Go to client card → Activity tab
 2. Click "+ New Activity"
 3. Fill form:
@@ -209,6 +223,7 @@ View metrics:
 See all interactions with a client in chronological order.
 
 **Filter by**:
+
 - Activity type
 - Date range
 - Team member
@@ -235,17 +250,20 @@ Never miss a follow-up!
 View key metrics:
 
 **Sales Performance**:
+
 - Revenue this month/quarter/year
 - Deals won vs lost
 - Average deal size
 - Sales cycle length
 
 **Team Performance**:
+
 - Deals by salesperson
 - Win rate by person
 - Activity by person
 
 **Client Insights**:
+
 - New clients this month
 - Client acquisition cost
 - Client lifetime value
@@ -281,30 +299,35 @@ Export any list to Excel/CSV:
 ## Tips & Best Practices
 
 ### 🎯 Keep Data Clean
+
 - Update client info regularly
 - Archive inactive clients
 - Use tags consistently
 - Avoid duplicate entries
 
 ### 📊 Use the Pipeline
+
 - Move deals promptly
 - Set realistic probabilities
 - Update deal values
 - Add notes on progress
 
 ### 📝 Log Everything
+
 - Log all client interactions
 - Set follow-up reminders
 - Attach relevant files
 - Keep notes detailed
 
 ### 🤝 Collaborate
+
 - Assign deals clearly
 - @mention teammates in notes
 - Share important updates
 - Use internal comments
 
 ### 📈 Review Analytics
+
 - Check dashboard weekly
 - Identify trends
 - Spot bottlenecks
@@ -328,17 +351,20 @@ Speed up your work:
 ## Troubleshooting
 
 ### Can't find a client?
+
 - Check spelling
 - Try partial name
 - Use email search
 - Check if archived
 
 ### Deal not moving?
+
 - Check permissions
 - Refresh page
 - Try manual stage change
 
 ### Import failed?
+
 - Check CSV format
 - Verify required fields
 - Look for special characters

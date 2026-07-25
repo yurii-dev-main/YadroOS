@@ -57,7 +57,11 @@ export const updateDeal = async (req: Request, res: Response) => {
 
   const updated = await prisma.deal.update({ where: { id }, data });
 
-  if (data.stage && data.stage === DealStage.closed_won && existing.stage !== DealStage.closed_won) {
+  if (
+    data.stage &&
+    data.stage === DealStage.closed_won &&
+    existing.stage !== DealStage.closed_won
+  ) {
     const actorName = await getActorName(req.user?.userId);
     await prisma.auditLog.create({
       data: {

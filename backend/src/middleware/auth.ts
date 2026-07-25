@@ -6,9 +6,7 @@ import { env } from '../config/env';
 
 export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers.authorization;
-  const token = authHeader?.startsWith('Bearer ')
-    ? authHeader.split(' ')[1]
-    : undefined;
+  const token = authHeader?.startsWith('Bearer ') ? authHeader.split(' ')[1] : undefined;
 
   if (!token) {
     return res.status(401).json({ message: 'Unauthorized' });

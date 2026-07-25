@@ -7,7 +7,7 @@ import {
   InvoiceEmailOptions,
   InvoiceReminderConfig,
   PaymentReminder,
-  CurrencyCode,
+  CurrencyCode
 } from '../types/accounting.types';
 
 interface InvoiceState {
@@ -18,7 +18,9 @@ interface InvoiceState {
   reminderConfig: InvoiceReminderConfig;
   error?: string;
   loadInvoices: () => Promise<void>;
-  createInvoice: (payload: Omit<Invoice, 'id' | 'status' | 'createdAt' | 'updatedAt' | 'number' | 'taxes'>) => Promise<Invoice>;
+  createInvoice: (
+    payload: Omit<Invoice, 'id' | 'status' | 'createdAt' | 'updatedAt' | 'number' | 'taxes'>
+  ) => Promise<Invoice>;
   sendInvoice: (invoiceId: string, options: InvoiceEmailOptions) => Promise<void>;
   recordPayment: (invoiceId: string, amount: number, currency: CurrencyCode) => Promise<void>;
   generatePdf: (invoiceId: string) => void;
@@ -29,7 +31,7 @@ interface InvoiceState {
 const defaultReminderConfig: InvoiceReminderConfig = {
   daysBeforeDue: [7, 1],
   daysAfterDue: [3, 7],
-  enabled: true,
+  enabled: true
 };
 
 const useInvoiceStore = create<InvoiceState>((set, get) => ({
@@ -47,7 +49,7 @@ const useInvoiceStore = create<InvoiceState>((set, get) => ({
     } catch (error) {
       set({
         loading: false,
-        error: error instanceof Error ? error.message : 'Failed to load invoices',
+        error: error instanceof Error ? error.message : 'Failed to load invoices'
       });
     }
   },
@@ -83,7 +85,7 @@ const useInvoiceStore = create<InvoiceState>((set, get) => ({
     }
     const invoice = get().invoices.find((item) => item.id === invoiceId) ?? null;
     set({ selectedInvoice: invoice });
-  },
+  }
 }));
 
 export const useInvoices = () => {

@@ -62,7 +62,11 @@ export class RateLimiter {
       scopes.push({ key: createKey(['endpoint', params.endpoint]), limit: endpointLimit });
     }
 
-    let result: RateLimitResult = { allowed: true, remaining: Number.MAX_SAFE_INTEGER, resetAt: Date.now() + interval };
+    let result: RateLimitResult = {
+      allowed: true,
+      remaining: Number.MAX_SAFE_INTEGER,
+      resetAt: Date.now() + interval
+    };
     for (const scope of scopes) {
       if (!scope.limit) {
         continue;

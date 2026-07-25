@@ -18,20 +18,22 @@ export const ActivityLog = ({ activities, filter, onFilterChange }: ActivityLogP
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-wrap items-center gap-3">
-        {(['all', 'call', 'meeting', 'email', 'note', 'task'] as Array<ActivityType | 'all'>).map((type) => (
-          <button
-            key={type}
-            onClick={() => onFilterChange(type)}
-            type="button"
-            className={`rounded-full px-4 py-1 text-sm transition ${
-              filter === type
-                ? 'bg-blue-600 text-white shadow shadow-blue-500/40'
-                : 'bg-slate-800/80 text-slate-300 hover:bg-slate-700/80'
-            }`}
-          >
-            {type === 'all' ? 'All' : activityLabels[type]}
-          </button>
-        ))}
+        {(['all', 'call', 'meeting', 'email', 'note', 'task'] as Array<ActivityType | 'all'>).map(
+          (type) => (
+            <button
+              key={type}
+              onClick={() => onFilterChange(type)}
+              type="button"
+              className={`rounded-full px-4 py-1 text-sm transition ${
+                filter === type
+                  ? 'bg-blue-600 text-white shadow shadow-blue-500/40'
+                  : 'bg-slate-800/80 text-slate-300 hover:bg-slate-700/80'
+              }`}
+            >
+              {type === 'all' ? 'All' : activityLabels[type]}
+            </button>
+          )
+        )}
       </div>
 
       <div className="relative">
@@ -49,15 +51,27 @@ export const ActivityLog = ({ activities, filter, onFilterChange }: ActivityLogP
                     {activity.type === 'note' && 'Note'}
                     {activity.type === 'task' && 'Task'}
                   </h4>
-                  <span className="text-xs text-slate-400">{new Date(activity.createdAt).toLocaleString()}</span>
+                  <span className="text-xs text-slate-400">
+                    {new Date(activity.createdAt).toLocaleString()}
+                  </span>
                 </div>
-                <p className="text-sm text-slate-200">{('notes' in activity && activity.notes) || ('content' in activity && activity.content) || '—'}</p>
+                <p className="text-sm text-slate-200">
+                  {('notes' in activity && activity.notes) ||
+                    ('content' in activity && activity.content) ||
+                    '—'}
+                </p>
                 <div className="grid grid-cols-2 gap-3 text-xs text-slate-400">
                   {'duration' in activity && <span>Duration: {activity.duration} min.</span>}
                   {'summary' in activity && <span>Summary: {activity.summary}</span>}
-                  {'deadline' in activity && <span>Deadline: {new Date(activity.deadline).toLocaleDateString()}</span>}
-                  {'status' in activity && 'deadline' in activity && <span>Status: {activity.status}</span>}
-                  {'attendees' in activity && <span>Attendees: {activity.attendees.join(', ')}</span>}
+                  {'deadline' in activity && (
+                    <span>Deadline: {new Date(activity.deadline).toLocaleDateString()}</span>
+                  )}
+                  {'status' in activity && 'deadline' in activity && (
+                    <span>Status: {activity.status}</span>
+                  )}
+                  {'attendees' in activity && (
+                    <span>Attendees: {activity.attendees.join(', ')}</span>
+                  )}
                   {'subject' in activity && <span>Subject: {activity.subject}</span>}
                 </div>
               </div>

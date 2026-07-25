@@ -9,7 +9,7 @@ import { CommunicationChannel, UnifiedInboxItem } from '../types/communication.t
 const channelPriority: Record<CommunicationChannel, number> = {
   email: 2,
   internal: 3,
-  telegram: 1,
+  telegram: 1
 };
 
 export const UnifiedInboxPage = () => {
@@ -17,7 +17,10 @@ export const UnifiedInboxPage = () => {
 
   useEffect(() => {
     const load = async () => {
-      const [emails, threads] = await Promise.all([emailService.fetchEmails({}), chatService.fetchThreads()]);
+      const [emails, threads] = await Promise.all([
+        emailService.fetchEmails({}),
+        chatService.fetchThreads()
+      ]);
       const unified: UnifiedInboxItem[] = [
         ...emails.map<UnifiedInboxItem>((email) => ({
           id: `email-${email.id}`,
@@ -32,10 +35,10 @@ export const UnifiedInboxPage = () => {
             ? {
                 id: email.relatedClientId,
                 name: email.from,
-                email: email.from,
+                email: email.from
               }
             : undefined,
-          payload: email,
+          payload: email
         })),
         ...threads
           .map((thread) => ({ thread, messages: [] as UnifiedInboxItem[] }))
@@ -44,17 +47,21 @@ export const UnifiedInboxPage = () => {
               ? [
                   {
                     id: `chat-${thread.id}`,
-                    channel: (thread.id.startsWith('telegram-') ? 'telegram' : 'internal') as CommunicationChannel,
+                    channel: (thread.id.startsWith('telegram-')
+                      ? 'telegram'
+                      : 'internal') as CommunicationChannel,
                     title: thread.title,
                     preview: thread.lastMessage?.content ?? '',
                     timestamp: thread.lastMessage?.createdAt ?? new Date().toISOString(),
                     unread: Boolean(thread.unreadCount),
-                    priority: (thread.unreadCount && thread.unreadCount > 0 ? 'high' : 'normal') as 'high' | 'normal',
-                    payload: thread.lastMessage,
-                  },
+                    priority: (thread.unreadCount && thread.unreadCount > 0 ? 'high' : 'normal') as
+                      | 'high'
+                      | 'normal',
+                    payload: thread.lastMessage
+                  }
                 ]
-              : [],
-          ),
+              : []
+          )
       ];
       setItems(unified.sort((a, b) => channelPriority[b.channel] - channelPriority[a.channel]));
     };
