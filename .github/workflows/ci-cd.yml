@@ -153,95 +153,95 @@ jobs:
           name: dist
           path: dist/
 
-  deploy-staging:
-    name: Deploy to Staging
-    needs: [build, e2e]
-    if: github.ref == 'refs/heads/develop'
-    runs-on: ubuntu-latest
-    environment:
-      name: staging
-      url: https://staging.yourcompany.com
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Download build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: dist
-          path: dist/
-
-      - name: Deploy to staging
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.STAGING_HOST }}
-          username: ${{ secrets.STAGING_USER }}
-          key: ${{ secrets.STAGING_SSH_KEY }}
-          script: |
-            cd /var/www/crm-staging
-            git pull origin develop
-            npm ci --production
-            npm run build
-            pm2 restart crm-staging
-
-  deploy-production:
-    name: Deploy to Production
-    needs: [build, e2e]
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    environment:
-      name: production
-      url: https://app.yourcompany.com
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Download build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: dist
-          path: dist/
-
-      - name: Create backup
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.PROD_HOST }}
-          username: ${{ secrets.PROD_USER }}
-          key: ${{ secrets.PROD_SSH_KEY }}
-          script: |
-            cd /var/www/crm
-            ./scripts/backup.sh
-
-      - name: Deploy to production
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.PROD_HOST }}
-          username: ${{ secrets.PROD_USER }}
-          key: ${{ secrets.PROD_SSH_KEY }}
-          script: |
-            cd /var/www/crm
-            ./scripts/deploy.sh
-
-      - name: Health check
-        run: |
-          sleep 10
-          curl -f https://app.yourcompany.com/health || exit 1
-
-      - name: Notify on success
-        if: success()
-        uses: 8398a7/action-slack@v3
-        with:
-          status: ${{ job.status }}
-          text: '🎉 Deployment to production successful!'
-          webhook_url: ${{ secrets.SLACK_WEBHOOK }}
-
-      - name: Rollback on failure
-        if: failure()
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.PROD_HOST }}
-          username: ${{ secrets.PROD_USER }}
-          key: ${{ secrets.PROD_SSH_KEY }}
-          script: |
-            cd /var/www/crm
-            ./scripts/rollback.sh
+#   deploy-staging:
+#     name: Deploy to Staging
+#     needs: [build, e2e]
+#     if: github.ref == 'refs/heads/develop'
+#     runs-on: ubuntu-latest
+#     environment:
+#       name: staging
+#       url: https://staging.yourcompany.com
+# 
+#     steps:
+#       - uses: actions/checkout@v4
+# 
+#       - name: Download build artifacts
+#         uses: actions/download-artifact@v4
+#         with:
+#           name: dist
+#           path: dist/
+# 
+#       - name: Deploy to staging
+#         uses: appleboy/ssh-action@master
+#         with:
+#           host: ${{ secrets.STAGING_HOST }}
+#           username: ${{ secrets.STAGING_USER }}
+#           key: ${{ secrets.STAGING_SSH_KEY }}
+#           script: |
+#             cd /var/www/crm-staging
+#             git pull origin develop
+#             npm ci --production
+#             npm run build
+#             pm2 restart crm-staging
+# 
+#   deploy-production:
+#     name: Deploy to Production
+#     needs: [build, e2e]
+#     if: github.ref == 'refs/heads/main'
+#     runs-on: ubuntu-latest
+#     environment:
+#       name: production
+#       url: https://app.yourcompany.com
+# 
+#     steps:
+#       - uses: actions/checkout@v4
+# 
+#       - name: Download build artifacts
+#         uses: actions/download-artifact@v4
+#         with:
+#           name: dist
+#           path: dist/
+# 
+#       - name: Create backup
+#         uses: appleboy/ssh-action@master
+#         with:
+#           host: ${{ secrets.PROD_HOST }}
+#           username: ${{ secrets.PROD_USER }}
+#           key: ${{ secrets.PROD_SSH_KEY }}
+#           script: |
+#             cd /var/www/crm
+#             ./scripts/backup.sh
+# 
+#       - name: Deploy to production
+#         uses: appleboy/ssh-action@master
+#         with:
+#           host: ${{ secrets.PROD_HOST }}
+#           username: ${{ secrets.PROD_USER }}
+#           key: ${{ secrets.PROD_SSH_KEY }}
+#           script: |
+#             cd /var/www/crm
+#             ./scripts/deploy.sh
+# 
+#       - name: Health check
+#         run: |
+#           sleep 10
+#           curl -f https://app.yourcompany.com/health || exit 1
+# 
+#       - name: Notify on success
+#         if: success()
+#         uses: 8398a7/action-slack@v3
+#         with:
+#           status: ${{ job.status }}
+#           text: '🎉 Deployment to production successful!'
+#           webhook_url: ${{ secrets.SLACK_WEBHOOK }}
+# 
+#       - name: Rollback on failure
+#         if: failure()
+#         uses: appleboy/ssh-action@master
+#         with:
+#           host: ${{ secrets.PROD_HOST }}
+#           username: ${{ secrets.PROD_USER }}
+#           key: ${{ secrets.PROD_SSH_KEY }}
+#           script: |
+#             cd /var/www/crm
+#             ./scripts/rollback.sh
