@@ -39,10 +39,11 @@ export const fetchPredictionSummaries = async (): Promise<PredictionSummary[]> =
 };
 
 export const askAssistant = async (messages: ChatMessage[]) => {
-  const answer = await generateAIResponse({ messages });
+  const { content, actions } = await generateAIResponse({ messages });
   return {
     id: uuid(),
-    content: answer,
+    content: content,
+    actions: actions,
     role: 'assistant' as const,
     timestamp: Date.now()
   };

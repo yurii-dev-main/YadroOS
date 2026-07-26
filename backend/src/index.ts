@@ -3,8 +3,12 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import { env } from './config/env';
 import router from './routes';
+import { createServer } from 'http';
+import { initSocket } from './lib/socket';
 
 const app = express();
+const httpServer = createServer(app);
+initSocket(httpServer);
 
 app.use(cors({ origin: env.corsOrigin, credentials: true }));
 app.use(express.json());
@@ -20,6 +24,6 @@ app.use((err: any, _req: express.Request, res: express.Response, _next: express.
   res.status(500).json({ message: 'Internal server error' });
 });
 
-app.listen(env.port, () => {
+httpServer.listen(env.port, () => {
   console.log(`Server running on port ${env.port}`);
 });

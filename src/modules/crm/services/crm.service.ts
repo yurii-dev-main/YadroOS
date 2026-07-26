@@ -1,6 +1,6 @@
 import { v4 as uuid } from 'uuid';
 
-import { apiClient } from '../../../services/apiClient';
+import { apiClient, IS_DEMO_MODE } from '../../../services/apiClient';
 import {
   ActivityType,
   CRMActivity,
@@ -371,6 +371,10 @@ class CRMService {
   }
 
   async getClients(query: CRMClientQuery): Promise<CRMClientQueryResult> {
+    if (!IS_DEMO_MODE) {
+      const response = await apiClient.get('/crm/clients', { params: query });
+      return response.data;
+    }
     const { page, pageSize, filters, search, sort } = query;
     let filtered = this.applyFilters(this.store.clients, filters);
     filtered = this.applySearch(filtered, search);
@@ -393,6 +397,11 @@ class CRMService {
       files?: CRMFile[];
     }
   ) {
+    if (!IS_DEMO_MODE) {
+      const response = await apiClient.post('/crm/clients', input);
+      emitEvent({ type: 'clients:updated', resourceId: response.data.id });
+      return response.data;
+    }
     const client: CRMClient = {
       ...input,
       id: uuid(),
@@ -407,6 +416,11 @@ class CRMService {
   }
 
   async updateClient(id: string, updates: Partial<CRMClient>) {
+    if (!IS_DEMO_MODE) {
+      const response = await apiClient.put(`/crm/clients/${id}`, updates);
+      emitEvent({ type: 'clients:updated', resourceId: id });
+      return response.data;
+    }
     const index = this.store.clients.findIndex((client) => client.id === id);
     if (index === -1) throw new Error('Client not found');
     const updated: CRMClient = {
@@ -420,6 +434,11 @@ class CRMService {
   }
 
   async deleteClient(id: string) {
+    if (!IS_DEMO_MODE) {
+      await apiClient.delete(`/crm/clients/${id}`);
+      emitEvent({ type: 'clients:updated', resourceId: id });
+      return true;
+    }
     this.store.clients = this.store.clients.filter((client) => client.id !== id);
     this.store.deals = this.store.deals.filter((deal) => deal.clientId !== id);
     this.store.activities = this.store.activities.filter((activity) => activity.clientId !== id);
@@ -450,6 +469,10 @@ class CRMService {
   }
 
   async getDeals(filters: CRMPipelineFilters = {}) {
+    if (!IS_DEMO_MODE) {
+      const response = await apiClient.get('/crm/deals', { params: filters });
+      return response.data.data;
+    }
     let deals = [...this.store.deals];
     if (filters.owner && filters.owner !== 'all') {
       deals = deals.filter((deal) => deal.owner === filters.owner);
@@ -470,6 +493,11 @@ class CRMService {
   }
 
   async updateDealStage(dealId: string, stage: DealStage) {
+    if (!IS_DEMO_MODE) {
+      const response = await apiClient.put(`/crm/deals/${dealId}`, { stage });
+      emitEvent({ type: 'deals:updated', resourceId: dealId });
+      return response.data;
+    }
     const index = this.store.deals.findIndex((deal) => deal.id === dealId);
     if (index === -1) throw new Error('Deal not found');
     this.store.deals[index] = {
@@ -482,6 +510,11 @@ class CRMService {
   }
 
   async updateDeal(dealId: string, updates: Partial<CRMDeal>) {
+    if (!IS_DEMO_MODE) {
+      const response = await apiClient.put(`/crm/deals/${dealId}`, updates);
+      emitEvent({ type: 'deals:updated', resourceId: dealId });
+      return response.data;
+    }
     const index = this.store.deals.findIndex((deal) => deal.id === dealId);
     if (index === -1) throw new Error('Deal not found');
     this.store.deals[index] = {
@@ -494,6 +527,11 @@ class CRMService {
   }
 
   async createDeal(input: Omit<CRMDeal, 'id' | 'createdAt' | 'updatedAt' | 'clientName'>) {
+    if (!IS_DEMO_MODE) {
+      const response = await apiClient.post('/crm/deals', input);
+      emitEvent({ type: 'deals:updated', resourceId: response.data.id });
+      return response.data;
+    }
     const client = this.store.clients.find((item) => item.id === input.clientId);
     if (!client) throw new Error('Client not found for deal');
     const deal: CRMDeal = {

@@ -32,6 +32,12 @@ export const navItems: NavItem[] = [
     roles: ['ADMIN', 'ACCOUNTANT', 'VIEWER']
   },
   {
+    label: 'Integrations',
+    icon: 'Link',
+    to: '/dashboard/integrations',
+    roles: ['ADMIN', 'MANAGER']
+  },
+  {
     label: 'AI Analytics',
     icon: 'Brain',
     to: '/dashboard/ai',

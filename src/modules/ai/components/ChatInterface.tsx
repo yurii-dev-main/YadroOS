@@ -81,6 +81,16 @@ export const ChatInterface = () => {
               className={`max-w-2xl rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-lg ${message.role === 'assistant' ? 'self-start bg-slate-900/80 text-slate-100' : 'self-end bg-sky-500/20 text-sky-100'}`}
             >
               {message.content}
+              {message.actions && message.actions.length > 0 && (
+                <div className="mt-3 flex flex-col gap-2 border-t border-slate-700 pt-3">
+                  <div className="text-xs font-semibold text-slate-400">EXECUTED ACTIONS:</div>
+                  {message.actions.map((action, idx) => (
+                    <div key={idx} className="rounded bg-slate-800/80 p-2 text-xs font-mono text-emerald-400">
+                      ✓ {action.type}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           ))}
           {streamingMessage && (

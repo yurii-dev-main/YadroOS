@@ -111,6 +111,7 @@ model Client {
   activities      Activity[]
   transactions    Transaction[]
   invoices        Invoice[]
+  unifiedMessages UnifiedMessage[]
   lastContactedAt DateTime?
   createdAt       DateTime     @default(now())
   updatedAt       DateTime     @updatedAt
@@ -227,4 +228,44 @@ model AuditLog {
   description String
   metadata    Json?
   createdAt   DateTime @default(now())
+}
+
+model IntegrationConnection {
+  id            String    @id @default(uuid()) @db.Uuid
+  provider      String
+  displayName   String
+  credentials   Json
+  status        String    @default("connected")
+  connectedAt   DateTime  @default(now())
+  lastSyncAt    DateTime?
+  configuration Json?
+}
+
+model UnifiedMessage {
+  id          String   @id @default(uuid()) @db.Uuid
+  source      String
+  sourceId    String
+  threadId    String
+  fromAddress String
+  fromName    String?
+  content     String
+  direction   String
+  clientId    String?  @db.Uuid
+  client      Client?  @relation(fields: [clientId], references: [id])
+  metadata    Json?
+  createdAt   DateTime @default(now())
+  
+  @@unique([source, sourceId])
+  @@index([threadId, createdAt])
+  @@index([clientId])
+}
+
+model WebhookSubscription {
+  id        String   @id @default(uuid()) @db.Uuid
+  event     String
+  targetUrl String
+  secret    String
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

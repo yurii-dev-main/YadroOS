@@ -9,6 +9,7 @@ import {
   TemplateCategory
 } from '../types/communication.types';
 import { filterEmails } from '../utils/email.utils';
+import { apiClient, IS_DEMO_MODE } from '../../../services/apiClient';
 
 const sampleTags: EmailTag[] = [
   { id: 'vip', label: 'VIP', color: 'bg-red-500' },
@@ -111,16 +112,28 @@ const emailTemplates: EmailTemplate[] = [
 
 export const emailService = {
   async fetchEmails(params: EmailSearchParams = {}) {
+    if (!IS_DEMO_MODE) {
+      const response = await apiClient.get('/v1/communications/emails', { params });
+      return response.data;
+    }
     await new Promise((resolve) => setTimeout(resolve, 200));
     return filterEmails(sampleEmails, params);
   },
 
   async fetchEmailById(id: string) {
+    if (!IS_DEMO_MODE) {
+      const response = await apiClient.get(`/v1/communications/emails/${id}`);
+      return response.data;
+    }
     await new Promise((resolve) => setTimeout(resolve, 150));
     return sampleEmails.find((email) => email.id === id) ?? null;
   },
 
   async sendEmail(draft: EmailDraft) {
+    if (!IS_DEMO_MODE) {
+      const response = await apiClient.post('/v1/communications/emails', draft);
+      return response.data;
+    }
     await new Promise((resolve) => setTimeout(resolve, 300));
     const newEmail: EmailMessage = {
       id: uuid(),

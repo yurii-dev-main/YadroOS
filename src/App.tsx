@@ -7,6 +7,7 @@ import { AISuitePage } from './pages/dashboard/AISuitePage';
 import { AccountingPage } from './pages/dashboard/AccountingPage';
 import { CommunicationsPage } from './pages/dashboard/CommunicationsPage';
 import { CRMPage } from './pages/dashboard/CRMPage';
+import { IntegrationsPage } from './pages/dashboard/IntegrationsPage';
 import { HRPage } from './pages/dashboard/HRPage';
 import { OverviewPage } from './pages/dashboard/OverviewPage';
 import { ForgotPasswordPage } from './pages/auth/ForgotPasswordPage';
@@ -33,6 +34,7 @@ const App = () => (
         <Route path="/dashboard/hr" element={<HRPage />} />
         <Route path="/dashboard/accounting" element={<AccountingPage />} />
         <Route path="/dashboard/ai" element={<AISuitePage />} />
+        <Route path="/dashboard/integrations" element={<IntegrationsPage />} />
       </Route>
       <Route path="/profile" element={<ProfilePage />} />
     </Route>

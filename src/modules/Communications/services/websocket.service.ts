@@ -1,3 +1,7 @@
+import { io, Socket } from 'socket.io-client';
+import { useAuthStore } from '../../../store/authStore';
+import { IS_DEMO_MODE } from '../../../services/apiClient';
+
 type EventHandler = (data: unknown) => void;
 
 class FakeSocket {
@@ -37,12 +41,61 @@ class FakeSocket {
   }
 }
 
-const sockets = new Map<string, FakeSocket>();
+class RealSocket {
+  private socket: Socket | null = null;
+
+  constructor(private readonly channel: string) {}
+
+  connect() {
+    const token = useAuthStore.getState().tokens?.accessToken;
+    if (!token) return;
+
+    if (!this.socket) {
+      this.socket = io(import.meta.env.VITE_API_BASE_URL?.replace('/api', '') || 'http://localhost:3001', {
+        auth: {
+          token
+        }
+      });
+      
+      this.socket.on('connect', () => {
+        console.log(`Connected to websocket on channel: ${this.channel}`);
+      });
+    }
+  }
+
+  disconnect() {
+    if (this.socket) {
+      this.socket.disconnect();
+      this.socket = null;
+    }
+  }
+
+  on(event: string, handler: EventHandler) {
+    if (this.socket) {
+      this.socket.on(event, handler);
+    }
+  }
+
+  off(event: string, handler: EventHandler) {
+    if (this.socket) {
+      this.socket.off(event, handler);
+    }
+  }
+
+  emit(event: string, data: unknown) {
+    if (this.socket) {
+      this.socket.emit(event, data);
+    }
+  }
+}
+
+const sockets = new Map<string, FakeSocket | RealSocket>();
 
 export const websocketService = {
   connect(channel: string) {
     if (!sockets.has(channel)) {
-      sockets.set(channel, new FakeSocket(channel));
+      const socket = IS_DEMO_MODE ? new FakeSocket(channel) : new RealSocket(channel);
+      sockets.set(channel, socket);
     }
     const socket = sockets.get(channel)!;
     socket.connect();

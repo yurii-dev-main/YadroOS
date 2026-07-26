@@ -5,9 +5,9 @@ export interface GenerateResponseParams {
   messages: ChatMessage[];
 }
 
-export const generateAIResponse = async ({ messages }: GenerateResponseParams): Promise<string> => {
-  const response = await apiClient.post<{ content: string }>('/v1/ai/chat', { messages });
-  return response.data.content;
+export const generateAIResponse = async ({ messages }: GenerateResponseParams): Promise<{ content: string; actions?: any[] }> => {
+  const response = await apiClient.post<{ content: string; actions?: any[] }>('/v1/ai/chat', { messages });
+  return response.data;
 };
 
 export const fetchAIOverview = async (): Promise<AIOverviewData> => {

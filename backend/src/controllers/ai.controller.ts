@@ -10,17 +10,22 @@ export const createChatCompletion = async (req: Request, res: Response) => {
   }
 
   if (messages.length === 0) {
-    return res.json({ content: 'How can I help you today?' });
+    return res.json({ content: 'How can I help you today?', actions: [] });
   }
 
-  const response = await generateAIResponse(
-    messages.map((message) => ({
-      role: message.role as 'system' | 'user' | 'assistant',
-      content: message.content
-    }))
-  );
+  try {
+    const response = await generateAIResponse(
+      messages.map((message) => ({
+        role: message.role as 'system' | 'user' | 'assistant' | 'tool',
+        content: message.content
+      }))
+    );
 
-  return res.json({ content: response });
+    return res.json(response);
+  } catch (e) {
+    console.error('AI Error:', e);
+    return res.status(500).json({ error: 'Failed to generate AI response' });
+  }
 };
 
 export const getAIInsights = async (_req: Request, res: Response) => {
