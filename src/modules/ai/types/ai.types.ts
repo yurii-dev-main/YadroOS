@@ -152,12 +152,18 @@ export interface AIQueryResult {
   sources: string[];
 }
 
+export interface ChatAction {
+  type: string;
+  params: Record<string, unknown>;
+  result: Record<string, unknown>;
+}
+
 export interface ChatMessage {
   id: string;
   role: 'user' | 'assistant';
   content: string;
   timestamp: number;
-  actions?: Array<{ type: string; params: Record<string, unknown>; result: Record<string, unknown> }>;
+  actions?: ChatAction[];
 }
 
 export interface AIOverviewData {

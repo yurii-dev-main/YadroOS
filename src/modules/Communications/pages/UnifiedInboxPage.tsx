@@ -22,6 +22,7 @@ export const UnifiedInboxPage = () => {
         chatService.fetchThreads()
       ]);
       const unified: UnifiedInboxItem[] = [
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         ...emails.map((email: any) => ({
           id: `email-${email.id}`,
           channel: 'email',
