@@ -8,14 +8,14 @@ import { handleTelegramWebhook } from '../controllers/communications.controller'
 vi.mock('../lib/prisma', () => ({
   prisma: {
     unifiedMessage: {
-      create: vi.fn(),
-    },
-  },
+      create: vi.fn()
+    }
+  }
 }));
 
 vi.mock('../lib/socket', () => ({
   getIO: vi.fn(),
-  emitToUser: vi.fn(),
+  emitToUser: vi.fn()
 }));
 
 describe('Integrations & Adapters', () => {
@@ -27,7 +27,7 @@ describe('Integrations & Adapters', () => {
 
   it('TelegramAdapter parses incoming webhook correctly', async () => {
     const adapter = new TelegramAdapter('fake-token');
-    
+
     const payload = {
       message: {
         message_id: 123,
@@ -37,12 +37,12 @@ describe('Integrations & Adapters', () => {
           first_name: 'John',
           last_name: 'Doe'
         },
-        text: 'Hello from Telegram!',
+        text: 'Hello from Telegram!'
       }
     };
 
     const normalized = await adapter.handleIncoming(payload);
-    
+
     expect(normalized).not.toBeNull();
     expect(normalized?.source).toBe('telegram');
     expect(normalized?.threadId).toBe('telegram-456');
@@ -60,14 +60,14 @@ describe('Integrations & Adapters', () => {
           message_id: 123,
           chat: { id: 456 },
           from: { id: 789, first_name: 'John' },
-          text: 'Webhook test',
+          text: 'Webhook test'
         }
       }
     } as any;
-    
+
     const res = {
       json: vi.fn(),
-      status: vi.fn().mockReturnThis(),
+      status: vi.fn().mockReturnThis()
     } as any;
 
     await handleTelegramWebhook(req, res);
@@ -77,7 +77,7 @@ describe('Integrations & Adapters', () => {
         source: 'telegram',
         threadId: 'telegram-456',
         fromName: 'John',
-        content: 'Webhook test',
+        content: 'Webhook test'
       })
     });
     expect(res.json).toHaveBeenCalledWith({ ok: true });

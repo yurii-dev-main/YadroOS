@@ -12,8 +12,8 @@ export class EmailAdapter implements IChannelAdapter {
       secure: smtpConfig.secure,
       auth: {
         user: smtpConfig.user,
-        pass: smtpConfig.pass,
-      },
+        pass: smtpConfig.pass
+      }
     });
   }
 
@@ -22,7 +22,7 @@ export class EmailAdapter implements IChannelAdapter {
     if (!rawPayload.subject || !rawPayload.from) {
       return null;
     }
-    
+
     return {
       source: 'email',
       sourceId: String(Date.now()), // Replace with real Message-ID
@@ -31,7 +31,7 @@ export class EmailAdapter implements IChannelAdapter {
       fromName: rawPayload.fromName,
       content: rawPayload.text || rawPayload.html,
       direction: 'inbound',
-      metadata: rawPayload,
+      metadata: rawPayload
     };
   }
 
@@ -41,7 +41,7 @@ export class EmailAdapter implements IChannelAdapter {
       from: this.smtpConfig.user,
       to: toAddress,
       subject: 'Re: YadroOS Communication',
-      text: content,
+      text: content
     });
   }
 

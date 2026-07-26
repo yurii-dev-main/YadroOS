@@ -15,7 +15,7 @@ export class TelegramAdapter implements IChannelAdapter {
       // Only handling text messages for now
       return null;
     }
-    
+
     return {
       source: 'telegram',
       sourceId: String(msg.message_id),
@@ -24,7 +24,7 @@ export class TelegramAdapter implements IChannelAdapter {
       fromName: [msg.from.first_name, msg.from.last_name].filter(Boolean).join(' '),
       content: msg.text,
       direction: 'inbound',
-      metadata: payload,
+      metadata: payload
     };
   }
 
@@ -32,7 +32,7 @@ export class TelegramAdapter implements IChannelAdapter {
     const chatId = threadId.replace('telegram-', '');
     await axios.post(`https://api.telegram.org/bot${this.botToken}/sendMessage`, {
       chat_id: chatId,
-      text: content,
+      text: content
     });
   }
 

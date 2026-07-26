@@ -13,7 +13,7 @@ export const integrationsController = {
           displayName: true,
           status: true,
           connectedAt: true,
-          lastSyncAt: true,
+          lastSyncAt: true
         }
       });
       res.json(connections);
@@ -24,14 +24,14 @@ export const integrationsController = {
 
   async addConnection(req: Request, res: Response) {
     const { provider, displayName, credentials } = req.body;
-    
+
     try {
       const connection = await prisma.integrationConnection.create({
         data: {
           provider,
           displayName,
           credentials, // In a real app, this should be encrypted using AES-256 before saving
-          status: 'connected',
+          status: 'connected'
         }
       });
 
@@ -68,11 +68,11 @@ export const integrationsController = {
   async checkHealth(req: Request, res: Response) {
     const { id } = req.params;
     const adapter = adapterRegistry.get(id);
-    
+
     if (!adapter) {
       return res.status(404).json({ error: 'Adapter not found or not registered' });
     }
-    
+
     const status = await adapter.checkHealth();
     await prisma.integrationConnection.update({
       where: { id },

@@ -17,7 +17,7 @@ export const listThreads = async (req: Request, res: Response) => {
           participants: [
             {
               id: msg.fromAddress,
-              name: msg.fromName || msg.fromAddress,
+              name: msg.fromName || msg.fromAddress
             }
           ],
           type: 'dm',
@@ -46,8 +46,8 @@ export const listMessagesForThread = async (req: Request, res: Response) => {
       where: { threadId },
       orderBy: { createdAt: 'asc' }
     });
-    
-    const mapped = messages.map(msg => ({
+
+    const mapped = messages.map((msg) => ({
       id: msg.id,
       chatId: msg.threadId,
       author: { id: msg.fromAddress, name: msg.fromName || 'Unknown' },
@@ -67,9 +67,9 @@ export const listMessages = async (req: Request, res: Response) => {
     const where: any = {};
     if (chatId) where.threadId = String(chatId);
     if (query) where.content = { contains: String(query), mode: 'insensitive' };
-    
+
     const messages = await prisma.unifiedMessage.findMany({ where, orderBy: { createdAt: 'asc' } });
-    const mapped = messages.map(msg => ({
+    const mapped = messages.map((msg) => ({
       id: msg.id,
       chatId: msg.threadId,
       author: { id: msg.fromAddress, name: msg.fromName || 'Unknown' },
@@ -98,13 +98,13 @@ export const createMessage = async (req: Request, res: Response) => {
         fromAddress: author.id,
         fromName: author.name,
         content,
-        direction: 'outbound',
+        direction: 'outbound'
       }
     });
 
     if (chatId.startsWith('telegram-')) {
       const adapters = adapterRegistry.getAll();
-      const tgAdapter = adapters.find(a => a.provider === 'telegram');
+      const tgAdapter = adapters.find((a) => a.provider === 'telegram');
       if (tgAdapter) {
         await tgAdapter.sendMessage(chatId, content);
       }
@@ -124,10 +124,10 @@ export const createMessage = async (req: Request, res: Response) => {
 };
 
 export const getTelegramStatus = async (req: Request, res: Response) => {
-  const adapters = adapterRegistry.getAll().filter(a => a.provider === 'telegram');
+  const adapters = adapterRegistry.getAll().filter((a) => a.provider === 'telegram');
   res.json({
     connected: adapters.length > 0,
-    botName: adapters.length > 0 ? 'Telegram Bot Active' : null,
+    botName: adapters.length > 0 ? 'Telegram Bot Active' : null
   });
 };
 
@@ -137,8 +137,8 @@ export const updateTelegramStatus = (req: Request, res: Response) => {
 
 export const handleTelegramWebhook = async (req: Request, res: Response) => {
   const payload = req.body;
-  const adapters = adapterRegistry.getAll().filter(a => a.provider === 'telegram');
-  
+  const adapters = adapterRegistry.getAll().filter((a) => a.provider === 'telegram');
+
   let normalizedMsg = null;
   for (const adapter of adapters) {
     normalizedMsg = await adapter.handleIncoming(payload);
@@ -159,10 +159,10 @@ export const handleTelegramWebhook = async (req: Request, res: Response) => {
         fromName: normalizedMsg.fromName,
         content: normalizedMsg.content,
         direction: normalizedMsg.direction,
-        metadata: normalizedMsg.metadata as any,
+        metadata: normalizedMsg.metadata as any
       }
     });
-    
+
     return res.json({ ok: true });
   } catch (e) {
     console.error('Failed to save webhook message:', e);

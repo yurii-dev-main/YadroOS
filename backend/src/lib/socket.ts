@@ -10,7 +10,7 @@ export const initSocket = (server: HttpServer) => {
   io = new Server(server, {
     cors: {
       origin: env.corsOrigin,
-      credentials: true,
+      credentials: true
     }
   });
 
@@ -31,7 +31,7 @@ export const initSocket = (server: HttpServer) => {
   io.on('connection', (socket) => {
     const user = socket.data.user as AuthPayload;
     console.log(`User connected to socket: ${user.id}`);
-    
+
     // Join a private room for the user to receive targeted notifications
     socket.join(`user:${user.id}`);
 

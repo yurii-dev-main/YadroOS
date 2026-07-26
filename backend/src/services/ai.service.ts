@@ -79,7 +79,11 @@ const executeFunction = async (name: string, args: any) => {
   console.log(`Executing AI Tool: ${name}`, args);
   if (name === 'create_crm_deal') {
     // Here we would call prisma.deal.create(...)
-    return { success: true, message: `Deal ${args.name} for $${args.amount} with ${args.clientName} created successfully.`, dealId: 'deal-' + Date.now() };
+    return {
+      success: true,
+      message: `Deal ${args.name} for $${args.amount} with ${args.clientName} created successfully.`,
+      dealId: 'deal-' + Date.now()
+    };
   }
   if (name === 'send_message') {
     // Here we would call communications controller
@@ -88,7 +92,9 @@ const executeFunction = async (name: string, args: any) => {
   return { success: false, error: 'Function not found' };
 };
 
-export const generateAIResponse = async (messages: AIChatMessage[]): Promise<{ content: string; actions?: any[] }> => {
+export const generateAIResponse = async (
+  messages: AIChatMessage[]
+): Promise<{ content: string; actions?: any[] }> => {
   const payload = await requestOpenAI<{
     choices?: Array<{ message?: { role: string; content?: string | null; tool_calls?: any[] } }>;
   }>({
@@ -100,7 +106,7 @@ export const generateAIResponse = async (messages: AIChatMessage[]): Promise<{ c
   });
 
   const responseMessage = payload.choices?.[0]?.message;
-  
+
   if (!responseMessage) {
     throw new Error('OpenAI response is empty');
   }
@@ -108,21 +114,24 @@ export const generateAIResponse = async (messages: AIChatMessage[]): Promise<{ c
   // Check if AI wanted to call a function
   if (responseMessage.tool_calls && responseMessage.tool_calls.length > 0) {
     const actionsTaken = [];
-    
+
     // Create a new messages array including the assistant's tool calls
-    const nextMessages = [...messages, { 
-      role: 'assistant' as const, 
-      content: responseMessage.content,
-      tool_calls: responseMessage.tool_calls 
-    }];
+    const nextMessages = [
+      ...messages,
+      {
+        role: 'assistant' as const,
+        content: responseMessage.content,
+        tool_calls: responseMessage.tool_calls
+      }
+    ];
 
     for (const toolCall of responseMessage.tool_calls) {
       const functionName = toolCall.function.name;
       const functionArgs = JSON.parse(toolCall.function.arguments);
-      
+
       // Execute the actual code
       const functionResponse = await executeFunction(functionName, functionArgs);
-      
+
       actionsTaken.push({
         type: functionName,
         params: functionArgs,
@@ -134,7 +143,7 @@ export const generateAIResponse = async (messages: AIChatMessage[]): Promise<{ c
         tool_call_id: toolCall.id,
         role: 'tool' as const,
         name: functionName,
-        content: JSON.stringify(functionResponse),
+        content: JSON.stringify(functionResponse)
       });
     }
 
