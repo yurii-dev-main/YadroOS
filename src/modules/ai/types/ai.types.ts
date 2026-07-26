@@ -157,7 +157,7 @@ export interface ChatMessage {
   role: 'user' | 'assistant';
   content: string;
   timestamp: number;
-  actions?: Array<{ type: string; params: any; result: any }>;
+  actions?: Array<{ type: string; params: Record<string, unknown>; result: Record<string, unknown> }>;
 }
 
 export interface AIOverviewData {

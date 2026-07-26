@@ -22,7 +22,7 @@ export const UnifiedInboxPage = () => {
         chatService.fetchThreads()
       ]);
       const unified: UnifiedInboxItem[] = [
-        ...emails.map<UnifiedInboxItem>((email) => ({
+        ...emails.map((email: any) => ({
           id: `email-${email.id}`,
           channel: 'email',
           title: email.subject,

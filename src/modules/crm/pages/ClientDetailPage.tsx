@@ -54,7 +54,7 @@ export const ClientDetailPage = () => {
           crmService.getDeals({})
         ]);
         setClient(clientData);
-        setDeals(dealsData.filter((deal) => deal.clientId === clientId));
+        setDeals(dealsData.filter((deal: CRMDeal) => deal.clientId === clientId));
         setNotes(clientData.notes);
       } finally {
         setLoading(false);
