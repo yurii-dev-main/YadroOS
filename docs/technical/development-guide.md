@@ -261,40 +261,34 @@ test(accounting): add invoice tests
 
 ## Testing
 
-### Unit Tests (Jest)
+### Unit and Integration Tests (Vitest)
+
+We use **Vitest** for all testing (unit, component, integration). Tests are run in CI/CD pipeline automatically.
 
 ```bash
 # Run all tests
 npm run test
 
+# Run tests in UI mode
+npm run test:ui
+
 # Watch mode
 npm run test:watch
-
-# Coverage report
-npm run test:coverage
 ```
 
 Example test:
 
 ```typescript
+import { describe, it, expect } from 'vitest';
 import { calculateBonus } from './bonus.utils';
 
 describe('calculateBonus', () => {
   it('should calculate bonus correctly', () => {
     const salary = 1000;
-    const performanceCoefficient = 1.2;
-
-    const result = calculateBonus(salary, performanceCoefficient);
-
-    expect(result).toBe(1200);
+    const coefficient = 1.2;
+    expect(calculateBonus(salary, coefficient)).toBe(1200);
   });
 });
-```
-
-### Integration Tests (Supertest)
-
-```bash
-npm run test:integration
 ```
 
 ### E2E Tests (Playwright)

@@ -5,10 +5,10 @@
 Integrated CRM platform for decentralized organizations with modules:
 
 - CRM (Client Relationship Management)
-- Communications (Unified inbox)
+- Communications (Unified inbox, WebSockets)
 - HR (Human Resources)
 - Accounting (Financial management)
-- AI Analytics
+- AI Agent (Actionable analytics and function execution)
 
 ## High-Level Architecture
 
@@ -111,10 +111,11 @@ Integrated CRM platform for decentralized organizations with modules:
 
 ### 5. AI Module
 
-- Lead scoring
-- Performance analysis
-- Bonus calculation
-- Predictive analytics
+- Actionable Agent (OpenAI Function Calling)
+- Autonomous Deal Creation (`create_crm_deal`)
+- Autonomous Messaging (`send_message`)
+- Lead scoring & predictive analytics
+- Context-aware code and text assistance
 
 ## Database Schema
 

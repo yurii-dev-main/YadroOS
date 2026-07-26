@@ -10,15 +10,16 @@ These guidelines help maintain a consistent development style and simplify code 
 ## Workflow
 
 1. **Branching.** Create a separate branch off `main` for each task (`feature/<short-desc>` or `fix/<short-desc>`).
-2. **Code Consistency.** Before committing, run:
+2. **Code Consistency.** Before committing, ensure the CI checks will pass locally:
    ```bash
    npm run lint
-   npm run format
-   npm run build   # type checking and build verification
+   npm run format:check
+   npm run type-check
+   npm run test
    ```
-3. **Tests.** Store unit tests in `tests/` next to the module being tested. Add new tests for modified functionality.
-4. **Commits.** Make commit messages meaningful: what changed and why (for example, `feat(hr): add onboarding checklist`).
-5. **PR.** In the description, specify the objective, key changes, checks (lint/build/tests), and any deployment risks.
+3. **Tests.** Store **Vitest** tests in `tests/` or alongside the module. The CI pipeline will strictly verify them.
+4. **Commits.** Make commit messages meaningful (e.g. `feat(ai): implement agentic function calling`).
+5. **PR.** GitHub Actions will automatically run linting, typing, formatting, and unit/integration tests on your pull request.
 
 ## Code Style
 
