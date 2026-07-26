@@ -15,7 +15,7 @@ YadroOS is a modular web platform for organizational process management (CRM, co
 - **Frontend:** React 18, TypeScript, Vite, Tailwind CSS, Zustand, React Router.
 - **Backend:** Node.js, Express, Prisma ORM, Socket.IO, SQLite/PostgreSQL.
 - **AI Capabilities:** OpenAI API with **Function Calling / Actionable Tools** (autonomous CRM deal creation, messaging, etc.).
-- **Infrastructure:** Nginx + PM2 (see `ecosystem.config.js`, `nginx/`), GitHub Actions for CI/CD.
+- **Infrastructure:** Docker and Docker Compose (see `docker-compose.yml`), GitHub Actions for CI/CD.
 - **Testing and Quality:** ESLint, Prettier, **Vitest** for robust unit and integration testing.
 
 ## Repository Structure

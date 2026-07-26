@@ -68,8 +68,7 @@ Integrated CRM platform for decentralized organizations with modules:
 ### Infrastructure
 
 - Nginx (Reverse proxy)
-- PM2 (Process manager)
-- Docker (Containerization - optional)
+- Docker and Docker Compose (Containerization & orchestration)
 - AWS S3 / Cloudflare R2 (File storage)
 - Let's Encrypt (SSL)
 
@@ -219,8 +218,7 @@ RESTful API at /api/v1/
       │             │
 ┌─────▼─────┐ ┌────▼──────┐
 │  App      │ │  App      │
-│  Server 1 │ │  Server 2 │
-│  (PM2)    │ │  (PM2)    │
+│  (Docker) │ │  (Docker) │
 └─────┬─────┘ └────┬──────┘
       │            │
       └──────┬─────┘
