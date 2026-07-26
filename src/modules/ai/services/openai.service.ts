@@ -5,8 +5,13 @@ export interface GenerateResponseParams {
   messages: ChatMessage[];
 }
 
-export const generateAIResponse = async ({ messages }: GenerateResponseParams): Promise<{ content: string; actions?: ChatAction[] }> => {
-  const response = await apiClient.post<{ content: string; actions?: ChatAction[] }>('/v1/ai/chat', { messages });
+export const generateAIResponse = async ({
+  messages
+}: GenerateResponseParams): Promise<{ content: string; actions?: ChatAction[] }> => {
+  const response = await apiClient.post<{ content: string; actions?: ChatAction[] }>(
+    '/v1/ai/chat',
+    { messages }
+  );
   return response.data;
 };
 

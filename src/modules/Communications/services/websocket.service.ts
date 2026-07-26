@@ -51,12 +51,15 @@ class RealSocket {
     if (!token) return;
 
     if (!this.socket) {
-      this.socket = io(import.meta.env.VITE_API_BASE_URL?.replace('/api', '') || 'http://localhost:3001', {
-        auth: {
-          token
+      this.socket = io(
+        import.meta.env.VITE_API_BASE_URL?.replace('/api', '') || 'http://localhost:3001',
+        {
+          auth: {
+            token
+          }
         }
-      });
-      
+      );
+
       this.socket.on('connect', () => {
         console.log(`Connected to websocket on channel: ${this.channel}`);
       });

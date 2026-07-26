@@ -9,10 +9,10 @@ vi.mock('../services/apiClient', () => ({
   apiClient: {
     get: vi.fn(),
     post: vi.fn(),
-    delete: vi.fn(),
+    delete: vi.fn()
   },
   // Set IS_DEMO_MODE initially to true for testing UI locks
-  IS_DEMO_MODE: true,
+  IS_DEMO_MODE: true
 }));
 
 describe('IntegrationsPage', () => {

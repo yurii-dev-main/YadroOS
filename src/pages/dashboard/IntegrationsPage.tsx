@@ -26,7 +26,7 @@ export const IntegrationsPage = () => {
             displayName: 'My Company Bot',
             status: 'connected',
             connectedAt: new Date().toISOString(),
-            lastSyncAt: new Date().toISOString(),
+            lastSyncAt: new Date().toISOString()
           }
         ]);
         return;
@@ -57,7 +57,7 @@ export const IntegrationsPage = () => {
       await apiClient.post('/v1/integrations', {
         provider,
         displayName: `${provider} Connection`,
-        credentials: { botToken: token },
+        credentials: { botToken: token }
       });
       fetchConnections();
     } catch (e) {
@@ -110,7 +110,7 @@ export const IntegrationsPage = () => {
                 Connect
               </button>
             </div>
-            
+
             <div className="flex items-center justify-between p-4 rounded-lg bg-slate-800/50 border border-white/5 opacity-50">
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center text-red-400 font-bold">
@@ -121,7 +121,10 @@ export const IntegrationsPage = () => {
                   <div className="text-sm text-slate-400">Sync emails directly</div>
                 </div>
               </div>
-              <button disabled className="px-3 py-1.5 bg-slate-700 text-slate-400 text-sm font-medium rounded-lg">
+              <button
+                disabled
+                className="px-3 py-1.5 bg-slate-700 text-slate-400 text-sm font-medium rounded-lg"
+              >
                 Connect
               </button>
             </div>
@@ -132,23 +135,25 @@ export const IntegrationsPage = () => {
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-medium text-white">Active Connections</h2>
           </div>
-          
+
           {loading ? (
             <div className="text-slate-400 text-center py-8">Loading...</div>
           ) : connections.length === 0 ? (
-            <div className="text-slate-400 text-center py-8">
-              No active connections.
-            </div>
+            <div className="text-slate-400 text-center py-8">No active connections.</div>
           ) : (
             <div className="space-y-4">
               {connections.map((conn) => (
-                <div key={conn.id} className="flex items-center justify-between p-4 rounded-lg bg-slate-800/50 border border-white/5">
+                <div
+                  key={conn.id}
+                  className="flex items-center justify-between p-4 rounded-lg bg-slate-800/50 border border-white/5"
+                >
                   <div className="flex items-center space-x-3">
                     <div className="w-2 h-2 rounded-full bg-green-500"></div>
                     <div>
                       <div className="text-white font-medium">{conn.displayName}</div>
                       <div className="text-xs text-slate-400">
-                        {conn.provider} • Connected {new Date(conn.connectedAt).toLocaleDateString()}
+                        {conn.provider} • Connected{' '}
+                        {new Date(conn.connectedAt).toLocaleDateString()}
                       </div>
                     </div>
                   </div>
@@ -156,7 +161,7 @@ export const IntegrationsPage = () => {
                     <button className="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-700">
                       <Settings2 className="w-4 h-4" />
                     </button>
-                    <button 
+                    <button
                       onClick={() => handleDelete(conn.id)}
                       className="p-2 text-red-400 hover:text-red-300 rounded-lg hover:bg-red-900/30"
                     >
