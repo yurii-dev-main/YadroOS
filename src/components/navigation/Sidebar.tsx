@@ -1,7 +1,6 @@
 import {
   Brain,
   LayoutDashboard,
-  Menu,
   MessageSquare,
   Receipt,
   UserCircle,

@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { UploadCloud, Download, Plus, Mail, Trash2, Columns, Table2 } from 'lucide-react';
+import { UploadCloud, Download, Plus, Trash2, Columns, Table2 } from 'lucide-react';
 
 import { Input } from '../../../components/ui/input';
 import { DataSourceBadge } from '../../../components/ui/DataSourceBadge';
@@ -64,10 +64,9 @@ export const ClientsPage = ({ onOpenClient }: { onOpenClient: (id: string) => vo
   };
 
   const handleImport = async (file: File) => {
-    const content = await file.text();
     setImporting(true);
     try {
-      await crmService.importClientsCSV(content);
+      await crmService.importClientsCSV(file);
     } finally {
       setImporting(false);
     }

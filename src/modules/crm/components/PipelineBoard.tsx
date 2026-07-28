@@ -4,7 +4,7 @@ import { useMemo, useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 
 import { CRMDeal, DealStage } from '../types/crm.types';
-import { formatCurrency, stageLabels } from '../utils/crm.utils';
+import { stageLabels } from '../utils/crm.utils';
 import { DealCard, DealCardView } from './DealCard';
 const CustomDragGhost = ({ deal }: { deal: CRMDeal }) => {
   const [pos, setPos] = useState({ x: -9999, y: -9999 });

@@ -9,7 +9,9 @@ const channelLabels: Record<'all' | CommunicationChannel, string> = {
   all: 'All channels',
   email: 'Email',
   internal: 'Internal chats',
-  telegram: 'Telegram'
+  telegram: 'Telegram',
+  whatsapp: 'WhatsApp',
+  livechat: 'Live Chat'
 };
 
 export const UnifiedInboxPanel = ({ items }: UnifiedInboxPanelProps) => {

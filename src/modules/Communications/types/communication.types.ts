@@ -101,7 +101,7 @@ export interface MessageSearchParams {
   authorId?: string;
 }
 
-export type CommunicationChannel = 'email' | 'internal' | 'telegram';
+export type CommunicationChannel = 'email' | 'internal' | 'telegram' | 'whatsapp' | 'livechat';
 
 export interface UnifiedInboxItem {
   id: string;

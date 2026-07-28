@@ -9,6 +9,9 @@ vi.mock('../lib/prisma', () => ({
   prisma: {
     unifiedMessage: {
       create: vi.fn()
+    },
+    integrationConnection: {
+      findUnique: vi.fn().mockResolvedValue({ organizationId: 'org-1' })
     }
   }
 }));

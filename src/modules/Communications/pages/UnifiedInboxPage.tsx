@@ -9,7 +9,9 @@ import { CommunicationChannel, UnifiedInboxItem } from '../types/communication.t
 const channelPriority: Record<CommunicationChannel, number> = {
   email: 2,
   internal: 3,
-  telegram: 1
+  telegram: 1,
+  whatsapp: 4,
+  livechat: 5
 };
 
 export const UnifiedInboxPage = () => {

@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { Building2, Check, ChevronDown, Plus, Users, Settings } from 'lucide-react';
+import { Building2, Check, ChevronDown, Settings } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';
 import { organizationsApi, Organization } from '../../api/organizations.api';

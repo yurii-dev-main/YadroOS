@@ -25,6 +25,7 @@ export interface User {
       email: boolean;
       push: boolean;
     };
+    signature?: string;
   };
 }
 

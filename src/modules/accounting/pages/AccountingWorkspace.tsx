@@ -7,7 +7,6 @@ import { PayrollPage } from './PayrollPage';
 import { ReportsPage } from './ReportsPage';
 import { BudgetsPage } from './BudgetsPage';
 import { DataSourceBadge, DataSourceType } from '../../../components/ui/DataSourceBadge';
-import { Plus } from 'lucide-react';
 
 const sections = [
   { id: 'accounts', label: 'Accounts', component: AccountsPage },

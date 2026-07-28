@@ -5,7 +5,6 @@ import { EmployeeFilters } from '../components/EmployeeFilters';
 import { EmployeesGrid } from '../components/EmployeesGrid';
 import { EmployeeProfile } from '../components/EmployeeProfile';
 import { OrgChartView } from '../components/OrgChartView';
-import { hrService } from '../services/hr.service';
 
 export const EmployeesPage = () => {
   const {

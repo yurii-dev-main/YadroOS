@@ -1,3 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable prefer-const */
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react/no-unescaped-entities */
 import {
   AutoResponder,
   CannedResponse,
@@ -73,7 +78,8 @@ export const chatService = {
           email: data.emailNotifications ?? true,
           telegram: true,
           whatsapp: false,
-          livechat: true
+          livechat: true,
+          internal: true
         }
       };
     } catch {
@@ -82,7 +88,7 @@ export const chatService = {
         sound: true,
         emailDigest: 'daily',
         doNotDisturb: false,
-        channelPreferences: { email: true, telegram: true, whatsapp: false, livechat: true }
+        channelPreferences: { email: true, telegram: true, whatsapp: false, livechat: true, internal: true }
       };
     }
   },

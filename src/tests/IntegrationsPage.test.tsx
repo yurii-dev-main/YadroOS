@@ -35,8 +35,11 @@ describe('IntegrationsPage', () => {
     const connectButtons = screen.getAllByText('Connect');
     fireEvent.click(connectButtons[0]);
 
-    // Should call alert because it's in demo mode
-    expect(window.alert).toHaveBeenCalledWith('Cannot add real integrations in demo mode');
+    // Should not call API
     expect(apiClient.post).not.toHaveBeenCalled();
+    // Wait for the new fake connection to appear
+    await waitFor(() => {
+      expect(screen.getByText('telegram Connection 2')).toBeInTheDocument();
+    });
   });
 });

@@ -70,6 +70,8 @@ export interface OrgChartNode {
   id: string;
   name: string;
   title: string;
+  role?: string;
+  department?: string;
   avatarUrl?: string;
   children?: OrgChartNode[];
 }
@@ -157,10 +159,12 @@ export interface AttendanceSummary {
   attendanceRate: number;
   lateArrivals: number;
   absenteeismRate: number;
+  date?: string;
 }
 
 export interface KPI {
   id: string;
+  employeeId?: string;
   role: string;
   title: string;
   target: number;
@@ -170,6 +174,7 @@ export interface KPI {
 
 export interface OKR {
   id: string;
+  employeeId?: string;
   objective: string;
   keyResults: {
     id: string;
@@ -181,6 +186,7 @@ export interface OKR {
 export interface PerformanceReview {
   id: string;
   employeeId: string;
+  reviewerId?: string;
   period: string;
   type: 'quarterly' | 'annual';
   overallScore: number;
@@ -192,6 +198,7 @@ export interface PerformanceReview {
 
 export interface PerformanceHighlight {
   employeeId: string;
+  id?: string;
   title: string;
   score: number;
 }

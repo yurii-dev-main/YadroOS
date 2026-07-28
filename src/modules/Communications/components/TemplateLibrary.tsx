@@ -84,7 +84,7 @@ export const TemplateLibrary = () => {
               <div dangerouslySetInnerHTML={{ __html: template.body }} />
             </div>
             <div className="mt-2 text-xs text-slate-500">
-              Variables: {template.variables.join(', ') || 'None'}
+              Variables: {(template.variables || []).join(', ') || 'None'}
             </div>
           </article>
         ))}

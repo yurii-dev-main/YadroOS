@@ -18,8 +18,8 @@ const statusColor: Record<Transaction['status'], string> = {
 type SortField = 'date' | 'description' | 'account' | 'category' | 'amount' | 'status';
 
 export const TransactionTable = ({ transactions, accounts, categories }: TransactionTableProps) => {
-  const accountMap = new Map(accounts.map((account) => [account.id, account]));
-  const categoryMap = new Map(categories.map((category) => [category.id, category]));
+  const accountMap = useMemo(() => new Map(accounts.map((account) => [account.id, account])), [accounts]);
+  const categoryMap = useMemo(() => new Map(categories.map((category) => [category.id, category])), [categories]);
 
   const [sortField, setSortField] = useState<SortField>('date');
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc');
@@ -43,21 +43,24 @@ export const TransactionTable = ({ transactions, accounts, categories }: Transac
         case 'description':
           comparison = (a.description ?? '').localeCompare(b.description ?? '');
           break;
-        case 'account':
+        case 'account': {
           const accA = accountMap.get(a.accountId)?.name ?? '';
           const accB = accountMap.get(b.accountId)?.name ?? '';
           comparison = accA.localeCompare(accB);
           break;
-        case 'category':
+        }
+        case 'category': {
           const catA = (a.categoryId ? categoryMap.get(a.categoryId)?.name : '') ?? '';
           const catB = (b.categoryId ? categoryMap.get(b.categoryId)?.name : '') ?? '';
           comparison = catA.localeCompare(catB);
           break;
-        case 'amount':
+        }
+        case 'amount': {
           const valA = a.type === 'expense' ? -a.amount : a.amount;
           const valB = b.type === 'expense' ? -b.amount : b.amount;
           comparison = valA - valB;
           break;
+        }
         case 'status':
           comparison = a.status.localeCompare(b.status);
           break;
