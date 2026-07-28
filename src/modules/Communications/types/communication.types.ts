@@ -140,10 +140,10 @@ export interface TemplateCategory {
 export interface EmailTemplate {
   id: string;
   name: string;
-  categoryId: string;
+  categoryId?: string;
   subject: string;
   body: string;
-  variables: string[];
+  variables?: string[];
 }
 
 export interface CannedResponse {

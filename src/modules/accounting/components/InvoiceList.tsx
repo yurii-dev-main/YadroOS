@@ -29,11 +29,11 @@ export const InvoiceList = ({
     </CardHeader>
     <CardContent className="space-y-4 text-sm text-slate-200">
       {invoices.map((invoice) => {
-        const subtotal = invoice.lineItems.reduce(
+        const subtotal = (invoice.lineItems || []).reduce(
           (acc, item) => acc + item.quantity * item.unitPrice,
           0
         );
-        const taxes = invoice.taxes;
+        const taxes = invoice.taxes || 0;
         const discount = invoice.discount ? subtotal * invoice.discount : 0;
         const total = subtotal + taxes - discount;
         return (
@@ -53,12 +53,12 @@ export const InvoiceList = ({
               <span>Issued: {format(new Date(invoice.issueDate), 'dd.MM.yyyy')}</span>
               <span>Due: {format(new Date(invoice.dueDate), 'dd.MM.yyyy')}</span>
               <span>
-                Total: {total.toFixed(2)} {invoice.currency}
+                Total: {(total || 0).toFixed(2)} {invoice.currency}
               </span>
               <span>
                 Paid:{' '}
-                {(invoice.payments ?? [])
-                  .reduce((acc, payment) => acc + payment.amount, 0)
+                {((invoice.payments || [])
+                  .reduce((acc, payment) => acc + payment.amount, 0) || 0)
                   .toFixed(2)}{' '}
                 {invoice.currency}
               </span>

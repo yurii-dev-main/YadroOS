@@ -307,8 +307,12 @@ class CRMService {
     return response.data;
   }
 
-  async importClientsCSV(content: string) {
-    const response = await apiClient.post('/crm/clients/import', { content });
+  async importClientsCSV(file: File) {
+    const formData = new FormData();
+    formData.append('file', file);
+    const response = await apiClient.post('/crm/clients/import', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    });
     emitEvent({ type: 'clients:updated' });
     return response.data;
   }
@@ -328,6 +332,10 @@ class CRMService {
     const response = await apiClient.post(`/crm/campaigns/${campaignId}/send`);
     emitEvent({ type: 'activities:updated' });
     return response.data;
+  }
+  async generateClientSummary(clientId: string) {
+    const response = await apiClient.post(`/crm/clients/${clientId}/summary`);
+    return response.data?.summary || response.data?.content || response.data;
   }
 }
 

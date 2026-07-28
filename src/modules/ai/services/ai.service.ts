@@ -35,21 +35,26 @@ export const fetchInsightGroups = async (): Promise<{ groups: InsightGroup[], is
 };
 
 export const fetchPredictionSummaries = async (): Promise<PredictionSummary[]> => {
-  const overview = await fetchAIOverview();
-  return [
-    {
-      title: 'Cash Flow Forecast',
-      description: 'Baseline scenario shows positive cash flow over the next 6 months.',
-      confidence: 0.83,
-      forecast: overview.accounting.forecast
-    },
-    {
-      title: 'Pipeline Conversion',
-      description: 'Expected deal closing rate is 34% with activity above 70%.',
-      confidence: 0.72,
-      forecast: overview.accounting.forecast
-    }
-  ];
+  try {
+    const { data } = await apiClient.get<PredictionSummary[]>('/v1/ai/predictions');
+    return data;
+  } catch {
+    const overview = await fetchAIOverview();
+    return [
+      {
+        title: 'Cash Flow Forecast',
+        description: 'Baseline scenario shows positive cash flow over the next 6 months.',
+        confidence: 0.83,
+        forecast: overview.accounting.forecast
+      },
+      {
+        title: 'Pipeline Conversion',
+        description: 'Expected deal closing rate is 34% with activity above 70%.',
+        confidence: 0.72,
+        forecast: overview.accounting.forecast
+      }
+    ];
+  }
 };
 
 export const askAssistant = async (messages: ChatMessage[]) => {

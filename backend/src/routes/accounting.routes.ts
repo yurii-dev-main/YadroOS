@@ -35,7 +35,12 @@ import {
   bulkImportTransactions,
   rollbackImport,
   syncAccountTransactions,
-  getExchangeRates
+  getExchangeRates,
+  refreshExchangeRates,
+  getRecurringInsights,
+  markPayrollPaid,
+  searchTransactions,
+  getClientPaymentHistory
 } from '../controllers/accounting-extended.controller';
 import { authMiddleware, checkRole } from '../middleware/auth';
 
@@ -49,6 +54,7 @@ router.post('/accounts/transfer', transferFunds);
 router.get('/accounts/:id', getAccountById);
 router.post('/accounts/:id/reconcile', reconcileAccount);
 router.post('/accounts/:id/sync', syncAccountTransactions);
+router.post('/accounts/:id/import', syncAccountTransactions);
 router.post('/accounts', createAccount);
 router.put('/accounts/:id', updateAccount);
 router.delete('/accounts/:id', deleteAccount);
@@ -56,6 +62,7 @@ router.delete('/accounts/:id', deleteAccount);
 const upload = multer({ storage: multer.memoryStorage() });
 
 router.get('/transactions', listTransactions);
+router.get('/transactions/search', searchTransactions);
 router.get('/transactions/:id', getTransactionById);
 router.post('/transactions/bulk-import', upload.single('file'), bulkImportTransactions);
 router.delete('/transactions/import-batch/:batchId', rollbackImport);
@@ -76,12 +83,16 @@ router.put('/invoices/:id/status', updateInvoiceStatus);
 
 router.get('/payroll', getPayroll);
 router.post('/payroll/run', runPayroll);
+router.post('/payroll/pay', markPayrollPaid);
 
 router.get('/dashboard', getDashboardAnalytics);
 router.get('/cash-balances', getCashBalances);
 router.get('/category-breakdown', getCategoryBreakdown);
 router.get('/client-profitability', getClientProfitability);
 router.get('/reports', getReports);
+router.get('/clients/:clientId/payment-history', getClientPaymentHistory);
 router.get('/exchange-rates', getExchangeRates);
+router.post('/exchange-rates/refresh', refreshExchangeRates);
+router.get('/recurring-insights', getRecurringInsights);
 
 export default router;

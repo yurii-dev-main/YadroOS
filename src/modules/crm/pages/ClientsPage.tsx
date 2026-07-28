@@ -191,14 +191,14 @@ export const ClientsPage = ({ onOpenClient }: { onOpenClient: (id: string) => vo
           <button
             type="button"
             onClick={() => handleBulkStatus('inactive')}
-            className="rounded-lg border border-primary/60 px-3 py-1 text-xs uppercase tracking-wide text-primary transition hover:border-primary hover:text-white"
+            className="rounded-lg border border-muted-foreground/60 px-3 py-1 text-xs uppercase tracking-wide text-muted-foreground transition hover:border-foreground hover:text-white hover:bg-muted"
           >
             Inactive
           </button>
           <button
             type="button"
             onClick={handleBulkDelete}
-            className="flex items-center gap-2 rounded-lg border border-red-400/60 px-3 py-1 text-xs uppercase tracking-wide text-red-200 transition hover:border-red-300 hover:text-white"
+            className="flex items-center gap-2 rounded-lg border border-destructive/60 px-3 py-1 text-xs uppercase tracking-wide text-destructive transition hover:border-destructive hover:text-destructive-foreground hover:bg-destructive"
           >
             <Trash2 className="h-3 w-3" /> Delete
           </button>

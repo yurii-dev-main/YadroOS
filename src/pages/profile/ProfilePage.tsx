@@ -20,7 +20,8 @@ const profileSchema = z.object({
   language: z.enum(['uk', 'en']),
   theme: z.enum(['light', 'dark', 'system']),
   emailNotifications: z.boolean(),
-  pushNotifications: z.boolean()
+  pushNotifications: z.boolean(),
+  signature: z.string().optional()
 });
 
 type ProfileFormValues = z.infer<typeof profileSchema>;
@@ -54,7 +55,8 @@ export const ProfilePage = () => {
           language: user.preferences?.language || 'en',
           theme: user.preferences?.theme || 'dark',
           emailNotifications: user.preferences?.notifications?.email || false,
-          pushNotifications: user.preferences?.notifications?.push || false
+          pushNotifications: user.preferences?.notifications?.push || false,
+          signature: (user.preferences as any)?.signature || ''
         }
       : {
           name: '',
@@ -62,7 +64,8 @@ export const ProfilePage = () => {
           language: 'uk',
           theme: 'dark',
           emailNotifications: true,
-          pushNotifications: true
+          pushNotifications: true,
+          signature: ''
         }
   });
 
@@ -76,7 +79,8 @@ export const ProfilePage = () => {
       language: user.preferences?.language || 'en',
       theme: user.preferences?.theme || 'dark',
       emailNotifications: user.preferences?.notifications?.email || false,
-      pushNotifications: user.preferences?.notifications?.push || false
+      pushNotifications: user.preferences?.notifications?.push || false,
+      signature: (user.preferences as any)?.signature || ''
     });
   }, [user, profileMethods]);
 
@@ -100,6 +104,7 @@ export const ProfilePage = () => {
         ...user.preferences,
         language: values.language,
         theme: values.theme,
+        signature: values.signature,
         notifications: {
           email: values.emailNotifications,
           push: values.pushNotifications
@@ -154,6 +159,17 @@ export const ProfilePage = () => {
             >
               <FormField<ProfileFormValues> name="name" label={t('profile.name')} />
               <FormField<ProfileFormValues> name="company" label={t('profile.company')} />
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-slate-200" htmlFor="signature">
+                  Email Signature
+                </label>
+                <textarea
+                  id="signature"
+                  className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 min-h-[80px]"
+                  placeholder="Best regards, ..."
+                  {...profileMethods.register('signature')}
+                />
+              </div>
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-slate-200" htmlFor="language">

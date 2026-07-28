@@ -24,10 +24,10 @@ export const statusLabels: Record<ClientStatus, string> = {
 };
 
 export const statusBadgeStyles: Record<ClientStatus, string> = {
-  lead: 'bg-primary/10 text-primary border border-primary/20',
-  active: 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20',
-  inactive: 'bg-slate-500/10 text-slate-300 border border-slate-500/20',
-  lost: 'bg-red-500/10 text-red-400 border border-red-500/20'
+  lead: 'bg-secondary/10 text-secondary border border-secondary/20',
+  active: 'bg-primary/10 text-primary border border-primary/20',
+  inactive: 'bg-muted text-muted-foreground border border-border',
+  lost: 'bg-destructive/10 text-destructive border border-destructive/20'
 };
 
 export const stageLabels: DealStage[] = [

@@ -113,8 +113,12 @@ const emailTemplates: EmailTemplate[] = [
 export const emailService = {
   async fetchEmails(params: EmailSearchParams = {}) {
     if (!IS_DEMO_MODE) {
-      const response = await apiClient.get('/v1/communications/emails', { params });
-      return response.data;
+      try {
+        const response = await apiClient.get('/v1/communications/emails', { params });
+        return response.data?.data || response.data || [];
+      } catch {
+        return [];
+      }
     }
     await new Promise((resolve) => setTimeout(resolve, 200));
     return filterEmails(sampleEmails, params);
@@ -122,8 +126,12 @@ export const emailService = {
 
   async fetchEmailById(id: string) {
     if (!IS_DEMO_MODE) {
-      const response = await apiClient.get(`/v1/communications/emails/${id}`);
-      return response.data;
+      try {
+        const response = await apiClient.get(`/v1/communications/emails/${id}`);
+        return response.data;
+      } catch {
+        return null;
+      }
     }
     await new Promise((resolve) => setTimeout(resolve, 150));
     return sampleEmails.find((email) => email.id === id) ?? null;
@@ -131,8 +139,12 @@ export const emailService = {
 
   async sendEmail(draft: EmailDraft) {
     if (!IS_DEMO_MODE) {
-      const response = await apiClient.post('/v1/communications/emails', draft);
-      return response.data;
+      try {
+        const response = await apiClient.post('/v1/communications/emails', draft);
+        return response.data;
+      } catch {
+        throw new Error('Failed to send email');
+      }
     }
     await new Promise((resolve) => setTimeout(resolve, 300));
     const newEmail: EmailMessage = {
@@ -153,49 +165,41 @@ export const emailService = {
   },
 
   async updateEmailStatus(id: string, changes: Partial<EmailMessage>) {
-    await new Promise((resolve) => setTimeout(resolve, 200));
-    const index = sampleEmails.findIndex((email) => email.id === id);
-    if (index === -1) return null;
-    sampleEmails[index] = { ...sampleEmails[index], ...changes };
-    return sampleEmails[index];
+    try {
+      const response = await apiClient.patch(`/v1/communications/emails/${id}`, changes);
+      return response.data?.data || response.data;
+    } catch {
+      return null;
+    }
   },
 
   async moveToFolder(ids: string[], folder: EmailMessage['folder']) {
-    await new Promise((resolve) => setTimeout(resolve, 200));
-    ids.forEach((id) => {
-      const email = sampleEmails.find((item) => item.id === id);
-      if (email) {
-        email.folder = folder;
-      }
-    });
+    await apiClient.put('/v1/communications/emails/bulk-folder', { emailIds: ids, folder });
     return this.fetchEmails({ folder });
   },
 
   async attachToClient(emailId: string, clientId: string) {
-    await new Promise((resolve) => setTimeout(resolve, 200));
-    const email = sampleEmails.find((item) => item.id === emailId);
-    if (!email) throw new Error('Email not found');
-    email.relatedClientId = clientId;
-    return email;
+    return this.updateEmailStatus(emailId, { relatedClientId: clientId });
   },
 
   async createClientFromEmail(emailId: string) {
-    await new Promise((resolve) => setTimeout(resolve, 200));
-    const email = sampleEmails.find((item) => item.id === emailId);
+    const email = await this.fetchEmailById(emailId);
     if (!email) throw new Error('Email not found');
-    const newClient: ClientSummary = {
-      id: uuid(),
+    const newClient = await apiClient.post('/api/crm/clients', {
       name: email.from.split('@')[0],
       email: email.from
-    };
-    sampleClients.push(newClient);
-    email.relatedClientId = newClient.id;
-    return newClient;
+    });
+    await this.attachToClient(emailId, newClient.data.id);
+    return newClient.data;
   },
 
   async fetchClients() {
-    await new Promise((resolve) => setTimeout(resolve, 150));
-    return sampleClients;
+    try {
+      const response = await apiClient.get('/api/crm/clients');
+      return response.data?.data || response.data || [];
+    } catch {
+      return [];
+    }
   },
 
   async fetchTags() {
@@ -204,12 +208,47 @@ export const emailService = {
   },
 
   async fetchTemplateCategories() {
-    await new Promise((resolve) => setTimeout(resolve, 120));
-    return templateCategories;
+    try {
+      const response = await apiClient.get('/v1/communications/template-categories');
+      return response.data?.data || response.data || [];
+    } catch {
+      return templateCategories;
+    }
   },
 
   async fetchTemplates() {
+    if (!IS_DEMO_MODE) {
+      try {
+        const response = await apiClient.get('/v1/communications/email-templates');
+        return response.data?.data || response.data || [];
+      } catch {
+        return [];
+      }
+    }
     await new Promise((resolve) => setTimeout(resolve, 160));
     return emailTemplates;
+  },
+
+  async createTemplate(template: Partial<EmailTemplate>) {
+    const response = await apiClient.post('/v1/communications/email-templates', template);
+    return response.data?.data || response.data;
+  },
+
+  async deleteTemplate(id: string) {
+    await apiClient.delete(`/v1/communications/email-templates/${id}`);
+  },
+
+  async getAutoResponders() {
+    try {
+      const response = await apiClient.get('/v1/communications/auto-responders');
+      return response.data?.data || response.data || [];
+    } catch {
+      return [];
+    }
+  },
+
+  async updateAutoResponder(id: string, payload: { active: boolean; message: string; type: string }) {
+    const response = await apiClient.put(`/v1/communications/auto-responders/${id}`, payload);
+    return response.data?.data || response.data;
   }
 };

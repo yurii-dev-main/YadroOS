@@ -9,9 +9,15 @@ import {
   updateTelegramStatus,
   listEmails,
   createEmail,
+  updateEmail,
+  bulkMoveFolder,
   listCannedResponses,
   getAutoResponders,
-  getNotificationPreferences
+  updateAutoResponder,
+  getNotificationPreferences,
+  listEmailTemplates,
+  createEmailTemplate,
+  deleteEmailTemplate
 } from '../controllers/communications.controller';
 import { authMiddleware } from '../middleware/auth';
 
@@ -29,8 +35,16 @@ router.put('/telegram/status', updateTelegramStatus);
 
 router.get('/emails', listEmails);
 router.post('/emails', createEmail);
+router.patch('/emails/:id', updateEmail);
+router.put('/emails/bulk-folder', bulkMoveFolder);
+router.get('/email-templates', listEmailTemplates);
+router.post('/email-templates', createEmailTemplate);
+router.delete('/email-templates/:id', deleteEmailTemplate);
+
 router.get('/canned-responses', listCannedResponses);
 router.get('/auto-responders', getAutoResponders);
+router.put('/auto-responders/:id', updateAutoResponder);
+
 router.get('/notification-preferences', getNotificationPreferences);
 
 export default router;

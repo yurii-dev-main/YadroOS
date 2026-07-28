@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Edit2, Check, X, ArrowLeft, Paperclip, FileText, Target, Activity } from 'lucide-react';
+import { Edit2, Check, X, ArrowLeft, Paperclip, FileText, Target, Activity, UploadCloud, Trash2, Sparkles } from 'lucide-react';
 import clsx from 'clsx';
 import { v4 as uuid } from 'uuid';
 
@@ -137,6 +137,20 @@ export const ClientDetailPage = () => {
                     <p className="text-sm text-slate-400">{client.company}</p>
                   </div>
                   <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        try {
+                          const sum = await crmService.generateClientSummary(client.id);
+                          alert(typeof sum === 'string' ? sum : JSON.stringify(sum, null, 2));
+                        } catch (e: any) {
+                          alert(e.message || 'Failed to generate summary');
+                        }
+                      }}
+                      className="flex items-center gap-2 rounded-lg border border-purple-500/60 px-3 py-1 text-sm text-purple-400 transition hover:bg-purple-500/10"
+                    >
+                      <Sparkles className="h-4 w-4" /> AI Summary
+                    </button>
                     {isEditing ? (
                       <>
                         <button
@@ -344,12 +358,43 @@ export const ClientDetailPage = () => {
 
                   {activeTab === 'files' && (
                     <div className="space-y-4">
-                      <div className="rounded-2xl border border-slate-700/40 bg-slate-900/60 p-4 text-sm text-slate-200">
+                      <div className="rounded-2xl border border-slate-700/40 bg-slate-900/60 p-4 text-sm text-slate-200 flex justify-between items-center">
                         <p>Files: {client.files.length}</p>
+                        <label className="flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-primary/30 transition hover:bg-primary/90 cursor-pointer">
+                          <UploadCloud className="h-4 w-4" /> Upload
+                          <input
+                            type="file"
+                            className="hidden"
+                            onChange={async (e) => {
+                              const file = e.target.files?.[0];
+                              if (file) {
+                                const newFile = {
+                                  id: uuid(),
+                                  name: file.name,
+                                  size: file.size,
+                                  type: file.type,
+                                  url: URL.createObjectURL(file)
+                                };
+                                await handleUpdate({ files: [...client.files, newFile] });
+                              }
+                            }}
+                          />
+                        </label>
                       </div>
-                      {client.files.length === 0 && (
+                      {client.files.length === 0 ? (
                         <div className="rounded-2xl border border-dashed border-slate-700/50 bg-slate-900/40 p-6 text-center text-sm text-slate-400">
                           No files yet.
+                        </div>
+                      ) : (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                          {client.files.map(f => (
+                            <div key={f.id} className="rounded-xl border border-slate-700 bg-slate-800 p-4 flex items-center justify-between">
+                               <div className="truncate max-w-[150px] text-sm text-slate-200" title={f.name}>{f.name}</div>
+                               <button type="button" className="text-red-400 hover:text-red-300" onClick={() => handleUpdate({ files: client.files.filter(x => x.id !== f.id) })}>
+                                 <Trash2 className="h-4 w-4" />
+                               </button>
+                            </div>
+                          ))}
                         </div>
                       )}
                     </div>

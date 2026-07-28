@@ -175,20 +175,21 @@ export const IntegrationsPage = () => {
               </button>
             </div>
 
-            <div className="flex items-center justify-between p-4 rounded-lg bg-slate-800/50 border border-white/5 opacity-50">
+            <div className="flex items-center justify-between p-4 rounded-lg bg-slate-800/50 border border-white/5">
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center text-red-400 font-bold">
                   GM
                 </div>
                 <div>
-                  <div className="text-white font-medium">Gmail OAuth (Coming Soon)</div>
+                  <div className="text-white font-medium">Gmail OAuth</div>
                   <div className="text-sm text-slate-400">Sync emails directly</div>
                 </div>
               </div>
               <button
-                disabled
-                className="px-3 py-1.5 bg-slate-700 text-slate-400 text-sm font-medium rounded-lg"
+                onClick={() => handleConnect('gmail')}
+                className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg flex items-center"
               >
+                <Plus className="w-4 h-4 mr-1" />
                 Connect
               </button>
             </div>

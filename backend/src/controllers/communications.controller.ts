@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { prisma } from '../lib/prisma';
 import { adapterRegistry } from '../adapters/AdapterRegistry';
+import { smtpService } from '../services/smtp.service';
 
 export const listThreads = async (req: Request, res: Response) => {
   try {
@@ -35,14 +36,14 @@ export const listThreads = async (req: Request, res: Response) => {
       }
     }
     res.json(Array.from(threadsMap.values()));
-  } catch (e) {
-    res.status(500).json({ error: 'Failed to list threads' });
+  } catch (e: any) {
+    res.status(500).json({ error: e.message || 'Failed to list threads' });
   }
 };
 
 export const listMessagesForThread = async (req: Request, res: Response) => {
-  const { threadId } = req.params;
   try {
+    const { threadId } = req.params;
     const messages = await prisma.unifiedMessage.findMany({
       where: { threadId, organizationId: req.user!.organizationId },
       orderBy: { createdAt: 'asc' }
@@ -57,14 +58,14 @@ export const listMessagesForThread = async (req: Request, res: Response) => {
       status: 'read'
     }));
     res.json(mapped);
-  } catch (e) {
-    res.status(500).json({ error: 'Failed to list messages' });
+  } catch (e: any) {
+    res.status(500).json({ error: e.message || 'Failed to list messages' });
   }
 };
 
 export const listMessages = async (req: Request, res: Response) => {
-  const { chatId, query } = req.query;
   try {
+    const { chatId, query } = req.query;
     const where: any = { organizationId: req.user!.organizationId };
     if (chatId) where.threadId = String(chatId);
     if (query) where.content = { contains: String(query), mode: 'insensitive' };
@@ -79,18 +80,18 @@ export const listMessages = async (req: Request, res: Response) => {
       status: 'read'
     }));
     res.json(mapped);
-  } catch (e) {
-    res.status(500).json({ error: 'Failed to search messages' });
+  } catch (e: any) {
+    res.status(500).json({ error: e.message || 'Failed to search messages' });
   }
 };
 
 export const createMessage = async (req: Request, res: Response) => {
-  const { chatId, author, content } = req.body;
-  if (!chatId || !author || !content) {
-    return res.status(400).json({ message: 'chatId, author and content are required' });
-  }
-
   try {
+    const { chatId, author, content } = req.body;
+    if (!chatId || !author || !content) {
+      return res.status(400).json({ message: 'chatId, author and content are required' });
+    }
+
     const newMessage = await prisma.unifiedMessage.create({
       data: {
         organizationId: req.user!.organizationId,
@@ -120,43 +121,51 @@ export const createMessage = async (req: Request, res: Response) => {
       createdAt: newMessage.createdAt,
       status: 'sent'
     });
-  } catch (e) {
-    res.status(500).json({ error: 'Failed to send message' });
+  } catch (e: any) {
+    res.status(500).json({ error: e.message || 'Failed to send message' });
   }
 };
 
 export const getTelegramStatus = async (req: Request, res: Response) => {
-  const adapters = adapterRegistry.getAll().filter((a) => a.provider === 'telegram');
-  res.json({
-    connected: adapters.length > 0,
-    botName: adapters.length > 0 ? 'Telegram Bot Active' : null
-  });
+  try {
+    const adapters = adapterRegistry.getAll().filter((a) => a.provider === 'telegram');
+    res.json({
+      connected: adapters.length > 0,
+      botName: adapters.length > 0 ? 'Telegram Bot Active' : null
+    });
+  } catch (e: any) {
+    res.status(500).json({ error: e.message });
+  }
 };
 
-export const updateTelegramStatus = (req: Request, res: Response) => {
-  res.json({ ok: true });
+export const updateTelegramStatus = async (req: Request, res: Response) => {
+  try {
+    res.json({ ok: true });
+  } catch (e: any) {
+    res.status(500).json({ error: e.message });
+  }
 };
 
 export const handleTelegramWebhook = async (req: Request, res: Response) => {
-  const payload = req.body;
-  const entries = adapterRegistry.getEntries().filter(([, a]) => a.provider === 'telegram');
-
-  let normalizedMsg = null;
-  let matchedConnectionId = null;
-
-  for (const [connId, adapter] of entries) {
-    normalizedMsg = await adapter.handleIncoming(payload);
-    if (normalizedMsg) {
-      matchedConnectionId = connId;
-      break;
-    }
-  }
-
-  if (!normalizedMsg || !matchedConnectionId) {
-    return res.json({ ok: true });
-  }
-
   try {
+    const payload = req.body;
+    const entries = adapterRegistry.getEntries().filter(([, a]) => a.provider === 'telegram');
+
+    let normalizedMsg = null;
+    let matchedConnectionId = null;
+
+    for (const [connId, adapter] of entries) {
+      normalizedMsg = await adapter.handleIncoming(payload);
+      if (normalizedMsg) {
+        matchedConnectionId = connId;
+        break;
+      }
+    }
+
+    if (!normalizedMsg || !matchedConnectionId) {
+      return res.json({ ok: true });
+    }
+
     const connection = await prisma.integrationConnection.findUnique({
       where: { id: matchedConnectionId }
     });
@@ -180,57 +189,177 @@ export const handleTelegramWebhook = async (req: Request, res: Response) => {
     });
 
     return res.json({ ok: true });
-  } catch (e) {
+  } catch (e: any) {
     console.error('Failed to save webhook message:', e);
-    return res.status(500).json({ error: 'Failed to process' });
+    return res.status(500).json({ error: e.message || 'Failed to process' });
   }
 };
 
 export const listEmails = async (req: Request, res: Response) => {
-  const emails = await prisma.emailMessage.findMany({
-    where: { organizationId: req.user!.organizationId },
-    orderBy: { createdAt: 'desc' }
-  });
-  res.json({ data: emails });
+  try {
+    const emails = await prisma.emailMessage.findMany({
+      where: { organizationId: req.user!.organizationId },
+      orderBy: { createdAt: 'desc' }
+    });
+    res.json({ data: emails });
+  } catch (e: any) {
+    res.status(500).json({ error: e.message });
+  }
 };
 
 export const createEmail = async (req: Request, res: Response) => {
-  const { subject, body, from, to } = req.body;
-  const email = await prisma.emailMessage.create({
-    data: {
-      organizationId: req.user!.organizationId,
-      subject,
-      body,
-      from,
-      to,
-      status: 'sent'
+  try {
+    const { subject, body, from, to } = req.body;
+    const email = await prisma.emailMessage.create({
+      data: {
+        organizationId: req.user!.organizationId,
+        subject,
+        body,
+        from,
+        to,
+        status: 'sent'
+      }
+    });
+
+    try {
+      const smtpConfig = { 
+        host: process.env.SMTP_HOST || 'smtp.ethereal.email', 
+        port: Number(process.env.SMTP_PORT) || 587,
+        user: process.env.SMTP_USER || '',
+        pass: process.env.SMTP_PASS || ''
+      };
+      if (smtpConfig.user) {
+        await smtpService.sendEmail(smtpConfig, email.to, email.subject, email.body);
+      }
+    } catch(err) {
+      console.error('SMTP error:', err);
     }
-  });
-  res.status(201).json(email);
+
+    res.status(201).json(email);
+  } catch (e: any) {
+    res.status(500).json({ error: e.message });
+  }
+};
+
+export const updateEmail = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { status, starred, folder, relatedClientId, unread } = req.body;
+    const updated = await prisma.emailMessage.update({
+      where: { id, organizationId: req.user!.organizationId },
+      data: {
+        ...(status !== undefined && { status }),
+        ...(starred !== undefined && { starred }),
+        ...(folder !== undefined && { folder }),
+        ...(relatedClientId !== undefined && { relatedClientId }),
+        ...(unread !== undefined && { unread })
+      }
+    });
+    res.json({ data: updated });
+  } catch (e: any) {
+    res.status(500).json({ error: e.message });
+  }
+};
+
+export const bulkMoveFolder = async (req: Request, res: Response) => {
+  try {
+    const { emailIds, folder } = req.body;
+    await prisma.emailMessage.updateMany({
+      where: { id: { in: emailIds }, organizationId: req.user!.organizationId },
+      data: { folder }
+    });
+    res.json({ ok: true });
+  } catch (e: any) {
+    res.status(500).json({ error: e.message });
+  }
 };
 
 export const listCannedResponses = async (req: Request, res: Response) => {
-  const responses = await prisma.cannedResponse.findMany({
-    where: { organizationId: req.user!.organizationId }
-  });
-  res.json({ data: responses });
+  try {
+    const responses = await prisma.cannedResponse.findMany({
+      where: { organizationId: req.user!.organizationId }
+    });
+    res.json({ data: responses });
+  } catch (e: any) {
+    res.status(500).json({ error: e.message });
+  }
 };
 
-export const getAutoResponders = (req: Request, res: Response) => {
-  res.json({
-    data: [
-      { id: 1, name: 'Welcome Auto-Responder', active: true },
-      { id: 2, name: 'Out of Office', active: false }
-    ]
-  });
+export const getAutoResponders = async (req: Request, res: Response) => {
+  try {
+    const responders = await prisma.autoResponder.findMany({
+      where: { organizationId: req.user!.organizationId }
+    });
+    res.json({ data: responders });
+  } catch (e: any) {
+    res.status(500).json({ error: e.message });
+  }
 };
 
-export const getNotificationPreferences = (req: Request, res: Response) => {
-  res.json({
-    data: {
-      emailNotifications: true,
-      pushNotifications: false,
-      smsNotifications: true
-    }
-  });
+export const updateAutoResponder = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { active, message, type } = req.body;
+    const responder = await prisma.autoResponder.update({
+      where: { id, organizationId: req.user!.organizationId },
+      data: { active, message, type }
+    });
+    res.json({ data: responder });
+  } catch (e: any) {
+    res.status(500).json({ error: e.message });
+  }
+};
+
+export const getNotificationPreferences = async (req: Request, res: Response) => {
+  try {
+    res.json({
+      data: {
+        emailNotifications: true,
+        pushNotifications: false,
+        smsNotifications: true
+      }
+    });
+  } catch (e: any) {
+    res.status(500).json({ error: e.message });
+  }
+};
+
+export const listEmailTemplates = async (req: Request, res: Response) => {
+  try {
+    const templates = await prisma.emailTemplate.findMany({
+      where: { organizationId: req.user!.organizationId }
+    });
+    res.json({ data: templates });
+  } catch (e: any) {
+    res.status(500).json({ error: e.message });
+  }
+};
+
+export const createEmailTemplate = async (req: Request, res: Response) => {
+  try {
+    const { name, subject, body } = req.body;
+    const template = await prisma.emailTemplate.create({
+      data: {
+        organizationId: req.user!.organizationId,
+        name,
+        subject,
+        body
+      }
+    });
+    res.status(201).json({ data: template });
+  } catch (e: any) {
+    res.status(500).json({ error: e.message });
+  }
+};
+
+export const deleteEmailTemplate = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    await prisma.emailTemplate.delete({
+      where: { id, organizationId: req.user!.organizationId }
+    });
+    res.status(204).send();
+  } catch (e: any) {
+    res.status(500).json({ error: e.message });
+  }
 };

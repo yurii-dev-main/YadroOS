@@ -13,6 +13,12 @@ export const apiClient = axios.create({
   withCredentials: true
 });
 
+// Shared in-flight refresh — prevents concurrent refresh storms
+let pendingRefresh: Promise<void> | null = null;
+
+// These endpoints must never trigger an auto-refresh retry
+const AUTH_SKIP_URLS = ['/auth/refresh', '/auth/login', '/auth/logout'];
+
 apiClient.interceptors.request.use((config) => {
   const accessToken = useAuthStore.getState().tokens?.accessToken;
   if (accessToken) {
@@ -30,18 +36,46 @@ apiClient.interceptors.response.use(
     return response;
   },
   async (error) => {
-    if (error.response?.status === 401) {
+    const originalConfig = error.config;
+
+    // Determine if this request is an auth-infrastructure call that should
+    // never be retried (prevents the infinite-loop crash).
+    const isAuthSkipUrl = AUTH_SKIP_URLS.some((url) =>
+      originalConfig?.url?.includes(url)
+    );
+
+    if (
+      error.response?.status === 401 &&
+      originalConfig &&
+      !originalConfig._refreshRetried && // never retry twice
+      !isAuthSkipUrl                      // never retry auth calls
+    ) {
+      // Mark immediately so any parallel requests that also see 401
+      // won't queue another retry loop.
+      originalConfig._refreshRetried = true;
+
       try {
-        await useAuthStore.getState().refreshTokens();
-        const retryConfig = error.config;
-        if (retryConfig) {
-          return apiClient.request(retryConfig);
+        // Deduplicate: if refresh is already in-flight, piggyback on it.
+        if (!pendingRefresh) {
+          pendingRefresh = useAuthStore
+            .getState()
+            .refreshTokens()
+            .finally(() => {
+              pendingRefresh = null;
+            });
         }
-      } catch (refreshError) {
+
+        await pendingRefresh;
+
+        // Retry the original request with the fresh access token.
+        return apiClient.request(originalConfig);
+      } catch {
+        // Refresh failed — log out cleanly and reject without another retry.
         await useAuthStore.getState().logout();
-        return Promise.reject(refreshError);
+        return Promise.reject(error);
       }
     }
+
     return Promise.reject(error);
   }
 );

@@ -3,22 +3,11 @@ import { Send } from 'lucide-react';
 
 import { Button } from '../../../components/ui/button';
 import { Input } from '../../../components/ui/input';
-import type { ChatMessage } from '../types/ai.types';
-import { askAssistant } from '../services/ai.service';
-
-const initialMessage: ChatMessage = {
-  id: 'welcome',
-  role: 'assistant',
-  content:
-    'Hello! I am YadroOS AI Advisor. Ask about clients, employees, or finances — and I will generate the needed insight.',
-  timestamp: Date.now()
-};
+import { useAiChat } from '../hooks/useAiChat';
 
 export const ChatInterface = () => {
-  const [messages, setMessages] = useState<ChatMessage[]>([initialMessage]);
-  const [pending, setPending] = useState(false);
+  const { messages, pending, streamingMessage, sendMessage } = useAiChat();
   const [input, setInput] = useState('');
-  const [streamingMessage, setStreamingMessage] = useState<ChatMessage | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -34,41 +23,10 @@ export const ChatInterface = () => {
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     if (!input.trim() || pending) return;
-
-    const userMessage: ChatMessage = {
-      id: crypto.randomUUID(),
-      role: 'user',
-      content: input.trim(),
-      timestamp: Date.now()
-    };
-
-    setMessages((current) => [...current, userMessage]);
+    
+    const content = input;
     setInput('');
-    setPending(true);
-
-    try {
-      const response = await askAssistant([...messages, userMessage]);
-      setStreamingMessage({ ...response, content: '' });
-      const fullContent = response.content;
-      let index = 0;
-
-      const stream = () => {
-        index += 1;
-        setStreamingMessage((current) =>
-          current ? { ...current, content: fullContent.slice(0, index) } : null
-        );
-        if (index < fullContent.length) {
-          window.setTimeout(stream, 16);
-        } else {
-          setMessages((current) => [...current, { ...response }]);
-          setStreamingMessage(null);
-        }
-      };
-
-      stream();
-    } finally {
-      setPending(false);
-    }
+    await sendMessage(content);
   };
 
   return (

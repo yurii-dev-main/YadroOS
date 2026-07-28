@@ -14,11 +14,12 @@ const groupByMonth = (transactions: Transaction[]) => {
       map.set(month, { income: 0, expense: 0 });
     }
     const entry = map.get(month)!;
+    const amount = Number(transaction.amount) || 0;
     if (transaction.type === 'income') {
-      entry.income += transaction.amount;
+      entry.income += amount;
     }
     if (transaction.type === 'expense') {
-      entry.expense += transaction.amount;
+      entry.expense += amount;
     }
   });
   return Array.from(map.entries())
@@ -47,7 +48,7 @@ export const ReportsPage = () => {
   const trend = useMemo(() => groupByMonth(filteredTransactions), [filteredTransactions]);
   const categories = useMemo(
     () =>
-      categoryBreakdown.map((category) => ({ name: category.categoryName, value: category.total })),
+      categoryBreakdown.map((category: any) => ({ name: category.category || category.categoryName || 'Unknown', value: category.amount || category.total || 0 })),
     [categoryBreakdown]
   );
   const forecast = forecasts[0]?.points ?? [];
@@ -109,7 +110,7 @@ export const ReportsPage = () => {
               {Object.entries(report.figures).map(([key, value]) => (
                 <div key={key} className="flex items-center justify-between">
                   <span className="uppercase tracking-wide text-slate-500">{key}</span>
-                  <span className="font-semibold text-slate-100">{value.toFixed(2)}</span>
+                  <span className="font-semibold text-slate-100">{(value || 0).toFixed(2)}</span>
                 </div>
               ))}
             </CardContent>
@@ -134,9 +135,9 @@ export const ReportsPage = () => {
             >
               <span className="text-xs uppercase text-slate-500">{item.month}</span>
               <div className="flex items-center gap-4">
-                <span className="text-emerald-300">Inflow: {item.inflow.toFixed(2)}</span>
-                <span className="text-rose-300">Outflow: {item.outflow.toFixed(2)}</span>
-                <span className="text-slate-100">Balance: {item.closingBalance.toFixed(2)}</span>
+                <span className="text-emerald-300">Inflow: {(item.inflow || 0).toFixed(2)}</span>
+                <span className="text-rose-300">Outflow: {(item.outflow || 0).toFixed(2)}</span>
+                <span className="text-slate-100">Balance: {(item.closingBalance || 0).toFixed(2)}</span>
               </div>
             </div>
           ))}

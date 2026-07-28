@@ -35,7 +35,9 @@ const filterNavItemsByRole = (items: NavItem[], role: Role | undefined) =>
   items.filter((item) => !role || item.roles.includes(role));
 
 export const Sidebar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(() => {
+    return localStorage.getItem('sidebar_open') === 'true';
+  });
   const role = useAuthStore((state) => state.user?.role);
   const location = useLocation();
   const { t } = useTranslation();
@@ -49,7 +51,11 @@ export const Sidebar = () => {
         <button
           type="button"
           className="rounded-md border border-slate-700 p-2"
-          onClick={() => setIsOpen((prev) => !prev)}
+          onClick={() => setIsOpen((prev) => {
+            const next = !prev;
+            localStorage.setItem('sidebar_open', String(next));
+            return next;
+          })}
           aria-label="Toggle sidebar"
         >
         </button>

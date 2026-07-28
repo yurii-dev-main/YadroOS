@@ -50,7 +50,7 @@ export const accountingService = {
   },
 
   async transfer(request: TransferRequest): Promise<Transaction> {
-    const res = await apiClient.post('/v1/accounting/transfer', request);
+    const res = await apiClient.post('/v1/accounting/accounts/transfer', request);
     return res.data;
   },
 
@@ -89,7 +89,7 @@ export const accountingService = {
   },
 
   async rollbackImport(batchId: string): Promise<boolean> {
-    const res = await apiClient.post(`/v1/accounting/transactions/rollback/${batchId}`);
+    const res = await apiClient.delete(`/v1/accounting/transactions/import-batch/${batchId}`);
     return res.data;
   },
 
@@ -232,7 +232,12 @@ export const accountingService = {
   },
 
   async getBudgetsUsage(): Promise<{ id: string; usage: number }[]> {
-    return [];
+    try {
+      const res = await apiClient.get('/v1/accounting/budgets/usage');
+      return res.data?.data || res.data || [];
+    } catch {
+      return [];
+    }
   },
 
   async getClientProfitability(
@@ -254,7 +259,12 @@ export const accountingService = {
   },
 
   async getAuditLog(): Promise<AccountingAuditEvent[]> {
-    return [];
+    try {
+      const res = await apiClient.get('/v1/accounting/audit-log');
+      return res.data?.data || res.data || [];
+    } catch {
+      return [];
+    }
   },
 
   async searchTransactions(filters: AccountingFilterState): Promise<Transaction[]> {
@@ -263,8 +273,12 @@ export const accountingService = {
   },
 
   async getRecurringInsights(): Promise<RecurringTransactionInsight[]> {
-    const res = await apiClient.get('/v1/accounting/recurring-insights');
-    return res.data;
+    try {
+      const res = await apiClient.get('/v1/accounting/recurring-insights');
+      return res.data;
+    } catch {
+      return [];
+    }
   },
 
   async getClientPaymentHistory(clientId: string): Promise<ClientPaymentHistory> {

@@ -58,7 +58,7 @@ export const AvatarUploader: FC<AvatarUploaderProps> = ({ value, onChange }) => 
     height: number;
   } | null>(null);
 
-  const preview = useMemo(() => value ?? imageSrc, [imageSrc, value]);
+  const preview = useMemo(() => imageSrc || value, [imageSrc, value]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onCropComplete = useCallback((_: any, areaPixels: typeof croppedAreaPixels) => {
@@ -104,6 +104,7 @@ export const AvatarUploader: FC<AvatarUploaderProps> = ({ value, onChange }) => 
             accept="image/*"
             onChange={handleFileChange}
             aria-label="Upload avatar"
+            className="block w-full max-w-[200px] truncate text-sm text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:bg-primary/90 cursor-pointer focus:outline-none"
           />
           {imageSrc && (
             <Button type="button" variant="secondary" onClick={handleApply}>

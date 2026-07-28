@@ -16,11 +16,11 @@ export const OverviewPage = () => {
   const { t } = useTranslation();
 
   const stats = [
-    { label: 'Total Balance', value: dashboard ? formatCurrency(dashboard.totalBalance) : '0', delta: 'All Accounts' },
-    { label: 'Total Income', value: dashboard ? formatCurrency(dashboard.totalIncome) : '0', delta: 'This Month' },
-    { label: 'Total Expense', value: dashboard ? formatCurrency(dashboard.totalExpense) : '0', delta: 'This Month' },
-    { label: 'Active Clients', value: clients.filter(c => c.status === 'active').length.toString(), delta: `Out of ${clients.length} total` },
-    { label: 'Active Employees', value: employees.filter(e => e.status === 'active').length.toString(), delta: 'Company Size' }
+    { label: t('overview.totalBalance', 'Total Balance'), value: dashboard ? formatCurrency(dashboard.totalBalance) : '0', delta: t('overview.allAccounts', 'All Accounts') },
+    { label: t('overview.totalIncome', 'Total Income'), value: dashboard ? formatCurrency(dashboard.totalIncome) : '0', delta: t('overview.thisMonth', 'This Month') },
+    { label: t('overview.totalExpense', 'Total Expense'), value: dashboard ? formatCurrency(dashboard.totalExpense) : '0', delta: t('overview.thisMonth', 'This Month') },
+    { label: t('overview.activeClients', 'Active Clients'), value: clients.filter(c => c.status === 'active').length.toString(), delta: t('overview.outOfTotal', `Out of ${clients.length} total`) },
+    { label: t('overview.activeEmployees', 'Active Employees'), value: employees.filter(e => e.status === 'active').length.toString(), delta: t('overview.companySize', 'Company Size') }
   ];
 
   const recentTransactions = useMemo(() => transactions.slice(0, 5), [transactions]);

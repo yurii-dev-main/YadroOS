@@ -16,6 +16,13 @@ export const getExchangeRates = async (req: Request, res: Response) => {
   res.json(rates);
 };
 
+export const refreshExchangeRates = async (req: Request, res: Response) => {
+  try {
+    const rates = await getNBURates();
+    res.json(rates);
+  } catch(e: any) { res.status(500).json({ error: e.message }); }
+};
+
 export const listCategories = async (req: Request, res: Response) => {
   const { type } = req.query as { type?: TransactionType };
   
@@ -121,17 +128,23 @@ export const updateBudget = async (req: Request, res: Response) => {
 // INVOICES
 // ---------------------------
 export const listInvoices = async (req: Request, res: Response) => {
-  const { status } = req.query as { status?: InvoiceStatus };
-  const where: Record<string, any> = { organizationId: req.user!.organizationId };
-  if (status) where.status = status;
+  try {
+    const { status } = req.query as { status?: InvoiceStatus };
+    const where: Record<string, any> = { organizationId: req.user!.organizationId };
+    if (status) where.status = status;
 
-  const invoices = await prisma.invoice.findMany({
-    where,
-    include: { client: true },
-    orderBy: { createdAt: 'desc' }
-  });
+    const invoices = await prisma.invoice.findMany({
+      where,
+      include: { client: true },
+      orderBy: { createdAt: 'desc' }
+    });
 
-  res.json({ data: invoices });
+    const mapped = invoices.map(inv => ({ ...inv, lineItems: (inv as any).lineItems || [] }));
+    res.json({ data: mapped });
+  } catch (error) {
+    console.error('Error in listInvoices:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
 };
 
 export const createInvoice = async (req: Request, res: Response) => {
@@ -232,6 +245,17 @@ export const runPayroll = async (req: Request, res: Response) => {
   res.json({ message: 'Payroll run successfully', data: payrollRecords });
 };
 
+export const markPayrollPaid = async (req: Request, res: Response) => {
+  try {
+    const { payrollIds } = req.body;
+    await prisma.payrollRecord.updateMany({
+      where: { id: { in: payrollIds }, organizationId: req.user!.organizationId },
+      data: { status: 'paid', paidAt: new Date() }
+    });
+    res.json({ ok: true });
+  } catch(e: any) { res.status(500).json({ error: e.message }); }
+};
+
 // ---------------------------
 // ANALYTICS
 // ---------------------------
@@ -262,6 +286,10 @@ export const getDashboardAnalytics = async (req: Request, res: Response) => {
       pendingInvoices
     }
   });
+};
+
+export const getRecurringInsights = async (req: Request, res: Response) => {
+  res.json({ data: [] });
 };
 
 export const getCashBalances = async (req: Request, res: Response) => {
@@ -328,6 +356,17 @@ export const getClientProfitability = async (req: Request, res: Response) => {
   res.json({ data: profitability });
 };
 
+export const getClientPaymentHistory = async (req: Request, res: Response) => {
+  try {
+    const { clientId } = req.params;
+    const invoices = await prisma.invoice.findMany({
+      where: { organizationId: req.user!.organizationId, clientId },
+      orderBy: { issueDate: 'desc' }
+    });
+    res.json({ data: invoices });
+  } catch(e: any) { res.status(500).json({ error: e.message }); }
+};
+
 export const getReports = async (req: Request, res: Response) => {
   const organizationId = req.user!.organizationId;
 
@@ -390,6 +429,22 @@ export const getReports = async (req: Request, res: Response) => {
 // ---------------------------
 // IMPORT & SYNC
 // ---------------------------
+
+export const searchTransactions = async (req: Request, res: Response) => {
+  try {
+    const { accountIds, types, categories, dateFrom, dateTo, search } = req.query as any;
+    const where: any = { organizationId: req.user!.organizationId };
+    if (accountIds?.length) where.accountId = { in: accountIds.split(',') };
+    if (types?.length) where.type = { in: types.split(',') };
+    if (dateFrom || dateTo) where.date = {};
+    if (dateFrom) where.date.gte = new Date(dateFrom);
+    if (dateTo) where.date.lte = new Date(dateTo);
+    if (search) where.description = { contains: search, mode: 'insensitive' };
+    const results = await prisma.transaction.findMany({ where, orderBy: { date: 'desc' }, take: 100 });
+    res.json({ data: results });
+  } catch(e: any) { res.status(500).json({ error: e.message }); }
+};
+
 export const bulkImportTransactions = async (req: Request, res: Response) => {
   const { accountId } = req.body;
   const file = req.file;

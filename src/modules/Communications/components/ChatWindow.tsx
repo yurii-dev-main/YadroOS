@@ -51,7 +51,7 @@ export const ChatWindow = ({
   };
 
   return (
-    <div className="flex h-full flex-col">
+    <div className="flex h-full min-h-0 flex-col">
       <div ref={containerRef} className="flex-1 overflow-y-auto bg-slate-950/30 p-4">
         {messages.map((message) => (
           <MessageBubble

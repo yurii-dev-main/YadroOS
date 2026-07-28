@@ -56,7 +56,7 @@ export const authService = {
   },
   async updateProfile(user: User): Promise<User> {
     const { data } = await apiClient.patch('/auth/me', user);
-    return data;
+    return data.user;
   },
   async changePassword(params: PasswordChangeParams): Promise<void> {
     await apiClient.post('/auth/change-password', params);

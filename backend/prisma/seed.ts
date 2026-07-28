@@ -8,12 +8,13 @@ import {
   TransactionType,
   InvoiceStatus,
 } from '@prisma/client';
-import { faker } from '@faker-js/faker';
 import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
 
 async function main() {
+  const fakerModule = await new Function("return import('@faker-js/faker')")();
+  const { faker } = fakerModule;
   console.log('Starting data seeding with faker...');
 
   // Clean up existing data
@@ -33,6 +34,13 @@ async function main() {
     prisma.leaveRequest.deleteMany(),
     prisma.kPI.deleteMany(),
     prisma.oKR.deleteMany(),
+    prisma.performanceHighlight.deleteMany(),
+    prisma.offboardingChecklist.deleteMany(),
+    prisma.autoResponder.deleteMany(),
+    prisma.cannedResponse.deleteMany(),
+    prisma.training.deleteMany(),
+    prisma.performanceReview.deleteMany(),
+    prisma.onboardingPlan.deleteMany(),
     prisma.employee.deleteMany(),
     prisma.department.deleteMany(),
     prisma.organizationMember.deleteMany(),
@@ -251,6 +259,106 @@ async function main() {
       },
     });
   }
+
+  console.log('Creating New HR and Communications Data (Trainings, KPIs, OKRs, Reviews, Attendance, Highlights, CannedResponses)...');
+
+  // Trainings
+  for (let i = 0; i < 5; i++) {
+    await prisma.training.create({
+      data: {
+        organizationId: org.id,
+        title: faker.lorem.words(3),
+        description: faker.lorem.sentence(),
+        type: faker.helpers.arrayElement(['workshop', 'webinar', 'course']),
+        startDate: faker.date.soon({ days: 30 }),
+        endDate: faker.date.soon({ days: 37 }),
+        instructor: faker.person.fullName(),
+        location: faker.location.city(),
+        capacity: faker.number.int({ min: 5, max: 30 }),
+        status: faker.helpers.arrayElement(['scheduled', 'ongoing', 'completed']),
+      }
+    });
+  }
+
+  // KPIs
+  for (const emp of employees) {
+    await prisma.kPI.create({
+      data: {
+        organizationId: org.id,
+        employeeId: emp.id,
+        name: faker.lorem.words(2),
+        target: faker.number.int({ min: 80, max: 100 }),
+        current: faker.number.int({ min: 60, max: 99 }),
+        unit: faker.helpers.arrayElement(['%', 'count', 'USD']),
+        period: 'Q2 2026',
+      }
+    });
+  }
+
+  // OKRs
+  for (const emp of employees.slice(0, 3)) {
+    await prisma.oKR.create({
+      data: {
+        organizationId: org.id,
+        employeeId: emp.id,
+        objective: faker.lorem.sentence(),
+        progress: faker.number.int({ min: 10, max: 90 }),
+        period: 'Q2 2026',
+      }
+    });
+  }
+
+  // Performance Reviews
+  for (const emp of employees) {
+    await prisma.performanceReview.create({
+      data: {
+        organizationId: org.id,
+        employeeId: emp.id,
+        reviewerId: employees[0].id,
+        rating: faker.number.int({ min: 3, max: 5 }),
+        comments: faker.lorem.paragraph(),
+        date: faker.date.recent({ days: 30 }),
+      }
+    });
+  }
+
+  // Attendance
+  for (const emp of employees) {
+    for (let d = 0; d < 20; d++) {
+      const date = faker.date.recent({ days: 30 });
+      await prisma.attendance.create({
+        data: {
+          organizationId: org.id,
+          employeeId: emp.id,
+          date,
+          clockIn: new Date(date.setHours(9, 0, 0)),
+          clockOut: new Date(date.setHours(17, 30, 0)),
+          status: faker.helpers.arrayElement(['present', 'late', 'absent']),
+        }
+      });
+    }
+  }
+
+  // Performance Highlights
+  for (const emp of employees) {
+    await prisma.performanceHighlight.create({
+      data: {
+        organizationId: org.id, 
+        employeeId: emp.id, 
+        title: faker.lorem.words(3), 
+        score: faker.number.int({ min: 60, max: 100 }) 
+      }
+    });
+  }
+
+  // Canned Responses
+  await prisma.cannedResponse.createMany({
+    data: [
+      { organizationId: org.id, title: 'Greeting', content: 'Hello! How can I help you today?', category: 'support' },
+      { organizationId: org.id, title: 'Thank you', content: 'Thank you for reaching out. We will get back to you shortly.', category: 'support' },
+      { organizationId: org.id, title: 'Follow-up', content: 'Just following up on our previous conversation. Do you have any questions?', category: 'sales' },
+    ]
+  });
 
   console.log('Seed completed successfully!');
 }

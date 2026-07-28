@@ -45,6 +45,9 @@ model Organization {
   trainings      Training[]
   transactions   Transaction[]
   messages       UnifiedMessage[]
+  highlights     PerformanceHighlight[]
+  offboardings   OffboardingChecklist[]
+  autoResponders AutoResponder[]
 }
 
 model OrganizationMember {
@@ -110,6 +113,9 @@ model Employee {
   okrs           OKR[]
   payrollRecords PayrollRecord[]
   reviews        PerformanceReview[]
+  highlights     PerformanceHighlight[]
+  offboardings   OffboardingChecklist[]
+  onboardings    OnboardingPlan[]
 }
 
 model Client {
@@ -450,11 +456,19 @@ model Training {
   organizationId String       @db.Uuid
   title          String
   description    String?
+  type           String       @default("workshop")
   startDate      DateTime?    @db.Date
   endDate        DateTime?    @db.Date
   instructor     String?
+  location       String?
+  capacity       Int          @default(0)
+  duration       Int          @default(60)
+  status         String       @default("scheduled")
+  isMandatory    Boolean      @default(false)
   createdAt      DateTime     @default(now())
   participants   Json         @default("[]")
+  materials      Json         @default("[]")
+  feedback       Json         @default("[]")
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 }
 
@@ -478,6 +492,7 @@ model OKR {
   objective      String
   progress       Int          @default(0)
   period         String
+  keyResults     Json         @default("[]")
   createdAt      DateTime     @default(now())
   employeeId     String?      @db.Uuid
   employee       Employee?    @relation(fields: [employeeId], references: [id], onDelete: Cascade)
@@ -500,11 +515,15 @@ model PerformanceReview {
 model OnboardingPlan {
   id             String       @id @default(uuid()) @db.Uuid
   organizationId String       @db.Uuid
+  employeeId     String       @db.Uuid
+  buddyId        String?      @db.Uuid
+  startDate      DateTime     @default(now())
   title          String
   role           String?
   tasks          Json         @default("[]")
   createdAt      DateTime     @default(now())
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  employee       Employee     @relation(fields: [employeeId], references: [id], onDelete: Cascade)
 }
 
 model CannedResponse {
@@ -518,15 +537,20 @@ model CannedResponse {
 }
 
 model EmailMessage {
-  id             String       @id @default(uuid()) @db.Uuid
-  organizationId String       @db.Uuid
-  subject        String
-  body           String
-  from           String
-  to             String
-  status         String       @default("sent")
-  createdAt      DateTime     @default(now())
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  id              String       @id @default(uuid()) @db.Uuid
+  organizationId  String       @db.Uuid
+  subject         String
+  body            String
+  from            String
+  to              String
+  status          String       @default("sent")
+  folder          String       @default("inbox")
+  unread          Boolean      @default(true)
+  starred         Boolean      @default(false)
+  relatedClientId String?      @db.Uuid
+  attachments     Json         @default("[]")
+  createdAt       DateTime     @default(now())
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 }
 
 model EmailTemplate {
@@ -623,4 +647,41 @@ enum InvoiceStatus {
   paid
   overdue
   cancelled
+}
+
+model PerformanceHighlight {
+  id             String       @id @default(uuid()) @db.Uuid
+  organizationId String       @db.Uuid
+  employeeId     String       @db.Uuid
+  title          String
+  score          Int          @default(0)
+  date           DateTime     @default(now())
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  employee       Employee     @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  
+  @@index([organizationId, employeeId])
+}
+
+model OffboardingChecklist {
+  id                      String       @id @default(uuid()) @db.Uuid
+  organizationId          String       @db.Uuid
+  employeeId              String       @db.Uuid
+  exitInterviewScheduled  Boolean      @default(false)
+  finalPaycheckProcessed  Boolean      @default(false)
+  tasks                   Json         @default("[]")
+  createdAt               DateTime     @default(now())
+  organization            Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  employee                Employee     @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+}
+
+model AutoResponder {
+  id             String       @id @default(uuid()) @db.Uuid
+  organizationId String       @db.Uuid
+  type           String
+  message        String
+  active         Boolean      @default(false)
+  scheduleStart  String?
+  scheduleEnd    String?
+  createdAt      DateTime     @default(now())
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 }
