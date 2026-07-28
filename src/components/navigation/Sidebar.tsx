@@ -50,14 +50,15 @@ export const Sidebar = () => {
         <button
           type="button"
           className="rounded-md border border-slate-700 p-2"
-          onClick={() => setIsOpen((prev) => {
-            const next = !prev;
-            localStorage.setItem('sidebar_open', String(next));
-            return next;
-          })}
+          onClick={() =>
+            setIsOpen((prev) => {
+              const next = !prev;
+              localStorage.setItem('sidebar_open', String(next));
+              return next;
+            })
+          }
           aria-label="Toggle sidebar"
-        >
-        </button>
+        ></button>
       </div>
       <div className={cn('px-4 py-4 border-b border-slate-800', !isOpen && 'hidden lg:block')}>
         <OrganizationSwitcher />
@@ -69,7 +70,7 @@ export const Sidebar = () => {
         {items.map((item) => {
           const Icon = iconMap[item.icon] ?? LayoutDashboard;
           const isActive = location.pathname.startsWith(item.to);
-          
+
           // Map to translation keys
           let tKey = 'nav.' + item.label.toLowerCase().replace(' ', '');
           if (item.label === 'AI Analytics') tKey = 'nav.ai';

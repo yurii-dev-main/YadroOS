@@ -20,6 +20,10 @@ router.get('/', listMyOrganizations);
 // Member management
 router.get('/:id/members', checkRole([OrgRole.OWNER, OrgRole.ADMIN]), getOrganizationMembers);
 router.post('/:id/members', checkRole([OrgRole.OWNER, OrgRole.ADMIN]), addOrganizationMember);
-router.delete('/:id/members/:userId', checkRole([OrgRole.OWNER, OrgRole.ADMIN]), removeOrganizationMember);
+router.delete(
+  '/:id/members/:userId',
+  checkRole([OrgRole.OWNER, OrgRole.ADMIN]),
+  removeOrganizationMember
+);
 
 export default router;

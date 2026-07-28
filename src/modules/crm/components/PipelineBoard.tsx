@@ -1,4 +1,11 @@
-import { DndContext, DragEndEvent, PointerSensor, useSensor, useSensors, useDroppable } from '@dnd-kit/core';
+import {
+  DndContext,
+  DragEndEvent,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  useDroppable
+} from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { useMemo, useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
@@ -13,7 +20,7 @@ const CustomDragGhost = ({ deal }: { deal: CRMDeal }) => {
     const handleMove = (e: PointerEvent) => {
       setPos({ x: e.clientX + 16, y: e.clientY + 16 });
     };
-    
+
     window.addEventListener('pointermove', handleMove);
     return () => window.removeEventListener('pointermove', handleMove);
   }, []);
@@ -21,13 +28,13 @@ const CustomDragGhost = ({ deal }: { deal: CRMDeal }) => {
   if (pos.x === -9999) return null;
 
   return createPortal(
-    <div 
+    <div
       className="pointer-events-none fixed z-[9999] opacity-95 shadow-2xl transition-none"
       style={{
         left: 0,
         top: 0,
         transform: `translate3d(${pos.x}px, ${pos.y}px, 0)`,
-        width: '280px',
+        width: '280px'
       }}
     >
       <DealCardView deal={deal} />
@@ -92,8 +99,8 @@ export const PipelineBoard = ({ groupedDeals, onMoveDeal, onQuickEdit }: Pipelin
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
-        distance: 5,
-      },
+        distance: 5
+      }
     })
   );
 

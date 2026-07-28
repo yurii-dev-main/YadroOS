@@ -28,7 +28,7 @@ export const integrationsController = {
 
   async addConnection(req: Request, res: Response) {
     const { provider, displayName, credentials } = req.body;
-    
+
     // Encrypt credentials before saving
     const encryptedCredentials = { encryptedData: encrypt(JSON.stringify(credentials)) };
 

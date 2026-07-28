@@ -6,7 +6,7 @@ export const listDepartments = async (req: Request, res: Response) => {
   try {
     const departments = await prisma.department.findMany({
       where: { organizationId: req.user!.organizationId },
-      include: { manager: true, _count: { select: { employees: true } } },
+      include: { manager: true, _count: { select: { employees: true } } }
     });
     res.json({ data: departments });
   } catch (error: any) {
@@ -19,7 +19,7 @@ export const getOrgChart = async (req: Request, res: Response) => {
   try {
     const employees = await prisma.employee.findMany({
       where: { organizationId: req.user!.organizationId },
-      include: { departmentRef: true, manager: true },
+      include: { departmentRef: true, manager: true }
     });
 
     const buildNode = (emp: any): any => ({
@@ -28,14 +28,15 @@ export const getOrgChart = async (req: Request, res: Response) => {
       title: emp.position || 'Employee',
       department: emp.department || emp.departmentRef?.name,
       avatarUrl: emp.avatarUrl,
-      children: employees
-        .filter(e => e.managerId === emp.id)
-        .map(buildNode)
+      children: employees.filter((e) => e.managerId === emp.id).map(buildNode)
     });
-    
-    const roots = employees.filter(e => !e.managerId);
-    const tree = roots.length === 1 ? buildNode(roots[0]) : { id: 'root', name: 'Organization', title: '', children: roots.map(buildNode) };
-    
+
+    const roots = employees.filter((e) => !e.managerId);
+    const tree =
+      roots.length === 1
+        ? buildNode(roots[0])
+        : { id: 'root', name: 'Organization', title: '', children: roots.map(buildNode) };
+
     res.json(tree);
   } catch (error: any) {
     res.status(500).json({ error: error.message });
@@ -49,18 +50,20 @@ export const getHrStats = async (req: Request, res: Response) => {
 
     const totalEmployees = await prisma.employee.count({ where: { organizationId: orgId } });
     const departmentsCount = await prisma.department.count({ where: { organizationId: orgId } });
-    const openLeaveRequests = await prisma.leaveRequest.count({ where: { organizationId: orgId, status: 'pending' } });
-    const activeTrainings = await prisma.training.count({ 
-      where: { 
+    const openLeaveRequests = await prisma.leaveRequest.count({
+      where: { organizationId: orgId, status: 'pending' }
+    });
+    const activeTrainings = await prisma.training.count({
+      where: {
         organizationId: orgId,
-        endDate: { gte: new Date() } 
-      } 
+        endDate: { gte: new Date() }
+      }
     });
     const employees = await prisma.employee.findMany({ where: { organizationId: orgId }, take: 3 });
 
     const attendances = await prisma.attendance.findMany({ where: { organizationId: orgId } });
     const totalAtt = attendances.length || 1;
-    const present = attendances.filter(a => a.status === 'present' || a.status === 'late').length;
+    const present = attendances.filter((a) => a.status === 'present' || a.status === 'late').length;
     const attendanceRate = Math.round((present / totalAtt) * 100);
 
     res.json({
@@ -73,7 +76,7 @@ export const getHrStats = async (req: Request, res: Response) => {
         topPerformers: employees.map((emp, index) => ({
           employeeId: emp.id,
           title: `${emp.firstName} ${emp.lastName}`,
-          score: 98 - (index * 2)
+          score: 98 - index * 2
         }))
       }
     });
@@ -88,7 +91,7 @@ export const listLeaveRequests = async (req: Request, res: Response) => {
     const requests = await prisma.leaveRequest.findMany({
       where: { organizationId: req.user!.organizationId },
       include: { employee: true },
-      orderBy: { createdAt: 'desc' },
+      orderBy: { createdAt: 'desc' }
     });
     res.json({ data: requests });
   } catch (error: any) {
@@ -99,7 +102,7 @@ export const listLeaveRequests = async (req: Request, res: Response) => {
 export const createLeaveRequest = async (req: Request, res: Response) => {
   try {
     const { employeeId, type, startDate, endDate, reason } = req.body;
-    
+
     const request = await prisma.leaveRequest.create({
       data: {
         organizationId: req.user!.organizationId,
@@ -108,7 +111,7 @@ export const createLeaveRequest = async (req: Request, res: Response) => {
         startDate: new Date(startDate),
         endDate: new Date(endDate),
         reason,
-        status: 'pending',
+        status: 'pending'
       }
     });
     res.status(201).json(request);
@@ -121,7 +124,7 @@ export const getLeaveBalances = async (req: Request, res: Response) => {
   try {
     const { employeeId } = req.params;
     const leaves = await prisma.leaveRequest.findMany({
-      where: { organizationId: req.user!.organizationId, employeeId, status: 'approved' },
+      where: { organizationId: req.user!.organizationId, employeeId, status: 'approved' }
     });
     res.json({ data: leaves });
   } catch (error: any) {
@@ -147,7 +150,7 @@ export const listAttendanceRecords = async (req: Request, res: Response) => {
     const records = await prisma.attendance.findMany({
       where: { organizationId: req.user!.organizationId },
       include: { employee: true },
-      orderBy: { date: 'desc' },
+      orderBy: { date: 'desc' }
     });
     res.json({ data: records });
   } catch (error: any) {
@@ -162,12 +165,12 @@ export const getAttendanceSummary = async (req: Request, res: Response) => {
     const employees = await prisma.employee.findMany({ where: { organizationId: orgId } });
     const attendances = await prisma.attendance.findMany({ where: { organizationId: orgId } });
 
-    const summary = employees.map(emp => {
-      const empAtt = attendances.filter(a => a.employeeId === emp.id);
+    const summary = employees.map((emp) => {
+      const empAtt = attendances.filter((a) => a.employeeId === emp.id);
       const total = empAtt.length || 1;
-      const present = empAtt.filter(a => a.status === 'present').length;
-      const late = empAtt.filter(a => a.status === 'late').length;
-      
+      const present = empAtt.filter((a) => a.status === 'present').length;
+      const late = empAtt.filter((a) => a.status === 'late').length;
+
       return {
         employeeId: emp.id,
         attendanceRate: Math.round(((present + late) / total) * 100),
@@ -187,7 +190,7 @@ export const listTrainings = async (req: Request, res: Response) => {
   try {
     const trainings = await prisma.training.findMany({
       where: { organizationId: req.user!.organizationId },
-      orderBy: { createdAt: 'desc' },
+      orderBy: { createdAt: 'desc' }
     });
     res.json({ data: trainings });
   } catch (error: any) {
@@ -201,7 +204,9 @@ export const createTraining = async (req: Request, res: Response) => {
       data: { organizationId: req.user!.organizationId, ...req.body }
     });
     res.status(201).json(training);
-  } catch(e: any) { res.status(500).json({ error: e.message }); }
+  } catch (e: any) {
+    res.status(500).json({ error: e.message });
+  }
 };
 
 export const getTrainingById = async (req: Request, res: Response) => {
@@ -209,7 +214,9 @@ export const getTrainingById = async (req: Request, res: Response) => {
     const training = await prisma.training.findUnique({ where: { id: req.params.id } });
     if (!training) return res.status(404).json({ message: 'Not found' });
     res.json(training);
-  } catch(e: any) { res.status(500).json({ error: e.message }); }
+  } catch (e: any) {
+    res.status(500).json({ error: e.message });
+  }
 };
 
 export const registerForTraining = async (req: Request, res: Response) => {
@@ -217,36 +224,47 @@ export const registerForTraining = async (req: Request, res: Response) => {
     const training = await prisma.training.findUnique({ where: { id: req.params.id } });
     if (!training) return res.status(404).json({ message: 'Not found' });
     const participants = (training.participants as any[]) || [];
-    if (!participants.find(p => p.employeeId === req.body.employeeId)) {
-      participants.push({ employeeId: req.body.employeeId, attended: false, feedbackSubmitted: false });
+    if (!participants.find((p) => p.employeeId === req.body.employeeId)) {
+      participants.push({
+        employeeId: req.body.employeeId,
+        attended: false,
+        feedbackSubmitted: false
+      });
     }
     const updated = await prisma.training.update({
       where: { id: req.params.id },
       data: { participants: participants as any }
     });
     res.json(updated);
-  } catch(e: any) { res.status(500).json({ error: e.message }); }
+  } catch (e: any) {
+    res.status(500).json({ error: e.message });
+  }
 };
 
 export const recordTrainingAttendance = async (req: Request, res: Response) => {
   try {
     const training = await prisma.training.findUnique({ where: { id: req.params.id } });
     if (!training) return res.status(404).json({ message: 'Not found' });
-    const participants = ((training.participants as any[]) || []).map(p =>
+    const participants = ((training.participants as any[]) || []).map((p) =>
       p.employeeId === req.body.employeeId ? { ...p, attended: req.body.attended } : p
     );
-    const updated = await prisma.training.update({ where: { id: req.params.id }, data: { participants: participants as any } });
+    const updated = await prisma.training.update({
+      where: { id: req.params.id },
+      data: { participants: participants as any }
+    });
     res.json(updated);
-  } catch(e: any) { res.status(500).json({ error: e.message }); }
+  } catch (e: any) {
+    res.status(500).json({ error: e.message });
+  }
 };
 
 export const submitTrainingFeedback = async (req: Request, res: Response) => {
   try {
     const training = await prisma.training.findUnique({ where: { id: req.params.id } });
     if (!training) return res.status(404).json({ message: 'Not found' });
-    const feedback = ((training.feedback as any[]) || []);
+    const feedback = (training.feedback as any[]) || [];
     feedback.push(req.body);
-    const participants = ((training.participants as any[]) || []).map(p =>
+    const participants = ((training.participants as any[]) || []).map((p) =>
       p.employeeId === req.body.employeeId ? { ...p, feedbackSubmitted: true } : p
     );
     const updated = await prisma.training.update({
@@ -254,7 +272,9 @@ export const submitTrainingFeedback = async (req: Request, res: Response) => {
       data: { feedback: feedback as any, participants: participants as any }
     });
     res.json(updated);
-  } catch(e: any) { res.status(500).json({ error: e.message }); }
+  } catch (e: any) {
+    res.status(500).json({ error: e.message });
+  }
 };
 
 export const listKPIs = async (req: Request, res: Response) => {
@@ -263,7 +283,7 @@ export const listKPIs = async (req: Request, res: Response) => {
       where: { organizationId: req.user!.organizationId },
       include: { employee: true }
     });
-    res.json({ data: kpis.map(k => ({ ...k, title: k.name, role: k.period || 'General' })) });
+    res.json({ data: kpis.map((k) => ({ ...k, title: k.name, role: k.period || 'General' })) });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
@@ -285,7 +305,7 @@ export const listPerformanceReviews = async (req: Request, res: Response) => {
     const reviews = await prisma.performanceReview.findMany({
       where: { organizationId: req.user!.organizationId },
       include: { employee: true },
-      orderBy: { createdAt: 'desc' },
+      orderBy: { createdAt: 'desc' }
     });
     res.json({ data: reviews });
   } catch (error: any) {

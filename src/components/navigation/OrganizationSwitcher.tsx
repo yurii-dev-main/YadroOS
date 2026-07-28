@@ -10,7 +10,7 @@ export const OrganizationSwitcher = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
-  
+
   const currentOrganizationId = useAuthStore((state) => state.currentOrganizationId);
   const switchOrganization = useAuthStore((state) => state.switchOrganization);
 
@@ -73,10 +73,10 @@ export const OrganizationSwitcher = () => {
               key={org.id}
               onClick={() => handleSelect(org.id)}
               className={cn(
-                "flex w-full items-center justify-between rounded-md px-2 py-1.5 text-sm transition-colors",
+                'flex w-full items-center justify-between rounded-md px-2 py-1.5 text-sm transition-colors',
                 org.id === currentOrganizationId
-                  ? "bg-primary/20 text-primary"
-                  : "text-slate-300 hover:bg-slate-800 hover:text-white"
+                  ? 'bg-primary/20 text-primary'
+                  : 'text-slate-300 hover:bg-slate-800 hover:text-white'
               )}
             >
               <span className="truncate">{org.name}</span>

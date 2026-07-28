@@ -22,16 +22,16 @@ interface IntegrationConnection {
 export const IntegrationsPage = () => {
   const [connections, setConnections] = useState<IntegrationConnection[]>([]);
   const [loading, setLoading] = useState(true);
-  const [configuringConnection, setConfiguringConnection] = useState<IntegrationConnection | null>(null);
+  const [configuringConnection, setConfiguringConnection] = useState<IntegrationConnection | null>(
+    null
+  );
 
   const handleSaveConfig = async (config: any) => {
     if (!configuringConnection) return;
     const id = configuringConnection.id;
 
     if (IS_DEMO_MODE) {
-      const updated = connections.map(c => 
-        c.id === id ? { ...c, configuration: config } : c
-      );
+      const updated = connections.map((c) => (c.id === id ? { ...c, configuration: config } : c));
       setConnections(updated);
       localStorage.setItem('demo_integrations', JSON.stringify(updated));
       return;
@@ -115,9 +115,9 @@ export const IntegrationsPage = () => {
 
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this integration?')) return;
-    
+
     if (IS_DEMO_MODE) {
-      const updated = connections.filter(c => c.id !== id);
+      const updated = connections.filter((c) => c.id !== id);
       setConnections(updated);
       localStorage.setItem('demo_integrations', JSON.stringify(updated));
       return;

@@ -9,7 +9,11 @@ interface OffboardingChecklistProps {
   onToggleTask: (employeeId: string, taskId: string) => void;
 }
 
-export const OffboardingChecklist: FC<OffboardingChecklistProps> = ({ employees, checklists, onToggleTask }) => (
+export const OffboardingChecklist: FC<OffboardingChecklistProps> = ({
+  employees,
+  checklists,
+  onToggleTask
+}) => (
   <Card className="border-slate-800 bg-slate-900/70">
     <CardHeader>
       <CardTitle className="text-lg text-slate-100">Offboarding</CardTitle>

@@ -52,12 +52,7 @@ export const TrainingCard: FC<TrainingCardProps> = ({
   const handleSubmitFeedback = (event: FormEvent) => {
     event.preventDefault();
     if (!currentUserId || feedbackRating === 0) return;
-    onSubmitFeedback(
-      training.id,
-      currentUserId,
-      feedbackRating,
-      feedbackComment || 'No comments'
-    );
+    onSubmitFeedback(training.id, currentUserId, feedbackRating, feedbackComment || 'No comments');
     setFeedbackRating(0);
     setFeedbackComment('');
   };
@@ -127,7 +122,11 @@ export const TrainingCard: FC<TrainingCardProps> = ({
                         type="button"
                         className="rounded-md border border-emerald-500/40 px-3 py-1 text-emerald-300 hover:bg-emerald-500/10"
                         onClick={() =>
-                          onMarkAttendance(training.id, participant.employeeId, !participant.attended)
+                          onMarkAttendance(
+                            training.id,
+                            participant.employeeId,
+                            !participant.attended
+                          )
                         }
                       >
                         {participant.attended ? 'Cancel' : 'Mark'}
@@ -145,7 +144,9 @@ export const TrainingCard: FC<TrainingCardProps> = ({
             onSubmit={handleRegister}
             className="rounded-lg border border-slate-800 bg-slate-900/70 p-3"
           >
-            <h4 className="text-xs uppercase tracking-wide text-slate-400">Training Registration</h4>
+            <h4 className="text-xs uppercase tracking-wide text-slate-400">
+              Training Registration
+            </h4>
             <div className="mt-2 flex flex-col gap-2 md:flex-row">
               <select
                 value={selectedEmployeeId}

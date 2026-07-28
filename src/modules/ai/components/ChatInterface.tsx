@@ -23,7 +23,7 @@ export const ChatInterface = () => {
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     if (!input.trim() || pending) return;
-    
+
     const content = input;
     setInput('');
     await sendMessage(content);

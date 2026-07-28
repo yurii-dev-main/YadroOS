@@ -36,7 +36,12 @@ export const useEmployees = (): UseEmployeesResult => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [departments, setDepartments] = useState<Department[]>([]);
-  const [orgChart, setOrgChart] = useState<OrgChartNode>({ id: '', name: '', title: '', children: [] });
+  const [orgChart, setOrgChart] = useState<OrgChartNode>({
+    id: '',
+    name: '',
+    title: '',
+    children: []
+  });
   const [statistics, setStatistics] = useState<HRStatistics>({
     totalEmployees: 0,
     activeTrainings: 0,

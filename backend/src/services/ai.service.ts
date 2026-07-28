@@ -32,9 +32,8 @@ export const generateAIResponse = async (
   messages: AIChatMessage[],
   organizationId: string
 ): Promise<{ content: string; actions?: any[] }> => {
-  
   const geminiIntegration = await prisma.integrationConnection.findFirst({
-    where: { provider: 'gemini', status: 'connected', organizationId },
+    where: { provider: 'gemini', status: 'connected', organizationId }
   });
 
   if (!geminiIntegration || !geminiIntegration.credentials) {
@@ -43,13 +42,13 @@ export const generateAIResponse = async (
 
   const creds = geminiIntegration.credentials as { apiKey?: string };
   const apiKey = creds.apiKey;
-  
+
   if (!apiKey) {
     throw new Error('Gemini API key is not configured in integrations');
   }
 
   const genAI = new GoogleGenerativeAI(apiKey);
-  
+
   // Define tools in Gemini format
   const tools = [
     {
@@ -91,12 +90,12 @@ export const generateAIResponse = async (
 
   // Convert messages to Gemini format
   const history = messages
-    .filter(m => m.role === 'user' || m.role === 'assistant')
-    .map(m => ({
+    .filter((m) => m.role === 'user' || m.role === 'assistant')
+    .map((m) => ({
       role: m.role === 'assistant' ? 'model' : 'user',
       parts: [{ text: m.content || '' }]
     }));
-    
+
   // Pop the last user message to send it
   const lastMsg = history.length > 0 ? history.pop() : null;
   const prompt = lastMsg ? lastMsg.parts[0].text : 'Hello';
@@ -105,24 +104,24 @@ export const generateAIResponse = async (
 
   const result = await chat.sendMessage(prompt);
   const response = result.response;
-  
+
   const functionCalls = response.functionCalls();
   if (functionCalls && functionCalls.length > 0) {
     const actionsTaken = [];
     const functionResponses = [];
-    
+
     for (const call of functionCalls) {
       const functionName = call.name;
       const functionArgs = call.args;
-      
+
       const functionResult = await executeFunction(functionName, functionArgs);
-      
+
       actionsTaken.push({
         type: functionName,
         params: functionArgs,
         result: functionResult
       });
-      
+
       functionResponses.push({
         functionResponse: {
           name: functionName,
@@ -130,10 +129,10 @@ export const generateAIResponse = async (
         }
       });
     }
-    
+
     // Send function responses back to the model
     const followupResult = await chat.sendMessage(functionResponses as any);
-    
+
     return {
       content: followupResult.response.text(),
       actions: actionsTaken

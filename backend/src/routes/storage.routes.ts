@@ -13,15 +13,15 @@ router.post('/upload', upload.single('file'), async (req, res) => {
     if (!req.file) {
       return res.status(400).json({ error: 'No file uploaded' });
     }
-    
+
     const fileKey = await s3Service.uploadFile(
-      req.file.buffer, 
-      req.file.originalname, 
+      req.file.buffer,
+      req.file.originalname,
       req.file.mimetype
     );
-    
+
     const url = await s3Service.getPresignedUrl(fileKey);
-    
+
     res.json({ fileKey, url });
   } catch (error) {
     console.error('File upload error:', error);

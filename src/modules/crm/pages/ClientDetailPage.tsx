@@ -5,7 +5,19 @@
 /* eslint-disable react/no-unescaped-entities */
 import { useEffect, useMemo, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Edit2, Check, X, ArrowLeft, Paperclip, FileText, Target, Activity, UploadCloud, Trash2, Sparkles } from 'lucide-react';
+import {
+  Edit2,
+  Check,
+  X,
+  ArrowLeft,
+  Paperclip,
+  FileText,
+  Target,
+  Activity,
+  UploadCloud,
+  Trash2,
+  Sparkles
+} from 'lucide-react';
 import clsx from 'clsx';
 import { v4 as uuid } from 'uuid';
 
@@ -109,7 +121,9 @@ export const ClientDetailPage = () => {
     () => ({
       lifetimeValue: client ? formatCurrency(client.revenue * 4) : '—',
       averageDeal: deals.length
-        ? formatCurrency(deals.reduce((acc, deal) => acc + Number(deal.value || 0), 0) / deals.length)
+        ? formatCurrency(
+            deals.reduce((acc, deal) => acc + Number(deal.value || 0), 0) / deals.length
+          )
         : '—',
       dealsCount: formatNumber(deals.length)
     }),
@@ -394,12 +408,26 @@ export const ClientDetailPage = () => {
                         </div>
                       ) : (
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                          {client.files.map(f => (
-                            <div key={f.id} className="rounded-xl border border-slate-700 bg-slate-800 p-4 flex items-center justify-between">
-                               <div className="truncate max-w-[150px] text-sm text-slate-200" title={f.name}>{f.name}</div>
-                               <button type="button" className="text-red-400 hover:text-red-300" onClick={() => handleUpdate({ files: client.files.filter(x => x.id !== f.id) })}>
-                                 <Trash2 className="h-4 w-4" />
-                               </button>
+                          {client.files.map((f) => (
+                            <div
+                              key={f.id}
+                              className="rounded-xl border border-slate-700 bg-slate-800 p-4 flex items-center justify-between"
+                            >
+                              <div
+                                className="truncate max-w-[150px] text-sm text-slate-200"
+                                title={f.name}
+                              >
+                                {f.name}
+                              </div>
+                              <button
+                                type="button"
+                                className="text-red-400 hover:text-red-300"
+                                onClick={() =>
+                                  handleUpdate({ files: client.files.filter((x) => x.id !== f.id) })
+                                }
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </button>
                             </div>
                           ))}
                         </div>

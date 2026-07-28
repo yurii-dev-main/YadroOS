@@ -24,9 +24,9 @@ export const BudgetsPage = () => {
 
   return (
     <div className="space-y-6">
-      <BudgetManager 
-        budgets={budgets} 
-        onUpdate={updateBudget} 
+      <BudgetManager
+        budgets={budgets}
+        onUpdate={updateBudget}
         onCreate={async (name, amount) => {
           await accountingService.createBudget({
             name,

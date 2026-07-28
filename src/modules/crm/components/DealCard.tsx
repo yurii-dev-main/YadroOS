@@ -54,14 +54,14 @@ export const DealCard = ({ deal, stage, onQuickEdit }: DealCardProps) => {
     id: deal.id,
     data: { stage }
   });
-  
+
   // When using DragOverlay, we want the original element to stay in place as a placeholder
   const style = {
     transform: CSS.Translate.toString(transform),
     transition,
-    opacity: isDragging ? 0.3 : 1, // Make the placeholder more transparent
+    opacity: isDragging ? 0.3 : 1 // Make the placeholder more transparent
   };
-  
+
   if (isDragging) {
     style.transform = undefined; // Don't move the placeholder with the cursor!
   }

@@ -73,17 +73,29 @@ export const HRDashboard = () => {
       {showModal && (
         <>
           {activeTab === 'employees' && (
-            <EmployeeFormModal onClose={() => setShowModal(false)} onSubmit={(data) => console.log('Save Employee', data)} />
+            <EmployeeFormModal
+              onClose={() => setShowModal(false)}
+              onSubmit={(data) => console.log('Save Employee', data)}
+            />
           )}
           {activeTab === 'trainings' && (
-            <CreateTrainingModal onClose={() => setShowModal(false)} onSubmit={(data) => console.log('Save Training', data)} />
+            <CreateTrainingModal
+              onClose={() => setShowModal(false)}
+              onSubmit={(data) => console.log('Save Training', data)}
+            />
           )}
           {activeTab === 'performance' && (
             // Since performance page has KPI and OKR, we just use KPI as the default record for this example
-            <KPIFormModal onClose={() => setShowModal(false)} onSubmit={(data) => console.log('Save KPI', data)} />
+            <KPIFormModal
+              onClose={() => setShowModal(false)}
+              onSubmit={(data) => console.log('Save KPI', data)}
+            />
           )}
           {(activeTab === 'attendance' || activeTab === 'lifecycle') && (
-            <EmployeeFormModal onClose={() => setShowModal(false)} onSubmit={(data) => console.log('Fallback to Employee', data)} />
+            <EmployeeFormModal
+              onClose={() => setShowModal(false)}
+              onSubmit={(data) => console.log('Fallback to Employee', data)}
+            />
           )}
         </>
       )}

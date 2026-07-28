@@ -25,7 +25,9 @@ interface PasswordChangeParams {
 }
 
 export const authService = {
-  async login(params: LoginParams): Promise<{ user: User; tokens: AuthTokens; organizationId?: string }> {
+  async login(
+    params: LoginParams
+  ): Promise<{ user: User; tokens: AuthTokens; organizationId?: string }> {
     const { data } = await apiClient.post('/auth/login', params);
     return {
       user: data.user,

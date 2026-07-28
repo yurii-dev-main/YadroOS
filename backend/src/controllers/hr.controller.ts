@@ -58,7 +58,17 @@ export const getEmployeeById = async (req: Request, res: Response) => {
 
 export const createEmployee = async (req: Request, res: Response) => {
   try {
-    const { userId, firstName, lastName, position, department, hireDate, salary, phone, avatarUrl } = req.body;
+    const {
+      userId,
+      firstName,
+      lastName,
+      position,
+      department,
+      hireDate,
+      salary,
+      phone,
+      avatarUrl
+    } = req.body;
 
     const employee = await prisma.employee.create({
       data: {
@@ -85,7 +95,17 @@ export const createEmployee = async (req: Request, res: Response) => {
 export const updateEmployee = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const { userId, firstName, lastName, position, department, hireDate, salary, phone, avatarUrl } = req.body;
+    const {
+      userId,
+      firstName,
+      lastName,
+      position,
+      department,
+      hireDate,
+      salary,
+      phone,
+      avatarUrl
+    } = req.body;
 
     const existing = await prisma.employee.findUnique({ where: { id } });
     if (!existing) {

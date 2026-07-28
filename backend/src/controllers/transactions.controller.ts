@@ -82,12 +82,24 @@ export const createTransaction = async (req: Request, res: Response) => {
     });
 
     if (type === 'income') {
-      await tx.account.update({ where: { id: accountId }, data: { balance: { increment: amount } } });
+      await tx.account.update({
+        where: { id: accountId },
+        data: { balance: { increment: amount } }
+      });
     } else if (type === 'expense') {
-      await tx.account.update({ where: { id: accountId }, data: { balance: { decrement: amount } } });
+      await tx.account.update({
+        where: { id: accountId },
+        data: { balance: { decrement: amount } }
+      });
     } else if (type === 'transfer' && toAccountId) {
-      await tx.account.update({ where: { id: accountId }, data: { balance: { decrement: amount } } });
-      await tx.account.update({ where: { id: toAccountId }, data: { balance: { increment: amount } } });
+      await tx.account.update({
+        where: { id: accountId },
+        data: { balance: { decrement: amount } }
+      });
+      await tx.account.update({
+        where: { id: toAccountId },
+        data: { balance: { increment: amount } }
+      });
     }
 
     return transaction;
@@ -117,12 +129,24 @@ export const updateTransaction = async (req: Request, res: Response) => {
       if (!existing) throw new Error('Transaction not found');
 
       if (existing.type === 'income') {
-        await tx.account.update({ where: { id: existing.accountId }, data: { balance: { decrement: existing.amount } } });
+        await tx.account.update({
+          where: { id: existing.accountId },
+          data: { balance: { decrement: existing.amount } }
+        });
       } else if (existing.type === 'expense') {
-        await tx.account.update({ where: { id: existing.accountId }, data: { balance: { increment: existing.amount } } });
+        await tx.account.update({
+          where: { id: existing.accountId },
+          data: { balance: { increment: existing.amount } }
+        });
       } else if (existing.type === 'transfer' && existing.toAccountId) {
-        await tx.account.update({ where: { id: existing.accountId }, data: { balance: { increment: existing.amount } } });
-        await tx.account.update({ where: { id: existing.toAccountId }, data: { balance: { decrement: existing.amount } } });
+        await tx.account.update({
+          where: { id: existing.accountId },
+          data: { balance: { increment: existing.amount } }
+        });
+        await tx.account.update({
+          where: { id: existing.toAccountId },
+          data: { balance: { decrement: existing.amount } }
+        });
       }
 
       const updated = await tx.transaction.update({
@@ -143,12 +167,24 @@ export const updateTransaction = async (req: Request, res: Response) => {
       });
 
       if (type === 'income') {
-        await tx.account.update({ where: { id: accountId }, data: { balance: { increment: amount } } });
+        await tx.account.update({
+          where: { id: accountId },
+          data: { balance: { increment: amount } }
+        });
       } else if (type === 'expense') {
-        await tx.account.update({ where: { id: accountId }, data: { balance: { decrement: amount } } });
+        await tx.account.update({
+          where: { id: accountId },
+          data: { balance: { decrement: amount } }
+        });
       } else if (type === 'transfer' && toAccountId) {
-        await tx.account.update({ where: { id: accountId }, data: { balance: { decrement: amount } } });
-        await tx.account.update({ where: { id: toAccountId }, data: { balance: { increment: amount } } });
+        await tx.account.update({
+          where: { id: accountId },
+          data: { balance: { decrement: amount } }
+        });
+        await tx.account.update({
+          where: { id: toAccountId },
+          data: { balance: { increment: amount } }
+        });
       }
 
       return updated;
@@ -169,12 +205,24 @@ export const deleteTransaction = async (req: Request, res: Response) => {
     if (!transaction) return;
 
     if (transaction.type === 'income') {
-      await tx.account.update({ where: { id: transaction.accountId }, data: { balance: { decrement: transaction.amount } } });
+      await tx.account.update({
+        where: { id: transaction.accountId },
+        data: { balance: { decrement: transaction.amount } }
+      });
     } else if (transaction.type === 'expense') {
-      await tx.account.update({ where: { id: transaction.accountId }, data: { balance: { increment: transaction.amount } } });
+      await tx.account.update({
+        where: { id: transaction.accountId },
+        data: { balance: { increment: transaction.amount } }
+      });
     } else if (transaction.type === 'transfer' && transaction.toAccountId) {
-      await tx.account.update({ where: { id: transaction.accountId }, data: { balance: { increment: transaction.amount } } });
-      await tx.account.update({ where: { id: transaction.toAccountId }, data: { balance: { decrement: transaction.amount } } });
+      await tx.account.update({
+        where: { id: transaction.accountId },
+        data: { balance: { increment: transaction.amount } }
+      });
+      await tx.account.update({
+        where: { id: transaction.toAccountId },
+        data: { balance: { decrement: transaction.amount } }
+      });
     }
 
     await tx.transaction.delete({ where: { id } });

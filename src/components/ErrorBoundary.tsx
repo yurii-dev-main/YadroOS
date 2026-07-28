@@ -47,11 +47,12 @@ export class ErrorBoundary extends Component<Props, State> {
             <div className="rounded-full bg-red-500/20 p-4 text-red-400">
               <AlertTriangle className="h-12 w-12" />
             </div>
-            
+
             <div className="space-y-2">
               <h1 className="text-2xl font-bold text-slate-100">Something went wrong</h1>
               <p className="text-sm text-slate-400">
-                An unexpected error occurred in the application. We've logged the issue and are looking into it.
+                An unexpected error occurred in the application. We've logged the issue and are
+                looking into it.
               </p>
             </div>
 

@@ -25,17 +25,17 @@ export const ChatPage = () => {
 
   useEffect(() => {
     chatService.fetchThreads();
-    
+
     // Connect WebSocket
     const token = localStorage.getItem('accessToken') || '';
     if (token) {
       webSocketService.connect(token);
     }
-    
+
     const handleStatus = (data: any) => {
       setWsConnected(data.connected);
     };
-    
+
     webSocketService.on('status', handleStatus);
     setWsConnected(webSocketService.isConnected);
 

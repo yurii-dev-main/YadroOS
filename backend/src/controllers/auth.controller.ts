@@ -21,11 +21,11 @@ const refreshCookieOptions = {
 const sanitizeUser = (user: any) => {
   const { passwordHash, memberships, ...rest } = user;
   const currentMembership = memberships?.[0];
-  return { 
-    ...rest, 
+  return {
+    ...rest,
     role: currentMembership?.role,
     organizationId: currentMembership?.organizationId,
-    memberships 
+    memberships
   };
 };
 
@@ -51,7 +51,11 @@ export const login = async (req: Request, res: Response) => {
     return res.status(403).json({ message: 'User does not belong to any organization' });
   }
 
-  const payload = { userId: user.id, organizationId: membership.organizationId, role: membership.role };
+  const payload = {
+    userId: user.id,
+    organizationId: membership.organizationId,
+    role: membership.role
+  };
   const accessToken = createAccessToken(payload);
   const refreshToken = createRefreshToken(payload);
 
@@ -86,8 +90,16 @@ export const refresh = async (req: Request, res: Response) => {
     return res.status(403).json({ message: 'User does not belong to any organization' });
   }
 
-  const accessToken = createAccessToken({ userId: user.id, organizationId: membership.organizationId, role: membership.role });
-  const newRefreshToken = createRefreshToken({ userId: user.id, organizationId: membership.organizationId, role: membership.role });
+  const accessToken = createAccessToken({
+    userId: user.id,
+    organizationId: membership.organizationId,
+    role: membership.role
+  });
+  const newRefreshToken = createRefreshToken({
+    userId: user.id,
+    organizationId: membership.organizationId,
+    role: membership.role
+  });
 
   res
     .cookie('refreshToken', newRefreshToken, refreshCookieOptions)
@@ -128,14 +140,21 @@ export const switchOrganization = async (req: Request, res: Response) => {
   });
 
   if (!membership || !membership.isActive) {
-    return res.status(403).json({ message: 'Forbidden: You are not a member of this organization' });
+    return res
+      .status(403)
+      .json({ message: 'Forbidden: You are not a member of this organization' });
   }
 
-  const payload = { userId: req.user.userId, organizationId: membership.organizationId, role: membership.role };
+  const payload = {
+    userId: req.user.userId,
+    organizationId: membership.organizationId,
+    role: membership.role
+  };
   const accessToken = createAccessToken(payload);
   const refreshToken = createRefreshToken(payload);
 
-  res.cookie('refreshToken', refreshToken, refreshCookieOptions)
+  res
+    .cookie('refreshToken', refreshToken, refreshCookieOptions)
     .json({ accessToken, organizationId, role: membership.role });
 };
 
@@ -147,7 +166,7 @@ export const register = async (req: Request, res: Response) => {
   }
 
   const passwordHash = await bcrypt.hash(password, 10);
-  
+
   const user = await prisma.$transaction(async (tx) => {
     const newUser = await tx.user.create({
       data: {

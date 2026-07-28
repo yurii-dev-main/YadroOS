@@ -8,13 +8,13 @@ export const listApiKeys = async (req: Request, res: Response) => {
     orderBy: { createdAt: 'desc' }
   });
   // Mask the key
-  res.json(apiKeys.map(k => ({ ...k, key: k.key.substring(0, 8) + '...' })));
+  res.json(apiKeys.map((k) => ({ ...k, key: k.key.substring(0, 8) + '...' })));
 };
 
 export const createApiKey = async (req: Request, res: Response) => {
   const { name, expiresAt } = req.body;
   const rawKey = 'sk_test_' + crypto.randomBytes(24).toString('hex');
-  
+
   const apiKey = await prisma.apiKey.create({
     data: {
       name,

@@ -43,10 +43,13 @@ export const OrganizationSettings = () => {
   const handleInvite = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!currentOrganizationId || !inviteEmail) return;
-    
+
     try {
       setLoading(true);
-      await organizationsApi.addMember(currentOrganizationId, { email: inviteEmail, role: inviteRole });
+      await organizationsApi.addMember(currentOrganizationId, {
+        email: inviteEmail,
+        role: inviteRole
+      });
       setInviteEmail('');
       await fetchMembers();
       setError(null);
@@ -58,7 +61,8 @@ export const OrganizationSettings = () => {
   };
 
   const handleRemove = async (userId: string) => {
-    if (!currentOrganizationId || !window.confirm('Are you sure you want to remove this member?')) return;
+    if (!currentOrganizationId || !window.confirm('Are you sure you want to remove this member?'))
+      return;
     try {
       await organizationsApi.removeMember(currentOrganizationId, userId);
       await fetchMembers();
@@ -84,9 +88,7 @@ export const OrganizationSettings = () => {
           <Users className="h-6 w-6 text-primary" />
           Organization Settings
         </h1>
-        <p className="text-sm text-slate-400 mt-1">
-          Manage your organization members and roles.
-        </p>
+        <p className="text-sm text-slate-400 mt-1">Manage your organization members and roles.</p>
       </div>
 
       {error && (
@@ -106,9 +108,9 @@ export const OrganizationSettings = () => {
                 <label className="text-sm font-medium text-slate-300">Email Address</label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
-                  <Input 
-                    type="email" 
-                    placeholder="colleague@company.com" 
+                  <Input
+                    type="email"
+                    placeholder="colleague@company.com"
                     className="pl-10"
                     value={inviteEmail}
                     onChange={(e) => setInviteEmail(e.target.value)}
@@ -118,7 +120,7 @@ export const OrganizationSettings = () => {
               </div>
               <div className="space-y-2 w-48">
                 <label className="text-sm font-medium text-slate-300">Role</label>
-                <select 
+                <select
                   className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                   value={inviteRole}
                   onChange={(e) => setInviteRole(e.target.value)}
@@ -160,8 +162,8 @@ export const OrganizationSettings = () => {
                     {member.role}
                   </div>
                   {isAdminOrOwner && currentUser?.id !== member.user.id && (
-                    <Button 
-                      variant="ghost" 
+                    <Button
+                      variant="ghost"
                       className="text-rose-400 hover:text-rose-300 hover:bg-rose-400/10"
                       onClick={() => handleRemove(member.user.id)}
                     >

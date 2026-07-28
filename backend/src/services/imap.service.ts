@@ -7,7 +7,10 @@ export class ImapListener {
   private organizationId: string;
   public isConnected = false;
 
-  constructor(config: { host: string; port: number; user: string; pass: string }, organizationId: string) {
+  constructor(
+    config: { host: string; port: number; user: string; pass: string },
+    organizationId: string
+  ) {
     this.organizationId = organizationId;
     this.client = new ImapFlow({
       host: config.host,
@@ -23,7 +26,7 @@ export class ImapListener {
       await this.client.connect();
       this.isConnected = true;
       this.notifyStatus(true);
-      
+
       this.client.on('exists', (data) => this.handleNewMessage(data));
       this.client.on('error', (err) => {
         console.error('IMAP Error:', err);
@@ -50,7 +53,7 @@ export class ImapListener {
     // In a full implementation, we fetch the message body and headers by sequence number
     // using this.client.fetchOne(...)
     console.log('New message received via IMAP', data);
-    
+
     // Example pseudo-implementation
     // await prisma.emailMessage.create({ ... });
   }

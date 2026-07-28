@@ -40,15 +40,13 @@ apiClient.interceptors.response.use(
 
     // Determine if this request is an auth-infrastructure call that should
     // never be retried (prevents the infinite-loop crash).
-    const isAuthSkipUrl = AUTH_SKIP_URLS.some((url) =>
-      originalConfig?.url?.includes(url)
-    );
+    const isAuthSkipUrl = AUTH_SKIP_URLS.some((url) => originalConfig?.url?.includes(url));
 
     if (
       error.response?.status === 401 &&
       originalConfig &&
       !originalConfig._refreshRetried && // never retry twice
-      !isAuthSkipUrl                      // never retry auth calls
+      !isAuthSkipUrl // never retry auth calls
     ) {
       // Mark immediately so any parallel requests that also see 401
       // won't queue another retry loop.

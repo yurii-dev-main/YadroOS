@@ -29,19 +29,30 @@ export const ClientCard = ({ client, onOpen }: ClientCardProps) => (
     <div className="mt-6 grid grid-cols-2 gap-3 text-sm text-slate-300">
       <div className="min-w-0">
         <p className="text-xs uppercase tracking-wide text-slate-500">Manager</p>
-        <p className="truncate" title={client.assignedTo}>{client.assignedTo}</p>
+        <p className="truncate" title={client.assignedTo}>
+          {client.assignedTo}
+        </p>
       </div>
       <div className="min-w-0">
         <p className="text-xs uppercase tracking-wide text-slate-500">Revenue</p>
-        <p className="truncate font-semibold text-emerald-400" title={formatCurrency(client.revenue)}>{formatCurrency(client.revenue)}</p>
+        <p
+          className="truncate font-semibold text-emerald-400"
+          title={formatCurrency(client.revenue)}
+        >
+          {formatCurrency(client.revenue)}
+        </p>
       </div>
       <div className="min-w-0">
         <p className="text-xs uppercase tracking-wide text-slate-500">Email</p>
-        <p className="truncate" title={client.email || ''}>{client.email}</p>
+        <p className="truncate" title={client.email || ''}>
+          {client.email}
+        </p>
       </div>
       <div className="min-w-0">
         <p className="text-xs uppercase tracking-wide text-slate-500">Phone</p>
-        <p className="truncate" title={client.phone || ''}>{client.phone}</p>
+        <p className="truncate" title={client.phone || ''}>
+          {client.phone}
+        </p>
       </div>
     </div>
 

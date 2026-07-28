@@ -23,21 +23,21 @@ import {
 import { buildAnalyticsSnapshot } from '../utils/crm.utils';
 
 const stageMapFromApi: Record<string, DealStage> = {
-  'lead': 'Lead',
-  'contact_made': 'Contact Made',
-  'qualification': 'Qualification',
-  'proposal': 'Proposal',
-  'negotiation': 'Negotiation',
-  'closed_won': 'Closed Won',
-  'closed_lost': 'Closed Lost'
+  lead: 'Lead',
+  contact_made: 'Contact Made',
+  qualification: 'Qualification',
+  proposal: 'Proposal',
+  negotiation: 'Negotiation',
+  closed_won: 'Closed Won',
+  closed_lost: 'Closed Lost'
 };
 
 const stageMapToApi: Record<DealStage, string> = {
-  'Lead': 'lead',
+  Lead: 'lead',
   'Contact Made': 'contact_made',
-  'Qualification': 'qualification',
-  'Proposal': 'proposal',
-  'Negotiation': 'negotiation',
+  Qualification: 'qualification',
+  Proposal: 'proposal',
+  Negotiation: 'negotiation',
   'Closed Won': 'closed_won',
   'Closed Lost': 'closed_lost'
 };

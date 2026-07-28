@@ -108,9 +108,15 @@ export const transferFunds = async (req: Request, res: Response) => {
         }
       });
 
-      await tx.account.update({ where: { id: fromAccountId }, data: { balance: { decrement: amount } } });
-      await tx.account.update({ where: { id: toAccountId }, data: { balance: { increment: amount } } });
-      
+      await tx.account.update({
+        where: { id: fromAccountId },
+        data: { balance: { decrement: amount } }
+      });
+      await tx.account.update({
+        where: { id: toAccountId },
+        data: { balance: { increment: amount } }
+      });
+
       return transaction;
     });
 
@@ -125,7 +131,7 @@ export const reconcileAccount = async (req: Request, res: Response) => {
   const { expectedBalance } = req.body;
   const account = await prisma.account.findUnique({ where: { id } });
   if (!account) return res.status(404).json({ message: 'Account not found' });
-  
+
   if (Number(account.balance) === Number(expectedBalance)) {
     const updated = await prisma.account.update({
       where: { id },

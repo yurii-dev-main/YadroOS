@@ -20,12 +20,14 @@ export const refreshExchangeRates = async (req: Request, res: Response) => {
   try {
     const rates = await getNBURates();
     res.json(rates);
-  } catch(e: any) { res.status(500).json({ error: e.message }); }
+  } catch (e: any) {
+    res.status(500).json({ error: e.message });
+  }
 };
 
 export const listCategories = async (req: Request, res: Response) => {
   const { type } = req.query as { type?: TransactionType };
-  
+
   const where: Record<string, any> = { organizationId: req.user!.organizationId };
   if (type) where.type = type;
 
@@ -139,7 +141,7 @@ export const listInvoices = async (req: Request, res: Response) => {
       orderBy: { createdAt: 'desc' }
     });
 
-    const mapped = invoices.map(inv => ({ ...inv, lineItems: (inv as any).lineItems || [] }));
+    const mapped = invoices.map((inv) => ({ ...inv, lineItems: (inv as any).lineItems || [] }));
     res.json({ data: mapped });
   } catch (error) {
     console.error('Error in listInvoices:', error);
@@ -149,7 +151,7 @@ export const listInvoices = async (req: Request, res: Response) => {
 
 export const createInvoice = async (req: Request, res: Response) => {
   const { invoiceNumber, clientId, amount, currency, issueDate, dueDate, taxRate } = req.body;
-  
+
   const taxAmount = (Number(amount) * Number(taxRate || 0)) / 100;
   const totalAmount = Number(amount) + taxAmount;
 
@@ -181,7 +183,7 @@ export const updateInvoiceStatus = async (req: Request, res: Response) => {
 
   const updated = await prisma.invoice.update({
     where: { id },
-    data: { 
+    data: {
       status,
       paidDate: status === 'paid' ? new Date() : undefined
     }
@@ -196,7 +198,14 @@ export const updateInvoiceStatus = async (req: Request, res: Response) => {
 export const getPayroll = async (req: Request, res: Response) => {
   const employees = await prisma.employee.findMany({
     where: { organizationId: req.user!.organizationId },
-    select: { id: true, firstName: true, lastName: true, position: true, salary: true, department: true }
+    select: {
+      id: true,
+      firstName: true,
+      lastName: true,
+      position: true,
+      salary: true,
+      department: true
+    }
   });
   res.json({ data: employees });
 };
@@ -210,12 +219,12 @@ export const runPayroll = async (req: Request, res: Response) => {
   });
 
   // taxRates is expected to be a record like { "Income Tax": 0.15, "Social Security": 0.05 }
-  const rates = taxRates || { "Default Tax": 0.20 };
+  const rates = taxRates || { 'Default Tax': 0.2 };
 
   const payrollRecords = await Promise.all(
     employees.map(async (employee) => {
       const grossSalary = Number(employee.salary) || 0;
-      
+
       const deductions: Record<string, number> = {};
       let totalDeductionsAmount = 0;
 
@@ -253,7 +262,9 @@ export const markPayrollPaid = async (req: Request, res: Response) => {
       data: { status: 'paid', paidAt: new Date() }
     });
     res.json({ ok: true });
-  } catch(e: any) { res.status(500).json({ error: e.message }); }
+  } catch (e: any) {
+    res.status(500).json({ error: e.message });
+  }
 };
 
 // ---------------------------
@@ -266,9 +277,13 @@ export const getDashboardAnalytics = async (req: Request, res: Response) => {
     where: { organizationId }
   });
 
-  const totalIncome = transactions.filter(t => t.type === 'income').reduce((acc, t) => acc + Number(t.amount), 0);
-  const totalExpense = transactions.filter(t => t.type === 'expense').reduce((acc, t) => acc + Number(t.amount), 0);
-  
+  const totalIncome = transactions
+    .filter((t) => t.type === 'income')
+    .reduce((acc, t) => acc + Number(t.amount), 0);
+  const totalExpense = transactions
+    .filter((t) => t.type === 'expense')
+    .reduce((acc, t) => acc + Number(t.amount), 0);
+
   const accounts = await prisma.account.findMany({
     where: { organizationId }
   });
@@ -297,10 +312,13 @@ export const getCashBalances = async (req: Request, res: Response) => {
     where: { organizationId: req.user!.organizationId }
   });
 
-  const balances = accounts.reduce((acc, account) => {
-    acc[account.type] = (acc[account.type] || 0) + Number(account.balance);
-    return acc;
-  }, {} as Record<string, number>);
+  const balances = accounts.reduce(
+    (acc, account) => {
+      acc[account.type] = (acc[account.type] || 0) + Number(account.balance);
+      return acc;
+    },
+    {} as Record<string, number>
+  );
 
   res.json({ data: balances });
 };
@@ -310,13 +328,16 @@ export const getCategoryBreakdown = async (req: Request, res: Response) => {
     where: { organizationId: req.user!.organizationId, type: 'expense' }
   });
 
-  const breakdown = transactions.reduce((acc, t) => {
-    const cat = t.category || 'Uncategorized';
-    acc[cat] = (acc[cat] || 0) + Number(t.amount);
-    return acc;
-  }, {} as Record<string, number>);
+  const breakdown = transactions.reduce(
+    (acc, t) => {
+      const cat = t.category || 'Uncategorized';
+      acc[cat] = (acc[cat] || 0) + Number(t.amount);
+      return acc;
+    },
+    {} as Record<string, number>
+  );
 
-  const data = Object.keys(breakdown).map(k => ({ category: k, amount: breakdown[k] }));
+  const data = Object.keys(breakdown).map((k) => ({ category: k, amount: breakdown[k] }));
   res.json({ data });
 };
 
@@ -333,23 +354,26 @@ export const getClientProfitability = async (req: Request, res: Response) => {
     include: { client: true }
   });
 
-  const profitability: Record<string, { revenue: number, cost: number, profit: number }> = {};
+  const profitability: Record<string, { revenue: number; cost: number; profit: number }> = {};
 
   // Add revenue from invoices
-  invoices.forEach(inv => {
+  invoices.forEach((inv) => {
     const clientName = inv.client.name;
     if (!profitability[clientName]) profitability[clientName] = { revenue: 0, cost: 0, profit: 0 };
     profitability[clientName].revenue += Number(inv.totalAmount);
-    profitability[clientName].profit = profitability[clientName].revenue - profitability[clientName].cost;
+    profitability[clientName].profit =
+      profitability[clientName].revenue - profitability[clientName].cost;
   });
 
   // Add cost from expense transactions
-  transactions.forEach(tx => {
+  transactions.forEach((tx) => {
     if (tx.client) {
       const clientName = tx.client.name;
-      if (!profitability[clientName]) profitability[clientName] = { revenue: 0, cost: 0, profit: 0 };
+      if (!profitability[clientName])
+        profitability[clientName] = { revenue: 0, cost: 0, profit: 0 };
       profitability[clientName].cost += Number(tx.amount);
-      profitability[clientName].profit = profitability[clientName].revenue - profitability[clientName].cost;
+      profitability[clientName].profit =
+        profitability[clientName].revenue - profitability[clientName].cost;
     }
   });
 
@@ -364,7 +388,9 @@ export const getClientPaymentHistory = async (req: Request, res: Response) => {
       orderBy: { issueDate: 'desc' }
     });
     res.json({ data: invoices });
-  } catch(e: any) { res.status(500).json({ error: e.message }); }
+  } catch (e: any) {
+    res.status(500).json({ error: e.message });
+  }
 };
 
 export const getReports = async (req: Request, res: Response) => {
@@ -417,10 +443,14 @@ export const getReports = async (req: Request, res: Response) => {
           }
         }
       ],
-      cashFlow: cashFlowForecast.map(c => ({ name: c.month, inflow: c.inflow, outflow: c.outflow })),
+      cashFlow: cashFlowForecast.map((c) => ({
+        name: c.month,
+        inflow: c.inflow,
+        outflow: c.outflow
+      })),
       forecasts: [],
       balanceSheet: [],
-      taxLiability: (totalIncome - totalExpense) > 0 ? (totalIncome - totalExpense) * 0.2 : 0,
+      taxLiability: totalIncome - totalExpense > 0 ? (totalIncome - totalExpense) * 0.2 : 0,
       cashFlowForecast
     }
   });
@@ -440,9 +470,15 @@ export const searchTransactions = async (req: Request, res: Response) => {
     if (dateFrom) where.date.gte = new Date(dateFrom);
     if (dateTo) where.date.lte = new Date(dateTo);
     if (search) where.description = { contains: search, mode: 'insensitive' };
-    const results = await prisma.transaction.findMany({ where, orderBy: { date: 'desc' }, take: 100 });
+    const results = await prisma.transaction.findMany({
+      where,
+      orderBy: { date: 'desc' },
+      take: 100
+    });
     res.json({ data: results });
-  } catch(e: any) { res.status(500).json({ error: e.message }); }
+  } catch (e: any) {
+    res.status(500).json({ error: e.message });
+  }
 };
 
 export const bulkImportTransactions = async (req: Request, res: Response) => {
@@ -463,7 +499,8 @@ export const bulkImportTransactions = async (req: Request, res: Response) => {
   if (file.mimetype === 'text/csv' || file.originalname.endsWith('.csv')) {
     const stream = Readable.from(file.buffer);
     await new Promise((resolve, reject) => {
-      stream.pipe(csv())
+      stream
+        .pipe(csv())
         .on('data', (data) => rows.push(data))
         .on('end', resolve)
         .on('error', reject);
@@ -480,13 +517,13 @@ export const bulkImportTransactions = async (req: Request, res: Response) => {
 
   let totalDifference = 0;
   let importedCount = 0;
-  
+
   for (const row of rows) {
     const date = new Date(row.Date || row.date);
     const amount = Number(row.Amount || row.amount);
     const description = row.Description || row.description || '';
     const type = (row.Type || row.type || 'expense').toLowerCase();
-    
+
     if (isNaN(amount) || isNaN(date.getTime())) continue;
 
     const hashString = `${date.toISOString()}-${amount}-${description}`;
@@ -504,10 +541,10 @@ export const bulkImportTransactions = async (req: Request, res: Response) => {
           date,
           source: 'CSV_IMPORT',
           importBatchId,
-          externalId,
+          externalId
         }
       });
-      
+
       if (type === 'income') {
         totalDifference += amount;
       } else {
@@ -586,7 +623,7 @@ export const syncAccountTransactions = async (req: Request, res: Response) => {
 
   // Get banking adapter based on account setup (using monobank for example)
   const adapter = bankingService.getAdapter('monobank', { token: 'mock-token' });
-  
+
   // Fetch transactions for the last 30 days
   const fromDate = new Date();
   fromDate.setDate(fromDate.getDate() - 30);
@@ -622,14 +659,14 @@ export const syncAccountTransactions = async (req: Request, res: Response) => {
       }
       syncedCount++;
     } catch (error: any) {
-       if (error.code === 'P2002') continue;
-       console.error(error);
+      if (error.code === 'P2002') continue;
+      console.error(error);
     }
   }
 
   await prisma.account.update({
     where: { id },
-    data: { 
+    data: {
       balance: { increment: totalDifference },
       lastSyncedAt: new Date()
     }

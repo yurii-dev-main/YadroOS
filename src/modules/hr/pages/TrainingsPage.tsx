@@ -92,10 +92,7 @@ export const TrainingsPage = () => {
       </div>
 
       {isCreateModalOpen && (
-        <CreateTrainingModal
-          onClose={() => setIsCreateModalOpen(false)}
-          onSubmit={addTraining}
-        />
+        <CreateTrainingModal onClose={() => setIsCreateModalOpen(false)} onSubmit={addTraining} />
       )}
     </div>
   );

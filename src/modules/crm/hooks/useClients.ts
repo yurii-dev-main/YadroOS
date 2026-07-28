@@ -37,25 +37,28 @@ export const useClients = () => {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [viewMode, setViewMode] = useState<'table' | 'cards'>('table');
 
-  const fetchClients = useCallback(async (background = false) => {
-    try {
-      if (!background) setLoading(true);
-      const result: CRMClientQueryResult = await crmService.getClients({
-        page,
-        pageSize,
-        search: debouncedSearch,
-        filters,
-        sort
-      });
-      setClients(result.data);
-      setTotal(result.total);
-      setError(null);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch clients');
-    } finally {
-      if (!background) setLoading(false);
-    }
-  }, [page, pageSize, debouncedSearch, filters, sort]);
+  const fetchClients = useCallback(
+    async (background = false) => {
+      try {
+        if (!background) setLoading(true);
+        const result: CRMClientQueryResult = await crmService.getClients({
+          page,
+          pageSize,
+          search: debouncedSearch,
+          filters,
+          sort
+        });
+        setClients(result.data);
+        setTotal(result.total);
+        setError(null);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to fetch clients');
+      } finally {
+        if (!background) setLoading(false);
+      }
+    },
+    [page, pageSize, debouncedSearch, filters, sort]
+  );
 
   useEffect(() => {
     fetchClients(false);

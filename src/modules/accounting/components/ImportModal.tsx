@@ -113,9 +113,7 @@ export const ImportModal = ({ onClose, onSuccess }: ImportModalProps) => {
         </div>
 
         {error && (
-          <div className="mt-4 rounded-md bg-rose-500/10 p-3 text-sm text-rose-400">
-            {error}
-          </div>
+          <div className="mt-4 rounded-md bg-rose-500/10 p-3 text-sm text-rose-400">{error}</div>
         )}
 
         <div className="mt-6 flex justify-end gap-3">

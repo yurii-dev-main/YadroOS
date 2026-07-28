@@ -252,7 +252,10 @@ export const emailService = {
     }
   },
 
-  async updateAutoResponder(id: string, payload: { active: boolean; message: string; type: string }) {
+  async updateAutoResponder(
+    id: string,
+    payload: { active: boolean; message: string; type: string }
+  ) {
     const response = await apiClient.put(`/v1/communications/auto-responders/${id}`, payload);
     return response.data?.data || response.data;
   }

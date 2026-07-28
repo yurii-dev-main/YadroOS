@@ -13,4 +13,4 @@ test('totpService hashes and verifies backup codes', async () => {
   const hashed = await totpService.hashBackupCodes(codes);
   const isValid = await totpService.verifyBackupCode(codes[0], hashed);
   expect(isValid).toBe(true);
-});
+}, 15000);

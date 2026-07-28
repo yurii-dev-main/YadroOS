@@ -47,13 +47,16 @@ export const ReportsPage = () => {
     } else {
       start = new Date(now.getFullYear(), 0, 1);
     }
-    return transactions.filter(t => new Date(t.date) >= start);
+    return transactions.filter((t) => new Date(t.date) >= start);
   }, [transactions, period]);
 
   const trend = useMemo(() => groupByMonth(filteredTransactions), [filteredTransactions]);
   const categories = useMemo(
     () =>
-      categoryBreakdown.map((category: any) => ({ name: category.category || category.categoryName || 'Unknown', value: category.amount || category.total || 0 })),
+      categoryBreakdown.map((category: any) => ({
+        name: category.category || category.categoryName || 'Unknown',
+        value: category.amount || category.total || 0
+      })),
     [categoryBreakdown]
   );
   const forecast = forecasts[0]?.points ?? [];
@@ -142,7 +145,9 @@ export const ReportsPage = () => {
               <div className="flex items-center gap-4">
                 <span className="text-emerald-300">Inflow: {(item.inflow || 0).toFixed(2)}</span>
                 <span className="text-rose-300">Outflow: {(item.outflow || 0).toFixed(2)}</span>
-                <span className="text-slate-100">Balance: {(item.closingBalance || 0).toFixed(2)}</span>
+                <span className="text-slate-100">
+                  Balance: {(item.closingBalance || 0).toFixed(2)}
+                </span>
               </div>
             </div>
           ))}

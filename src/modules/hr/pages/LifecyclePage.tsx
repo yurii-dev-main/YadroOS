@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from '../../../components/ui/card';
 import { useEmployees } from '../hooks/useEmployees';
 import { useLifecycle } from '../hooks/useLifecycle';
@@ -7,7 +6,8 @@ import { OffboardingChecklist } from '../components/OffboardingChecklist';
 
 export const LifecyclePage = () => {
   const { employees } = useEmployees();
-  const { onboardingPlans, offboardingChecklists, toggleOnboardingTask, toggleOffboardingTask } = useLifecycle();
+  const { onboardingPlans, offboardingChecklists, toggleOnboardingTask, toggleOffboardingTask } =
+    useLifecycle();
 
   return (
     <div className="space-y-6">
@@ -21,8 +21,16 @@ export const LifecyclePage = () => {
         </CardContent>
       </Card>
 
-      <OnboardingChecklist employees={employees} plans={onboardingPlans} onToggleTask={toggleOnboardingTask} />
-      <OffboardingChecklist employees={employees} checklists={offboardingChecklists} onToggleTask={toggleOffboardingTask} />
+      <OnboardingChecklist
+        employees={employees}
+        plans={onboardingPlans}
+        onToggleTask={toggleOnboardingTask}
+      />
+      <OffboardingChecklist
+        employees={employees}
+        checklists={offboardingChecklists}
+        onToggleTask={toggleOffboardingTask}
+      />
     </div>
   );
 };

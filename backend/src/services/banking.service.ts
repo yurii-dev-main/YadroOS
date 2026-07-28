@@ -12,12 +12,16 @@ export interface IBankingAdapter {
 
 export class MonobankAdapter implements IBankingAdapter {
   private token: string;
-  
+
   constructor(token: string) {
     this.token = token;
   }
-  
-  async fetchTransactions(accountId: string, fromDate: Date, toDate: Date): Promise<BankTransaction[]> {
+
+  async fetchTransactions(
+    accountId: string,
+    fromDate: Date,
+    toDate: Date
+  ): Promise<BankTransaction[]> {
     // Real implementation would look like this:
     /*
     const response = await fetch(`https://api.monobank.ua/personal/statement/${accountId}/${Math.floor(fromDate.getTime() / 1000)}/${Math.floor(toDate.getTime() / 1000)}`, {
@@ -36,9 +40,27 @@ export class MonobankAdapter implements IBankingAdapter {
 
     // Returning realistic mock data structure for demo purposes
     return [
-      { id: `mono-${Date.now()}-1`, amount: 12.50, description: 'Coffee Shop', time: Date.now() - 86400000, type: 'expense' },
-      { id: `mono-${Date.now()}-2`, amount: 1500.00, description: 'Client Payment', time: Date.now() - 86400000 * 2, type: 'income' },
-      { id: `mono-${Date.now()}-3`, amount: 99.99, description: 'Software Subscription', time: Date.now() - 86400000 * 3, type: 'expense' }
+      {
+        id: `mono-${Date.now()}-1`,
+        amount: 12.5,
+        description: 'Coffee Shop',
+        time: Date.now() - 86400000,
+        type: 'expense'
+      },
+      {
+        id: `mono-${Date.now()}-2`,
+        amount: 1500.0,
+        description: 'Client Payment',
+        time: Date.now() - 86400000 * 2,
+        type: 'income'
+      },
+      {
+        id: `mono-${Date.now()}-3`,
+        amount: 99.99,
+        description: 'Software Subscription',
+        time: Date.now() - 86400000 * 3,
+        type: 'expense'
+      }
     ];
   }
 }

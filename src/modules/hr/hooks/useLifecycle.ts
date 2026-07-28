@@ -19,23 +19,29 @@ export const useLifecycle = (): UseLifecycleResult => {
   }, []);
 
   const toggleOnboardingTask = (employeeId: string, taskId: string) => {
-    setOnboardingPlans(plans => plans.map(plan => {
-      if (plan.employeeId !== employeeId) return plan;
-      return {
-        ...plan,
-        tasks: plan.tasks.map(t => t.id === taskId ? { ...t, completed: !t.completed } : t)
-      };
-    }));
+    setOnboardingPlans((plans) =>
+      plans.map((plan) => {
+        if (plan.employeeId !== employeeId) return plan;
+        return {
+          ...plan,
+          tasks: plan.tasks.map((t) => (t.id === taskId ? { ...t, completed: !t.completed } : t))
+        };
+      })
+    );
   };
 
   const toggleOffboardingTask = (employeeId: string, taskId: string) => {
-    setOffboardingChecklists(checklists => checklists.map(checklist => {
-      if (checklist.employeeId !== employeeId) return checklist;
-      return {
-        ...checklist,
-        tasks: checklist.tasks.map(t => t.id === taskId ? { ...t, completed: !t.completed } : t)
-      };
-    }));
+    setOffboardingChecklists((checklists) =>
+      checklists.map((checklist) => {
+        if (checklist.employeeId !== employeeId) return checklist;
+        return {
+          ...checklist,
+          tasks: checklist.tasks.map((t) =>
+            t.id === taskId ? { ...t, completed: !t.completed } : t
+          )
+        };
+      })
+    );
   };
 
   return {

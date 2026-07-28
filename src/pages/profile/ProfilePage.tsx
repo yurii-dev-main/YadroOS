@@ -143,126 +143,126 @@ export const ProfilePage = () => {
         <h1 className="text-2xl font-bold text-slate-100">{t('profile.settings')}</h1>
       </div>
       <div className="grid gap-6 lg:grid-cols-3">
-      <Card className="lg:col-span-1">
-        <CardHeader>
-          <CardTitle>{t('profile.avatar')}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <AvatarUploader value={user?.avatarUrl} onChange={handleAvatarChange} />
-        </CardContent>
-      </Card>
-      <Card className="lg:col-span-2">
-        <CardHeader>
-          <CardTitle>{t('profile.personalDetails')}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <FormProvider {...profileMethods}>
-            <form
-              onSubmit={profileMethods.handleSubmit(onProfileSubmit)}
-              className="space-y-5"
-              noValidate
-            >
-              <FormField<ProfileFormValues> name="name" label={t('profile.name')} />
-              <FormField<ProfileFormValues> name="company" label={t('profile.company')} />
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-200" htmlFor="signature">
-                  Email Signature
-                </label>
-                <textarea
-                  id="signature"
-                  className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 min-h-[80px]"
-                  placeholder="Best regards, ..."
-                  {...profileMethods.register('signature')}
+        <Card className="lg:col-span-1">
+          <CardHeader>
+            <CardTitle>{t('profile.avatar')}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <AvatarUploader value={user?.avatarUrl} onChange={handleAvatarChange} />
+          </CardContent>
+        </Card>
+        <Card className="lg:col-span-2">
+          <CardHeader>
+            <CardTitle>{t('profile.personalDetails')}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <FormProvider {...profileMethods}>
+              <form
+                onSubmit={profileMethods.handleSubmit(onProfileSubmit)}
+                className="space-y-5"
+                noValidate
+              >
+                <FormField<ProfileFormValues> name="name" label={t('profile.name')} />
+                <FormField<ProfileFormValues> name="company" label={t('profile.company')} />
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-slate-200" htmlFor="signature">
+                    Email Signature
+                  </label>
+                  <textarea
+                    id="signature"
+                    className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 min-h-[80px]"
+                    placeholder="Best regards, ..."
+                    {...profileMethods.register('signature')}
+                  />
+                </div>
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-slate-200" htmlFor="language">
+                      {t('profile.language')}
+                    </label>
+                    <select
+                      id="language"
+                      className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm"
+                      {...profileMethods.register('language')}
+                    >
+                      <option value="uk">Ukrainian</option>
+                      <option value="en">English</option>
+                    </select>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-slate-200" htmlFor="theme">
+                      {t('profile.theme')}
+                    </label>
+                    <select
+                      id="theme"
+                      className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm"
+                      {...profileMethods.register('theme')}
+                    >
+                      <option value="dark">Steel Blue</option>
+                      <option value="light">Bronze / Gold</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <p className="text-sm font-medium text-slate-200">{t('profile.notifications')}</p>
+                  <div className="flex flex-col gap-3">
+                    <Switch
+                      checked={profileMethods.watch('emailNotifications')}
+                      onCheckedChange={(checked) =>
+                        profileMethods.setValue('emailNotifications', checked)
+                      }
+                      label={t('profile.email')}
+                    />
+                    <Switch
+                      checked={profileMethods.watch('pushNotifications')}
+                      onCheckedChange={(checked) =>
+                        profileMethods.setValue('pushNotifications', checked)
+                      }
+                      label={t('profile.push')}
+                    />
+                  </div>
+                </div>
+                <Button type="submit">{t('profile.save')}</Button>
+              </form>
+            </FormProvider>
+          </CardContent>
+        </Card>
+        <Card className="lg:col-span-3">
+          <CardHeader>
+            <CardTitle>{t('profile.changePassword')}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <FormProvider {...passwordMethods}>
+              <form
+                onSubmit={passwordMethods.handleSubmit(onPasswordSubmit)}
+                className="grid gap-4 md:grid-cols-3"
+                noValidate
+              >
+                <FormField<PasswordFormValues>
+                  name="currentPassword"
+                  label={t('profile.currentPassword')}
+                  type="password"
+                  autoComplete="current-password"
                 />
-              </div>
-              <div className="grid gap-4 md:grid-cols-2">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-200" htmlFor="language">
-                    {t('profile.language')}
-                  </label>
-                  <select
-                    id="language"
-                    className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm"
-                    {...profileMethods.register('language')}
-                  >
-                    <option value="uk">Ukrainian</option>
-                    <option value="en">English</option>
-                  </select>
+                <FormField<PasswordFormValues>
+                  name="newPassword"
+                  label={t('profile.newPassword')}
+                  type="password"
+                  autoComplete="new-password"
+                />
+                <FormField<PasswordFormValues>
+                  name="confirmPassword"
+                  label={t('profile.confirmPassword')}
+                  type="password"
+                  autoComplete="new-password"
+                />
+                <div className="md:col-span-3">
+                  <Button type="submit">{t('profile.updatePassword')}</Button>
                 </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-200" htmlFor="theme">
-                    {t('profile.theme')}
-                  </label>
-                  <select
-                    id="theme"
-                    className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm"
-                    {...profileMethods.register('theme')}
-                  >
-                    <option value="dark">Steel Blue</option>
-                    <option value="light">Bronze / Gold</option>
-                  </select>
-                </div>
-              </div>
-              <div className="space-y-2">
-                <p className="text-sm font-medium text-slate-200">{t('profile.notifications')}</p>
-                <div className="flex flex-col gap-3">
-                  <Switch
-                    checked={profileMethods.watch('emailNotifications')}
-                    onCheckedChange={(checked) =>
-                      profileMethods.setValue('emailNotifications', checked)
-                    }
-                    label={t('profile.email')}
-                  />
-                  <Switch
-                    checked={profileMethods.watch('pushNotifications')}
-                    onCheckedChange={(checked) =>
-                      profileMethods.setValue('pushNotifications', checked)
-                    }
-                    label={t('profile.push')}
-                  />
-                </div>
-              </div>
-              <Button type="submit">{t('profile.save')}</Button>
-            </form>
-          </FormProvider>
-        </CardContent>
-      </Card>
-      <Card className="lg:col-span-3">
-        <CardHeader>
-          <CardTitle>{t('profile.changePassword')}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <FormProvider {...passwordMethods}>
-            <form
-              onSubmit={passwordMethods.handleSubmit(onPasswordSubmit)}
-              className="grid gap-4 md:grid-cols-3"
-              noValidate
-            >
-              <FormField<PasswordFormValues>
-                name="currentPassword"
-                label={t('profile.currentPassword')}
-                type="password"
-                autoComplete="current-password"
-              />
-              <FormField<PasswordFormValues>
-                name="newPassword"
-                label={t('profile.newPassword')}
-                type="password"
-                autoComplete="new-password"
-              />
-              <FormField<PasswordFormValues>
-                name="confirmPassword"
-                label={t('profile.confirmPassword')}
-                type="password"
-                autoComplete="new-password"
-              />
-              <div className="md:col-span-3">
-                <Button type="submit">{t('profile.updatePassword')}</Button>
-              </div>
-            </form>
-          </FormProvider>
-        </CardContent>
-      </Card>
+              </form>
+            </FormProvider>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

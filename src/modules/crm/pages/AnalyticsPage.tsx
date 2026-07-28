@@ -92,7 +92,12 @@ export const AnalyticsPage = () => {
                     <ResponsiveContainer width="100%" height="100%">
                       <FunnelChart margin={{ top: 20, right: 120, bottom: 20, left: 20 }}>
                         <Tooltip />
-                        <Funnel dataKey="value" data={summary.funnel} fill="#3b82f6" isAnimationActive={false}>
+                        <Funnel
+                          dataKey="value"
+                          data={summary.funnel}
+                          fill="#3b82f6"
+                          isAnimationActive={false}
+                        >
                           <LabelList
                             position="right"
                             fill="#e2e8f0"

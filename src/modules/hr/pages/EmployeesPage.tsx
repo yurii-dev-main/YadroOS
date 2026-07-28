@@ -61,7 +61,7 @@ export const EmployeesPage = () => {
           <CardContent className="space-y-1 text-sm text-slate-300">
             {statistics.topPerformers.map((highlight) => (
               <p key={highlight.employeeId}>
-                {employees.find(e => e.id === highlight.employeeId)?.name ?? 'Unknown'} —{' '}
+                {employees.find((e) => e.id === highlight.employeeId)?.name ?? 'Unknown'} —{' '}
                 {highlight.score}
               </p>
             ))}

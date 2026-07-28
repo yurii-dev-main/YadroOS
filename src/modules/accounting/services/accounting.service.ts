@@ -59,8 +59,13 @@ export const accountingService = {
     return res.data;
   },
 
-  async reconcile(accountId: string, statementBalance: number): Promise<{ accountId: string; statementBalance: number; variance: number; date: string }> {
-    const res = await apiClient.post(`/v1/accounting/accounts/${accountId}/reconcile`, { statementBalance });
+  async reconcile(
+    accountId: string,
+    statementBalance: number
+  ): Promise<{ accountId: string; statementBalance: number; variance: number; date: string }> {
+    const res = await apiClient.post(`/v1/accounting/accounts/${accountId}/reconcile`, {
+      statementBalance
+    });
     return res.data;
   },
 
@@ -74,7 +79,9 @@ export const accountingService = {
     return res.data;
   },
 
-  async addTransaction(payload: Omit<Transaction, 'id' | 'createdAt' | 'updatedAt'>): Promise<Transaction> {
+  async addTransaction(
+    payload: Omit<Transaction, 'id' | 'createdAt' | 'updatedAt'>
+  ): Promise<Transaction> {
     const res = await apiClient.post('/v1/accounting/transactions', payload);
     return res.data;
   },
@@ -120,8 +127,15 @@ export const accountingService = {
     return res.data;
   },
 
-  async recordInvoicePayment(invoiceId: string, amount: number, currency: CurrencyCode): Promise<any> {
-    const res = await apiClient.post(`/finance/invoices/${invoiceId}/payments`, { amount, currency });
+  async recordInvoicePayment(
+    invoiceId: string,
+    amount: number,
+    currency: CurrencyCode
+  ): Promise<any> {
+    const res = await apiClient.post(`/finance/invoices/${invoiceId}/payments`, {
+      amount,
+      currency
+    });
     return res.data;
   },
 
@@ -142,13 +156,16 @@ export const accountingService = {
       return data.map((emp: any) => ({
         id: emp.id?.startsWith('payroll') ? emp.id : `payroll-${emp.id}`,
         employeeId: emp.employeeId || emp.id,
-        employeeName: emp.employeeName || `${emp.firstName || ''} ${emp.lastName || ''}`.trim() || 'Unknown',
+        employeeName:
+          emp.employeeName || `${emp.firstName || ''} ${emp.lastName || ''}`.trim() || 'Unknown',
         period: emp.period || new Date().toISOString().slice(0, 7),
         currency: emp.currency || 'USD',
         baseSalary: Number(emp.baseSalary || emp.salary || 0),
         grossSalary: Number(emp.grossSalary || emp.salary || 0),
         netSalary: Number(emp.netSalary || (emp.salary ? Number(emp.salary) * 0.8 : 0)),
-        deductions: emp.deductions || [{ type: 'tax', amount: Number(emp.salary || 0) * 0.2, description: 'Income Tax 20%' }],
+        deductions: emp.deductions || [
+          { type: 'tax', amount: Number(emp.salary || 0) * 0.2, description: 'Income Tax 20%' }
+        ],
         bonuses: emp.bonuses || [],
         status: emp.status || 'scheduled',
         generatedAt: emp.generatedAt || new Date().toISOString(),
@@ -232,7 +249,9 @@ export const accountingService = {
   async getCategoryBreakdown(
     baseCurrency: 'UAH' | 'USD' | 'EUR' = 'UAH'
   ): Promise<CategorisedExpense[]> {
-    const res = await apiClient.get('/v1/accounting/category-breakdown', { params: { baseCurrency } });
+    const res = await apiClient.get('/v1/accounting/category-breakdown', {
+      params: { baseCurrency }
+    });
     return res.data;
   },
 
@@ -248,7 +267,9 @@ export const accountingService = {
   async getClientProfitability(
     baseCurrency: 'UAH' | 'USD' | 'EUR' = 'UAH'
   ): Promise<ClientProfitability[]> {
-    const res = await apiClient.get('/v1/accounting/client-profitability', { params: { baseCurrency } });
+    const res = await apiClient.get('/v1/accounting/client-profitability', {
+      params: { baseCurrency }
+    });
     return res.data;
   },
 

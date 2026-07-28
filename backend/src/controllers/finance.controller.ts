@@ -22,8 +22,16 @@ export const getProfitAndLoss = async (req: Request, res: Response) => {
   if (from) dateFilter.gte = new Date(from);
   if (to) dateFilter.lte = new Date(to);
 
-  const incomeWhere: any = { organizationId: req.user!.organizationId, type: TransactionType.income, currency };
-  const expenseWhere: any = { organizationId: req.user!.organizationId, type: TransactionType.expense, currency };
+  const incomeWhere: any = {
+    organizationId: req.user!.organizationId,
+    type: TransactionType.income,
+    currency
+  };
+  const expenseWhere: any = {
+    organizationId: req.user!.organizationId,
+    type: TransactionType.expense,
+    currency
+  };
   if (from || to) {
     incomeWhere.date = dateFilter;
     expenseWhere.date = dateFilter;
@@ -131,15 +139,15 @@ export const sendInvoiceReminders = async (req: Request, res: Response) => {
   });
 
   if (overdueInvoices.length > 0) {
-    const ids = overdueInvoices.map(inv => inv.id);
+    const ids = overdueInvoices.map((inv) => inv.id);
     await prisma.invoice.updateMany({
       where: { id: { in: ids } },
       data: { status: 'overdue' }
     });
   }
 
-  res.json({ 
+  res.json({
     message: `Reminders sent for ${overdueInvoices.length} overdue invoices`,
-    remindedCount: overdueInvoices.length 
+    remindedCount: overdueInvoices.length
   });
 };

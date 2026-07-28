@@ -6,11 +6,7 @@ interface MessengerSidebarProps {
   onSelect: (id: string) => void;
 }
 
-export const MessengerSidebar = ({
-  threads,
-  activeChatId,
-  onSelect
-}: MessengerSidebarProps) => {
+export const MessengerSidebar = ({ threads, activeChatId, onSelect }: MessengerSidebarProps) => {
   return (
     <aside className="flex h-full w-72 flex-col border-r border-slate-800 bg-slate-900/70">
       <div className="border-b border-slate-800 p-4">

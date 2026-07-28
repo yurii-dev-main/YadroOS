@@ -40,13 +40,13 @@ export const PayrollTable = ({ records, onGeneratePayslip }: PayrollTableProps) 
           comparison = a.netSalary - b.netSalary;
           break;
         case 'bonuses':
-          comparison = 
-            a.bonuses.reduce((acc, sum) => acc + sum.amount, 0) - 
+          comparison =
+            a.bonuses.reduce((acc, sum) => acc + sum.amount, 0) -
             b.bonuses.reduce((acc, sum) => acc + sum.amount, 0);
           break;
         case 'deductions':
-          comparison = 
-            a.deductions.reduce((acc, sum) => acc + sum.amount, 0) - 
+          comparison =
+            a.deductions.reduce((acc, sum) => acc + sum.amount, 0) -
             b.deductions.reduce((acc, sum) => acc + sum.amount, 0);
           break;
         case 'status':
@@ -62,8 +62,16 @@ export const PayrollTable = ({ records, onGeneratePayslip }: PayrollTableProps) 
     return sortDir === 'asc' ? <ArrowUp className="h-3 w-3" /> : <ArrowDown className="h-3 w-3" />;
   };
 
-  const Th = ({ field, label, align = 'left' }: { field: SortField; label: string; align?: 'left' | 'right' }) => (
-    <th 
+  const Th = ({
+    field,
+    label,
+    align = 'left'
+  }: {
+    field: SortField;
+    label: string;
+    align?: 'left' | 'right';
+  }) => (
+    <th
       className={`px-4 py-3 cursor-pointer select-none hover:text-white transition ${align === 'right' ? 'text-right' : 'text-left'}`}
       onClick={() => handleSort(field)}
     >

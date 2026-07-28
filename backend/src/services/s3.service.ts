@@ -6,7 +6,7 @@ const s3Client = new S3Client({
   region: process.env.AWS_REGION || 'us-east-1',
   credentials: {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID || 'dummy-key',
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || 'dummy-secret',
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || 'dummy-secret'
   }
 });
 
@@ -19,9 +19,9 @@ export const s3Service = {
       Bucket: BUCKET_NAME,
       Key: fileKey,
       Body: fileBuffer,
-      ContentType: mimeType,
+      ContentType: mimeType
     });
-    
+
     await s3Client.send(command);
     return fileKey;
   },
@@ -29,9 +29,9 @@ export const s3Service = {
   async getPresignedUrl(fileKey: string, expiresInSeconds: number = 3600): Promise<string> {
     const command = new GetObjectCommand({
       Bucket: BUCKET_NAME,
-      Key: fileKey,
+      Key: fileKey
     });
-    
+
     return await getSignedUrl(s3Client, command, { expiresIn: expiresInSeconds });
   }
 };

@@ -29,7 +29,9 @@ export interface AccountingInvoice {
 export const accountingRoutes = {
   listTransactions(request?: ApiListRequest) {
     return apiClient
-      .get<ApiListResponse<AccountingTransaction>>('/v1/accounting/transactions', { params: request })
+      .get<ApiListResponse<AccountingTransaction>>('/v1/accounting/transactions', {
+        params: request
+      })
       .then((response) => response.data);
   },
   createTransaction(payload: Partial<AccountingTransaction>) {

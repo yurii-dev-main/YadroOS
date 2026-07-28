@@ -1,1 +1,15 @@
-import { PrismaClient } from '@prisma/client'; import bcrypt from 'bcrypt'; const prisma = new PrismaClient(); async function main() { const users = await prisma.user.findMany(); console.log('Total users:', users.length); for (const user of users) { console.log('Email:', user.email, 'Role:', user.role); const isValid = await bcrypt.compare('Admin123!', user.passwordHash); console.log('Matches Admin123!:', isValid); } } main().catch(console.error).finally(() => prisma.$disconnect());
+import { PrismaClient } from '@prisma/client';
+import bcrypt from 'bcrypt';
+const prisma = new PrismaClient();
+async function main() {
+  const users = await prisma.user.findMany();
+  console.log('Total users:', users.length);
+  for (const user of users) {
+    console.log('Email:', user.email, 'Role:', user.role);
+    const isValid = await bcrypt.compare('Admin123!', user.passwordHash);
+    console.log('Matches Admin123!:', isValid);
+  }
+}
+main()
+  .catch(console.error)
+  .finally(() => prisma.$disconnect());

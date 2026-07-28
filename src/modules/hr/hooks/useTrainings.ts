@@ -32,9 +32,12 @@ export const useTrainings = (): UseTrainingsResult => {
   const [selectedTraining, setSelectedTraining] = useState<Training | undefined>(undefined);
 
   useEffect(() => {
-    hrService.getTrainings(filters.status).then(data => {
-      setTrainings(data.sort((a, b) => a.date.localeCompare(b.date)));
-    }).catch(console.error);
+    hrService
+      .getTrainings(filters.status)
+      .then((data) => {
+        setTrainings(data.sort((a, b) => a.date.localeCompare(b.date)));
+      })
+      .catch(console.error);
   }, [filters.status, version]);
 
   useEffect(() => {
@@ -66,9 +69,12 @@ export const useTrainings = (): UseTrainingsResult => {
       update();
     },
     addTraining: (training) => {
-      hrService.createTraining(training).then(() => {
-        update();
-      }).catch(console.error);
+      hrService
+        .createTraining(training)
+        .then(() => {
+          update();
+        })
+        .catch(console.error);
     }
   };
 };

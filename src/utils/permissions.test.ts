@@ -22,7 +22,9 @@ describe('Permissions Utility', () => {
   describe('hasRoleAccess', () => {
     it('should return true if the role is in the allowed list', () => {
       expect(hasRoleAccess('ADMIN' as Role, ['ADMIN', 'MANAGER'] as Role[])).toBe(true);
-      expect(hasRoleAccess('HR_SPECIALIST' as Role, ['HR_SPECIALIST', 'ADMIN'] as Role[])).toBe(true);
+      expect(hasRoleAccess('HR_SPECIALIST' as Role, ['HR_SPECIALIST', 'ADMIN'] as Role[])).toBe(
+        true
+      );
     });
 
     it('should return false if the role is not in the allowed list', () => {

@@ -26,10 +26,10 @@
     --color-slate-700: 203 213 225; /* slate-300 */
     --color-slate-600: 148 163 184; /* slate-400 */
     --color-slate-500: 100 116 139; /* slate-500 */
-    --color-slate-400: 71 85 105;   /* slate-600 */
-    --color-slate-300: 51 65 85;    /* slate-700 */
-    --color-slate-200: 30 41 59;    /* slate-800 */
-    --color-slate-100: 15 23 42;    /* slate-900 */
+    --color-slate-400: 71 85 105; /* slate-600 */
+    --color-slate-300: 51 65 85; /* slate-700 */
+    --color-slate-200: 30 41 59; /* slate-800 */
+    --color-slate-100: 15 23 42; /* slate-900 */
     --color-primary: 217 119 6; /* Bronze/Gold */
     color-scheme: light;
   }
@@ -82,10 +82,16 @@ button:disabled {
 .rbc-calendar {
   @apply bg-transparent font-sans text-slate-300;
 }
-.rbc-month-view, .rbc-agenda-view, .rbc-time-view {
+.rbc-month-view,
+.rbc-agenda-view,
+.rbc-time-view {
   @apply bg-slate-900 border-slate-700;
 }
-.rbc-header, .rbc-day-bg, .rbc-month-row, .rbc-agenda-date-cell, .rbc-agenda-time-cell {
+.rbc-header,
+.rbc-day-bg,
+.rbc-month-row,
+.rbc-agenda-date-cell,
+.rbc-agenda-time-cell {
   @apply border-slate-700;
 }
 .rbc-header {

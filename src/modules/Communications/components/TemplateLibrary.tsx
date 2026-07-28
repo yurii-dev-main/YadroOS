@@ -9,7 +9,12 @@ export const TemplateLibrary = () => {
   const [autoResponders, setAutoResponders] = useState<AutoResponder[]>([]);
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [isAddingTemplate, setIsAddingTemplate] = useState(false);
-  const [newTemplate, setNewTemplate] = useState({ name: '', subject: '', body: '', categoryId: '' });
+  const [newTemplate, setNewTemplate] = useState({
+    name: '',
+    subject: '',
+    body: '',
+    categoryId: ''
+  });
 
   useEffect(() => {
     emailService.fetchTemplateCategories().then(setCategories);
@@ -65,7 +70,7 @@ export const TemplateLibrary = () => {
             </button>
           ))}
         </div>
-        <button 
+        <button
           onClick={() => setIsAddingTemplate(true)}
           className="rounded border border-slate-700 px-3 py-2 text-xs text-slate-300 hover:border-emerald-500 hover:text-emerald-300"
         >
@@ -121,7 +126,7 @@ export const TemplateLibrary = () => {
           ))}
         </div>
       </div>
-      
+
       {isAddingTemplate && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
           <div className="w-full max-w-md rounded-lg border border-slate-700 bg-slate-900 p-6 shadow-xl">

@@ -169,7 +169,7 @@ export const handleTelegramWebhook = async (req: Request, res: Response) => {
     const connection = await prisma.integrationConnection.findUnique({
       where: { id: matchedConnectionId }
     });
-    
+
     if (!connection) {
       return res.status(404).json({ error: 'Connection not found' });
     }
@@ -222,8 +222,8 @@ export const createEmail = async (req: Request, res: Response) => {
     });
 
     try {
-      const smtpConfig = { 
-        host: process.env.SMTP_HOST || 'smtp.ethereal.email', 
+      const smtpConfig = {
+        host: process.env.SMTP_HOST || 'smtp.ethereal.email',
         port: Number(process.env.SMTP_PORT) || 587,
         user: process.env.SMTP_USER || '',
         pass: process.env.SMTP_PASS || ''
@@ -231,7 +231,7 @@ export const createEmail = async (req: Request, res: Response) => {
       if (smtpConfig.user) {
         await smtpService.sendEmail(smtpConfig, email.to, email.subject, email.body);
       }
-    } catch(err) {
+    } catch (err) {
       console.error('SMTP error:', err);
     }
 

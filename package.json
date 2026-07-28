@@ -42,6 +42,7 @@
     "jspdf-autotable": "^3.8.3",
     "localforage": "^1.10.0",
     "lucide-react": "^0.334.0",
+    "nodemailer": "^9.0.3",
     "pdfjs-dist": "^4.0.379",
     "qrcode": "^1.5.3",
     "react": "^18.2.0",

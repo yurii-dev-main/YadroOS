@@ -58,11 +58,15 @@ export const chatService = {
       return data.map((r: any) => ({
         ...r,
         id: String(r.id),
-        type: r.type || (r.name?.toLowerCase().includes('welcome') ? 'welcome_message' : 'out_of_office'),
+        type:
+          r.type ||
+          (r.name?.toLowerCase().includes('welcome') ? 'welcome_message' : 'out_of_office'),
         message: r.message || 'Thank you for your message. We will get back to you shortly.',
         active: !!r.active
       }));
-    } catch { return []; }
+    } catch {
+      return [];
+    }
   },
 
   async fetchNotificationPreferences(): Promise<NotificationPreferences> {
@@ -88,13 +92,22 @@ export const chatService = {
         sound: true,
         emailDigest: 'daily',
         doNotDisturb: false,
-        channelPreferences: { email: true, telegram: true, whatsapp: false, livechat: true, internal: true }
+        channelPreferences: {
+          email: true,
+          telegram: true,
+          whatsapp: false,
+          livechat: true,
+          internal: true
+        }
       };
     }
   },
 
   async updateNotificationPreferences(prefs: NotificationPreferences) {
-    const response = await apiClient.put<NotificationPreferences>('/v1/communications/notification-preferences', prefs);
+    const response = await apiClient.put<NotificationPreferences>(
+      '/v1/communications/notification-preferences',
+      prefs
+    );
     return response.data;
   }
 };

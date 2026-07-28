@@ -9,25 +9,37 @@ interface DataSourceBadgeProps {
   onSourceChange?: (source: DataSourceType) => void;
 }
 
-export const DataSourceBadge: React.FC<DataSourceBadgeProps> = ({ source, label, onSourceChange }) => {
+export const DataSourceBadge: React.FC<DataSourceBadgeProps> = ({
+  source,
+  label,
+  onSourceChange
+}) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const getSourceIcon = (type: DataSourceType) => {
     switch (type) {
-      case 'mock': return <Play className="w-3 h-3" />;
-      case 'excel': return <FileSpreadsheet className="w-3 h-3" />;
-      case 'db': return <HardDrive className="w-3 h-3" />;
-      case 'api': return <Database className="w-3 h-3" />;
+      case 'mock':
+        return <Play className="w-3 h-3" />;
+      case 'excel':
+        return <FileSpreadsheet className="w-3 h-3" />;
+      case 'db':
+        return <HardDrive className="w-3 h-3" />;
+      case 'api':
+        return <Database className="w-3 h-3" />;
     }
   };
 
   const getSourceLabel = (type: DataSourceType) => {
     if (label) return label;
     switch (type) {
-      case 'mock': return 'Demo Data';
-      case 'excel': return 'Excel Import';
-      case 'db': return 'Database';
-      case 'api': return 'Live API';
+      case 'mock':
+        return 'Demo Data';
+      case 'excel':
+        return 'Excel Import';
+      case 'db':
+        return 'Database';
+      case 'api':
+        return 'Live API';
     }
   };
 
@@ -35,7 +47,7 @@ export const DataSourceBadge: React.FC<DataSourceBadgeProps> = ({ source, label,
 
   return (
     <div className="relative inline-block text-left">
-      <button 
+      <button
         type="button"
         onClick={() => onSourceChange && setIsOpen(!isOpen)}
         className={`flex items-center gap-1.5 px-2 py-1 text-xs font-medium rounded border border-slate-700 bg-slate-900/80 text-slate-300 transition ${onSourceChange ? 'hover:bg-slate-800 cursor-pointer' : 'cursor-default'}`}
@@ -50,7 +62,7 @@ export const DataSourceBadge: React.FC<DataSourceBadgeProps> = ({ source, label,
       {isOpen && onSourceChange && (
         <div className="absolute left-0 mt-1 w-40 rounded-md bg-slate-900 border border-slate-700 shadow-lg z-50">
           <div className="py-1">
-            {sources.map(src => (
+            {sources.map((src) => (
               <button
                 type="button"
                 key={src}

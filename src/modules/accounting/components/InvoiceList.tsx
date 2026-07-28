@@ -57,9 +57,9 @@ export const InvoiceList = ({
               </span>
               <span>
                 Paid:{' '}
-                {((invoice.payments || [])
-                  .reduce((acc, payment) => acc + payment.amount, 0) || 0)
-                  .toFixed(2)}{' '}
+                {(
+                  (invoice.payments || []).reduce((acc, payment) => acc + payment.amount, 0) || 0
+                ).toFixed(2)}{' '}
                 {invoice.currency}
               </span>
             </div>

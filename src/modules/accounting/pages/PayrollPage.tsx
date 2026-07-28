@@ -91,16 +91,16 @@ export const PayrollPage = () => {
           </div>
         </div>
       </div>
-      
+
       <div className="flex items-center justify-between gap-4">
-        <Input 
-          placeholder="Search employees..." 
+        <Input
+          placeholder="Search employees..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="max-w-xs"
         />
-        <select 
-          value={sortBy} 
+        <select
+          value={sortBy}
           onChange={(e) => setSortBy(e.target.value as any)}
           className="rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"
         >
@@ -111,7 +111,10 @@ export const PayrollPage = () => {
       </div>
 
       <PayrollDashboard records={filteredRecords} />
-      <PayrollTable records={filteredRecords} onGeneratePayslip={(recordId) => generatePayslip(recordId)} />
+      <PayrollTable
+        records={filteredRecords}
+        onGeneratePayslip={(recordId) => generatePayslip(recordId)}
+      />
     </div>
   );
 };

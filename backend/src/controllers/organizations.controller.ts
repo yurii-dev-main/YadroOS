@@ -65,7 +65,7 @@ export const getOrganizationMembers = async (req: Request, res: Response) => {
 export const addOrganizationMember = async (req: Request, res: Response) => {
   const { id } = req.params;
   const { email, name, role } = req.body;
-  
+
   if (!email || !name || !role) {
     return res.status(400).json({ message: 'Email, name and role are required' });
   }
@@ -73,10 +73,10 @@ export const addOrganizationMember = async (req: Request, res: Response) => {
   // Create user if not exists
   let user = await prisma.user.findUnique({ where: { email } });
   let inviteToken = null;
-  
+
   if (!user) {
     // Generate a random password for now
-    const passwordHash = 'placeholder'; 
+    const passwordHash = 'placeholder';
     user = await prisma.user.create({
       data: {
         email,

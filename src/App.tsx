@@ -27,7 +27,9 @@ const App = () => {
     const root = window.document.documentElement;
     root.classList.remove('light', 'dark');
     if (theme === 'system') {
-      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches
+        ? 'dark'
+        : 'light';
       root.classList.add(systemTheme);
     } else if (theme) {
       root.classList.add(theme);
@@ -37,33 +39,33 @@ const App = () => {
   }, [theme]);
 
   return (
-  <ErrorBoundary>
-    <Routes>
-      <Route path="/" element={<Navigate to="/dashboard" replace />} />
-      <Route element={<AuthLayout />}>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-        <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
-      </Route>
-
-      <Route element={<ProtectedRoute />}>
-        <Route element={<DashboardLayout />}>
-          <Route path="/dashboard" element={<OverviewPage />} />
-          <Route path="/dashboard/crm/*" element={<CRMPage />} />
-          <Route path="/dashboard/communications" element={<CommunicationsPage />} />
-          <Route path="/dashboard/hr" element={<HRPage />} />
-          <Route path="/dashboard/accounting" element={<AccountingPage />} />
-          <Route path="/dashboard/ai" element={<AISuitePage />} />
-          <Route path="/dashboard/integrations" element={<IntegrationsPage />} />
-          <Route path="/organization/settings" element={<OrganizationSettings />} />
+    <ErrorBoundary>
+      <Routes>
+        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        <Route element={<AuthLayout />}>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
         </Route>
-        <Route path="/profile" element={<ProfilePage />} />
-      </Route>
 
-      <Route path="*" element={<Navigate to="/dashboard" replace />} />
-    </Routes>
-  </ErrorBoundary>
+        <Route element={<ProtectedRoute />}>
+          <Route element={<DashboardLayout />}>
+            <Route path="/dashboard" element={<OverviewPage />} />
+            <Route path="/dashboard/crm/*" element={<CRMPage />} />
+            <Route path="/dashboard/communications" element={<CommunicationsPage />} />
+            <Route path="/dashboard/hr" element={<HRPage />} />
+            <Route path="/dashboard/accounting" element={<AccountingPage />} />
+            <Route path="/dashboard/ai" element={<AISuitePage />} />
+            <Route path="/dashboard/integrations" element={<IntegrationsPage />} />
+            <Route path="/organization/settings" element={<OrganizationSettings />} />
+          </Route>
+          <Route path="/profile" element={<ProfilePage />} />
+        </Route>
+
+        <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      </Routes>
+    </ErrorBoundary>
   );
 };
 

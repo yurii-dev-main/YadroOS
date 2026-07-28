@@ -26,7 +26,11 @@ export const organizationsApi = {
     const { data } = await apiClient.get('/v1/organizations');
     return data;
   },
-  async createOrganization(params: { name: string; slug: string; industry?: string }): Promise<Organization> {
+  async createOrganization(params: {
+    name: string;
+    slug: string;
+    industry?: string;
+  }): Promise<Organization> {
     const { data } = await apiClient.post('/v1/organizations', params);
     return data;
   },
@@ -34,7 +38,10 @@ export const organizationsApi = {
     const { data } = await apiClient.get(`/v1/organizations/${organizationId}/members`);
     return data;
   },
-  async addMember(organizationId: string, params: { email: string; role: string }): Promise<OrganizationMember> {
+  async addMember(
+    organizationId: string,
+    params: { email: string; role: string }
+  ): Promise<OrganizationMember> {
     const { data } = await apiClient.post(`/v1/organizations/${organizationId}/members`, params);
     return data;
   },

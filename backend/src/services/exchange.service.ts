@@ -1,12 +1,14 @@
 export const getNBURates = async () => {
   try {
-    const response = await fetch('https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json');
+    const response = await fetch(
+      'https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json'
+    );
     if (!response.ok) throw new Error('Failed to fetch NBU rates');
     const data = await response.json();
-    
+
     const usd = data.find((r: any) => r.cc === 'USD')?.rate || 41.25;
-    const eur = data.find((r: any) => r.cc === 'EUR')?.rate || 45.10;
-    
+    const eur = data.find((r: any) => r.cc === 'EUR')?.rate || 45.1;
+
     return {
       base: 'UAH',
       rates: {

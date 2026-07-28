@@ -37,7 +37,7 @@ export const getAIInsights = async (_req: Request, res: Response) => {
 
   try {
     const geminiIntegration = await prisma.integrationConnection.findFirst({
-      where: { provider: 'gemini', status: 'connected' },
+      where: { provider: 'gemini', status: 'connected' }
     });
 
     let customInsights: any[] = [];
@@ -47,14 +47,21 @@ export const getAIInsights = async (_req: Request, res: Response) => {
       isGeminiConnected = true;
       const creds = geminiIntegration.credentials as { apiKey?: string };
       const apiKey = creds.apiKey;
-      
+
       if (apiKey) {
         try {
           const genAI = new GoogleGenerativeAI(apiKey);
-          const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+          const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
 
-          const deals = await prisma.deal.findMany({ include: { client: true }, take: 10, orderBy: { value: 'desc' } });
-          const transactions = await prisma.transaction.findMany({ take: 10, orderBy: { date: 'desc' } });
+          const deals = await prisma.deal.findMany({
+            include: { client: true },
+            take: 10,
+            orderBy: { value: 'desc' }
+          });
+          const transactions = await prisma.transaction.findMany({
+            take: 10,
+            orderBy: { date: 'desc' }
+          });
 
           const prompt = `Analyze these deals and transactions and provide 3 key business insights.
           Deals: ${JSON.stringify(deals)}
@@ -63,10 +70,13 @@ export const getAIInsights = async (_req: Request, res: Response) => {
 
           const result = await model.generateContent(prompt);
           let text = result.response.text();
-          text = text.replace(/```json/g, '').replace(/```/g, '').trim();
+          text = text
+            .replace(/```json/g, '')
+            .replace(/```/g, '')
+            .trim();
           customInsights = JSON.parse(text);
         } catch (e) {
-          console.error("Gemini query error:", e);
+          console.error('Gemini query error:', e);
         }
       }
     }
@@ -82,10 +92,10 @@ export const getAIInsights = async (_req: Request, res: Response) => {
       });
 
       const overdueInvoices = await prisma.invoice.findMany({
-        where: { 
-          organizationId: orgId, 
-          status: { in: ['sent', 'overdue'] }, 
-          dueDate: { lt: new Date() } 
+        where: {
+          organizationId: orgId,
+          status: { in: ['sent', 'overdue'] },
+          dueDate: { lt: new Date() }
         },
         take: 2
       });
@@ -95,7 +105,7 @@ export const getAIInsights = async (_req: Request, res: Response) => {
           type: 'action',
           title: 'Focus on High-Value Deals',
           description: `You have high-value deals in negotiation. Consider reaching out to ${highValueDeals[0].client?.name || 'the client'}.`,
-          confidence: 0.9,
+          confidence: 0.9
         });
       }
 
@@ -104,7 +114,7 @@ export const getAIInsights = async (_req: Request, res: Response) => {
           type: 'alert',
           title: 'Overdue Invoices Detected',
           description: `There are unpaid overdue invoices (e.g. ${overdueInvoices[0].invoiceNumber}). Follow up with clients.`,
-          confidence: 0.85,
+          confidence: 0.85
         });
       }
 
@@ -113,12 +123,12 @@ export const getAIInsights = async (_req: Request, res: Response) => {
           type: 'insight',
           title: 'All Systems Normal',
           description: 'Your business metrics look healthy with no immediate actions required.',
-          confidence: 0.95,
+          confidence: 0.95
         });
       }
     }
 
-    const formattedInsights = customInsights.map(insight => ({
+    const formattedInsights = customInsights.map((insight) => ({
       id: randomUUID(),
       title: insight.title || 'Insight',
       description: insight.description || '',

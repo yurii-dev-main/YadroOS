@@ -9,7 +9,11 @@ interface OnboardingChecklistProps {
   onToggleTask: (employeeId: string, taskId: string) => void;
 }
 
-export const OnboardingChecklist: FC<OnboardingChecklistProps> = ({ employees, plans, onToggleTask }) => (
+export const OnboardingChecklist: FC<OnboardingChecklistProps> = ({
+  employees,
+  plans,
+  onToggleTask
+}) => (
   <Card className="border-slate-800 bg-slate-900/70">
     <CardHeader>
       <CardTitle className="text-lg text-slate-100">Onboarding</CardTitle>

@@ -63,6 +63,7 @@ docker-compose exec backend npx prisma db seed
 ```
 
 This script will generate an admin user with the following credentials:
+
 - **Email**: `parker_simonis95@yahoo.com`
 - **Password**: `Password123!`
 

@@ -17,11 +17,13 @@ export const listClients = async (req: Request, res: Response) => {
   const sort = (req.query.sort as any) || { field: 'createdAt', direction: 'desc' };
 
   const where: any = { organizationId: req.user!.organizationId };
-  
+
   if (filters.status && filters.status !== 'all') where.status = filters.status;
   if (filters.industry && filters.industry !== 'all') where.industry = filters.industry;
   if (filters.assignedTo && filters.assignedTo !== 'all') {
-    const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(filters.assignedTo);
+    const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+      filters.assignedTo
+    );
     if (isUUID) {
       where.assignedTo = filters.assignedTo;
     } else {
@@ -36,7 +38,7 @@ export const listClients = async (req: Request, res: Response) => {
       };
     }
   }
-  
+
   if (search) {
     where.OR = [
       { name: { contains: search, mode: 'insensitive' } },
@@ -46,7 +48,8 @@ export const listClients = async (req: Request, res: Response) => {
   }
 
   const isCustomSort = ['revenue', 'manager', 'status'].includes(sort.field);
-  const orderBy = !isCustomSort && sort.field ? { [sort.field]: sort.direction || 'asc' } : { createdAt: 'desc' };
+  const orderBy =
+    !isCustomSort && sort.field ? { [sort.field]: sort.direction || 'asc' } : { createdAt: 'desc' };
 
   let total = await prisma.client.count({ where });
   let clients = [];
@@ -67,17 +70,22 @@ export const listClients = async (req: Request, res: Response) => {
     });
   }
 
-  let formattedClients = clients.map(client => ({
+  let formattedClients = clients.map((client) => ({
     ...client,
-    revenue: client.deals.reduce((sum: number, deal: any) => sum + (deal.stage === 'closed_won' ? Number(deal.value || 0) : 0), 0),
-    assignedTo: client.assignedEmployee 
+    revenue: client.deals.reduce(
+      (sum: number, deal: any) => sum + (deal.stage === 'closed_won' ? Number(deal.value || 0) : 0),
+      0
+    ),
+    assignedTo: client.assignedEmployee
       ? `${client.assignedEmployee.firstName} ${client.assignedEmployee.lastName}`
       : client.assignedTo
   }));
 
   if (isCustomSort) {
     if (sort.field === 'revenue') {
-      formattedClients.sort((a, b) => sort.direction === 'desc' ? b.revenue - a.revenue : a.revenue - b.revenue);
+      formattedClients.sort((a, b) =>
+        sort.direction === 'desc' ? b.revenue - a.revenue : a.revenue - b.revenue
+      );
     } else if (sort.field === 'manager') {
       formattedClients.sort((a, b) => {
         const nameA = a.assignedTo || '';
@@ -85,9 +93,13 @@ export const listClients = async (req: Request, res: Response) => {
         return sort.direction === 'desc' ? nameB.localeCompare(nameA) : nameA.localeCompare(nameB);
       });
     } else if (sort.field === 'status') {
-      formattedClients.sort((a, b) => sort.direction === 'desc' ? b.status.localeCompare(a.status) : a.status.localeCompare(b.status));
+      formattedClients.sort((a, b) =>
+        sort.direction === 'desc'
+          ? b.status.localeCompare(a.status)
+          : a.status.localeCompare(b.status)
+      );
     }
-    
+
     // Slice for pagination
     formattedClients = formattedClients.slice((page - 1) * pageSize, page * pageSize);
   }
@@ -149,7 +161,9 @@ export const exportClients = async (req: Request, res: Response) => {
   });
 
   const header = ['name', 'company', 'email', 'phone', 'status', 'industry'].join(',');
-  const rows = clients.map(c => [c.name, c.company, c.email, c.phone, c.status, c.industry].map(v => `"${v || ''}"`).join(','));
+  const rows = clients.map((c) =>
+    [c.name, c.company, c.email, c.phone, c.status, c.industry].map((v) => `"${v || ''}"`).join(',')
+  );
   const csv = [header, ...rows].join('\n');
 
   res.setHeader('Content-Type', 'text/csv');
@@ -163,17 +177,17 @@ export const importClients = async (req: Request, res: Response) => {
   }
 
   const csv = req.file.buffer.toString('utf-8');
-  const lines = csv.split('\n').filter(l => l.trim().length > 0);
+  const lines = csv.split('\n').filter((l) => l.trim().length > 0);
   if (lines.length < 2) {
     return res.status(400).json({ message: 'Invalid CSV format' });
   }
 
-  const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
+  const headers = lines[0].split(',').map((h) => h.trim().replace(/"/g, ''));
   const orgId = req.user!.organizationId;
 
   let importedCount = 0;
   for (let i = 1; i < lines.length; i++) {
-    const values = lines[i].split(',').map(v => v.trim().replace(/"/g, ''));
+    const values = lines[i].split(',').map((v) => v.trim().replace(/"/g, ''));
     if (values.length !== headers.length) continue;
 
     const clientData: any = { organizationId: orgId };
@@ -202,14 +216,16 @@ export const importClients = async (req: Request, res: Response) => {
 export const listDeals = async (req: Request, res: Response) => {
   const { search, stage, assignedTo, minValue, maxValue } = req.query as any;
   const where: any = { organizationId: req.user!.organizationId };
-  
+
   if (stage) where.stage = stage;
   if (search) {
     where.title = { contains: search, mode: 'insensitive' };
   }
-  
+
   if (assignedTo && assignedTo !== 'all') {
-    const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(assignedTo);
+    const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+      assignedTo
+    );
     if (isUUID) {
       where.assignedTo = assignedTo;
     } else {
@@ -236,7 +252,7 @@ export const listDeals = async (req: Request, res: Response) => {
     include: { client: true, assignedEmployee: true }
   });
 
-  const formattedDeals = deals.map(deal => ({
+  const formattedDeals = deals.map((deal) => ({
     ...deal,
     assignedTo: deal.assignedEmployee
       ? `${deal.assignedEmployee.firstName} ${deal.assignedEmployee.lastName}`
@@ -261,7 +277,7 @@ export const updateDeal = async (req: Request, res: Response) => {
   const { id } = req.params;
   const { assignedTo, ...rest } = req.body;
   const data: any = { ...rest };
-  
+
   if (assignedTo && typeof assignedTo === 'string' && assignedTo.trim() !== '') {
     data.assignedTo = assignedTo;
   } else if (assignedTo === null || assignedTo === '') {
@@ -325,11 +341,14 @@ export const getClientDetail = async (req: Request, res: Response) => {
     }
   });
   if (!client) return res.status(404).json({ message: 'Client not found' });
-  
+
   const formattedClient = {
     ...client,
-    revenue: client.deals.reduce((sum: number, deal: any) => sum + (deal.stage === 'closed_won' ? Number(deal.value || 0) : 0), 0),
-    assignedTo: client.assignedEmployee 
+    revenue: client.deals.reduce(
+      (sum: number, deal: any) => sum + (deal.stage === 'closed_won' ? Number(deal.value || 0) : 0),
+      0
+    ),
+    assignedTo: client.assignedEmployee
       ? `${client.assignedEmployee.firstName} ${client.assignedEmployee.lastName}`
       : client.assignedTo,
     assignedToAvatar: client.assignedEmployee?.avatarUrl || null,
@@ -342,40 +361,57 @@ export const getClientDetail = async (req: Request, res: Response) => {
 
 export const getCRMAnalytics = async (req: Request, res: Response) => {
   const orgId = req.user!.organizationId;
-  const allDeals = await prisma.deal.findMany({ where: { organizationId: orgId }, include: { assignedEmployee: true } });
+  const allDeals = await prisma.deal.findMany({
+    where: { organizationId: orgId },
+    include: { assignedEmployee: true }
+  });
   const allClients = await prisma.client.findMany({ where: { organizationId: orgId } });
 
   const totalDeals = allDeals.length;
   const wonDeals = allDeals.filter((d) => d.stage === DealStage.closed_won);
   const winRate = totalDeals > 0 ? Math.round((wonDeals.length / totalDeals) * 100) : 0;
-  
+
   const revenue = wonDeals.reduce((sum, d) => sum + Number(d.value || 0), 0);
   const averageDealSize = wonDeals.length > 0 ? revenue / wonDeals.length : 0;
-  
+
   const ltv = allClients.length > 0 ? revenue / allClients.length : 0;
 
   const funnelData = [
-    { stage: 'Lead', value: allDeals.filter(d => d.stage === DealStage.lead).length },
-    { stage: 'Contact Made', value: allDeals.filter(d => d.stage === DealStage.contact_made).length },
-    { stage: 'Qualification', value: allDeals.filter(d => d.stage === DealStage.qualification).length },
-    { stage: 'Proposal', value: allDeals.filter(d => d.stage === DealStage.proposal).length },
-    { stage: 'Negotiation', value: allDeals.filter(d => d.stage === DealStage.negotiation).length },
+    { stage: 'Lead', value: allDeals.filter((d) => d.stage === DealStage.lead).length },
+    {
+      stage: 'Contact Made',
+      value: allDeals.filter((d) => d.stage === DealStage.contact_made).length
+    },
+    {
+      stage: 'Qualification',
+      value: allDeals.filter((d) => d.stage === DealStage.qualification).length
+    },
+    { stage: 'Proposal', value: allDeals.filter((d) => d.stage === DealStage.proposal).length },
+    {
+      stage: 'Negotiation',
+      value: allDeals.filter((d) => d.stage === DealStage.negotiation).length
+    },
     { stage: 'Closed Won', value: wonDeals.length },
-    { stage: 'Closed Lost', value: allDeals.filter(d => d.stage === DealStage.closed_lost).length }
+    {
+      stage: 'Closed Lost',
+      value: allDeals.filter((d) => d.stage === DealStage.closed_lost).length
+    }
   ];
 
-  const activeClients = allClients.filter(c => c.status === 'active').length;
-  const inactiveClients = allClients.filter(c => c.status === 'inactive').length;
-  const leadClients = allClients.filter(c => c.status === 'lead').length;
+  const activeClients = allClients.filter((c) => c.status === 'active').length;
+  const inactiveClients = allClients.filter((c) => c.status === 'inactive').length;
+  const leadClients = allClients.filter((c) => c.status === 'lead').length;
   const statusDistribution = [
     { status: 'Active', value: activeClients },
     { status: 'Inactive', value: inactiveClients },
     { status: 'Lead', value: leadClients }
   ];
 
-  const managersMap: Record<string, { deals: number, won: number, revenue: number }> = {};
-  allDeals.forEach(d => {
-    const managerName = d.assignedEmployee ? `${d.assignedEmployee.firstName} ${d.assignedEmployee.lastName}` : 'Unassigned';
+  const managersMap: Record<string, { deals: number; won: number; revenue: number }> = {};
+  allDeals.forEach((d) => {
+    const managerName = d.assignedEmployee
+      ? `${d.assignedEmployee.firstName} ${d.assignedEmployee.lastName}`
+      : 'Unassigned';
     if (!managersMap[managerName]) {
       managersMap[managerName] = { deals: 0, won: 0, revenue: 0 };
     }
@@ -385,20 +421,33 @@ export const getCRMAnalytics = async (req: Request, res: Response) => {
       managersMap[managerName].revenue += Number(d.value || 0);
     }
   });
-  
+
   const managerPerformance = Object.entries(managersMap).map(([manager, stats]) => ({
     manager,
     ...stats
   }));
 
-  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  
+  const months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec'
+  ];
+
   const now = new Date();
   const newClients = [];
   for (let i = 5; i >= 0; i--) {
     const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
     const monthStr = months[d.getMonth()];
-    const count = allClients.filter(c => {
+    const count = allClients.filter((c) => {
       const cd = new Date(c.createdAt);
       return cd.getFullYear() === d.getFullYear() && cd.getMonth() === d.getMonth();
     }).length;
@@ -406,9 +455,9 @@ export const getCRMAnalytics = async (req: Request, res: Response) => {
   }
 
   const revenueForecast = [];
-  const openDeals = allDeals.filter(d => !['closed_won', 'closed_lost'].includes(d.stage));
+  const openDeals = allDeals.filter((d) => !['closed_won', 'closed_lost'].includes(d.stage));
   const openValue = openDeals.reduce((sum, d) => sum + Number(d.value || 0), 0);
-  
+
   for (let i = 1; i <= 3; i++) {
     const d = new Date(now.getFullYear(), now.getMonth() + i, 1);
     const monthStr = months[d.getMonth()];
@@ -455,7 +504,7 @@ export const createCampaign = async (req: Request, res: Response) => {
     data: {
       name: name || 'Untitled Campaign',
       status: status || 'draft',
-      organizationId: req.user!.organizationId,
+      organizationId: req.user!.organizationId
     }
   });
   res.status(201).json(campaign);
@@ -466,11 +515,11 @@ export const sendCampaign = async (req: Request, res: Response) => {
   const campaign = await prisma.campaign.findUnique({
     where: { id, organizationId: req.user!.organizationId }
   });
-  
+
   if (!campaign) {
     return res.status(404).json({ message: 'Campaign not found' });
   }
-  
+
   const updated = await prisma.campaign.update({
     where: { id },
     data: {
@@ -478,6 +527,6 @@ export const sendCampaign = async (req: Request, res: Response) => {
       sentCount: { increment: 15 } // Mockup for sent count
     }
   });
-  
+
   res.json({ message: 'Campaign sent successfully', data: updated });
 };

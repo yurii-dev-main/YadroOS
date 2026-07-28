@@ -12,10 +12,10 @@ class WebSocketService {
 
   connect(token: string) {
     if (this.socket) return;
-    
+
     // In production, you would use import.meta.env.VITE_API_URL or relative path
     const url = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-    
+
     this.socket = io(url, {
       auth: { token }
     });
@@ -53,14 +53,17 @@ class WebSocketService {
   off(event: string, callback: (...args: any[]) => void) {
     const arr = this.listeners.get(event);
     if (arr) {
-      this.listeners.set(event, arr.filter(cb => cb !== callback));
+      this.listeners.set(
+        event,
+        arr.filter((cb) => cb !== callback)
+      );
     }
   }
 
   private emit(event: string, data: any) {
     const arr = this.listeners.get(event);
     if (arr) {
-      arr.forEach(cb => cb(data));
+      arr.forEach((cb) => cb(data));
     }
   }
 }

@@ -11,18 +11,21 @@ export const useDeals = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchDeals = useCallback(async (background = false) => {
-    try {
-      if (!background) setLoading(true);
-      const response = await crmService.getDeals(filters);
-      setDeals(response);
-      setError(null);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch deals');
-    } finally {
-      if (!background) setLoading(false);
-    }
-  }, [filters]);
+  const fetchDeals = useCallback(
+    async (background = false) => {
+      try {
+        if (!background) setLoading(true);
+        const response = await crmService.getDeals(filters);
+        setDeals(response);
+        setError(null);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to fetch deals');
+      } finally {
+        if (!background) setLoading(false);
+      }
+    },
+    [filters]
+  );
 
   useEffect(() => {
     fetchDeals(false);

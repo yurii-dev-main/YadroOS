@@ -18,8 +18,14 @@ const statusColor: Record<Transaction['status'], string> = {
 type SortField = 'date' | 'description' | 'account' | 'category' | 'amount' | 'status';
 
 export const TransactionTable = ({ transactions, accounts, categories }: TransactionTableProps) => {
-  const accountMap = useMemo(() => new Map(accounts.map((account) => [account.id, account])), [accounts]);
-  const categoryMap = useMemo(() => new Map(categories.map((category) => [category.id, category])), [categories]);
+  const accountMap = useMemo(
+    () => new Map(accounts.map((account) => [account.id, account])),
+    [accounts]
+  );
+  const categoryMap = useMemo(
+    () => new Map(categories.map((category) => [category.id, category])),
+    [categories]
+  );
 
   const [sortField, setSortField] = useState<SortField>('date');
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc');
@@ -74,8 +80,16 @@ export const TransactionTable = ({ transactions, accounts, categories }: Transac
     return sortDir === 'asc' ? <ArrowUp className="h-3 w-3" /> : <ArrowDown className="h-3 w-3" />;
   };
 
-  const Th = ({ field, label, align = 'left' }: { field: SortField; label: string; align?: 'left' | 'right' }) => (
-    <th 
+  const Th = ({
+    field,
+    label,
+    align = 'left'
+  }: {
+    field: SortField;
+    label: string;
+    align?: 'left' | 'right';
+  }) => (
+    <th
       className={`px-4 py-3 cursor-pointer select-none hover:text-white transition ${align === 'right' ? 'text-right' : 'text-left'}`}
       onClick={() => handleSort(field)}
     >

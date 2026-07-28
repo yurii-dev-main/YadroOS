@@ -1,5 +1,12 @@
 import { Router } from 'express';
-import { listApiKeys, createApiKey, deleteApiKey, listWebhooks, createWebhook, deleteWebhook } from '../controllers/developer.controller';
+import {
+  listApiKeys,
+  createApiKey,
+  deleteApiKey,
+  listWebhooks,
+  createWebhook,
+  deleteWebhook
+} from '../controllers/developer.controller';
 import { authMiddleware } from '../middleware/auth';
 
 const router = Router();

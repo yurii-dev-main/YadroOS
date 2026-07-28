@@ -6,7 +6,7 @@ import {
   ActivityType,
   AccountType,
   TransactionType,
-  InvoiceStatus,
+  InvoiceStatus
 } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 
@@ -45,7 +45,7 @@ async function main() {
     prisma.department.deleteMany(),
     prisma.organizationMember.deleteMany(),
     prisma.user.deleteMany(),
-    prisma.organization.deleteMany(),
+    prisma.organization.deleteMany()
   ]);
 
   const passwordHash = await bcrypt.hash('Password123!', 10);
@@ -54,14 +54,23 @@ async function main() {
   const org = await prisma.organization.create({
     data: {
       name: faker.company.name(),
-      slug: faker.helpers.slugify(faker.company.name()).toLowerCase() + '-' + faker.string.alphanumeric(4),
-      industry: faker.company.buzzNoun(),
-    },
+      slug:
+        faker.helpers.slugify(faker.company.name()).toLowerCase() +
+        '-' +
+        faker.string.alphanumeric(4),
+      industry: faker.company.buzzNoun()
+    }
   });
 
   console.log('Creating Users and Employees...');
   const employees = [];
-  const roles = [OrgRole.OWNER, OrgRole.ADMIN, OrgRole.SALES, OrgRole.ACCOUNTANT, OrgRole.HR_SPECIALIST];
+  const roles = [
+    OrgRole.OWNER,
+    OrgRole.ADMIN,
+    OrgRole.SALES,
+    OrgRole.ACCOUNTANT,
+    OrgRole.HR_SPECIALIST
+  ];
 
   for (let i = 0; i < 5; i++) {
     const isFirst = i === 0;
@@ -70,16 +79,16 @@ async function main() {
         email: isFirst ? 'parker_simonis95@yahoo.com' : faker.internet.email().toLowerCase(),
         passwordHash,
         name: isFirst ? 'Parker Simonis' : faker.person.fullName(),
-        company: org.name,
-      },
+        company: org.name
+      }
     });
 
     await prisma.organizationMember.create({
       data: {
         organizationId: org.id,
         userId: user.id,
-        role: roles[i],
-      },
+        role: roles[i]
+      }
     });
 
     const employee = await prisma.employee.create({
@@ -90,8 +99,8 @@ async function main() {
         lastName: user.name!.split(' ').slice(1).join(' ') || 'Smith',
         position: faker.person.jobTitle(),
         salary: faker.number.int({ min: 40000, max: 120000 }),
-        hireDate: faker.date.past({ years: 3 }),
-      },
+        hireDate: faker.date.past({ years: 3 })
+      }
     });
     employees.push(employee);
   }
@@ -108,8 +117,8 @@ async function main() {
         company: faker.company.name(),
         industry: faker.company.buzzNoun(),
         status: faker.helpers.arrayElement(Object.values(ClientStatus)),
-        assignedTo: faker.helpers.arrayElement(employees).id,
-      },
+        assignedTo: faker.helpers.arrayElement(employees).id
+      }
     });
     clients.push(client);
   }
@@ -123,8 +132,8 @@ async function main() {
         title: faker.commerce.productName() + ' Deal',
         value: faker.number.int({ min: 1000, max: 50000 }),
         stage: faker.helpers.arrayElement(Object.values(DealStage)),
-        assignedTo: faker.helpers.arrayElement(employees).id,
-      },
+        assignedTo: faker.helpers.arrayElement(employees).id
+      }
     });
     deals.push(deal);
   }
@@ -140,12 +149,14 @@ async function main() {
         description: faker.lorem.paragraph(),
         date: faker.date.recent({ days: 30 }),
         duration: faker.number.int({ min: 15, max: 120 }),
-        createdBy: faker.helpers.arrayElement(employees).id,
-      },
+        createdBy: faker.helpers.arrayElement(employees).id
+      }
     });
   }
 
-  console.log('Creating Accounting Data (Accounts, Categories, Transactions, Budgets, Invoices)...');
+  console.log(
+    'Creating Accounting Data (Accounts, Categories, Transactions, Budgets, Invoices)...'
+  );
   const accounts = [];
   const accountTypes = [AccountType.bank, AccountType.cash, AccountType.card];
   for (let i = 0; i < 3; i++) {
@@ -155,8 +166,8 @@ async function main() {
         name: `Account ${i + 1} - ${faker.finance.accountName()}`,
         type: accountTypes[i],
         balance: faker.number.int({ min: 10000, max: 100000 }),
-        currency: 'USD',
-      },
+        currency: 'USD'
+      }
     });
     accounts.push(acc);
   }
@@ -168,7 +179,7 @@ async function main() {
     const taxAmount = amount * taxRate;
     const totalAmount = amount + taxAmount;
     const status = faker.helpers.arrayElement(Object.values(InvoiceStatus));
-    
+
     const invoice = await prisma.invoice.create({
       data: {
         organizationId: org.id,
@@ -181,10 +192,11 @@ async function main() {
         currency: 'USD',
         status,
         issueDate: faker.date.recent({ days: 60 }),
-        dueDate: status === 'overdue' ? faker.date.recent({ days: 30 }) : faker.date.soon({ days: 30 }),
+        dueDate:
+          status === 'overdue' ? faker.date.recent({ days: 30 }) : faker.date.soon({ days: 30 }),
         paidDate: status === 'paid' ? faker.date.recent({ days: 10 }) : null,
-        createdBy: faker.helpers.arrayElement(employees).id,
-      },
+        createdBy: faker.helpers.arrayElement(employees).id
+      }
     });
     invoices.push(invoice);
   }
@@ -195,8 +207,8 @@ async function main() {
       data: {
         organizationId: org.id,
         name: faker.commerce.department(),
-        type: faker.helpers.arrayElement([TransactionType.income, TransactionType.expense]),
-      },
+        type: faker.helpers.arrayElement([TransactionType.income, TransactionType.expense])
+      }
     });
     categories.push(cat);
   }
@@ -212,8 +224,8 @@ async function main() {
         currency: 'USD',
         categoryId: cat.id,
         date: faker.date.recent({ days: 30 }),
-        description: faker.lorem.words(3),
-      },
+        description: faker.lorem.words(3)
+      }
     });
   }
 
@@ -226,8 +238,8 @@ async function main() {
         period: 'monthly',
         startDate: new Date('2026-07-01'),
         endDate: new Date('2026-07-31'),
-        categoryId: faker.helpers.arrayElement(categories).id,
-      },
+        categoryId: faker.helpers.arrayElement(categories).id
+      }
     });
   }
 
@@ -242,8 +254,8 @@ async function main() {
         baseSalary: emp.salary || 5000,
         grossSalary: Number(emp.salary || 5000) + faker.number.int({ min: 0, max: 1000 }),
         netSalary: Number(emp.salary || 5000) * 0.8,
-        status: 'paid',
-      },
+        status: 'paid'
+      }
     });
   }
 
@@ -255,12 +267,14 @@ async function main() {
         employeeId: emp.id,
         type: faker.helpers.arrayElement(['vacation', 'sick', 'personal']),
         total: 20,
-        used: faker.number.int({ min: 0, max: 15 }),
-      },
+        used: faker.number.int({ min: 0, max: 15 })
+      }
     });
   }
 
-  console.log('Creating New HR and Communications Data (Trainings, KPIs, OKRs, Reviews, Attendance, Highlights, CannedResponses)...');
+  console.log(
+    'Creating New HR and Communications Data (Trainings, KPIs, OKRs, Reviews, Attendance, Highlights, CannedResponses)...'
+  );
 
   // Trainings
   for (let i = 0; i < 5; i++) {
@@ -275,7 +289,7 @@ async function main() {
         instructor: faker.person.fullName(),
         location: faker.location.city(),
         capacity: faker.number.int({ min: 5, max: 30 }),
-        status: faker.helpers.arrayElement(['scheduled', 'ongoing', 'completed']),
+        status: faker.helpers.arrayElement(['scheduled', 'ongoing', 'completed'])
       }
     });
   }
@@ -290,7 +304,7 @@ async function main() {
         target: faker.number.int({ min: 80, max: 100 }),
         current: faker.number.int({ min: 60, max: 99 }),
         unit: faker.helpers.arrayElement(['%', 'count', 'USD']),
-        period: 'Q2 2026',
+        period: 'Q2 2026'
       }
     });
   }
@@ -303,7 +317,7 @@ async function main() {
         employeeId: emp.id,
         objective: faker.lorem.sentence(),
         progress: faker.number.int({ min: 10, max: 90 }),
-        period: 'Q2 2026',
+        period: 'Q2 2026'
       }
     });
   }
@@ -317,7 +331,7 @@ async function main() {
         reviewerId: employees[0].id,
         rating: faker.number.int({ min: 3, max: 5 }),
         comments: faker.lorem.paragraph(),
-        date: faker.date.recent({ days: 30 }),
+        date: faker.date.recent({ days: 30 })
       }
     });
   }
@@ -333,7 +347,7 @@ async function main() {
           date,
           clockIn: new Date(date.setHours(9, 0, 0)),
           clockOut: new Date(date.setHours(17, 30, 0)),
-          status: faker.helpers.arrayElement(['present', 'late', 'absent']),
+          status: faker.helpers.arrayElement(['present', 'late', 'absent'])
         }
       });
     }
@@ -343,10 +357,10 @@ async function main() {
   for (const emp of employees) {
     await prisma.performanceHighlight.create({
       data: {
-        organizationId: org.id, 
-        employeeId: emp.id, 
-        title: faker.lorem.words(3), 
-        score: faker.number.int({ min: 60, max: 100 }) 
+        organizationId: org.id,
+        employeeId: emp.id,
+        title: faker.lorem.words(3),
+        score: faker.number.int({ min: 60, max: 100 })
       }
     });
   }
@@ -354,9 +368,24 @@ async function main() {
   // Canned Responses
   await prisma.cannedResponse.createMany({
     data: [
-      { organizationId: org.id, title: 'Greeting', content: 'Hello! How can I help you today?', category: 'support' },
-      { organizationId: org.id, title: 'Thank you', content: 'Thank you for reaching out. We will get back to you shortly.', category: 'support' },
-      { organizationId: org.id, title: 'Follow-up', content: 'Just following up on our previous conversation. Do you have any questions?', category: 'sales' },
+      {
+        organizationId: org.id,
+        title: 'Greeting',
+        content: 'Hello! How can I help you today?',
+        category: 'support'
+      },
+      {
+        organizationId: org.id,
+        title: 'Thank you',
+        content: 'Thank you for reaching out. We will get back to you shortly.',
+        category: 'support'
+      },
+      {
+        organizationId: org.id,
+        title: 'Follow-up',
+        content: 'Just following up on our previous conversation. Do you have any questions?',
+        category: 'sales'
+      }
     ]
   });
 

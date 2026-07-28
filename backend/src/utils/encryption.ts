@@ -18,27 +18,27 @@ export function encrypt(text: string): string {
   const salt = crypto.randomBytes(SALT_LENGTH);
   const iv = crypto.randomBytes(IV_LENGTH);
   const key = getKey(salt);
-  
+
   const cipher = crypto.createCipheriv(ALGORITHM, key, iv);
   const encrypted = Buffer.concat([cipher.update(text, 'utf8'), cipher.final()]);
   const tag = cipher.getAuthTag();
-  
+
   return Buffer.concat([salt, iv, tag, encrypted]).toString('base64');
 }
 
 export function decrypt(cipherText: string): string {
   try {
     const raw = Buffer.from(cipherText, 'base64');
-    
+
     const salt = raw.subarray(0, SALT_LENGTH);
     const iv = raw.subarray(SALT_LENGTH, TAG_POSITION);
     const tag = raw.subarray(TAG_POSITION, ENCRYPTED_POSITION);
     const encrypted = raw.subarray(ENCRYPTED_POSITION);
-    
+
     const key = getKey(salt);
     const decipher = crypto.createDecipheriv(ALGORITHM, key, iv);
     decipher.setAuthTag(tag);
-    
+
     return decipher.update(encrypted) + decipher.final('utf8');
   } catch (e) {
     throw new Error('Failed to decrypt data');

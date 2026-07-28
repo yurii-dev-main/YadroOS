@@ -31,7 +31,7 @@ export const AccountsPage = () => {
     try {
       await accountingService.syncBank(accountId);
       // Wait for 1 second just to simulate the sync
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
     } finally {
       setSyncingAccountId(null);
     }

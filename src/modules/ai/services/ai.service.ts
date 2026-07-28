@@ -13,7 +13,10 @@ export const fetchAIOverview = async (): Promise<AIOverviewData> => {
   return data;
 };
 
-export const fetchInsightGroups = async (): Promise<{ groups: InsightGroup[], isGeminiConnected: boolean }> => {
+export const fetchInsightGroups = async (): Promise<{
+  groups: InsightGroup[];
+  isGeminiConnected: boolean;
+}> => {
   const overview = await fetchAIOverview();
   const groups: InsightGroup[] = [];
 

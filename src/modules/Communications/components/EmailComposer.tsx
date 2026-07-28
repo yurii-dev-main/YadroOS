@@ -46,16 +46,14 @@ export const EmailComposer = ({ onSent, templates = [] }: EmailComposerProps) =>
   const handleSubmit = async () => {
     if (!draft.to.length || !draft.subject) return;
     setIsSending(true);
-    const bodyWithSignature = includeSignature
-      ? `${draft.body}\n\n--\nBest regards`
-      : draft.body;
-      
+    const bodyWithSignature = includeSignature ? `${draft.body}\n\n--\nBest regards` : draft.body;
+
     await emailService.sendEmail({
       ...draft,
       body: bodyWithSignature,
       attachments
     });
-    
+
     setIsSending(false);
     setDraft(defaultDraft);
     setSelectedTemplate('');
@@ -125,13 +123,13 @@ export const EmailComposer = ({ onSent, templates = [] }: EmailComposerProps) =>
             ref={fileInputRef}
             onChange={handleFileChange}
           />
-          <button 
+          <button
             onClick={() => fileInputRef.current?.click()}
             className="rounded-md border border-slate-700 px-3 py-2 hover:border-emerald-500 hover:text-emerald-400"
           >
             Attach file
           </button>
-          <button 
+          <button
             onClick={() => setIncludeSignature((prev) => !prev)}
             className={`rounded-md border px-3 py-2 ${includeSignature ? 'border-sky-500 text-sky-400 bg-sky-500/10' : 'border-slate-700 hover:border-sky-500 hover:text-sky-400'}`}
           >

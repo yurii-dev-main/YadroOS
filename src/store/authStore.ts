@@ -34,7 +34,11 @@ export const useAuthStore = create<AuthStateExtended & AuthActions>()(
       tokens: null,
       currentOrganizationId: undefined,
       login: async ({ email, password, rememberMe }) => {
-        const { user, tokens, organizationId } = await authService.login({ email, password, rememberMe });
+        const { user, tokens, organizationId } = await authService.login({
+          email,
+          password,
+          rememberMe
+        });
         set({ isAuthenticated: true, user, tokens, currentOrganizationId: organizationId });
       },
       register: async ({ email, password, name, company }) => {
@@ -82,7 +86,7 @@ export const useAuthStore = create<AuthStateExtended & AuthActions>()(
         const data = await authService.switchOrganization(organizationId);
         const tokens = get().tokens;
         if (tokens) {
-          set({ 
+          set({
             tokens: { ...tokens, accessToken: data.accessToken },
             currentOrganizationId: organizationId
           });

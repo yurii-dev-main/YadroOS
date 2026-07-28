@@ -160,7 +160,10 @@ export const hrService = {
   },
 
   async registerForTraining(trainingId: string, employeeId: string): Promise<TrainingParticipant> {
-    const response = await apiClient.post<TrainingParticipant>(`/v1/hr/trainings/${trainingId}/register`, { employeeId });
+    const response = await apiClient.post<TrainingParticipant>(
+      `/v1/hr/trainings/${trainingId}/register`,
+      { employeeId }
+    );
     return response.data;
   },
 
@@ -169,19 +172,25 @@ export const hrService = {
     employeeId: string,
     attended: boolean
   ): Promise<Training> {
-    const response = await apiClient.post<Training>(`/v1/hr/trainings/${trainingId}/attendance`, { employeeId, attended });
+    const response = await apiClient.post<Training>(`/v1/hr/trainings/${trainingId}/attendance`, {
+      employeeId,
+      attended
+    });
     return response.data;
   },
 
   async submitTrainingFeedback(trainingId: string, feedback: TrainingFeedback): Promise<Training> {
-    const response = await apiClient.post<Training>(`/v1/hr/trainings/${trainingId}/feedback`, feedback);
+    const response = await apiClient.post<Training>(
+      `/v1/hr/trainings/${trainingId}/feedback`,
+      feedback
+    );
     return response.data;
   },
 
   async getAttendanceRecords(): Promise<AttendanceRecord[]> {
     const response = await apiClient.get<any>('/v1/hr/attendance-records');
     const data = response.data?.data || response.data || [];
-    
+
     // Group flat Prisma attendance records by employeeId to match frontend interface
     if (data.length > 0 && !data[0].entries) {
       const grouped = data.reduce((acc: any, record: any) => {
@@ -230,8 +239,20 @@ export const hrService = {
       return response.data?.data || response.data || [];
     } catch {
       return [
-        { employeeId: '1', date: new Date().toISOString(), attendanceRate: 100, lateArrivals: 0, absenteeismRate: 0 },
-        { employeeId: '2', date: new Date().toISOString(), attendanceRate: 0, lateArrivals: 0, absenteeismRate: 100 }
+        {
+          employeeId: '1',
+          date: new Date().toISOString(),
+          attendanceRate: 100,
+          lateArrivals: 0,
+          absenteeismRate: 0
+        },
+        {
+          employeeId: '2',
+          date: new Date().toISOString(),
+          attendanceRate: 0,
+          lateArrivals: 0,
+          absenteeismRate: 100
+        }
       ];
     }
   },
@@ -247,8 +268,24 @@ export const hrService = {
       }));
     } catch {
       return [
-        { id: 'kpi-1', employeeId: '1', title: 'Code Quality', target: 95, current: 92, unit: '%', role: 'Developer' },
-        { id: 'kpi-2', employeeId: '1', title: 'Features Delivered', target: 10, current: 8, unit: 'count', role: 'Developer' }
+        {
+          id: 'kpi-1',
+          employeeId: '1',
+          title: 'Code Quality',
+          target: 95,
+          current: 92,
+          unit: '%',
+          role: 'Developer'
+        },
+        {
+          id: 'kpi-2',
+          employeeId: '1',
+          title: 'Features Delivered',
+          target: 10,
+          current: 8,
+          unit: 'count',
+          role: 'Developer'
+        }
       ];
     }
   },
@@ -315,9 +352,7 @@ export const hrService = {
       const response = await apiClient.get<any>('/v1/hr/performance-highlights');
       return response.data?.data || response.data || [];
     } catch {
-      return [
-        { id: 'ph-1', employeeId: '1', title: 'Employee of the Month', score: 100 }
-      ];
+      return [{ id: 'ph-1', employeeId: '1', title: 'Employee of the Month', score: 100 }];
     }
   },
 
@@ -332,8 +367,20 @@ export const hrService = {
           buddyId: '2',
           startDate: new Date().toISOString(),
           tasks: [
-            { id: 't-1', title: 'Setup Environment', completed: true, dueDate: new Date().toISOString(), owner: 'IT' },
-            { id: 't-2', title: 'Read Documentation', completed: false, dueDate: new Date(Date.now() + 86400000).toISOString(), owner: 'HR' }
+            {
+              id: 't-1',
+              title: 'Setup Environment',
+              completed: true,
+              dueDate: new Date().toISOString(),
+              owner: 'IT'
+            },
+            {
+              id: 't-2',
+              title: 'Read Documentation',
+              completed: false,
+              dueDate: new Date(Date.now() + 86400000).toISOString(),
+              owner: 'HR'
+            }
           ]
         }
       ];

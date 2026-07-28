@@ -111,7 +111,9 @@ export const CreateTrainingModal: FC<CreateTrainingModalProps> = ({ onClose, onS
               />
             </div>
             <div>
-              <label className="mb-1 block text-sm font-medium text-slate-300">Duration (hrs)</label>
+              <label className="mb-1 block text-sm font-medium text-slate-300">
+                Duration (hrs)
+              </label>
               <input
                 required
                 type="number"

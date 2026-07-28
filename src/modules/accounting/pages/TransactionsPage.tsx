@@ -62,7 +62,7 @@ export const TransactionsPage = () => {
           </button>
         </div>
       </div>
-      
+
       <div className="space-y-6">
         <TransactionTable transactions={filtered} accounts={accounts} categories={categories} />
         <RecurringTransactionsPanel insights={recurring} />

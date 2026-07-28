@@ -1,5 +1,13 @@
 import { useMemo } from 'react';
-import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import {
+  Area,
+  AreaChart,
+  CartesianGrid,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis
+} from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
 import { useAuthStore } from '../../store/authStore';
 import { useAccounting } from '../../modules/accounting/hooks/useAccounting';
@@ -16,11 +24,31 @@ export const OverviewPage = () => {
   const { t } = useTranslation();
 
   const stats = [
-    { label: t('overview.totalBalance', 'Total Balance'), value: dashboard ? formatCurrency(dashboard.totalBalance) : '0', delta: t('overview.allAccounts', 'All Accounts') },
-    { label: t('overview.totalIncome', 'Total Income'), value: dashboard ? formatCurrency(dashboard.totalIncome) : '0', delta: t('overview.thisMonth', 'This Month') },
-    { label: t('overview.totalExpense', 'Total Expense'), value: dashboard ? formatCurrency(dashboard.totalExpense) : '0', delta: t('overview.thisMonth', 'This Month') },
-    { label: t('overview.activeClients', 'Active Clients'), value: clients.filter(c => c.status === 'active').length.toString(), delta: t('overview.outOfTotal', `Out of ${clients.length} total`) },
-    { label: t('overview.activeEmployees', 'Active Employees'), value: employees.filter(e => e.status === 'active').length.toString(), delta: t('overview.companySize', 'Company Size') }
+    {
+      label: t('overview.totalBalance', 'Total Balance'),
+      value: dashboard ? formatCurrency(dashboard.totalBalance) : '0',
+      delta: t('overview.allAccounts', 'All Accounts')
+    },
+    {
+      label: t('overview.totalIncome', 'Total Income'),
+      value: dashboard ? formatCurrency(dashboard.totalIncome) : '0',
+      delta: t('overview.thisMonth', 'This Month')
+    },
+    {
+      label: t('overview.totalExpense', 'Total Expense'),
+      value: dashboard ? formatCurrency(dashboard.totalExpense) : '0',
+      delta: t('overview.thisMonth', 'This Month')
+    },
+    {
+      label: t('overview.activeClients', 'Active Clients'),
+      value: clients.filter((c) => c.status === 'active').length.toString(),
+      delta: t('overview.outOfTotal', `Out of ${clients.length} total`)
+    },
+    {
+      label: t('overview.activeEmployees', 'Active Employees'),
+      value: employees.filter((e) => e.status === 'active').length.toString(),
+      delta: t('overview.companySize', 'Company Size')
+    }
   ];
 
   const recentTransactions = useMemo(() => transactions.slice(0, 5), [transactions]);
@@ -31,9 +59,7 @@ export const OverviewPage = () => {
         <h1 className="text-2xl font-semibold text-slate-50">
           {t('module.overview.title').replace('{name}', user?.name || '')}
         </h1>
-        <p className="text-sm text-slate-400">
-          {t('module.overview.subtitle')}
-        </p>
+        <p className="text-sm text-slate-400">{t('module.overview.subtitle')}</p>
       </div>
       <div className="grid gap-4 md:grid-cols-5">
         {stats.map((stat) => (
@@ -61,10 +87,28 @@ export const OverviewPage = () => {
                 <YAxis stroke="#94a3b8" />
                 <Tooltip
                   formatter={(value: number) => formatCurrency(value)}
-                  contentStyle={{ backgroundColor: '#0f172a', borderRadius: 12, border: '1px solid rgba(148,163,184,0.3)' }}
+                  contentStyle={{
+                    backgroundColor: '#0f172a',
+                    borderRadius: 12,
+                    border: '1px solid rgba(148,163,184,0.3)'
+                  }}
                 />
-                <Area type="monotone" dataKey="inflow" stackId="1" stroke="#10b981" fill="#10b981" fillOpacity={0.4} />
-                <Area type="monotone" dataKey="outflow" stackId="2" stroke="#f43f5e" fill="#f43f5e" fillOpacity={0.4} />
+                <Area
+                  type="monotone"
+                  dataKey="inflow"
+                  stackId="1"
+                  stroke="#10b981"
+                  fill="#10b981"
+                  fillOpacity={0.4}
+                />
+                <Area
+                  type="monotone"
+                  dataKey="outflow"
+                  stackId="2"
+                  stroke="#f43f5e"
+                  fill="#f43f5e"
+                  fillOpacity={0.4}
+                />
               </AreaChart>
             </ResponsiveContainer>
           </CardContent>
@@ -79,14 +123,21 @@ export const OverviewPage = () => {
                 <div key={tx.id} className="flex items-center justify-between text-sm">
                   <div>
                     <p className="font-medium text-slate-100">{tx.description}</p>
-                    <p className="text-xs text-slate-500">{new Date(tx.date).toLocaleDateString()}</p>
+                    <p className="text-xs text-slate-500">
+                      {new Date(tx.date).toLocaleDateString()}
+                    </p>
                   </div>
-                  <p className={`font-medium ${tx.type === 'income' ? 'text-emerald-400' : 'text-rose-400'}`}>
-                    {tx.type === 'income' ? '+' : '-'}{formatCurrency(tx.amount)}
+                  <p
+                    className={`font-medium ${tx.type === 'income' ? 'text-emerald-400' : 'text-rose-400'}`}
+                  >
+                    {tx.type === 'income' ? '+' : '-'}
+                    {formatCurrency(tx.amount)}
                   </p>
                 </div>
               ))}
-              {!recentTransactions.length && <p className="text-sm text-slate-500">No recent transactions.</p>}
+              {!recentTransactions.length && (
+                <p className="text-sm text-slate-500">No recent transactions.</p>
+              )}
             </div>
           </CardContent>
         </Card>

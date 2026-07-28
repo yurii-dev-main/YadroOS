@@ -28,10 +28,10 @@ export const AttendancePage = () => {
           <CardTitle className="text-lg text-slate-100">Time Tracking</CardTitle>
           <div className="flex items-center gap-2">
             <span className="text-sm text-slate-400">Period:</span>
-            <Input 
-              type="month" 
-              value={period} 
-              onChange={(e) => setPeriod(e.target.value)} 
+            <Input
+              type="month"
+              value={period}
+              onChange={(e) => setPeriod(e.target.value)}
               className="w-auto h-8"
             />
           </div>
