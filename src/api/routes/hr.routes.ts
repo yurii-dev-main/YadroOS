@@ -27,43 +27,43 @@ export interface TimeOffRequest {
 export const hrRoutes = {
   listEmployees(request?: ApiListRequest) {
     return apiClient
-      .get<ApiListResponse<EmployeeRecord>>('/hr/employees', { params: request })
+      .get<ApiListResponse<EmployeeRecord>>('/v1/hr/employees', { params: request })
       .then((response) => response.data);
   },
   upsertEmployee(employeeId: string | null, payload: Partial<EmployeeRecord>) {
     if (employeeId) {
       return apiClient
-        .put<EmployeeRecord>(`/hr/employees/${employeeId}`, payload)
+        .put<EmployeeRecord>(`/v1/hr/employees/${employeeId}`, payload)
         .then((response) => response.data);
     }
 
     return apiClient
-      .post<EmployeeRecord>('/hr/employees', payload)
+      .post<EmployeeRecord>('/v1/hr/employees', payload)
       .then((response) => response.data);
   },
   archiveEmployee(employeeId: string) {
-    return apiClient.delete(`/hr/employees/${employeeId}`).then(() => undefined);
+    return apiClient.delete(`/v1/hr/employees/${employeeId}`).then(() => undefined);
   },
   importEmployees(payload: FormData) {
     return apiClient
-      .post<ApiBulkResponse<EmployeeRecord>>('/hr/employees/import', payload, {
+      .post<ApiBulkResponse<EmployeeRecord>>('/v1/hr/employees/import', payload, {
         headers: { 'Content-Type': 'multipart/form-data' }
       })
       .then((response) => response.data);
   },
   listTimeOffRequests(request?: ApiListRequest) {
     return apiClient
-      .get<ApiListResponse<TimeOffRequest>>('/hr/time-off', { params: request })
+      .get<ApiListResponse<TimeOffRequest>>('/v1/hr/time-off', { params: request })
       .then((response) => response.data);
   },
   approveTimeOffRequest(requestId: string) {
     return apiClient
-      .post<TimeOffRequest>(`/hr/time-off/${requestId}/approve`)
+      .post<TimeOffRequest>(`/v1/hr/time-off/${requestId}/approve`)
       .then((response) => response.data);
   },
   rejectTimeOffRequest(requestId: string, reason: string) {
     return apiClient
-      .post<TimeOffRequest>(`/hr/time-off/${requestId}/reject`, { reason })
+      .post<TimeOffRequest>(`/v1/hr/time-off/${requestId}/reject`, { reason })
       .then((response) => response.data);
   }
 };

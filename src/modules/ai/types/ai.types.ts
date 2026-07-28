@@ -194,6 +194,8 @@ export interface AIOverviewData {
     insights: ExecutiveInsight[];
     healthScore: number;
   };
+  isGeminiConnected?: boolean;
+  customInsights?: Recommendation[];
 }
 
 export interface InsightGroup {

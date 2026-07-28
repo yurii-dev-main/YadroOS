@@ -6,18 +6,32 @@ import type {
   InsightGroup,
   PredictionSummary
 } from '../types/ai.types';
-import { fetchAIOverview as fetchAIOverviewFromApi, generateAIResponse } from './openai.service';
+import { apiClient } from '../../../services/apiClient';
 
-export const fetchAIOverview = async (): Promise<AIOverviewData> => fetchAIOverviewFromApi();
+export const fetchAIOverview = async (): Promise<AIOverviewData> => {
+  const { data } = await apiClient.get<AIOverviewData>('/v1/ai/insights');
+  return data;
+};
 
-export const fetchInsightGroups = async (): Promise<InsightGroup[]> => {
+export const fetchInsightGroups = async (): Promise<{ groups: InsightGroup[], isGeminiConnected: boolean }> => {
   const overview = await fetchAIOverview();
-  return [
+  const groups: InsightGroup[] = [];
+
+  if (overview.customInsights && overview.customInsights.length > 0) {
+    groups.push({
+      title: overview.isGeminiConnected ? 'Gemini AI Insights' : 'Algorithmic Insights',
+      insights: overview.customInsights
+    });
+  }
+
+  groups.push(
     { title: 'CRM Recommendations', insights: overview.crm.recommendations },
     { title: 'HR Recommendations', insights: overview.hr.recommendations },
     { title: 'Communications', insights: overview.communications.autoReplies },
     { title: 'Accounting', insights: overview.accounting.anomalies }
-  ];
+  );
+
+  return { groups, isGeminiConnected: !!overview.isGeminiConnected };
 };
 
 export const fetchPredictionSummaries = async (): Promise<PredictionSummary[]> => {
@@ -39,11 +53,11 @@ export const fetchPredictionSummaries = async (): Promise<PredictionSummary[]> =
 };
 
 export const askAssistant = async (messages: ChatMessage[]) => {
-  const { content, actions } = await generateAIResponse({ messages });
+  const { data } = await apiClient.post('/v1/ai/chat', { messages });
   return {
     id: uuid(),
-    content: content,
-    actions: actions,
+    content: data.content,
+    actions: data.actions,
     role: 'assistant' as const,
     timestamp: Date.now()
   };

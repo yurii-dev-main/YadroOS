@@ -9,10 +9,11 @@ export const listEmployees = async (req: Request, res: Response) => {
   };
 
   const where: {
+    organizationId: string;
     department?: string;
     position?: string;
     OR?: Array<Record<string, unknown>>;
-  } = {};
+  } = { organizationId: req.user!.organizationId };
 
   if (department) where.department = department;
   if (position) where.position = position;
@@ -26,7 +27,7 @@ export const listEmployees = async (req: Request, res: Response) => {
 
   const employees = await prisma.employee.findMany({
     where,
-    include: { user: { select: { email: true } } },
+    include: {},
     orderBy: { createdAt: 'desc' }
   });
 
@@ -37,7 +38,7 @@ export const getEmployeeById = async (req: Request, res: Response) => {
   const { id } = req.params;
   const employee = await prisma.employee.findUnique({
     where: { id },
-    include: { user: { select: { email: true } } }
+    include: {}
   });
 
   if (!employee) {
@@ -53,6 +54,7 @@ export const createEmployee = async (req: Request, res: Response) => {
 
   const employee = await prisma.employee.create({
     data: {
+      organizationId: req.user!.organizationId,
       userId,
       firstName,
       lastName,
@@ -63,7 +65,7 @@ export const createEmployee = async (req: Request, res: Response) => {
       phone,
       avatarUrl
     },
-    include: { user: { select: { email: true } } }
+    include: {}
   });
 
   res.status(201).json(employee);
@@ -92,7 +94,7 @@ export const updateEmployee = async (req: Request, res: Response) => {
       phone,
       avatarUrl
     },
-    include: { user: { select: { email: true } } }
+    include: {}
   });
 
   return res.json(employee);

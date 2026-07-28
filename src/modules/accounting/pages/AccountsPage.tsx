@@ -7,6 +7,7 @@ import { ExchangeRateWidget } from '../components/ExchangeRateWidget';
 import { ReconciliationPanel } from '../components/ReconciliationPanel';
 import { useAccounting } from '../hooks/useAccounting';
 import { CurrencyCode } from '../types/accounting.types';
+import { accountingService } from '../services/accounting.service';
 
 export const AccountsPage = () => {
   const {
@@ -23,6 +24,18 @@ export const AccountsPage = () => {
   const [toAccount, setToAccount] = useState<string>('');
   const [currency, setCurrency] = useState<CurrencyCode>('UAH');
   const [description, setDescription] = useState('');
+  const [syncingAccountId, setSyncingAccountId] = useState<string | null>(null);
+
+  const handleSync = async (accountId: string) => {
+    setSyncingAccountId(accountId);
+    try {
+      await accountingService.syncBank(accountId);
+      // Wait for 1 second just to simulate the sync
+      await new Promise(resolve => setTimeout(resolve, 1000));
+    } finally {
+      setSyncingAccountId(null);
+    }
+  };
 
   const handleTransfer = async () => {
     if (!fromAccount || !toAccount || !transferAmount) return;
@@ -52,6 +65,8 @@ export const AccountsPage = () => {
             exchangeRate={exchangeRate}
             baseCurrency={baseCurrency}
             onReconcile={(accountId) => handleImport(accountId)}
+            onSync={handleSync}
+            syncingAccountId={syncingAccountId}
           />
           <div className="rounded-lg border border-slate-800 bg-slate-900/60 p-4 text-sm text-slate-200">
             <h3 className="text-base font-semibold text-slate-100">Transfer between accounts</h3>

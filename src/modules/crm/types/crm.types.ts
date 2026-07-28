@@ -69,7 +69,7 @@ export interface CRMDeal {
   clientName: string;
   stage: DealStage;
   probability: number;
-  owner: string;
+  assignedTo: string;
   closeDate?: string;
   createdAt: string;
   updatedAt: string;
@@ -130,7 +130,7 @@ export interface CRMClientFilters {
   tagIds?: string[];
 }
 
-export type ClientSortField = 'name' | 'createdAt' | 'revenue';
+export type ClientSortField = 'name' | 'createdAt' | 'revenue' | 'manager' | 'status';
 
 export interface CRMClientSort {
   field: ClientSortField;
@@ -151,7 +151,7 @@ export interface CRMClientQueryResult {
 }
 
 export interface CRMPipelineFilters {
-  owner?: string | 'all';
+  assignedTo?: string | 'all';
   minValue?: number;
   maxValue?: number;
   from?: string;

@@ -15,15 +15,15 @@ export interface AiInsight {
 export const aiRoutes = {
   listInsights(request?: ApiListRequest) {
     return apiClient
-      .get<ApiListResponse<AiInsight>>('/ai/insights', { params: request })
+      .get<ApiListResponse<AiInsight>>('/v1/ai/insights', { params: request })
       .then((response) => response.data);
   },
   getInsight(insightId: string) {
-    return apiClient.get<AiInsight>(`/ai/insights/${insightId}`).then((response) => response.data);
+    return apiClient.get<AiInsight>(`/v1/ai/insights/${insightId}`).then((response) => response.data);
   },
   markInsightResolved(insightId: string) {
     return apiClient
-      .post<AiInsight>(`/ai/insights/${insightId}/resolve`)
+      .post<AiInsight>(`/v1/ai/insights/${insightId}/resolve`)
       .then((response) => response.data);
   }
 };

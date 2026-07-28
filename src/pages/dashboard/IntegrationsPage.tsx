@@ -2,6 +2,7 @@ import { Plus, Settings2, Trash2 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 
 import { apiClient, IS_DEMO_MODE } from '../../services/apiClient';
+import { IntegrationConfigModal } from './IntegrationConfigModal';
 
 interface IntegrationConnection {
   id: string;
@@ -10,25 +11,56 @@ interface IntegrationConnection {
   status: string;
   connectedAt: string;
   lastSyncAt: string | null;
+  configuration?: any;
 }
 
 export const IntegrationsPage = () => {
   const [connections, setConnections] = useState<IntegrationConnection[]>([]);
   const [loading, setLoading] = useState(true);
+  const [configuringConnection, setConfiguringConnection] = useState<IntegrationConnection | null>(null);
+
+  const handleSaveConfig = async (config: any) => {
+    if (!configuringConnection) return;
+    const id = configuringConnection.id;
+
+    if (IS_DEMO_MODE) {
+      const updated = connections.map(c => 
+        c.id === id ? { ...c, configuration: config } : c
+      );
+      setConnections(updated);
+      localStorage.setItem('demo_integrations', JSON.stringify(updated));
+      return;
+    }
+
+    try {
+      await apiClient.put(`/v1/integrations/${id}/config`, { config });
+      fetchConnections();
+    } catch (e) {
+      alert('Failed to save configuration');
+    }
+  };
 
   const fetchConnections = async () => {
     try {
       if (IS_DEMO_MODE) {
-        setConnections([
-          {
-            id: 'demo-1',
-            provider: 'telegram',
-            displayName: 'My Company Bot',
-            status: 'connected',
-            connectedAt: new Date().toISOString(),
-            lastSyncAt: new Date().toISOString()
-          }
-        ]);
+        const stored = localStorage.getItem('demo_integrations');
+        if (stored) {
+          setConnections(JSON.parse(stored));
+        } else {
+          const initial = [
+            {
+              id: 'demo-1',
+              provider: 'telegram',
+              displayName: 'My Company Bot',
+              status: 'connected',
+              connectedAt: new Date().toISOString(),
+              lastSyncAt: new Date().toISOString()
+            }
+          ];
+          setConnections(initial);
+          localStorage.setItem('demo_integrations', JSON.stringify(initial));
+        }
+        setLoading(false);
         return;
       }
       const response = await apiClient.get('/v1/integrations');
@@ -49,7 +81,18 @@ export const IntegrationsPage = () => {
     if (!token) return;
 
     if (IS_DEMO_MODE) {
-      alert('Cannot add real integrations in demo mode');
+      const newConn = {
+        id: `demo-${Date.now()}`,
+        provider,
+        displayName: `${provider} Connection ${connections.length + 1}`,
+        status: 'connected',
+        connectedAt: new Date().toISOString(),
+        lastSyncAt: new Date().toISOString(),
+        configuration: provider === 'gemini' ? { apiKey: token } : {}
+      };
+      const updated = [...connections, newConn];
+      setConnections(updated);
+      localStorage.setItem('demo_integrations', JSON.stringify(updated));
       return;
     }
 
@@ -57,7 +100,7 @@ export const IntegrationsPage = () => {
       await apiClient.post('/v1/integrations', {
         provider,
         displayName: `${provider} Connection`,
-        credentials: { botToken: token }
+        credentials: provider === 'gemini' ? { apiKey: token } : { botToken: token }
       });
       fetchConnections();
     } catch (e) {
@@ -66,11 +109,14 @@ export const IntegrationsPage = () => {
   };
 
   const handleDelete = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this integration?')) return;
+    
     if (IS_DEMO_MODE) {
-      alert('Cannot delete integrations in demo mode');
+      const updated = connections.filter(c => c.id !== id);
+      setConnections(updated);
+      localStorage.setItem('demo_integrations', JSON.stringify(updated));
       return;
     }
-    if (!confirm('Are you sure you want to delete this integration?')) return;
     try {
       await apiClient.delete(`/v1/integrations/${id}`);
       fetchConnections();
@@ -113,6 +159,24 @@ export const IntegrationsPage = () => {
 
             <div className="flex items-center justify-between p-4 rounded-lg bg-slate-800/50 border border-white/5 opacity-50">
               <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold">
+                  BNK
+                </div>
+                <div>
+                  <div className="text-white font-medium">Bank API (OpenBanking)</div>
+                  <div className="text-sm text-slate-400">Sync transactions and cash flow</div>
+                </div>
+              </div>
+              <button
+                disabled
+                className="px-3 py-1.5 bg-slate-700 text-slate-400 text-sm font-medium rounded-lg"
+              >
+                Connect
+              </button>
+            </div>
+
+            <div className="flex items-center justify-between p-4 rounded-lg bg-slate-800/50 border border-white/5 opacity-50">
+              <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center text-red-400 font-bold">
                   GM
                 </div>
@@ -125,6 +189,25 @@ export const IntegrationsPage = () => {
                 disabled
                 className="px-3 py-1.5 bg-slate-700 text-slate-400 text-sm font-medium rounded-lg"
               >
+                Connect
+              </button>
+            </div>
+
+            <div className="flex items-center justify-between p-4 rounded-lg bg-slate-800/50 border border-white/5">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400 font-bold">
+                  AI
+                </div>
+                <div>
+                  <div className="text-white font-medium">Gemini AI</div>
+                  <div className="text-sm text-slate-400">Advanced AI models and context</div>
+                </div>
+              </div>
+              <button
+                onClick={() => handleConnect('gemini')}
+                className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg flex items-center"
+              >
+                <Plus className="w-4 h-4 mr-1" />
                 Connect
               </button>
             </div>
@@ -158,7 +241,10 @@ export const IntegrationsPage = () => {
                     </div>
                   </div>
                   <div className="flex space-x-2">
-                    <button className="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-700">
+                    <button
+                      onClick={() => setConfiguringConnection(conn)}
+                      className="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-700"
+                    >
                       <Settings2 className="w-4 h-4" />
                     </button>
                     <button
@@ -174,6 +260,14 @@ export const IntegrationsPage = () => {
           )}
         </div>
       </div>
+
+      {configuringConnection && (
+        <IntegrationConfigModal
+          connection={configuringConnection}
+          onClose={() => setConfiguringConnection(null)}
+          onSave={handleSaveConfig}
+        />
+      )}
     </div>
   );
 };

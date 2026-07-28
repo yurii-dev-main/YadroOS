@@ -30,16 +30,16 @@ export const initSocket = (server: HttpServer) => {
 
   io.on('connection', (socket) => {
     const user = socket.data.user as AuthPayload;
-    console.log(`User connected to socket: ${user.id}`);
+    console.log(`User connected to socket: ${user.userId}`);
 
     // Join a private room for the user to receive targeted notifications
-    socket.join(`user:${user.id}`);
+    socket.join(`user:${user.userId}`);
 
     // Optionally join a global broadcast room
     socket.join('broadcast');
 
     socket.on('disconnect', () => {
-      console.log(`User disconnected from socket: ${user.id}`);
+      console.log(`User disconnected from socket: ${user.userId}`);
     });
   });
 

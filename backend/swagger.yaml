@@ -609,3 +609,44 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Message'
+  /crm/clients/export:
+    get:
+      summary: Export clients to CSV
+      tags: [CRM]
+      responses:
+        '200':
+          description: CSV file with clients
+          content:
+            text/csv:
+              schema:
+                type: string
+                format: binary
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+  /crm/clients/import:
+    post:
+      summary: Import clients from CSV
+      tags: [CRM]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Clients imported successfully
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'

@@ -31,7 +31,7 @@ export const ClientFilters = ({
         <select
           value={filters.status ?? 'all'}
           onChange={handleSelect('status')}
-          className="mt-1 rounded-lg border border-slate-700/60 bg-slate-900/70 px-3 py-2 text-sm text-slate-100 focus:border-blue-500 focus:outline-none"
+          className="mt-1 rounded-lg border border-slate-700/60 bg-slate-900/70 px-3 py-2 text-sm text-slate-100 focus:border-primary focus:outline-none"
         >
           <option value="all">All</option>
           <option value="lead">Leads</option>
@@ -46,7 +46,7 @@ export const ClientFilters = ({
         <select
           value={filters.industry ?? 'all'}
           onChange={handleSelect('industry')}
-          className="mt-1 rounded-lg border border-slate-700/60 bg-slate-900/70 px-3 py-2 text-sm text-slate-100 focus:border-blue-500 focus:outline-none"
+          className="mt-1 rounded-lg border border-slate-700/60 bg-slate-900/70 px-3 py-2 text-sm text-slate-100 focus:border-primary focus:outline-none"
         >
           <option value="all">All</option>
           {industries.map((industry) => (
@@ -62,7 +62,7 @@ export const ClientFilters = ({
         <select
           value={filters.assignedTo ?? 'all'}
           onChange={handleSelect('assignedTo')}
-          className="mt-1 rounded-lg border border-slate-700/60 bg-slate-900/70 px-3 py-2 text-sm text-slate-100 focus:border-blue-500 focus:outline-none"
+          className="mt-1 rounded-lg border border-slate-700/60 bg-slate-900/70 px-3 py-2 text-sm text-slate-100 focus:border-primary focus:outline-none"
         >
           <option value="all">All</option>
           {managers.map((manager) => (

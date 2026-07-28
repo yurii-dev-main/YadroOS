@@ -2,8 +2,52 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  color-scheme: dark;
+@layer base {
+  :root {
+    /* Bronze / Gold Theme (Neutral Warm Dark) */
+    color-scheme: dark;
+    --color-slate-950: 17 17 17;
+    --color-slate-900: 26 26 26;
+    --color-slate-800: 38 38 38;
+    --color-slate-700: 64 64 64;
+    --color-slate-600: 82 82 82;
+    --color-slate-500: 115 115 115;
+    --color-slate-400: 163 163 163;
+    --color-slate-300: 212 212 212;
+    --color-slate-200: 229 229 229;
+    --color-slate-100: 245 245 245;
+    --color-primary: 217 119 6; /* Bronze/Gold */
+  }
+
+  .light {
+    --color-slate-950: 248 250 252; /* slate-50 */
+    --color-slate-900: 241 245 249; /* slate-100 */
+    --color-slate-800: 226 232 240; /* slate-200 */
+    --color-slate-700: 203 213 225; /* slate-300 */
+    --color-slate-600: 148 163 184; /* slate-400 */
+    --color-slate-500: 100 116 139; /* slate-500 */
+    --color-slate-400: 71 85 105;   /* slate-600 */
+    --color-slate-300: 51 65 85;    /* slate-700 */
+    --color-slate-200: 30 41 59;    /* slate-800 */
+    --color-slate-100: 15 23 42;    /* slate-900 */
+    --color-primary: 217 119 6; /* Bronze/Gold */
+    color-scheme: light;
+  }
+
+  .dark {
+    /* Steel Blue Theme (Cool Dark) */
+    --color-slate-950: 2 6 23;
+    --color-slate-900: 15 23 42;
+    --color-slate-800: 30 41 59;
+    --color-slate-700: 51 65 85;
+    --color-slate-600: 71 85 105;
+    --color-slate-500: 100 116 139;
+    --color-slate-400: 148 163 184;
+    --color-slate-300: 203 213 225;
+    --color-slate-200: 226 232 240;
+    --color-slate-100: 241 245 249;
+    --color-primary: 29 78 216; /* Steel Blue */
+  }
 }
 
 body {
@@ -32,4 +76,68 @@ button:disabled {
 
 .pt-safe {
   padding-top: calc(env(safe-area-inset-top, 0px) + 0.5rem);
+}
+
+/* React Big Calendar Dark Theme Overrides */
+.rbc-calendar {
+  @apply bg-transparent font-sans text-slate-300;
+}
+.rbc-month-view, .rbc-agenda-view, .rbc-time-view {
+  @apply bg-slate-900 border-slate-700;
+}
+.rbc-header, .rbc-day-bg, .rbc-month-row, .rbc-agenda-date-cell, .rbc-agenda-time-cell {
+  @apply border-slate-700;
+}
+.rbc-header {
+  @apply text-slate-200 font-semibold py-2;
+}
+.rbc-off-range-bg {
+  @apply bg-slate-800/50;
+}
+.rbc-today {
+  background-color: rgba(30, 41, 59, 0.8) !important;
+}
+.rbc-date-cell {
+  @apply text-slate-400 pr-2 pt-1;
+}
+.rbc-event {
+  @apply border-none bg-transparent;
+}
+.rbc-event-content {
+  @apply font-medium text-xs text-white;
+}
+.rbc-toolbar button {
+  @apply text-slate-300 border-slate-700 hover:text-white hover:bg-slate-800 focus:bg-slate-800;
+  color: #d4d4d4 !important;
+}
+.rbc-toolbar button:hover,
+.rbc-toolbar button:active,
+.rbc-toolbar button:focus {
+  background-color: #1e293b !important;
+  color: #ffffff !important;
+  border-color: #334155 !important;
+}
+.rbc-toolbar button.rbc-active {
+  @apply bg-slate-700 text-white shadow-none;
+  background-color: #3b82f6 !important;
+  color: white !important;
+  border-color: #3b82f6 !important;
+}
+.rbc-toolbar button.rbc-active:hover,
+.rbc-toolbar button.rbc-active:active,
+.rbc-toolbar button.rbc-active:focus {
+  background-color: #2563eb !important;
+  color: white !important;
+}
+.rbc-off-range-bg {
+  background-color: rgba(30, 41, 59, 0.5) !important;
+}
+.rbc-day-bg {
+  border-color: #334155 !important;
+}
+.rbc-agenda-view table.rbc-agenda-table tbody > tr > td {
+  @apply text-slate-300 border-slate-700;
+}
+.rbc-agenda-view table.rbc-agenda-table thead > tr > th {
+  @apply border-slate-700 text-slate-300;
 }

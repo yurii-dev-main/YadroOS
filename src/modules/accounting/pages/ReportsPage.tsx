@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import * as XLSX from 'xlsx';
 import { Button } from '../../../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../../../components/ui/card';
@@ -29,7 +29,22 @@ const groupByMonth = (transactions: Transaction[]) => {
 export const ReportsPage = () => {
   const { reports, cashFlow, forecasts, transactions, categoryBreakdown, cashFlowForecast } =
     useAccounting();
-  const trend = useMemo(() => groupByMonth(transactions), [transactions]);
+  const [period, setPeriod] = useState<'all' | 'last30' | 'ytd'>('all');
+
+  const filteredTransactions = useMemo(() => {
+    if (period === 'all') return transactions;
+    const now = new Date();
+    let start: Date;
+    if (period === 'last30') {
+      start = new Date();
+      start.setDate(now.getDate() - 30);
+    } else {
+      start = new Date(now.getFullYear(), 0, 1);
+    }
+    return transactions.filter(t => new Date(t.date) >= start);
+  }, [transactions, period]);
+
+  const trend = useMemo(() => groupByMonth(filteredTransactions), [filteredTransactions]);
   const categories = useMemo(
     () =>
       categoryBreakdown.map((category) => ({ name: category.categoryName, value: category.total })),
@@ -69,9 +84,20 @@ export const ReportsPage = () => {
           <h3 className="text-xl font-semibold text-slate-100">Financial Analytics</h3>
           <p className="text-sm text-slate-500">P&L, Cash Flow, forecasts and expense structures</p>
         </div>
-        <Button variant="secondary" onClick={handleExport}>
-          Export to Excel
-        </Button>
+        <div className="flex gap-2">
+          <select
+            className="rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"
+            value={period}
+            onChange={(e) => setPeriod(e.target.value as any)}
+          >
+            <option value="all">All Time</option>
+            <option value="last30">Last 30 Days</option>
+            <option value="ytd">Year to Date</option>
+          </select>
+          <Button variant="secondary" onClick={handleExport}>
+            Export to Excel
+          </Button>
+        </div>
       </div>
       <div className="grid gap-4 md:grid-cols-2">
         {reports.map((report) => (

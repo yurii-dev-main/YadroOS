@@ -45,6 +45,11 @@ export interface Employee {
   status: EmployeeStatus;
   timeline: EmployeeTimelineEvent[];
   trainings: string[];
+  performanceScore?: number;
+  timeTrackingSummary?: {
+    attendanceRate: number;
+    hoursWorkedLastMonth: number;
+  };
 }
 
 export interface DepartmentStats {

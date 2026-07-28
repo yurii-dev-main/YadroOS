@@ -7,8 +7,8 @@ interface OrgChartViewProps {
 }
 
 const NodeCard: FC<{ node: OrgChartNode }> = ({ node }) => (
-  <div className="min-w-[180px] rounded-lg border border-indigo-500/40 bg-slate-900/80 p-3 text-center text-xs text-slate-100 shadow-lg">
-    <p className="text-sm font-semibold text-indigo-200">{node.name}</p>
+  <div className="min-w-[180px] rounded-lg border border-primary/40 bg-slate-900/80 p-3 text-center text-xs text-slate-100 shadow-lg">
+    <p className="text-sm font-semibold text-primary">{node.name}</p>
     <p className="text-slate-400">{node.title}</p>
   </div>
 );

@@ -12,5 +12,6 @@ router.get('/', integrationsController.getConnections);
 router.post('/', integrationsController.addConnection);
 router.delete('/:id', integrationsController.deleteConnection);
 router.get('/:id/health', integrationsController.checkHealth);
+router.put('/:id/config', integrationsController.updateConfig);
 
 export default router;

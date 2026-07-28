@@ -6,9 +6,10 @@ import { formatDate, getEmployeeName } from '../utils/hr.utils';
 interface OnboardingChecklistProps {
   employees: Employee[];
   plans: OnboardingPlan[];
+  onToggleTask: (employeeId: string, taskId: string) => void;
 }
 
-export const OnboardingChecklist: FC<OnboardingChecklistProps> = ({ employees, plans }) => (
+export const OnboardingChecklist: FC<OnboardingChecklistProps> = ({ employees, plans, onToggleTask }) => (
   <Card className="border-slate-800 bg-slate-900/70">
     <CardHeader>
       <CardTitle className="text-lg text-slate-100">Onboarding</CardTitle>
@@ -35,15 +36,16 @@ export const OnboardingChecklist: FC<OnboardingChecklistProps> = ({ employees, p
               >
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-slate-100">{task.title}</span>
-                  <span
-                    className={`rounded-full px-2 py-1 text-xs ${
+                  <button
+                    onClick={() => onToggleTask(plan.employeeId, task.id)}
+                    className={`rounded-full px-2 py-1 text-xs transition-colors hover:opacity-80 ${
                       task.completed
                         ? 'border border-emerald-500/40 bg-emerald-500/10 text-emerald-300'
                         : 'border border-amber-500/40 bg-amber-500/10 text-amber-300'
                     }`}
                   >
                     {task.completed ? 'Completed' : 'In progress'}
-                  </span>
+                  </button>
                 </div>
                 <p className="text-xs text-slate-400">Assignee: {task.owner}</p>
                 <p className="text-xs text-slate-400">Deadline: {formatDate(task.dueDate)}</p>

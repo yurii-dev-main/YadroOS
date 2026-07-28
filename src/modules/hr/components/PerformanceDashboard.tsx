@@ -35,7 +35,7 @@ export const PerformanceDashboard: FC<PerformanceDashboardProps> = ({
           <CardTitle className="text-sm text-slate-400">KPIs in Progress</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-3xl font-semibold text-indigo-300">{kpis.length}</p>
+          <p className="text-3xl font-semibold text-primary">{kpis.length}</p>
         </CardContent>
       </Card>
       <Card className="border-slate-800 bg-slate-900/70">
@@ -66,7 +66,7 @@ export const PerformanceDashboard: FC<PerformanceDashboardProps> = ({
               </div>
               <div className="mt-2 h-2 rounded-full bg-slate-800">
                 <div
-                  className="h-2 rounded-full bg-indigo-500"
+                  className="h-2 rounded-full bg-primary"
                   style={{ width: `${Math.min((kpi.current / kpi.target) * 100, 100)}%` }}
                 />
               </div>
@@ -92,7 +92,7 @@ export const PerformanceDashboard: FC<PerformanceDashboardProps> = ({
                 <li key={kr.id} className="text-sm text-slate-300">
                   <div className="flex items-center justify-between">
                     <span>{kr.description}</span>
-                    <span className="text-xs text-indigo-300">{kr.progress}%</span>
+                    <span className="text-xs text-primary">{kr.progress}%</span>
                   </div>
                   <div className="mt-1 h-1.5 rounded-full bg-slate-800">
                     <div
@@ -119,7 +119,7 @@ export const PerformanceDashboard: FC<PerformanceDashboardProps> = ({
               <p className="text-sm font-semibold text-slate-100">
                 {getEmployeeName(employees, review.employeeId)} — {review.period}
               </p>
-              <span className="rounded-md border border-indigo-500/40 bg-indigo-500/10 px-2 py-1 text-xs uppercase tracking-wide text-indigo-200">
+              <span className="rounded-md border border-primary/40 bg-primary/10 px-2 py-1 text-xs uppercase tracking-wide text-primary">
                 {review.type}
               </span>
             </div>

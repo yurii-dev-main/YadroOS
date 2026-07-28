@@ -1,4 +1,4 @@
-import { TrendingDown, TrendingUp } from 'lucide-react';
+import { AlertTriangle, TrendingDown, TrendingUp } from 'lucide-react';
 import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 import { Card, CardContent, CardHeader, CardTitle } from '../../../components/ui/card';
@@ -22,6 +22,12 @@ export const AIDashboardPage = () => {
 
   return (
     <div className="space-y-8">
+      {!data.isGeminiConnected && (
+        <div className="flex items-center gap-3 rounded-lg border border-amber-500/50 bg-amber-500/10 p-4 text-amber-200">
+          <AlertTriangle className="h-5 w-5 text-amber-400" />
+          <p className="text-sm font-medium">Connect Gemini AI in the Integrations Hub for deeper insights!</p>
+        </div>
+      )}
       <section className="grid gap-6 lg:grid-cols-3">
         <Card className="col-span-1">
           <CardHeader>

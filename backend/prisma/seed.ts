@@ -1,249 +1,263 @@
 import {
   PrismaClient,
-  Role,
+  OrgRole,
   ClientStatus,
   DealStage,
-  TransactionType,
+  ActivityType,
   AccountType,
-  InvoiceStatus
+  TransactionType,
+  InvoiceStatus,
 } from '@prisma/client';
-import bcrypt from 'bcrypt';
+import { faker } from '@faker-js/faker';
+import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('Seeding database...');
+  console.log('Starting data seeding with faker...');
 
-  const adminPassword = await bcrypt.hash('Admin123!', 10);
-  const managerPassword = await bcrypt.hash('Manager123!', 10);
-  const accountantPassword = await bcrypt.hash('Account123!', 10);
+  // Clean up existing data
+  console.log('Cleaning up existing data...');
+  await prisma.$transaction([
+    prisma.activity.deleteMany(),
+    prisma.invoice.deleteMany(),
+    prisma.deal.deleteMany(),
+    prisma.transaction.deleteMany(),
+    prisma.budget.deleteMany(),
+    prisma.category.deleteMany(),
+    prisma.account.deleteMany(),
+    prisma.client.deleteMany(),
+    prisma.payrollRecord.deleteMany(),
+    prisma.leaveBalance.deleteMany(),
+    prisma.attendance.deleteMany(),
+    prisma.leaveRequest.deleteMany(),
+    prisma.kPI.deleteMany(),
+    prisma.oKR.deleteMany(),
+    prisma.employee.deleteMany(),
+    prisma.department.deleteMany(),
+    prisma.organizationMember.deleteMany(),
+    prisma.user.deleteMany(),
+    prisma.organization.deleteMany(),
+  ]);
 
-  const admin = await prisma.user.upsert({
-    where: { email: 'admin@crm.local' },
-    update: {},
-    create: {
-      email: 'admin@crm.local',
-      passwordHash: adminPassword,
-      role: Role.ADMIN
-    }
-  });
+  const passwordHash = await bcrypt.hash('Password123!', 10);
 
-  const manager = await prisma.user.upsert({
-    where: { email: 'manager@crm.local' },
-    update: {},
-    create: {
-      email: 'manager@crm.local',
-      passwordHash: managerPassword,
-      role: Role.MANAGER
-    }
-  });
-
-  const accountant = await prisma.user.upsert({
-    where: { email: 'accountant@crm.local' },
-    update: {},
-    create: {
-      email: 'accountant@crm.local',
-      passwordHash: accountantPassword,
-      role: Role.ACCOUNTANT
-    }
-  });
-
-  const adminEmployee = await prisma.employee.upsert({
-    where: { id: admin.id },
-    update: {},
-    create: {
-      id: admin.id,
-      userId: admin.id,
-      firstName: 'Olena',
-      lastName: 'Ivanenko',
-      position: 'Administrator',
-      department: 'Operations',
-      hireDate: new Date('2022-01-10')
-    }
-  });
-
-  const managerEmployee = await prisma.employee.upsert({
-    where: { id: manager.id },
-    update: {},
-    create: {
-      id: manager.id,
-      userId: manager.id,
-      firstName: 'Andrii',
-      lastName: 'Shevchenko',
-      position: 'Sales Manager',
-      department: 'Sales',
-      hireDate: new Date('2023-03-15')
-    }
-  });
-
-  const accountantEmployee = await prisma.employee.upsert({
-    where: { id: accountant.id },
-    update: {},
-    create: {
-      id: accountant.id,
-      userId: accountant.id,
-      firstName: 'Iryna',
-      lastName: 'Koval',
-      position: 'Accountant',
-      department: 'Finance',
-      hireDate: new Date('2022-07-01')
-    }
-  });
-
-  const clientA = await prisma.client.create({
+  console.log('Creating Organization...');
+  const org = await prisma.organization.create({
     data: {
-      name: 'TechNova LLC',
-      company: 'TechNova',
-      email: 'contact@technova.com',
-      phone: '+380671234567',
-      industry: 'Software',
-      website: 'https://technova.example.com',
-      size: 120,
-      revenue: 1500000,
-      status: ClientStatus.active,
-      assignedTo: managerEmployee.id
-    }
+      name: faker.company.name(),
+      slug: faker.helpers.slugify(faker.company.name()).toLowerCase() + '-' + faker.string.alphanumeric(4),
+      industry: faker.company.buzzNoun(),
+    },
   });
 
-  const clientB = await prisma.client.create({
-    data: {
-      name: 'GreenFarm',
-      company: 'GreenFarm',
-      email: 'info@greenfarm.com',
-      phone: '+380931112233',
-      industry: 'Agriculture',
-      size: 80,
-      revenue: 950000,
-      status: ClientStatus.lead,
-      assignedTo: managerEmployee.id
-    }
-  });
+  console.log('Creating Users and Employees...');
+  const employees = [];
+  const roles = [OrgRole.OWNER, OrgRole.ADMIN, OrgRole.SALES, OrgRole.ACCOUNTANT, OrgRole.HR_SPECIALIST];
 
-  const deal = await prisma.deal.create({
-    data: {
-      clientId: clientA.id,
-      title: 'CRM Implementation',
-      value: 50000,
-      currency: 'USD',
-      stage: DealStage.negotiation,
-      probability: 70,
-      expectedCloseDate: new Date(),
-      assignedTo: managerEmployee.id
-    }
-  });
-
-  await prisma.activity.create({
-    data: {
-      clientId: clientA.id,
-      dealId: deal.id,
-      type: 'call',
-      subject: 'Initial requirements',
-      description: 'Discussed CRM rollout phases',
-      date: new Date(),
-      duration: 45,
-      createdBy: managerEmployee.id
-    }
-  });
-
-  const bankAccount = await prisma.account.create({
-    data: {
-      name: 'Main Bank',
-      type: AccountType.bank,
-      currency: 'USD',
-      balance: 250000,
-      bankName: 'MonoBank'
-    }
-  });
-
-  const cashAccount = await prisma.account.create({
-    data: {
-      name: 'Cash Desk',
-      type: AccountType.cash,
-      currency: 'USD',
-      balance: 15000
-    }
-  });
-
-  await prisma.transaction.createMany({
-    data: [
-      {
-        accountId: bankAccount.id,
-        type: TransactionType.income,
-        amount: 20000,
-        currency: 'USD',
-        category: 'Implementation',
-        description: 'Upfront payment from TechNova',
-        date: new Date(),
-        clientId: clientA.id,
-        status: 'completed'
+  for (let i = 0; i < 5; i++) {
+    const isFirst = i === 0;
+    const user = await prisma.user.create({
+      data: {
+        email: isFirst ? 'parker_simonis95@yahoo.com' : faker.internet.email().toLowerCase(),
+        passwordHash,
+        name: isFirst ? 'Parker Simonis' : faker.person.fullName(),
+        company: org.name,
       },
-      {
-        accountId: bankAccount.id,
-        type: TransactionType.expense,
-        amount: 5000,
-        currency: 'USD',
-        category: 'Salaries',
-        description: 'Monthly payroll',
-        date: new Date(),
-        status: 'completed'
+    });
+
+    await prisma.organizationMember.create({
+      data: {
+        organizationId: org.id,
+        userId: user.id,
+        role: roles[i],
       },
-      {
-        accountId: cashAccount.id,
-        type: TransactionType.expense,
-        amount: 1200,
+    });
+
+    const employee = await prisma.employee.create({
+      data: {
+        organizationId: org.id,
+        userId: user.id,
+        firstName: user.name!.split(' ')[0],
+        lastName: user.name!.split(' ').slice(1).join(' ') || 'Smith',
+        position: faker.person.jobTitle(),
+        salary: faker.number.int({ min: 40000, max: 120000 }),
+        hireDate: faker.date.past({ years: 3 }),
+      },
+    });
+    employees.push(employee);
+  }
+
+  console.log('Creating CRM Data (Clients, Deals, Activities)...');
+  const clients = [];
+  for (let i = 0; i < 20; i++) {
+    const client = await prisma.client.create({
+      data: {
+        organizationId: org.id,
+        name: faker.company.name(),
+        email: faker.internet.email(),
+        phone: faker.phone.number(),
+        company: faker.company.name(),
+        industry: faker.company.buzzNoun(),
+        status: faker.helpers.arrayElement(Object.values(ClientStatus)),
+        assignedTo: faker.helpers.arrayElement(employees).id,
+      },
+    });
+    clients.push(client);
+  }
+
+  const deals = [];
+  for (let i = 0; i < 40; i++) {
+    const deal = await prisma.deal.create({
+      data: {
+        organizationId: org.id,
+        clientId: faker.helpers.arrayElement(clients).id,
+        title: faker.commerce.productName() + ' Deal',
+        value: faker.number.int({ min: 1000, max: 50000 }),
+        stage: faker.helpers.arrayElement(Object.values(DealStage)),
+        assignedTo: faker.helpers.arrayElement(employees).id,
+      },
+    });
+    deals.push(deal);
+  }
+
+  for (let i = 0; i < 50; i++) {
+    await prisma.activity.create({
+      data: {
+        organizationId: org.id,
+        clientId: faker.helpers.arrayElement(clients).id,
+        dealId: faker.helpers.arrayElement(deals).id,
+        type: faker.helpers.arrayElement(Object.values(ActivityType)),
+        subject: faker.lorem.sentence(),
+        description: faker.lorem.paragraph(),
+        date: faker.date.recent({ days: 30 }),
+        duration: faker.number.int({ min: 15, max: 120 }),
+        createdBy: faker.helpers.arrayElement(employees).id,
+      },
+    });
+  }
+
+  console.log('Creating Accounting Data (Accounts, Categories, Transactions, Budgets, Invoices)...');
+  const accounts = [];
+  const accountTypes = [AccountType.bank, AccountType.cash, AccountType.card];
+  for (let i = 0; i < 3; i++) {
+    const acc = await prisma.account.create({
+      data: {
+        organizationId: org.id,
+        name: `Account ${i + 1} - ${faker.finance.accountName()}`,
+        type: accountTypes[i],
+        balance: faker.number.int({ min: 10000, max: 100000 }),
         currency: 'USD',
-        category: 'Office',
-        description: 'Supplies',
-        date: new Date(),
-        status: 'completed'
-      }
-    ]
-  });
+      },
+    });
+    accounts.push(acc);
+  }
 
-  const invoice = await prisma.invoice.create({
-    data: {
-      invoiceNumber: 'INV-1001',
-      clientId: clientA.id,
-      amount: 50000,
-      currency: 'USD',
-      taxRate: 0.2,
-      taxAmount: 10000,
-      totalAmount: 60000,
-      status: InvoiceStatus.sent,
-      issueDate: new Date(),
-      dueDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
-      createdBy: accountantEmployee.id
-    }
-  });
+  const invoices = [];
+  for (let i = 0; i < 15; i++) {
+    const amount = faker.number.int({ min: 500, max: 15000 });
+    const taxRate = 0.2;
+    const taxAmount = amount * taxRate;
+    const totalAmount = amount + taxAmount;
+    const status = faker.helpers.arrayElement(Object.values(InvoiceStatus));
+    
+    const invoice = await prisma.invoice.create({
+      data: {
+        organizationId: org.id,
+        invoiceNumber: `INV-${faker.number.int({ min: 1000, max: 9999 })}`,
+        clientId: faker.helpers.arrayElement(clients).id,
+        amount,
+        taxRate,
+        taxAmount,
+        totalAmount,
+        currency: 'USD',
+        status,
+        issueDate: faker.date.recent({ days: 60 }),
+        dueDate: status === 'overdue' ? faker.date.recent({ days: 30 }) : faker.date.soon({ days: 30 }),
+        paidDate: status === 'paid' ? faker.date.recent({ days: 10 }) : null,
+        createdBy: faker.helpers.arrayElement(employees).id,
+      },
+    });
+    invoices.push(invoice);
+  }
 
-  await prisma.auditLog.create({
-    data: {
-      userId: manager.id,
-      entityType: 'deal',
-      entityId: deal.id,
-      action: 'deal_created',
-      description: `Manager ${managerEmployee.firstName} ${managerEmployee.lastName} created deal ${deal.title}`,
-      metadata: { clientId: clientA.id }
-    }
-  });
+  const categories = [];
+  for (let i = 0; i < 10; i++) {
+    const cat = await prisma.category.create({
+      data: {
+        organizationId: org.id,
+        name: faker.commerce.department(),
+        type: faker.helpers.arrayElement([TransactionType.income, TransactionType.expense]),
+      },
+    });
+    categories.push(cat);
+  }
 
-  await prisma.auditLog.create({
-    data: {
-      userId: accountant.id,
-      entityType: 'invoice',
-      entityId: invoice.id,
-      action: 'invoice_sent',
-      description: 'Finance department sent invoice to client',
-      metadata: { client: clientA.name }
-    }
-  });
+  for (let i = 0; i < 100; i++) {
+    const cat = faker.helpers.arrayElement(categories);
+    await prisma.transaction.create({
+      data: {
+        organizationId: org.id,
+        accountId: faker.helpers.arrayElement(accounts).id,
+        type: cat.type,
+        amount: faker.number.int({ min: 10, max: 5000 }),
+        currency: 'USD',
+        categoryId: cat.id,
+        date: faker.date.recent({ days: 30 }),
+        description: faker.lorem.words(3),
+      },
+    });
+  }
 
-  console.log('Seeding completed');
+  for (let i = 0; i < 5; i++) {
+    await prisma.budget.create({
+      data: {
+        organizationId: org.id,
+        name: faker.finance.accountName() + ' Budget',
+        amount: faker.number.int({ min: 5000, max: 20000 }),
+        period: 'monthly',
+        startDate: new Date('2026-07-01'),
+        endDate: new Date('2026-07-31'),
+        categoryId: faker.helpers.arrayElement(categories).id,
+      },
+    });
+  }
+
+  console.log('Creating HR Data (PayrollRecords, LeaveBalances)...');
+  for (let i = 0; i < 10; i++) {
+    const emp = faker.helpers.arrayElement(employees);
+    await prisma.payrollRecord.create({
+      data: {
+        organizationId: org.id,
+        employeeId: emp.id,
+        period: 'July 2026',
+        baseSalary: emp.salary || 5000,
+        grossSalary: Number(emp.salary || 5000) + faker.number.int({ min: 0, max: 1000 }),
+        netSalary: Number(emp.salary || 5000) * 0.8,
+        status: 'paid',
+      },
+    });
+  }
+
+  for (let i = 0; i < 10; i++) {
+    const emp = faker.helpers.arrayElement(employees);
+    await prisma.leaveBalance.create({
+      data: {
+        organizationId: org.id,
+        employeeId: emp.id,
+        type: faker.helpers.arrayElement(['vacation', 'sick', 'personal']),
+        total: 20,
+        used: faker.number.int({ min: 0, max: 15 }),
+      },
+    });
+  }
+
+  console.log('Seed completed successfully!');
 }
 
 main()
   .catch((e) => {
-    console.error(e);
+    console.error('Error during seed:', e);
     process.exit(1);
   })
   .finally(async () => {

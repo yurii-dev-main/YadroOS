@@ -6,7 +6,12 @@ import {
   listMessages,
   listMessagesForThread,
   listThreads,
-  updateTelegramStatus
+  updateTelegramStatus,
+  listEmails,
+  createEmail,
+  listCannedResponses,
+  getAutoResponders,
+  getNotificationPreferences
 } from '../controllers/communications.controller';
 import { authMiddleware } from '../middleware/auth';
 
@@ -21,5 +26,11 @@ router.get('/messages', listMessages);
 router.post('/messages', createMessage);
 router.get('/telegram/status', getTelegramStatus);
 router.put('/telegram/status', updateTelegramStatus);
+
+router.get('/emails', listEmails);
+router.post('/emails', createEmail);
+router.get('/canned-responses', listCannedResponses);
+router.get('/auto-responders', getAutoResponders);
+router.get('/notification-preferences', getNotificationPreferences);
 
 export default router;

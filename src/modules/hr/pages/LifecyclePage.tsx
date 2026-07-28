@@ -1,13 +1,13 @@
 import { useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../../../components/ui/card';
-import { hrService } from '../services/hr.service';
+import { useEmployees } from '../hooks/useEmployees';
 import { useLifecycle } from '../hooks/useLifecycle';
 import { OnboardingChecklist } from '../components/OnboardingChecklist';
 import { OffboardingChecklist } from '../components/OffboardingChecklist';
 
 export const LifecyclePage = () => {
-  const employees = useMemo(() => hrService.getEmployees(), []);
-  const { onboardingPlans, offboardingChecklists } = useLifecycle();
+  const { employees } = useEmployees();
+  const { onboardingPlans, offboardingChecklists, toggleOnboardingTask, toggleOffboardingTask } = useLifecycle();
 
   return (
     <div className="space-y-6">
@@ -21,8 +21,8 @@ export const LifecyclePage = () => {
         </CardContent>
       </Card>
 
-      <OnboardingChecklist employees={employees} plans={onboardingPlans} />
-      <OffboardingChecklist employees={employees} checklists={offboardingChecklists} />
+      <OnboardingChecklist employees={employees} plans={onboardingPlans} onToggleTask={toggleOnboardingTask} />
+      <OffboardingChecklist employees={employees} checklists={offboardingChecklists} onToggleTask={toggleOffboardingTask} />
     </div>
   );
 };

@@ -174,7 +174,7 @@ export const ClientFormModal = ({ open, onClose, onSubmit, initialData }: Client
             <button
               type="submit"
               disabled={isSubmitting}
-              className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
+              className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white transition hover:bg-primary disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isSubmitting ? 'Saving...' : 'Save'}
             </button>

@@ -36,7 +36,7 @@ CREATE TABLE "User" (
 -- CreateTable
 CREATE TABLE "Employee" (
     "id" UUID NOT NULL,
-    "userId" TEXT,
+    "userId" UUID,
     "firstName" TEXT NOT NULL,
     "lastName" TEXT NOT NULL,
     "position" TEXT,
@@ -63,7 +63,7 @@ CREATE TABLE "Client" (
     "size" INTEGER,
     "revenue" DECIMAL(65,30),
     "status" "ClientStatus" NOT NULL DEFAULT 'lead',
-    "assignedTo" TEXT,
+    "assignedTo" UUID,
     "lastContactedAt" TIMESTAMP(3),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -74,14 +74,14 @@ CREATE TABLE "Client" (
 -- CreateTable
 CREATE TABLE "Deal" (
     "id" UUID NOT NULL,
-    "clientId" TEXT NOT NULL,
+    "clientId" UUID NOT NULL,
     "title" TEXT NOT NULL,
     "value" DECIMAL(65,30),
     "currency" TEXT NOT NULL DEFAULT 'USD',
     "stage" "DealStage" NOT NULL DEFAULT 'lead',
     "probability" INTEGER,
     "expectedCloseDate" TIMESTAMP(3),
-    "assignedTo" TEXT,
+    "assignedTo" UUID,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -91,14 +91,14 @@ CREATE TABLE "Deal" (
 -- CreateTable
 CREATE TABLE "Activity" (
     "id" UUID NOT NULL,
-    "clientId" TEXT,
-    "dealId" TEXT,
+    "clientId" UUID,
+    "dealId" UUID,
     "type" "ActivityType" NOT NULL,
     "subject" TEXT,
     "description" TEXT,
     "date" TIMESTAMP(3),
     "duration" INTEGER,
-    "createdBy" TEXT,
+    "createdBy" UUID,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Activity_pkey" PRIMARY KEY ("id")
@@ -123,15 +123,15 @@ CREATE TABLE "Account" (
 -- CreateTable
 CREATE TABLE "Transaction" (
     "id" UUID NOT NULL,
-    "accountId" TEXT NOT NULL,
-    "toAccountId" TEXT,
+    "accountId" UUID NOT NULL,
+    "toAccountId" UUID,
     "type" "TransactionType" NOT NULL,
     "amount" DECIMAL(65,30) NOT NULL,
     "currency" TEXT NOT NULL,
     "category" TEXT,
     "description" TEXT,
     "date" DATE NOT NULL,
-    "clientId" TEXT,
+    "clientId" UUID,
     "status" TEXT NOT NULL DEFAULT 'completed',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -142,14 +142,14 @@ CREATE TABLE "Transaction" (
 CREATE TABLE "Invoice" (
     "id" UUID NOT NULL,
     "invoiceNumber" TEXT NOT NULL,
-    "clientId" TEXT NOT NULL,
+    "clientId" UUID NOT NULL,
     "amount" DECIMAL(65,30) NOT NULL,
     "currency" TEXT NOT NULL DEFAULT 'USD',
     "status" "InvoiceStatus" NOT NULL DEFAULT 'draft',
     "issueDate" DATE,
     "dueDate" DATE,
     "paidDate" DATE,
-    "createdBy" TEXT,
+    "createdBy" UUID,
     "taxRate" DOUBLE PRECISION NOT NULL DEFAULT 0,
     "taxAmount" DECIMAL(65,30) NOT NULL DEFAULT 0,
     "totalAmount" DECIMAL(65,30) NOT NULL DEFAULT 0,
@@ -161,7 +161,7 @@ CREATE TABLE "Invoice" (
 -- CreateTable
 CREATE TABLE "AuditLog" (
     "id" UUID NOT NULL,
-    "userId" TEXT,
+    "userId" UUID,
     "entityType" TEXT,
     "entityId" TEXT,
     "action" TEXT NOT NULL,
@@ -170,6 +170,50 @@ CREATE TABLE "AuditLog" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "AuditLog_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "IntegrationConnection" (
+    "id" UUID NOT NULL,
+    "provider" TEXT NOT NULL,
+    "displayName" TEXT NOT NULL,
+    "credentials" JSONB NOT NULL,
+    "status" TEXT NOT NULL DEFAULT 'connected',
+    "connectedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "lastSyncAt" TIMESTAMP(3),
+    "configuration" JSONB,
+
+    CONSTRAINT "IntegrationConnection_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "UnifiedMessage" (
+    "id" UUID NOT NULL,
+    "source" TEXT NOT NULL,
+    "sourceId" TEXT NOT NULL,
+    "threadId" TEXT NOT NULL,
+    "fromAddress" TEXT NOT NULL,
+    "fromName" TEXT,
+    "content" TEXT NOT NULL,
+    "direction" TEXT NOT NULL,
+    "clientId" UUID,
+    "metadata" JSONB,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "UnifiedMessage_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "WebhookSubscription" (
+    "id" UUID NOT NULL,
+    "event" TEXT NOT NULL,
+    "targetUrl" TEXT NOT NULL,
+    "secret" TEXT NOT NULL,
+    "active" BOOLEAN NOT NULL DEFAULT true,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "WebhookSubscription_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -214,6 +258,15 @@ CREATE INDEX "Invoice_clientId_idx" ON "Invoice"("clientId");
 -- CreateIndex
 CREATE INDEX "Invoice_invoiceNumber_idx" ON "Invoice"("invoiceNumber");
 
+-- CreateIndex
+CREATE INDEX "UnifiedMessage_threadId_createdAt_idx" ON "UnifiedMessage"("threadId", "createdAt");
+
+-- CreateIndex
+CREATE INDEX "UnifiedMessage_clientId_idx" ON "UnifiedMessage"("clientId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "UnifiedMessage_source_sourceId_key" ON "UnifiedMessage"("source", "sourceId");
+
 -- AddForeignKey
 ALTER TABLE "Employee" ADD CONSTRAINT "Employee_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
@@ -252,3 +305,6 @@ ALTER TABLE "Invoice" ADD CONSTRAINT "Invoice_createdBy_fkey" FOREIGN KEY ("crea
 
 -- AddForeignKey
 ALTER TABLE "AuditLog" ADD CONSTRAINT "AuditLog_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "UnifiedMessage" ADD CONSTRAINT "UnifiedMessage_clientId_fkey" FOREIGN KEY ("clientId") REFERENCES "Client"("id") ON DELETE SET NULL ON UPDATE CASCADE;

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Button } from '../../../components/ui/button';
 import { Input } from '../../../components/ui/input';
 import { PayrollDashboard } from '../components/PayrollDashboard';
@@ -10,6 +10,26 @@ export const PayrollPage = () => {
   const [period, setPeriod] = useState(() => new Date().toISOString().slice(0, 7));
   const [includeBonuses, setIncludeBonuses] = useState(true);
   const [includeOvertime, setIncludeOvertime] = useState(false);
+
+  const [search, setSearch] = useState('');
+  const [sortBy, setSortBy] = useState<'name' | 'net' | 'gross'>('name');
+
+  const filteredRecords = useMemo(() => {
+    let result = [...records];
+    if (search) {
+      const q = search.toLowerCase();
+      result = result.filter(
+        (r) => r.employeeName.toLowerCase().includes(q) || r.employeeId.toLowerCase().includes(q)
+      );
+    }
+    result.sort((a, b) => {
+      if (sortBy === 'name') return a.employeeName.localeCompare(b.employeeName);
+      if (sortBy === 'net') return b.netSalary - a.netSalary;
+      if (sortBy === 'gross') return b.grossSalary - a.grossSalary;
+      return 0;
+    });
+    return result;
+  }, [records, search, sortBy]);
 
   const handleRun = async () => {
     await runPayroll({ period, includeBonuses, includeOvertime, approveImmediately: true });
@@ -66,8 +86,27 @@ export const PayrollPage = () => {
           </div>
         </div>
       </div>
-      <PayrollDashboard records={records} />
-      <PayrollTable records={records} onGeneratePayslip={(recordId) => generatePayslip(recordId)} />
+      
+      <div className="flex items-center justify-between gap-4">
+        <Input 
+          placeholder="Search employees..." 
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="max-w-xs"
+        />
+        <select 
+          value={sortBy} 
+          onChange={(e) => setSortBy(e.target.value as any)}
+          className="rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"
+        >
+          <option value="name">Sort by Name</option>
+          <option value="net">Sort by Net Salary (High to Low)</option>
+          <option value="gross">Sort by Gross Salary (High to Low)</option>
+        </select>
+      </div>
+
+      <PayrollDashboard records={filteredRecords} />
+      <PayrollTable records={filteredRecords} onGeneratePayslip={(recordId) => generatePayslip(recordId)} />
     </div>
   );
 };

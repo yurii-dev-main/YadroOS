@@ -26,7 +26,7 @@ export const ActivityLog = ({ activities, filter, onFilterChange }: ActivityLogP
               type="button"
               className={`rounded-full px-4 py-1 text-sm transition ${
                 filter === type
-                  ? 'bg-blue-600 text-white shadow shadow-blue-500/40'
+                  ? 'bg-primary text-white shadow shadow-primary/40'
                   : 'bg-slate-800/80 text-slate-300 hover:bg-slate-700/80'
               }`}
             >
@@ -41,7 +41,7 @@ export const ActivityLog = ({ activities, filter, onFilterChange }: ActivityLogP
         <div className="flex flex-col gap-6">
           {activities.map((activity) => (
             <div key={activity.id} className="relative flex gap-4">
-              <div className="absolute left-3 top-2 h-2 w-2 rounded-full bg-blue-500" aria-hidden />
+              <div className="absolute left-3 top-2 h-2 w-2 rounded-full bg-primary" aria-hidden />
               <div className="ml-8 flex flex-1 flex-col gap-2 rounded-2xl border border-slate-700/40 bg-slate-900/60 p-4 shadow-lg shadow-black/20">
                 <div className="flex items-center justify-between">
                   <h4 className="text-sm font-semibold text-white">

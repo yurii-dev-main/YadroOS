@@ -1,8 +1,9 @@
-import type { Role } from '@prisma/client';
+import type { OrgRole } from '@prisma/client';
 
 export interface AuthPayload {
   userId: string;
-  role: Role;
+  organizationId: string;
+  role: OrgRole;
 }
 
 declare module 'express-serve-static-core' {

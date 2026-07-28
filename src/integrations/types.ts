@@ -7,7 +7,8 @@ export type IntegrationProvider =
   | 'telegram'
   | 'whatsapp'
   | 'google-calendar'
-  | 'microsoft-calendar';
+  | 'microsoft-calendar'
+  | 'gemini';
 
 export interface OAuthCredentials {
   clientId: string;

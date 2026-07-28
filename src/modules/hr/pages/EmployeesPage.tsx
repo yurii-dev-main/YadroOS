@@ -34,7 +34,7 @@ export const EmployeesPage = () => {
             <CardTitle className="text-sm text-slate-400">Employees</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-semibold text-indigo-300">{statistics.totalEmployees}</p>
+            <p className="text-3xl font-semibold text-primary">{statistics.totalEmployees}</p>
           </CardContent>
         </Card>
         <Card className="border-slate-800 bg-slate-900/70">
@@ -62,7 +62,7 @@ export const EmployeesPage = () => {
           <CardContent className="space-y-1 text-sm text-slate-300">
             {statistics.topPerformers.map((highlight) => (
               <p key={highlight.employeeId}>
-                {hrService.getEmployeeById(highlight.employeeId)?.name ?? 'Unknown'} —{' '}
+                {employees.find(e => e.id === highlight.employeeId)?.name ?? 'Unknown'} —{' '}
                 {highlight.score}
               </p>
             ))}

@@ -6,15 +6,17 @@ import { fetchInsightGroups } from '../services/ai.service';
 export const useInsights = () => {
   const [insights, setInsights] = useState<InsightGroup[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isGeminiConnected, setIsGeminiConnected] = useState(true);
 
   useEffect(() => {
     let mounted = true;
 
     const load = async () => {
       try {
-        const result = await fetchInsightGroups();
+        const { groups, isGeminiConnected } = await fetchInsightGroups();
         if (!mounted) return;
-        setInsights(result);
+        setInsights(groups);
+        setIsGeminiConnected(isGeminiConnected);
       } finally {
         if (mounted) {
           setLoading(false);
@@ -28,5 +30,5 @@ export const useInsights = () => {
     };
   }, []);
 
-  return { insights, loading };
+  return { insights, loading, isGeminiConnected };
 };

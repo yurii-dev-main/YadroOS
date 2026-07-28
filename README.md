@@ -1,22 +1,22 @@
 # YadroOS Platform
 
-YadroOS is a modular web platform for organizational process management (CRM, communications, HR, finance, and monitoring) featuring a unified interface and shared technical stack. The repository contains a React + TypeScript frontend built with Vite and styled with Tailwind CSS.
+YadroOS is a modular web platform for organizational process management (CRM, communications, HR, finance, and monitoring) featuring a unified interface and shared technical stack. The repository contains a React + TypeScript frontend built with Vite, styled with Tailwind CSS, and a Node.js backend powered by Prisma and Express.
 
 ## Key Features
 
-- CRM: clients, deals, tasks, and analytics.
-- Communications: unified inbox and messenger, integrations with Telegram/IMAP/SMTP.
-- HR: employee database, training, time tracking, performance evaluation.
-- Accounting and Finance: invoices, transactions, billing, bonus calculation.
-- Analytics and Monitoring: reports, dashboards, AI suggestions.
+- **CRM**: clients, deals, tasks, and analytics with CSV import/export and unified mailing campaigns.
+- **Communications**: unified inbox and messenger, real-time WebSockets integration, and a hybrid email strategy (IMAP/SMTP + external providers).
+- **HR**: employee database, training, time tracking, performance evaluation, dynamic KPI tracking.
+- **Accounting and Finance**: invoices, transactions, billing, tax calculation, dynamic cash flow tracking, multi-currency support via external APIs (NBU).
+- **Analytics and Monitoring**: reports, dashboards, AI suggestions.
 
 ## Tech Stack
 
 - **Frontend:** React 18, TypeScript, Vite, Tailwind CSS, Zustand, React Router.
-- **Backend:** Node.js, Express, Prisma ORM, Socket.IO, SQLite/PostgreSQL.
-- **AI Capabilities:** OpenAI API with **Function Calling / Actionable Tools** (autonomous CRM deal creation, messaging, etc.).
-- **Infrastructure:** Docker and Docker Compose (see `docker-compose.yml`), GitHub Actions for CI/CD.
-- **Testing and Quality:** ESLint, Prettier, **Vitest** for robust unit and integration testing.
+- **Backend:** Node.js, Express, Prisma ORM, Socket.IO.
+- **Database & Services:** PostgreSQL, Docker, Docker Compose for unified dev environments.
+- **AI Capabilities:** Google Gemini 3.1 Flash Lite via `@google/generative-ai` SDK with **Function Calling / Actionable Tools** (autonomous CRM deal creation, messaging, etc.) and intelligent fallbacks.
+- **Testing and Quality:** ESLint, Prettier, **Vitest** for robust unit and RBAC integration testing.
 
 ## Repository Structure
 
@@ -36,53 +36,46 @@ YadroOS is a modular web platform for organizational process management (CRM, co
 ├── tests/                # Vitest unit and integration tests
 ├── vite.config.ts        # Vite configuration
 ├── vitest.config.ts      # Vitest test configuration
-└── tailwind.config.js    # Tailwind CSS configuration
+├── tailwind.config.js    # Tailwind CSS configuration
+└── docker-compose.yml    # Unified container environment (Frontend, Backend, DB)
 ```
 
-## Quick Start
+## Quick Start (Docker - Recommended)
 
-### Automated Environment Setup
+The easiest way to spin up the entire platform (Frontend, Backend, and PostgreSQL database) simultaneously in development mode is through Docker Compose.
 
-For quick deployment on a new machine, dependency installation scripts can be used.
+1. Ensure Docker Desktop is running.
+2. Run the following command in the root of the project:
+   ```bash
+   docker-compose up --build
+   ```
+3. Access the application:
+   - **Frontend UI:** `http://localhost:5187/`
+   - **Backend API:** `http://localhost:3000/api`
+   - **Database (PostgreSQL):** `localhost:5433`
 
-**Ubuntu/Debian:**
+### Seeding Test Data
+
+To populate the system with a realistic test organization (clients, deals, invoices, and employees), run the Prisma seed script inside the backend container:
 
 ```bash
-./scripts/bootstrap.sh
+docker-compose exec backend npx prisma db seed
 ```
 
-**Windows (PowerShell as Administrator):**
+This script will generate an admin user with the following credentials:
+- **Email**: `parker_simonis95@yahoo.com`
+- **Password**: `Password123!`
 
-```powershell
-Set-ExecutionPolicy -Scope Process Bypass
-./scripts/bootstrap.ps1
-```
+---
 
-Optional flags:
+## Manual Local Installation
 
-- `--skip-docker` — skip Docker installation.
-- `--skip-node` — skip Node.js installation.
-- `--skip-git` — skip git installation.
-
-PowerShell flags:
-
-- `-SkipDocker` — skip Docker Desktop installation.
-- `-SkipNode` — skip Node.js installation.
-- `-SkipGit` — skip git installation.
-
-After completion, log out and log back in if you were added to the `docker` group.
-
-### Manual Installation
+If you prefer to run things without Docker:
 
 1. Install Node.js 20+ and npm.
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Start the Vite dev server (default at http://localhost:5187/):
-   ```bash
-   npm run dev
-   ```
+2. Provide a PostgreSQL database and configure the connection in `backend/.env`.
+3. In `backend/`: Run `npm install`, then `npx prisma db push`, and start the backend with `npm run dev`.
+4. In the root directory: Run `npm install` and start the frontend with `npm run dev`.
 
 ## Build and Checks
 

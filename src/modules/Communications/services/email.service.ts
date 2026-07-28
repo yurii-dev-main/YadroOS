@@ -14,7 +14,7 @@ import { apiClient, IS_DEMO_MODE } from '../../../services/apiClient';
 const sampleTags: EmailTag[] = [
   { id: 'vip', label: 'VIP', color: 'bg-red-500' },
   { id: 'finance', label: 'Finance', color: 'bg-emerald-500' },
-  { id: 'support', label: 'Support', color: 'bg-blue-500' }
+  { id: 'support', label: 'Support', color: 'bg-primary' }
 ];
 
 const sampleClients: ClientSummary[] = [
@@ -44,7 +44,7 @@ const sampleEmails: EmailMessage[] = [
     body: 'Hello! I confirm the meeting for tomorrow at 14:00. Please send me a short agenda.',
     from: 'maria.koval@techvision.ua',
     to: ['sales@yadroos.io'],
-    date: '2024-02-05T07:32:00Z',
+    date: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
     folder: 'inbox',
     unread: true,
     starred: true,
@@ -58,7 +58,7 @@ const sampleEmails: EmailMessage[] = [
     body: 'Hello, I am interested in CRM integration and communication automation. Can we discuss the details? Looking forward to your reply.',
     from: 'oleh@greensoft.io',
     to: ['sales@yadroos.io'],
-    date: '2024-02-04T16:12:00Z',
+    date: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
     folder: 'inbox',
     unread: false,
     tags: [sampleTags[1]],
@@ -71,7 +71,7 @@ const sampleEmails: EmailMessage[] = [
     body: 'Team, sharing project updates. Details in the attached file.',
     from: 'project-manager@yadroos.io',
     to: ['marketing@yadroos.io'],
-    date: '2024-02-03T08:20:00Z',
+    date: new Date(Date.now() - 1000 * 60 * 60 * 48).toISOString(),
     folder: 'sent',
     unread: false,
     attachments: [

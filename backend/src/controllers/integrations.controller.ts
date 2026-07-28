@@ -3,17 +3,21 @@ import { prisma } from '../lib/prisma';
 import { adapterRegistry } from '../adapters/AdapterRegistry';
 import { TelegramAdapter } from '../adapters/TelegramAdapter';
 
+import { encrypt } from '../utils/encryption';
+
 export const integrationsController = {
   async getConnections(req: Request, res: Response) {
     try {
       const connections = await prisma.integrationConnection.findMany({
+        where: { organizationId: req.user!.organizationId },
         select: {
           id: true,
           provider: true,
           displayName: true,
           status: true,
           connectedAt: true,
-          lastSyncAt: true
+          lastSyncAt: true,
+          configuration: true
         }
       });
       res.json(connections);
@@ -24,13 +28,17 @@ export const integrationsController = {
 
   async addConnection(req: Request, res: Response) {
     const { provider, displayName, credentials } = req.body;
+    
+    // Encrypt credentials before saving
+    const encryptedCredentials = { encryptedData: encrypt(JSON.stringify(credentials)) };
 
     try {
       const connection = await prisma.integrationConnection.create({
         data: {
+          organizationId: req.user!.organizationId,
           provider,
           displayName,
-          credentials, // In a real app, this should be encrypted using AES-256 before saving
+          credentials: encryptedCredentials,
           status: 'connected'
         }
       });
@@ -80,5 +88,20 @@ export const integrationsController = {
     });
 
     res.json({ status });
+  },
+
+  async updateConfig(req: Request, res: Response) {
+    const { id } = req.params;
+    const { config } = req.body;
+
+    try {
+      const connection = await prisma.integrationConnection.update({
+        where: { id },
+        data: { configuration: config }
+      });
+      res.json(connection);
+    } catch (e) {
+      res.status(500).json({ error: 'Failed to update configuration' });
+    }
   }
 };

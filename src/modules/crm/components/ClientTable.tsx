@@ -15,7 +15,9 @@ interface ClientTableProps {
 const sortableColumns: Array<{ key: ClientSortField; label: string }> = [
   { key: 'name', label: 'Client' },
   { key: 'createdAt', label: 'Created Date' },
-  { key: 'revenue', label: 'Revenue' }
+  { key: 'revenue', label: 'Revenue' },
+  { key: 'manager', label: 'Manager' },
+  { key: 'status', label: 'Status' }
 ];
 
 export const ClientTable = ({
@@ -69,12 +71,6 @@ export const ClientTable = ({
               </th>
             ))}
             <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-400">
-              Manager
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-400">
-              Status
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-400">
               Tags
             </th>
           </tr>
@@ -100,7 +96,7 @@ export const ClientTable = ({
             clients.map((client) => (
               <tr
                 key={client.id}
-                className="group cursor-pointer bg-slate-900/50 transition hover:bg-blue-500/5"
+                className="group cursor-pointer bg-slate-900/50 transition hover:bg-primary/5"
                 onClick={() => onOpenClient(client.id)}
               >
                 <td className="px-6 py-4">
@@ -136,7 +132,7 @@ export const ClientTable = ({
                 </td>
                 <td className="px-6 py-4">
                   <div className="flex flex-wrap gap-2">
-                    {client.tags.map((tag) => (
+                    {(client.tags || []).map((tag) => (
                       <span
                         key={tag.id}
                         className="rounded-full bg-slate-800/80 px-2 py-1 text-xs text-slate-200"

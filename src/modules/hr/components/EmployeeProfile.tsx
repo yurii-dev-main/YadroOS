@@ -49,6 +49,19 @@ export const EmployeeProfile: FC<EmployeeProfileProps> = ({ employee }) => {
             </p>
             <p>Payment Method: {employee.paymentMethod}</p>
           </div>
+          {employee.performanceScore !== undefined && (
+            <div>
+              <h4 className="text-xs uppercase tracking-wide text-slate-400">Performance</h4>
+              <p className="font-medium text-amber-400">Score: {employee.performanceScore}/100</p>
+            </div>
+          )}
+          {employee.timeTrackingSummary && (
+            <div>
+              <h4 className="text-xs uppercase tracking-wide text-slate-400">Time Tracking</h4>
+              <p>Attendance: {employee.timeTrackingSummary.attendanceRate}%</p>
+              <p>Hours (Month): {employee.timeTrackingSummary.hoursWorkedLastMonth}h</p>
+            </div>
+          )}
         </CardContent>
       </Card>
 

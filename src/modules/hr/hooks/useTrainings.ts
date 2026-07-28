@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { hrService } from '../services/hr.service';
 import { Training, TrainingStatus } from '../types/hr.types';
 
@@ -20,6 +20,7 @@ interface UseTrainingsResult {
     rating: number,
     comments: string
   ) => void;
+  addTraining: (training: Partial<Training>) => void;
 }
 
 export const useTrainings = (): UseTrainingsResult => {
@@ -27,17 +28,22 @@ export const useTrainings = (): UseTrainingsResult => {
   const [selectedTrainingId, setSelectedTrainingId] = useState<string | null>(null);
   const [version, setVersion] = useState(0);
 
-  const trainings = useMemo(() => {
-    const data = hrService.getTrainings(filters.status);
-    return data.sort((a, b) => a.date.localeCompare(b.date));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filters, version]);
+  const [trainings, setTrainings] = useState<Training[]>([]);
+  const [selectedTraining, setSelectedTraining] = useState<Training | undefined>(undefined);
 
-  const selectedTraining = useMemo(
-    () => (selectedTrainingId ? hrService.getTrainingById(selectedTrainingId) : undefined),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [selectedTrainingId, version]
-  );
+  useEffect(() => {
+    hrService.getTrainings(filters.status).then(data => {
+      setTrainings(data.sort((a, b) => a.date.localeCompare(b.date)));
+    }).catch(console.error);
+  }, [filters.status, version]);
+
+  useEffect(() => {
+    if (selectedTrainingId) {
+      hrService.getTrainingById(selectedTrainingId).then(setSelectedTraining).catch(console.error);
+    } else {
+      setSelectedTraining(undefined);
+    }
+  }, [selectedTrainingId, version]);
 
   const update = () => setVersion((prev) => prev + 1);
 
@@ -58,6 +64,11 @@ export const useTrainings = (): UseTrainingsResult => {
     submitFeedback: (trainingId, employeeId, rating, comments) => {
       hrService.submitTrainingFeedback(trainingId, { employeeId, rating, comments });
       update();
+    },
+    addTraining: (training) => {
+      hrService.createTraining(training).then(() => {
+        update();
+      }).catch(console.error);
     }
   };
 };

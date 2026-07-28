@@ -1,4 +1,4 @@
-import { RadialBar, RadialBarChart, ResponsiveContainer } from 'recharts';
+import { PolarAngleAxis, RadialBar, RadialBarChart, ResponsiveContainer } from 'recharts';
 
 interface ScoreGaugeProps {
   value: number;
@@ -24,6 +24,7 @@ export const ScoreGauge = ({ value, label, size = 180, suffix = '%' }: ScoreGaug
             endAngle={-45}
             data={chartData}
           >
+            <PolarAngleAxis type="number" domain={[0, 100]} angleAxisId={0} tick={false} />
             <RadialBar background dataKey="value" cornerRadius={12} fill="#38bdf8" />
           </RadialBarChart>
         </ResponsiveContainer>

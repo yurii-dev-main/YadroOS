@@ -9,56 +9,6 @@ import {
 } from '../types/communication.types';
 import { apiClient } from '../../../services/apiClient';
 
-const cannedResponses: CannedResponse[] = [
-  {
-    id: 'cr-1',
-    shortcut: '/thanks',
-    title: 'Thank You',
-    content: 'Thank you for reaching out! We are already working on your request.'
-  },
-  {
-    id: 'cr-2',
-    shortcut: '/schedule',
-    title: 'Offer a call',
-    content:
-      'Would it be convenient for you to discuss the details on a short call tomorrow at 12:00?'
-  }
-];
-
-const autoResponders: AutoResponder[] = [
-  {
-    id: 'auto-1',
-    type: 'out_of_office',
-    active: false,
-    message: 'Hello! We are currently out of office, we will get back to you within 24 hours.'
-  },
-  {
-    id: 'auto-2',
-    type: 'business_hours',
-    active: true,
-    message: 'Welcome! We work from 9:00 to 18:00. We will reply as soon as we are online.'
-  }
-];
-
-const notificationPreferences: NotificationPreferences = {
-  desktop: true,
-  emailDigest: 'daily',
-  sound: true,
-  urgentOnly: false,
-  doNotDisturb: false,
-  schedule: {
-    startHour: 9,
-    endHour: 18,
-    timezone: 'Europe/Kyiv',
-    days: [1, 2, 3, 4, 5]
-  },
-  channelPreferences: {
-    email: true,
-    internal: true,
-    telegram: false
-  }
-};
-
 export const chatService = {
   async fetchThreads() {
     const response = await apiClient.get<ChatThread[]>('/v1/communications/threads');
@@ -92,23 +42,53 @@ export const chatService = {
   },
 
   async fetchCannedResponses() {
-    await new Promise((resolve) => setTimeout(resolve, 150));
-    return cannedResponses;
+    const response = await apiClient.get<CannedResponse[]>('/v1/communications/canned-responses');
+    return response.data;
   },
 
-  async fetchAutoResponders() {
-    await new Promise((resolve) => setTimeout(resolve, 150));
-    return autoResponders;
+  async fetchAutoResponders(): Promise<AutoResponder[]> {
+    try {
+      const response = await apiClient.get<any>('/v1/communications/auto-responders');
+      const data = response.data?.data || response.data || [];
+      return data.map((r: any) => ({
+        ...r,
+        id: String(r.id),
+        type: r.type || (r.name?.toLowerCase().includes('welcome') ? 'welcome_message' : 'out_of_office'),
+        message: r.message || 'Thank you for your message. We will get back to you shortly.',
+        active: !!r.active
+      }));
+    } catch { return []; }
   },
 
-  async fetchNotificationPreferences() {
-    await new Promise((resolve) => setTimeout(resolve, 150));
-    return notificationPreferences;
+  async fetchNotificationPreferences(): Promise<NotificationPreferences> {
+    try {
+      const response = await apiClient.get<any>('/v1/communications/notification-preferences');
+      const data = response.data?.data || response.data || {};
+      return {
+        desktop: data.pushNotifications ?? data.desktop ?? true,
+        sound: data.sound ?? true,
+        emailDigest: data.emailDigest ?? 'daily',
+        doNotDisturb: data.doNotDisturb ?? false,
+        channelPreferences: data.channelPreferences || {
+          email: data.emailNotifications ?? true,
+          telegram: true,
+          whatsapp: false,
+          livechat: true
+        }
+      };
+    } catch {
+      return {
+        desktop: true,
+        sound: true,
+        emailDigest: 'daily',
+        doNotDisturb: false,
+        channelPreferences: { email: true, telegram: true, whatsapp: false, livechat: true }
+      };
+    }
   },
 
   async updateNotificationPreferences(prefs: NotificationPreferences) {
-    await new Promise((resolve) => setTimeout(resolve, 200));
-    Object.assign(notificationPreferences, prefs);
-    return notificationPreferences;
+    const response = await apiClient.put<NotificationPreferences>('/v1/communications/notification-preferences', prefs);
+    return response.data;
   }
 };

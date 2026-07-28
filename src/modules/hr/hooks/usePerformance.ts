@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { hrService } from '../services/hr.service';
 import { KPI, OKR, PerformanceHighlight, PerformanceReview } from '../types/hr.types';
 
@@ -11,10 +11,17 @@ interface UsePerformanceResult {
 }
 
 export const usePerformance = (): UsePerformanceResult => {
-  const kpis = useMemo(() => hrService.getKpis(), []);
-  const okrs = useMemo(() => hrService.getOkrs(), []);
-  const reviews = useMemo(() => hrService.getPerformanceReviews(), []);
-  const highlights = useMemo(() => hrService.getPerformanceHighlights(), []);
+  const [kpis, setKpis] = useState<KPI[]>([]);
+  const [okrs, setOkrs] = useState<OKR[]>([]);
+  const [reviews, setReviews] = useState<PerformanceReview[]>([]);
+  const [highlights, setHighlights] = useState<PerformanceHighlight[]>([]);
+
+  useEffect(() => {
+    hrService.getKpis().then(setKpis).catch(console.error);
+    hrService.getOkrs().then(setOkrs).catch(console.error);
+    hrService.getPerformanceReviews().then(setReviews).catch(console.error);
+    hrService.getPerformanceHighlights().then(setHighlights).catch(console.error);
+  }, []);
 
   const averageScore = useMemo(() => {
     if (!reviews.length) return 0;

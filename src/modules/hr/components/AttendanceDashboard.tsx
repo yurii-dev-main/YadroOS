@@ -51,7 +51,7 @@ export const AttendanceDashboard: FC<AttendanceDashboardProps> = ({
           <CardTitle className="text-sm text-slate-400">Active Leaves</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-3xl font-semibold text-indigo-300">
+          <p className="text-3xl font-semibold text-primary">
             {leaveRequests.filter((request) => request.status === 'approved').length}
           </p>
         </CardContent>
@@ -72,7 +72,7 @@ export const AttendanceDashboard: FC<AttendanceDashboardProps> = ({
               <p className="text-sm font-semibold text-slate-100">
                 {getEmployeeName(employees, record.employeeId)}
               </p>
-              <span className="rounded-md border border-indigo-500/30 bg-indigo-500/10 px-2 py-1 text-xs uppercase tracking-wide text-indigo-200">
+              <span className="rounded-md border border-primary/30 bg-primary/10 px-2 py-1 text-xs uppercase tracking-wide text-primary">
                 {record.schedule}
               </span>
             </div>
@@ -142,7 +142,7 @@ export const AttendanceDashboard: FC<AttendanceDashboardProps> = ({
                   {getEmployeeName(employees, balance.employeeId)}
                 </p>
                 <p className="text-xs text-slate-400">{balance.type}</p>
-                <p className="text-sm text-indigo-300">
+                <p className="text-sm text-primary">
                   Remaining: {balance.total - balance.used} days of {balance.total}
                 </p>
               </div>

@@ -17,8 +17,8 @@ const statusColors: Record<Employee['status'], string> = {
 
 export const EmployeeCard: FC<EmployeeCardProps> = ({ employee, onSelect, isSelected }) => (
   <Card
-    className={`cursor-pointer transition-all duration-150 hover:border-indigo-400/60 hover:shadow-lg hover:shadow-indigo-500/10 ${
-      isSelected ? 'border-indigo-400 shadow-lg shadow-indigo-500/20' : 'border-slate-800'
+    className={`cursor-pointer transition-all duration-150 hover:border-primary/60 hover:shadow-lg hover:shadow-primary/10 ${
+      isSelected ? 'border-primary shadow-lg shadow-primary/20' : 'border-slate-800'
     }`}
     onClick={() => onSelect?.(employee)}
   >

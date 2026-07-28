@@ -1,10 +1,40 @@
-import { DndContext, DragEndEvent, DragOverlay, useDroppable } from '@dnd-kit/core';
+import { DndContext, DragEndEvent, PointerSensor, useSensor, useSensors, useDroppable } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 
 import { CRMDeal, DealStage } from '../types/crm.types';
 import { formatCurrency, stageLabels } from '../utils/crm.utils';
-import { DealCard } from './DealCard';
+import { DealCard, DealCardView } from './DealCard';
+const CustomDragGhost = ({ deal }: { deal: CRMDeal }) => {
+  const [pos, setPos] = useState({ x: -9999, y: -9999 });
+
+  useEffect(() => {
+    const handleMove = (e: PointerEvent) => {
+      setPos({ x: e.clientX + 16, y: e.clientY + 16 });
+    };
+    
+    window.addEventListener('pointermove', handleMove);
+    return () => window.removeEventListener('pointermove', handleMove);
+  }, []);
+
+  if (pos.x === -9999) return null;
+
+  return createPortal(
+    <div 
+      className="pointer-events-none fixed z-[9999] opacity-95 shadow-2xl transition-none"
+      style={{
+        left: 0,
+        top: 0,
+        transform: `translate3d(${pos.x}px, ${pos.y}px, 0)`,
+        width: '280px',
+      }}
+    >
+      <DealCardView deal={deal} />
+    </div>,
+    document.body
+  );
+};
 
 interface PipelineBoardProps {
   groupedDeals: Record<DealStage, CRMDeal[]>;
@@ -59,6 +89,14 @@ const Column = ({
 export const PipelineBoard = ({ groupedDeals, onMoveDeal, onQuickEdit }: PipelineBoardProps) => {
   const [activeDeal, setActiveDeal] = useState<CRMDeal | null>(null);
 
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5,
+      },
+    })
+  );
+
   const columns = useMemo(
     () =>
       stageLabels.map((stage) => ({
@@ -82,6 +120,7 @@ export const PipelineBoard = ({ groupedDeals, onMoveDeal, onQuickEdit }: Pipelin
 
   return (
     <DndContext
+      sensors={sensors}
       onDragStart={(event) => {
         const { active } = event;
         const deal = columns
@@ -103,23 +142,7 @@ export const PipelineBoard = ({ groupedDeals, onMoveDeal, onQuickEdit }: Pipelin
         ))}
       </div>
 
-      <DragOverlay>
-        {activeDeal && (
-          <div className="w-64 rounded-2xl border border-slate-700/60 bg-slate-900/80 p-4 text-left shadow-xl shadow-black/30">
-            <div className="flex items-center justify-between">
-              <h4 className="text-sm font-semibold text-white">{activeDeal.title}</h4>
-              <span className="text-xs text-slate-400">{activeDeal.stage}</span>
-            </div>
-            <div className="mt-2 text-xs text-slate-400">{activeDeal.clientName}</div>
-            <div className="mt-3 flex items-center justify-between text-sm">
-              <span className="font-semibold text-emerald-400">
-                {formatCurrency(activeDeal.value)}
-              </span>
-              <span className="text-slate-400">{activeDeal.probability}%</span>
-            </div>
-          </div>
-        )}
-      </DragOverlay>
+      {activeDeal && <CustomDragGhost deal={activeDeal} />}
     </DndContext>
   );
 };

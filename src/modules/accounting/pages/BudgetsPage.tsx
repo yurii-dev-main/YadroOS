@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../../../components/ui/card';
 import { BudgetManager } from '../components/BudgetManager';
 import { useAccounting } from '../hooks/useAccounting';
+import { accountingService } from '../services/accounting.service';
 
 export const BudgetsPage = () => {
   const { budgets, loadBudgets, updateBudget } = useAccounting();
@@ -23,7 +24,19 @@ export const BudgetsPage = () => {
 
   return (
     <div className="space-y-6">
-      <BudgetManager budgets={budgets} onUpdate={updateBudget} />
+      <BudgetManager 
+        budgets={budgets} 
+        onUpdate={updateBudget} 
+        onCreate={async (name, amount) => {
+          await accountingService.createBudget({
+            name,
+            allocatedAmount: amount,
+            currency: 'USD',
+            period: 'monthly'
+          });
+          await loadBudgets();
+        }}
+      />
       <Card className="border border-slate-800 bg-slate-900/60">
         <CardHeader>
           <CardTitle className="text-sm font-semibold text-slate-100">Budget Usage</CardTitle>

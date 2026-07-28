@@ -8,13 +8,17 @@ interface AccountListProps {
   exchangeRate: ExchangeRate | null;
   baseCurrency: CurrencyCode;
   onReconcile?: (accountId: string) => void;
+  onSync?: (accountId: string) => void;
+  syncingAccountId?: string | null;
 }
 
 export const AccountList = ({
   accounts,
   exchangeRate,
   baseCurrency,
-  onReconcile
+  onReconcile,
+  onSync,
+  syncingAccountId
 }: AccountListProps) => {
   const total = useMemo(
     () => calculateTotalBalance(accounts, baseCurrency, exchangeRate),
@@ -34,7 +38,13 @@ export const AccountList = ({
       </div>
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {accounts.map((account) => (
-          <AccountCard key={account.id} account={account} onReconcile={onReconcile} />
+          <AccountCard
+            key={account.id}
+            account={account}
+            onReconcile={onReconcile}
+            onSync={onSync}
+            isSyncing={syncingAccountId === account.id}
+          />
         ))}
       </div>
     </div>

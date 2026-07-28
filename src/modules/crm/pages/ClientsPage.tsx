@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { UploadCloud, Download, Plus, Mail, Trash2, Columns, Table2 } from 'lucide-react';
 
 import { Input } from '../../../components/ui/input';
+import { DataSourceBadge } from '../../../components/ui/DataSourceBadge';
 import { ClientFormModal, ClientFormValues } from '../components/ClientFormModal';
 import { ClientFilters } from '../components/ClientFilters';
 import { ClientTable } from '../components/ClientTable';
@@ -92,14 +93,15 @@ export const ClientsPage = ({ onOpenClient }: { onOpenClient: (id: string) => vo
           </p>
         </div>
         <div className="flex items-center gap-3">
+          <DataSourceBadge source="mock" onSourceChange={() => {}} />
           <button
             type="button"
             onClick={() => setOpenForm(true)}
-            className="flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-blue-500/30 transition hover:bg-blue-500"
+            className="flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-primary/30 transition hover:bg-primary"
           >
             <Plus className="h-4 w-4" /> New Client
           </button>
-          <label className="flex items-center gap-2 rounded-xl border border-slate-600/60 px-4 py-2 text-sm text-slate-200 transition hover:border-blue-500 hover:text-blue-300">
+          <label className="flex items-center gap-2 rounded-xl border border-slate-600/60 px-4 py-2 text-sm text-slate-200 transition hover:border-primary hover:text-primary">
             <UploadCloud className="h-4 w-4" /> Import
             <input
               type="file"
@@ -114,7 +116,7 @@ export const ClientsPage = ({ onOpenClient }: { onOpenClient: (id: string) => vo
           <button
             type="button"
             onClick={handleExport}
-            className="flex items-center gap-2 rounded-xl border border-slate-600/60 px-4 py-2 text-sm text-slate-200 transition hover:border-blue-500 hover:text-blue-300"
+            className="flex items-center gap-2 rounded-xl border border-slate-600/60 px-4 py-2 text-sm text-slate-200 transition hover:border-primary hover:text-primary"
           >
             <Download className="h-4 w-4" /> Export
           </button>
@@ -124,11 +126,11 @@ export const ClientsPage = ({ onOpenClient }: { onOpenClient: (id: string) => vo
       <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-slate-700/50 bg-slate-900/60 p-4">
         <div className="flex items-center gap-2 rounded-xl border border-slate-700/60 bg-slate-900/70 px-3 py-2">
           <Table2
-            className={`h-4 w-4 cursor-pointer ${viewMode === 'table' ? 'text-blue-400' : 'text-slate-500'}`}
+            className={`h-4 w-4 cursor-pointer ${viewMode === 'table' ? 'text-primary' : 'text-slate-500'}`}
             onClick={() => setViewMode('table')}
           />
           <Columns
-            className={`h-4 w-4 cursor-pointer ${viewMode === 'cards' ? 'text-blue-400' : 'text-slate-500'}`}
+            className={`h-4 w-4 cursor-pointer ${viewMode === 'cards' ? 'text-primary' : 'text-slate-500'}`}
             onClick={() => setViewMode('cards')}
           />
         </div>
@@ -177,19 +179,19 @@ export const ClientsPage = ({ onOpenClient }: { onOpenClient: (id: string) => vo
       )}
 
       {selectedIds.length > 0 && (
-        <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-blue-500/40 bg-blue-500/10 p-4 text-sm text-blue-100">
+        <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-primary/40 bg-primary/10 p-4 text-sm text-primary">
           <span>{selectedIds.length} selected</span>
           <button
             type="button"
             onClick={() => handleBulkStatus('active')}
-            className="rounded-lg border border-blue-400/60 px-3 py-1 text-xs uppercase tracking-wide text-blue-200 transition hover:border-blue-300 hover:text-white"
+            className="rounded-lg border border-primary/60 px-3 py-1 text-xs uppercase tracking-wide text-primary transition hover:border-primary hover:text-white"
           >
             Mark as active
           </button>
           <button
             type="button"
             onClick={() => handleBulkStatus('inactive')}
-            className="rounded-lg border border-blue-400/60 px-3 py-1 text-xs uppercase tracking-wide text-blue-200 transition hover:border-blue-300 hover:text-white"
+            className="rounded-lg border border-primary/60 px-3 py-1 text-xs uppercase tracking-wide text-primary transition hover:border-primary hover:text-white"
           >
             Inactive
           </button>
@@ -199,13 +201,6 @@ export const ClientsPage = ({ onOpenClient }: { onOpenClient: (id: string) => vo
             className="flex items-center gap-2 rounded-lg border border-red-400/60 px-3 py-1 text-xs uppercase tracking-wide text-red-200 transition hover:border-red-300 hover:text-white"
           >
             <Trash2 className="h-3 w-3" /> Delete
-          </button>
-          <button
-            type="button"
-            onClick={() => alert('Bulk mailing launched (demo)')}
-            className="ml-auto flex items-center gap-2 rounded-lg border border-emerald-400/60 px-3 py-1 text-xs uppercase tracking-wide text-emerald-200 transition hover:border-emerald-300 hover:text-white"
-          >
-            <Mail className="h-3 w-3" /> Bulk email
           </button>
         </div>
       )}

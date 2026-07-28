@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import type { Role } from '@prisma/client';
+import type { OrgRole } from '@prisma/client';
 import type { AuthPayload } from '../types/express';
 import { env } from '../config/env';
 
@@ -21,9 +21,9 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
   }
 };
 
-export const checkRole = (roles: Role[]) => {
+export const checkRole = (roles: OrgRole[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    if (!req.user || !roles.includes(req.user.role)) {
+    if (!req.user || (!roles.includes(req.user.role) && req.user.role !== 'OWNER')) {
       return res.status(403).json({ message: 'Forbidden' });
     }
     next();

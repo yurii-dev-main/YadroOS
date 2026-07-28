@@ -1,9 +1,12 @@
-import { useMemo } from 'react';
+import { useState, useMemo } from 'react';
+import { Plus } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../../../components/ui/card';
-import { hrService } from '../services/hr.service';
+import { useAuthStore } from '../../../store/authStore';
+import { useEmployees } from '../hooks/useEmployees';
 import { useTrainings } from '../hooks/useTrainings';
 import { TrainingCalendar } from '../components/TrainingCalendar';
 import { TrainingCard } from '../components/TrainingCard';
+import { CreateTrainingModal } from '../components/CreateTrainingModal';
 import { TrainingStatus } from '../types/hr.types';
 
 const statusOptions = [
@@ -15,7 +18,9 @@ const statusOptions = [
 ];
 
 export const TrainingsPage = () => {
-  const employees = useMemo(() => hrService.getEmployees(), []);
+  const currentUser = useAuthStore((state) => state.user);
+  const { employees } = useEmployees();
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const {
     trainings,
     selectedTraining,
@@ -24,8 +29,11 @@ export const TrainingsPage = () => {
     selectTraining,
     register,
     markAttendance,
-    submitFeedback
+    submitFeedback,
+    addTraining
   } = useTrainings();
+
+  const canManage = currentUser?.role === 'OWNER' || currentUser?.role === 'HR_SPECIALIST';
 
   return (
     <div className="space-y-6">
@@ -38,20 +46,31 @@ export const TrainingsPage = () => {
             <p className="text-sm text-slate-300">
               Plan workshops, webinars, and courses. Mark attendance and gather feedback.
             </p>
-            <select
-              value={filters.status ?? ''}
-              onChange={(event) => {
-                const value = event.target.value as TrainingStatus | '';
-                setFilters({ status: value ? value : undefined });
-              }}
-              className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none md:w-64"
-            >
-              {statusOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
+            <div className="flex items-center gap-2">
+              <select
+                value={filters.status ?? ''}
+                onChange={(event) => {
+                  const value = event.target.value as TrainingStatus | '';
+                  setFilters({ status: value ? value : undefined });
+                }}
+                className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 focus:border-primary focus:outline-none md:w-64"
+              >
+                {statusOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+              {canManage && (
+                <button
+                  onClick={() => setIsCreateModalOpen(true)}
+                  className="flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-white transition hover:bg-primary/90"
+                >
+                  <Plus className="h-4 w-4" />
+                  Create Event
+                </button>
+              )}
+            </div>
           </div>
           <TrainingCalendar trainings={trainings} onSelectTraining={selectTraining} />
         </CardContent>
@@ -66,9 +85,18 @@ export const TrainingsPage = () => {
             onRegister={register}
             onMarkAttendance={markAttendance}
             onSubmitFeedback={submitFeedback}
+            currentUserRole={currentUser?.role}
+            currentUserId={currentUser?.id}
           />
         ))}
       </div>
+
+      {isCreateModalOpen && (
+        <CreateTrainingModal
+          onClose={() => setIsCreateModalOpen(false)}
+          onSubmit={addTraining}
+        />
+      )}
     </div>
   );
 };

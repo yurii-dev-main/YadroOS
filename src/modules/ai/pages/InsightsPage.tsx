@@ -1,14 +1,21 @@
+import { AlertTriangle } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../../../components/ui/card';
 import { AIInsightCard } from '../components/AIInsightCard';
 import { useInsights } from '../hooks/useInsights';
 import { usePredictions } from '../hooks/usePredictions';
 
 export const InsightsPage = () => {
-  const { insights, loading: insightsLoading } = useInsights();
+  const { insights, loading: insightsLoading, isGeminiConnected } = useInsights();
   const { predictions, loading: predictionsLoading } = usePredictions();
 
   return (
     <div className="space-y-8">
+      {!insightsLoading && !isGeminiConnected && (
+        <div className="flex items-center gap-3 rounded-lg border border-amber-500/50 bg-amber-500/10 p-4 text-amber-200">
+          <AlertTriangle className="h-5 w-5 text-amber-400" />
+          <p className="text-sm font-medium">Connect Gemini AI in the Integrations Hub for deeper insights!</p>
+        </div>
+      )}
       <section className="grid gap-6 lg:grid-cols-2">
         {insightsLoading ? (
           <p className="text-sm text-slate-400">AI is generating recommendations…</p>

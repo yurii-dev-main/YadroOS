@@ -8,7 +8,7 @@ export const listActivities = async (req: Request, res: Response) => {
     createdBy?: string;
   };
 
-  const where: Record<string, string> = {};
+  const where: Record<string, any> = { organizationId: req.user!.organizationId };
   if (clientId) where.clientId = clientId;
   if (dealId) where.dealId = dealId;
   if (createdBy) where.createdBy = createdBy;
@@ -44,6 +44,7 @@ export const createActivity = async (req: Request, res: Response) => {
 
   const activity = await prisma.activity.create({
     data: {
+      organizationId: req.user!.organizationId,
       clientId,
       dealId,
       type,
@@ -51,7 +52,7 @@ export const createActivity = async (req: Request, res: Response) => {
       description,
       date: date ? new Date(date) : undefined,
       duration,
-      createdBy: employee?.id
+      createdBy: employee?.id || undefined
     },
     include: { client: true, deal: true, creator: true }
   });

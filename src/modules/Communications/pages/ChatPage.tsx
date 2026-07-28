@@ -1,4 +1,5 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { webSocketService } from '../../../services/websocket.service';
 import { ChatWindow } from '../components/ChatWindow';
 import { MessengerSidebar } from '../components/MessengerSidebar';
 import { TemplateLibrary } from '../components/TemplateLibrary';
@@ -15,8 +16,27 @@ export const ChatPage = () => {
   const { threads, activeChatId, setActiveChatId, messages, typingUsers, sendMessage, markTyping } =
     useMessages();
 
+  const [wsConnected, setWsConnected] = useState(false);
+
   useEffect(() => {
     chatService.fetchThreads();
+    
+    // Connect WebSocket
+    const token = localStorage.getItem('accessToken') || '';
+    if (token) {
+      webSocketService.connect(token);
+    }
+    
+    const handleStatus = (data: any) => {
+      setWsConnected(data.connected);
+    };
+    
+    webSocketService.on('status', handleStatus);
+    setWsConnected(webSocketService.isConnected);
+
+    return () => {
+      webSocketService.off('status', handleStatus);
+    };
   }, []);
 
   return (
@@ -26,7 +46,6 @@ export const ChatPage = () => {
           threads={threads}
           activeChatId={activeChatId}
           onSelect={setActiveChatId}
-          onCreateGroup={() => alert('Group creation form')}
         />
         <div className="flex min-w-0 flex-1 flex-col">
           <div className="flex items-center justify-between border-b border-slate-800 px-4 py-3">
@@ -36,9 +55,15 @@ export const ChatPage = () => {
                 Online statuses, read receipts and threads in real time
               </p>
             </div>
-            <span className="rounded-full bg-emerald-500/20 px-3 py-1 text-xs text-emerald-300">
-              WebSocket active
-            </span>
+            {wsConnected ? (
+              <span className="rounded-full bg-emerald-500/20 px-3 py-1 text-xs text-emerald-300">
+                WebSocket connected
+              </span>
+            ) : (
+              <span className="rounded-full bg-rose-500/20 px-3 py-1 text-xs text-rose-300">
+                WebSocket disconnected
+              </span>
+            )}
           </div>
           <ChatWindow
             messages={messages}

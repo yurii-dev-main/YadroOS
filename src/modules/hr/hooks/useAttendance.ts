@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { hrService } from '../services/hr.service';
 import { AttendanceRecord, AttendanceSummary, LeaveBalance, LeaveRequest } from '../types/hr.types';
 
@@ -12,10 +12,17 @@ interface UseAttendanceResult {
 }
 
 export const useAttendance = (): UseAttendanceResult => {
-  const records = useMemo(() => hrService.getAttendanceRecords(), []);
-  const leaveRequests = useMemo(() => hrService.getLeaveRequests(), []);
-  const leaveBalances = useMemo(() => hrService.getLeaveBalances(), []);
-  const summaries = useMemo(() => hrService.getAttendanceSummaries(), []);
+  const [records, setRecords] = useState<AttendanceRecord[]>([]);
+  const [leaveRequests, setLeaveRequests] = useState<LeaveRequest[]>([]);
+  const [leaveBalances, setLeaveBalances] = useState<LeaveBalance[]>([]);
+  const [summaries, setSummaries] = useState<AttendanceSummary[]>([]);
+
+  useEffect(() => {
+    hrService.getAttendanceRecords().then(setRecords).catch(console.error);
+    hrService.getLeaveRequests().then(setLeaveRequests).catch(console.error);
+    hrService.getLeaveBalances().then(setLeaveBalances).catch(console.error);
+    hrService.getAttendanceSummaries().then(setSummaries).catch(console.error);
+  }, []);
 
   const averageAttendance = useMemo(() => {
     if (!summaries.length) return 0;

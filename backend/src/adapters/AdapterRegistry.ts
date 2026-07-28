@@ -15,6 +15,10 @@ class AdapterRegistry {
     return Array.from(this.adapters.values());
   }
 
+  getEntries(): [string, IChannelAdapter][] {
+    return Array.from(this.adapters.entries());
+  }
+
   remove(connectionId: string) {
     this.adapters.delete(connectionId);
   }

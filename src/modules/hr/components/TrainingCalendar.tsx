@@ -35,8 +35,8 @@ const eventPropGetter: EventPropGetter<any> = (event: any) => {
   return {
     className: 'border-none text-xs font-medium',
     style: {
-      backgroundColor: `${statusColor}33`,
-      color: statusColor,
+      backgroundColor: statusColor,
+      color: '#ffffff',
       borderRadius: '8px',
       padding: '4px 8px'
     }

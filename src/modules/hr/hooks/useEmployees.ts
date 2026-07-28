@@ -35,15 +35,20 @@ export const useEmployees = (): UseEmployeesResult => {
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const departments = useMemo(() => hrService.getDepartments(), []);
+  const [departments, setDepartments] = useState<Department[]>([]);
+  const [orgChart, setOrgChart] = useState<OrgChartNode>({ id: '', name: '', role: '', children: [] });
+  const [statistics, setStatistics] = useState<HRStatistics>({
+    totalEmployees: 0,
+    activeTrainings: 0,
+    attendanceRate: 0,
+    topPerformers: []
+  });
 
-  const positions = useMemo(() => {
-    return Array.from(new Set(employees.map((employee) => employee.position))).sort();
-  }, [employees]);
-
-  const orgChart = useMemo(() => hrService.getOrgChart(), []);
-
-  const statistics = useMemo(() => hrService.getStatistics(), []);
+  useEffect(() => {
+    hrService.getDepartments().then(setDepartments).catch(console.error);
+    hrService.getOrgChart().then(setOrgChart).catch(console.error);
+    hrService.getStatistics().then(setStatistics).catch(console.error);
+  }, []);
 
   useEffect(() => {
     let isMounted = true;
@@ -68,6 +73,10 @@ export const useEmployees = (): UseEmployeesResult => {
       isMounted = false;
     };
   }, [filters, selectedEmployeeId]);
+
+  const positions = useMemo(() => {
+    return Array.from(new Set(employees.map((employee) => employee.position))).sort();
+  }, [employees]);
 
   const selectedEmployee = useMemo(
     () => employees.find((employee) => employee.id === selectedEmployeeId),

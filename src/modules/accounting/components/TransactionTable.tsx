@@ -1,4 +1,6 @@
+import { useMemo, useState } from 'react';
 import { format } from 'date-fns';
+import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react';
 import { Account, Transaction, TransactionCategory } from '../types/accounting.types';
 
 interface TransactionTableProps {
@@ -13,25 +15,88 @@ const statusColor: Record<Transaction['status'], string> = {
   cancelled: 'text-rose-300'
 };
 
+type SortField = 'date' | 'description' | 'account' | 'category' | 'amount' | 'status';
+
 export const TransactionTable = ({ transactions, accounts, categories }: TransactionTableProps) => {
   const accountMap = new Map(accounts.map((account) => [account.id, account]));
   const categoryMap = new Map(categories.map((category) => [category.id, category]));
+
+  const [sortField, setSortField] = useState<SortField>('date');
+  const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc');
+
+  const handleSort = (field: SortField) => {
+    if (sortField === field) {
+      setSortDir(sortDir === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortField(field);
+      setSortDir('asc');
+    }
+  };
+
+  const sortedTransactions = useMemo(() => {
+    return [...transactions].sort((a, b) => {
+      let comparison = 0;
+      switch (sortField) {
+        case 'date':
+          comparison = new Date(a.date).getTime() - new Date(b.date).getTime();
+          break;
+        case 'description':
+          comparison = (a.description ?? '').localeCompare(b.description ?? '');
+          break;
+        case 'account':
+          const accA = accountMap.get(a.accountId)?.name ?? '';
+          const accB = accountMap.get(b.accountId)?.name ?? '';
+          comparison = accA.localeCompare(accB);
+          break;
+        case 'category':
+          const catA = (a.categoryId ? categoryMap.get(a.categoryId)?.name : '') ?? '';
+          const catB = (b.categoryId ? categoryMap.get(b.categoryId)?.name : '') ?? '';
+          comparison = catA.localeCompare(catB);
+          break;
+        case 'amount':
+          const valA = a.type === 'expense' ? -a.amount : a.amount;
+          const valB = b.type === 'expense' ? -b.amount : b.amount;
+          comparison = valA - valB;
+          break;
+        case 'status':
+          comparison = a.status.localeCompare(b.status);
+          break;
+      }
+      return sortDir === 'asc' ? comparison : -comparison;
+    });
+  }, [transactions, sortField, sortDir, accountMap, categoryMap]);
+
+  const SortIcon = ({ field }: { field: SortField }) => {
+    if (sortField !== field) return <ArrowUpDown className="h-3 w-3 opacity-30" />;
+    return sortDir === 'asc' ? <ArrowUp className="h-3 w-3" /> : <ArrowDown className="h-3 w-3" />;
+  };
+
+  const Th = ({ field, label, align = 'left' }: { field: SortField; label: string; align?: 'left' | 'right' }) => (
+    <th 
+      className={`px-4 py-3 cursor-pointer select-none hover:text-white transition ${align === 'right' ? 'text-right' : 'text-left'}`}
+      onClick={() => handleSort(field)}
+    >
+      <div className={`flex items-center gap-1 ${align === 'right' ? 'justify-end' : ''}`}>
+        {label} <SortIcon field={field} />
+      </div>
+    </th>
+  );
 
   return (
     <div className="overflow-x-auto rounded-lg border border-slate-800">
       <table className="min-w-full divide-y divide-slate-800 text-sm text-slate-200">
         <thead className="bg-slate-900/60 text-xs uppercase tracking-wide text-slate-400">
           <tr>
-            <th className="px-4 py-3 text-left">Date</th>
-            <th className="px-4 py-3 text-left">Description</th>
-            <th className="px-4 py-3 text-left">Account</th>
-            <th className="px-4 py-3 text-left">Category</th>
-            <th className="px-4 py-3 text-right">Amount</th>
-            <th className="px-4 py-3 text-right">Status</th>
+            <Th field="date" label="Date" />
+            <Th field="description" label="Description" />
+            <Th field="account" label="Account" />
+            <Th field="category" label="Category" />
+            <Th field="amount" label="Amount" align="right" />
+            <Th field="status" label="Status" align="right" />
           </tr>
         </thead>
         <tbody className="divide-y divide-slate-800 bg-slate-950/40">
-          {transactions.map((transaction) => {
+          {sortedTransactions.map((transaction) => {
             const account = accountMap.get(transaction.accountId);
             const category = transaction.categoryId
               ? categoryMap.get(transaction.categoryId)

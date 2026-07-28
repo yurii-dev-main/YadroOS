@@ -14,6 +14,7 @@ interface PayrollState {
   records: PayrollRecord[];
   calendar: PayrollCalendarEntry[];
   loading: boolean;
+  initialized: boolean;
   error?: string;
   lastRun?: string;
   loadPayroll: () => Promise<void>;
@@ -26,13 +27,14 @@ const usePayrollStore = create<PayrollState>((set, get) => ({
   records: [],
   calendar: [],
   loading: false,
+  initialized: false,
   error: undefined,
   lastRun: undefined,
   async loadPayroll() {
     set({ loading: true, error: undefined });
     try {
       const records = await accountingService.getPayrollRecords();
-      set({ records, loading: false });
+      set({ records, loading: false, initialized: true });
       if (!get().calendar.length) {
         const calendar: PayrollCalendarEntry[] = records.map((record) => ({
           id: `${record.period}-${record.employeeId}`,
@@ -51,6 +53,7 @@ const usePayrollStore = create<PayrollState>((set, get) => ({
     } catch (error) {
       set({
         loading: false,
+        initialized: true,
         error: error instanceof Error ? error.message : 'Failed to load payroll data'
       });
     }
@@ -87,9 +90,9 @@ const usePayrollStore = create<PayrollState>((set, get) => ({
 export const usePayroll = () => {
   const store = usePayrollStore();
   useEffect(() => {
-    if (!store.records.length && !store.loading) {
+    if (!store.initialized && !store.loading) {
       void store.loadPayroll();
     }
-  }, [store, store.records.length, store.loading, store.loadPayroll]);
+  }, [store, store.initialized, store.loading, store.loadPayroll]);
   return store;
 };

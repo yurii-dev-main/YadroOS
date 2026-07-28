@@ -1,11 +1,11 @@
 import { useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../../../components/ui/card';
-import { hrService } from '../services/hr.service';
+import { useEmployees } from '../hooks/useEmployees';
 import { usePerformance } from '../hooks/usePerformance';
 import { PerformanceDashboard } from '../components/PerformanceDashboard';
 
 export const PerformancePage = () => {
-  const employees = useMemo(() => hrService.getEmployees(), []);
+  const { employees } = useEmployees();
   const { kpis, okrs, reviews, highlights, averageScore } = usePerformance();
 
   return (

@@ -90,14 +90,20 @@ export const AnalyticsPage = () => {
                   </h2>
                   <div className="mt-4 h-72">
                     <ResponsiveContainer width="100%" height="100%">
-                      <FunnelChart>
+                      <FunnelChart margin={{ top: 20, right: 120, bottom: 20, left: 20 }}>
                         <Tooltip />
-                        <Funnel dataKey="value" data={summary.funnel} fill="#3b82f6">
+                        <Funnel dataKey="value" data={summary.funnel} fill="#3b82f6" isAnimationActive={false}>
                           <LabelList
                             position="right"
                             fill="#e2e8f0"
                             stroke="none"
                             dataKey="stage"
+                          />
+                          <LabelList
+                            position="center"
+                            fill="#ffffff"
+                            stroke="none"
+                            dataKey="value"
                           />
                         </Funnel>
                       </FunnelChart>
@@ -151,7 +157,7 @@ export const AnalyticsPage = () => {
                   </div>
                   <div className="flex items-center justify-between">
                     <dt>LTV</dt>
-                    <dd className="font-semibold text-blue-300">{formatCurrency(summary.ltv)}</dd>
+                    <dd className="font-semibold text-primary">{formatCurrency(summary.ltv)}</dd>
                   </div>
                   <div className="flex items-center justify-between">
                     <dt>Win rate</dt>

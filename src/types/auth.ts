@@ -1,4 +1,4 @@
-export type Role = 'ADMIN' | 'MANAGER' | 'OPERATOR' | 'ACCOUNTANT' | 'HR_SPECIALIST' | 'VIEWER';
+export type Role = 'OWNER' | 'ADMIN' | 'MANAGER' | 'OPERATOR' | 'ACCOUNTANT' | 'HR_SPECIALIST' | 'VIEWER';
 
 export type Permission =
   | 'crm:read'

@@ -12,13 +12,15 @@ interface ClientSidebarProps {
   activities: CRMActivity[];
   onAddTag: (tag: string) => void;
   onRemoveTag: (tagId: string) => void;
+  dealsCount: number;
 }
 
 export const ClientSidebar = ({
   client,
   activities,
   onAddTag,
-  onRemoveTag
+  onRemoveTag,
+  dealsCount
 }: ClientSidebarProps) => {
   const recent = getRecentActivities(activities, 5);
 
@@ -40,7 +42,7 @@ export const ClientSidebar = ({
           </div>
           <div>
             <p className="text-xs uppercase tracking-wide text-slate-500">Deals</p>
-            <p>{formatNumber(Math.floor(Math.random() * 5) + 1)}</p>
+            <p>{formatNumber(dealsCount)}</p>
           </div>
           <div>
             <p className="text-xs uppercase tracking-wide text-slate-500">Revenue</p>
@@ -89,7 +91,7 @@ export const ClientSidebar = ({
             const label = prompt('Tag label');
             if (label) onAddTag(label);
           }}
-          className="rounded-lg border border-dashed border-slate-600/60 px-3 py-1 text-xs text-slate-300 transition hover:border-blue-500 hover:text-blue-300"
+          className="rounded-lg border border-dashed border-slate-600/60 px-3 py-1 text-xs text-slate-300 transition hover:border-primary hover:text-primary"
         >
           + Add tag
         </button>

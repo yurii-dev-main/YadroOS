@@ -24,7 +24,7 @@ export const statusLabels: Record<ClientStatus, string> = {
 };
 
 export const statusBadgeStyles: Record<ClientStatus, string> = {
-  lead: 'bg-blue-500/10 text-blue-400 border border-blue-500/20',
+  lead: 'bg-primary/10 text-primary border border-primary/20',
   active: 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20',
   inactive: 'bg-slate-500/10 text-slate-300 border border-slate-500/20',
   lost: 'bg-red-500/10 text-red-400 border border-red-500/20'
@@ -87,10 +87,16 @@ export const buildAnalyticsSnapshot = (
   clients: CRMClient[],
   deals: CRMDeal[]
 ): CRMAnalyticsSummary => {
-  const newClients = Array.from({ length: 6 }).map((_, index) => ({
-    period: `Month ${index + 1}`,
-    value: Math.floor(Math.random() * 12) + 5
-  }));
+  const newClients = Array.from({ length: 6 }).map((_, i) => {
+    const d = new Date();
+    d.setMonth(d.getMonth() - (5 - i));
+    const monthYear = d.toLocaleString('en-US', { month: 'short' });
+    const count = clients.filter((c) => {
+      const cDate = new Date(c.createdAt);
+      return cDate.getMonth() === d.getMonth() && cDate.getFullYear() === d.getFullYear();
+    }).length;
+    return { period: monthYear, value: count };
+  });
 
   const funnel = stageLabels.map((stage) => ({
     stage,
@@ -105,15 +111,19 @@ export const buildAnalyticsSnapshot = (
   const wonCount = closedDeals.length;
   const winRate = deals.length ? Math.round((wonCount / deals.length) * 100) : 0;
 
-  const revenueForecast = Array.from({ length: 4 }).map((_, index) => ({
-    month: `Q${index + 1}`,
-    value: Math.round(totalClosed * (1 + index * 0.1))
-  }));
+  const revenueForecast = Array.from({ length: 4 }).map((_, index) => {
+    const month = new Date();
+    month.setMonth(month.getMonth() + index + 1);
+    return {
+      month: month.toLocaleString('en-US', { month: 'short' }),
+      value: totalClosed > 0 ? Math.round(totalClosed * (1 + index * 0.1)) : 0
+    };
+  });
 
   const managerGroups = deals.reduce<
     Record<string, { deals: number; won: number; revenue: number }>
   >((acc, deal) => {
-    const manager = deal.owner;
+    const manager = deal.assignedTo;
     if (!acc[manager]) {
       acc[manager] = { deals: 0, won: 0, revenue: 0 };
     }

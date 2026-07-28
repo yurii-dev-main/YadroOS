@@ -7,31 +7,31 @@ import { CRMDeal, CRMPipelineFilters, DealStage } from '../types/crm.types';
 
 export const useDeals = () => {
   const [deals, setDeals] = useState<CRMDeal[]>([]);
-  const [filters, setFilters] = useState<CRMPipelineFilters>({ owner: 'all' });
+  const [filters, setFilters] = useState<CRMPipelineFilters>({ assignedTo: 'all' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchDeals = useCallback(async () => {
+  const fetchDeals = useCallback(async (background = false) => {
     try {
-      setLoading(true);
+      if (!background) setLoading(true);
       const response = await crmService.getDeals(filters);
       setDeals(response);
       setError(null);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch deals');
     } finally {
-      setLoading(false);
+      if (!background) setLoading(false);
     }
   }, [filters]);
 
   useEffect(() => {
-    fetchDeals();
+    fetchDeals(false);
   }, [fetchDeals]);
 
   useEffect(() => {
     const unsubscribe = subscribeToCRMEvents((payload) => {
       if (payload.type === 'deals:updated') {
-        fetchDeals();
+        fetchDeals(true);
       }
     });
     return unsubscribe;

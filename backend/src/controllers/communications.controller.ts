@@ -5,6 +5,7 @@ import { adapterRegistry } from '../adapters/AdapterRegistry';
 export const listThreads = async (req: Request, res: Response) => {
   try {
     const messages = await prisma.unifiedMessage.findMany({
+      where: { organizationId: req.user!.organizationId },
       orderBy: { createdAt: 'desc' }
     });
 
@@ -43,7 +44,7 @@ export const listMessagesForThread = async (req: Request, res: Response) => {
   const { threadId } = req.params;
   try {
     const messages = await prisma.unifiedMessage.findMany({
-      where: { threadId },
+      where: { threadId, organizationId: req.user!.organizationId },
       orderBy: { createdAt: 'asc' }
     });
 
@@ -64,7 +65,7 @@ export const listMessagesForThread = async (req: Request, res: Response) => {
 export const listMessages = async (req: Request, res: Response) => {
   const { chatId, query } = req.query;
   try {
-    const where: any = {};
+    const where: any = { organizationId: req.user!.organizationId };
     if (chatId) where.threadId = String(chatId);
     if (query) where.content = { contains: String(query), mode: 'insensitive' };
 
@@ -92,6 +93,7 @@ export const createMessage = async (req: Request, res: Response) => {
   try {
     const newMessage = await prisma.unifiedMessage.create({
       data: {
+        organizationId: req.user!.organizationId,
         source: 'internal',
         sourceId: Date.now().toString(),
         threadId: chatId,
@@ -137,21 +139,35 @@ export const updateTelegramStatus = (req: Request, res: Response) => {
 
 export const handleTelegramWebhook = async (req: Request, res: Response) => {
   const payload = req.body;
-  const adapters = adapterRegistry.getAll().filter((a) => a.provider === 'telegram');
+  const entries = adapterRegistry.getEntries().filter(([, a]) => a.provider === 'telegram');
 
   let normalizedMsg = null;
-  for (const adapter of adapters) {
+  let matchedConnectionId = null;
+
+  for (const [connId, adapter] of entries) {
     normalizedMsg = await adapter.handleIncoming(payload);
-    if (normalizedMsg) break;
+    if (normalizedMsg) {
+      matchedConnectionId = connId;
+      break;
+    }
   }
 
-  if (!normalizedMsg) {
+  if (!normalizedMsg || !matchedConnectionId) {
     return res.json({ ok: true });
   }
 
   try {
+    const connection = await prisma.integrationConnection.findUnique({
+      where: { id: matchedConnectionId }
+    });
+    
+    if (!connection) {
+      return res.status(404).json({ error: 'Connection not found' });
+    }
+
     await prisma.unifiedMessage.create({
       data: {
+        organizationId: connection.organizationId,
         source: normalizedMsg.source,
         sourceId: normalizedMsg.sourceId,
         threadId: normalizedMsg.threadId,
@@ -168,4 +184,53 @@ export const handleTelegramWebhook = async (req: Request, res: Response) => {
     console.error('Failed to save webhook message:', e);
     return res.status(500).json({ error: 'Failed to process' });
   }
+};
+
+export const listEmails = async (req: Request, res: Response) => {
+  const emails = await prisma.emailMessage.findMany({
+    where: { organizationId: req.user!.organizationId },
+    orderBy: { createdAt: 'desc' }
+  });
+  res.json({ data: emails });
+};
+
+export const createEmail = async (req: Request, res: Response) => {
+  const { subject, body, from, to } = req.body;
+  const email = await prisma.emailMessage.create({
+    data: {
+      organizationId: req.user!.organizationId,
+      subject,
+      body,
+      from,
+      to,
+      status: 'sent'
+    }
+  });
+  res.status(201).json(email);
+};
+
+export const listCannedResponses = async (req: Request, res: Response) => {
+  const responses = await prisma.cannedResponse.findMany({
+    where: { organizationId: req.user!.organizationId }
+  });
+  res.json({ data: responses });
+};
+
+export const getAutoResponders = (req: Request, res: Response) => {
+  res.json({
+    data: [
+      { id: 1, name: 'Welcome Auto-Responder', active: true },
+      { id: 2, name: 'Out of Office', active: false }
+    ]
+  });
+};
+
+export const getNotificationPreferences = (req: Request, res: Response) => {
+  res.json({
+    data: {
+      emailNotifications: true,
+      pushNotifications: false,
+      smsNotifications: true
+    }
+  });
 };

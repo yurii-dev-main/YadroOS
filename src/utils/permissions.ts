@@ -1,6 +1,17 @@
 import type { Permission, Role } from '../types/auth';
 
 export const rolePermissions: Record<Role, Permission[]> = {
+  OWNER: [
+    'crm:read',
+    'crm:write',
+    'communications:read',
+    'communications:write',
+    'hr:read',
+    'hr:write',
+    'accounting:read',
+    'accounting:write',
+    'ai:read'
+  ],
   ADMIN: [
     'crm:read',
     'crm:write',

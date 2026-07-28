@@ -10,7 +10,7 @@ export const ClientCard = ({ client, onOpen }: ClientCardProps) => (
   <button
     type="button"
     onClick={() => onOpen(client.id)}
-    className="group flex w-full flex-col rounded-2xl border border-slate-700/60 bg-slate-900/60 p-6 text-left shadow-lg shadow-black/30 transition hover:-translate-y-1 hover:border-blue-500/60 hover:bg-slate-900/80 hover:shadow-blue-500/20"
+    className="group flex w-full flex-col rounded-2xl border border-slate-700/60 bg-slate-900/60 p-6 text-left shadow-lg shadow-black/30 transition hover:-translate-y-1 hover:border-primary/60 hover:bg-slate-900/80 hover:shadow-primary/20"
   >
     <div className="flex items-center justify-between">
       <div>
@@ -27,21 +27,21 @@ export const ClientCard = ({ client, onOpen }: ClientCardProps) => (
     </div>
 
     <div className="mt-6 grid grid-cols-2 gap-3 text-sm text-slate-300">
-      <div>
+      <div className="min-w-0">
         <p className="text-xs uppercase tracking-wide text-slate-500">Manager</p>
-        <p>{client.assignedTo}</p>
+        <p className="truncate" title={client.assignedTo}>{client.assignedTo}</p>
       </div>
-      <div>
+      <div className="min-w-0">
         <p className="text-xs uppercase tracking-wide text-slate-500">Revenue</p>
-        <p className="font-semibold text-emerald-400">{formatCurrency(client.revenue)}</p>
+        <p className="truncate font-semibold text-emerald-400" title={formatCurrency(client.revenue)}>{formatCurrency(client.revenue)}</p>
       </div>
-      <div>
+      <div className="min-w-0">
         <p className="text-xs uppercase tracking-wide text-slate-500">Email</p>
-        <p>{client.email}</p>
+        <p className="truncate" title={client.email || ''}>{client.email}</p>
       </div>
-      <div>
+      <div className="min-w-0">
         <p className="text-xs uppercase tracking-wide text-slate-500">Phone</p>
-        <p>{client.phone}</p>
+        <p className="truncate" title={client.phone || ''}>{client.phone}</p>
       </div>
     </div>
 

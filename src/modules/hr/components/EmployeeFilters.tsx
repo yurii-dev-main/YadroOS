@@ -40,7 +40,7 @@ export const EmployeeFilters: FC<EmployeeFiltersProps> = ({
         <input
           type="search"
           placeholder="Name or email"
-          className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none"
+          className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 focus:border-primary focus:outline-none"
           value={filters.search ?? ''}
           onChange={handleSearch}
         />
@@ -49,7 +49,7 @@ export const EmployeeFilters: FC<EmployeeFiltersProps> = ({
         <label className="text-xs uppercase tracking-wide text-slate-400">Department</label>
         <select
           name="department"
-          className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none"
+          className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 focus:border-primary focus:outline-none"
           value={filters.department ?? ''}
           onChange={handleSelect}
         >
@@ -65,7 +65,7 @@ export const EmployeeFilters: FC<EmployeeFiltersProps> = ({
         <label className="text-xs uppercase tracking-wide text-slate-400">Position</label>
         <select
           name="position"
-          className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none"
+          className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 focus:border-primary focus:outline-none"
           value={filters.position ?? ''}
           onChange={handleSelect}
         >
@@ -81,7 +81,7 @@ export const EmployeeFilters: FC<EmployeeFiltersProps> = ({
         <label className="text-xs uppercase tracking-wide text-slate-400">Status</label>
         <select
           name="status"
-          className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none"
+          className="w-full rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 focus:border-primary focus:outline-none"
           value={filters.status ?? ''}
           onChange={handleSelect}
         >
@@ -95,7 +95,7 @@ export const EmployeeFilters: FC<EmployeeFiltersProps> = ({
       <div className="md:col-span-2 lg:col-span-4">
         <button
           type="button"
-          className="rounded-md border border-indigo-500 px-4 py-2 text-sm font-medium text-indigo-300 transition hover:bg-indigo-500/10"
+          className="rounded-md border border-primary px-4 py-2 text-sm font-medium text-primary transition hover:bg-primary/10"
           onClick={onReset}
         >
           Reset filters
